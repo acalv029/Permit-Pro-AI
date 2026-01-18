@@ -48,7 +48,7 @@ export default function App() {
     formData.append('permit_type', selectedPermit);
 
     try {
-      const response = await fetch('http://localhost:8000/api/analyze-permit', {
+      const response = await fetch('https://south-florida-permit-helper-production.up.railway.app/api/analyze-permit', {
         method: 'POST',
         body: formData,
       });
