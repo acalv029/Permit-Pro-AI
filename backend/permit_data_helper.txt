@@ -1,0 +1,11 @@
+NOTE: Your original permit_data.py file is too large to include here directly.
+
+When you set up the backend, you'll need to:
+1. Copy your permit_data.py file (the one with all the requirements.py content)
+2. Place it in the backend/ folder
+3. Make sure it has these functions that the API uses:
+   - get_city_key(city_name)
+   - get_permit_types(city_key) 
+   - get_permit_requirements(city_key, permit_type)
+
+Your file already has all of these! Just copy it over as-is.
