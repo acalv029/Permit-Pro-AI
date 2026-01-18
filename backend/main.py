@@ -46,7 +46,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 # In-memory storage (replace with database later)
 analysis_results = {}
 
