@@ -40,6 +40,7 @@ app.add_middleware(
         "http://localhost:3000",
         "http://localhost:5173",
         "https://south-florida-permit-helper-production.up.railway.app",
+        "https://frontend-nine-mu-19.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
