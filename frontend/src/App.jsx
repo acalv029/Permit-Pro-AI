@@ -4,10 +4,10 @@
  */
 
 import { useState, useEffect } from 'react'
-import './App.css'
+import './index.css' 
 
 // ✅ UPDATE THIS to your Railway backend URL
-const API_URL = 'https://south-florida-permit-helper-production-9d6f.up.railway.app'
+const API_URL = 'https://comfortable-education-production.up.railway.app'
 
 function App() {
   const [cities, setCities] = useState({})
