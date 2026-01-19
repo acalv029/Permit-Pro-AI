@@ -7,4 +7,4 @@ pymupdf==1.23.26
 pillow==10.1.0
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
-python-dotenv==1.0.0
+python-dotenv==1.0.0git 
