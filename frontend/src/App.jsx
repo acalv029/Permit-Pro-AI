@@ -25,13 +25,6 @@ function App() {
     loadCities()
   }, [])
 
-  // Load permit types when city changes
-  useEffect(() => {
-    if (selectedCity) {
-      loadPermitTypes(selectedCity)
-    }
-  }, [selectedCity])
-
   const loadCities = async () => {
     try {
       console.log('📍 Loading cities...')
@@ -62,18 +55,20 @@ function App() {
     }
   }
 
-  const handleCityChange = (e) => {
-    const cityName = e.target.value
-    setSelectedCity(cityName)
-    setSelectedPermitType('')
-    setPermitTypes([])
-    
-    // Find city key from cities object
-    if (cityName && cities[cityName]) {
-      const cityData = cities[cityName]
-      console.log(`Selected city: ${cityName} (${cityData.key})`)
-    }
+ const handleCityChange = (e) => {
+  const cityName = e.target.value
+  setSelectedCity(cityName)
+  setSelectedPermitType('')
+  setPermitTypes([])
+  
+  // Find city key from cities object
+  if (cityName && cities[cityName]) {
+    const cityData = cities[cityName]
+    const cityKey = cityData.key  // ← Get the KEY (fort_lauderdale)
+    console.log(`Selected city: ${cityName} (${cityKey})`)
+    loadPermitTypes(cityKey)  // ← Call with KEY not NAME!
   }
+}
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0]
