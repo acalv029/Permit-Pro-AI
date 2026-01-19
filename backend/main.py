@@ -31,9 +31,8 @@ from analyzer import analyze_document_with_claude
 
 app = FastAPI(title="South Florida Permit Checker API")
 
-app = FastAPI(title="South Florida Permit Checker API")
-
 # CORS - allows your React frontend to talk to this API
+# ✅ UPDATED: Added your Vercel domain
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -41,23 +40,72 @@ app.add_middleware(
         "http://localhost:5173",
         "https://south-florida-permit-helper-production.up.railway.app",
         "https://frontend-nine-mu-19.vercel.app",
+        "https://south-florida-permit-helper.vercel.app",  # ← ADD YOUR VERCEL URL HERE
+        "https://*.vercel.app",  # Allows all Vercel preview deployments
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 # In-memory storage (replace with database later)
 analysis_results = {}
 
 
 @app.get("/")
 async def root():
-    return {"message": "South Florida Permit Checker API", "status": "running"}
+    """Root endpoint with API key status"""
+    api_key = (
+        os.getenv("AI_PERMIT_KEY")
+        or os.getenv("AI-PERMIT-KEY")
+        or os.getenv("ANTHROPIC_API_KEY")
+    )
+    return {
+        "message": "South Florida Permit Checker API",
+        "status": "running",
+        "api_key_configured": bool(api_key),
+        "endpoints": {
+            "health": "/health or /api/health",
+            "cities": "/api/cities",
+            "analyze": "/api/analyze-permit",
+        },
+    }
+
+
+# ✅ NEW: Add /health endpoint (without /api prefix)
+@app.get("/health")
+async def health_check_simple():
+    """Health check endpoint - simple version"""
+    api_key = (
+        os.getenv("AI_PERMIT_KEY")
+        or os.getenv("AI-PERMIT-KEY")
+        or os.getenv("ANTHROPIC_API_KEY")
+    )
+    return {
+        "status": "healthy",
+        "api_key_present": bool(api_key),
+        "timestamp": datetime.now().isoformat(),
+        "endpoints": {
+            "analyze_permit": "/api/analyze-permit (POST)",
+            "cities": "/api/cities (GET)",
+            "permits": "/api/permits/{city_key} (GET)",
+        },
+    }
 
 
 @app.get("/api/health")
 async def health_check():
-    return {"status": "healthy", "timestamp": datetime.now().isoformat()}
+    """Health check endpoint - API version"""
+    api_key = (
+        os.getenv("AI_PERMIT_KEY")
+        or os.getenv("AI-PERMIT-KEY")
+        or os.getenv("ANTHROPIC_API_KEY")
+    )
+    return {
+        "status": "healthy",
+        "api_key_present": bool(api_key),
+        "timestamp": datetime.now().isoformat(),
+    }
 
 
 @app.get("/api/cities")
@@ -127,6 +175,9 @@ async def analyze_permit(
     """
     Upload a permit document for analysis
     """
+    print(f"📄 Received file: {file.filename}")
+    print(f"🏙️  City: {city}")
+    print(f"📋 Permit type: {permit_type}")
 
     # Validate file type
     allowed_types = [".pdf", ".png", ".jpg", ".jpeg"]
@@ -150,10 +201,14 @@ async def analyze_permit(
         with open(temp_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
+        print(f"💾 File saved to: {temp_path}")
+
         # Extract text from document
+        print("📖 Extracting text from document...")
         document_text = get_document_text(temp_path, is_blueprint=False)
 
         # Get permit requirements
+        print(f"🔍 Getting requirements for {city} - {permit_type}")
         city_key = get_city_key(city)
         requirements = get_permit_requirements(city_key, permit_type)
 
@@ -164,8 +219,16 @@ async def analyze_permit(
             or os.getenv("ANTHROPIC_API_KEY")
         )
 
+        if not api_key:
+            raise HTTPException(
+                status_code=500,
+                detail="API key not configured. Please add ANTHROPIC_API_KEY to environment variables.",
+            )
+
         # Analyze document
+        print("🤖 Starting AI analysis...")
         analysis = analyze_document_with_claude(document_text, requirements, api_key)
+        print("✅ Analysis complete!")
 
         # Store results
         analysis_results[analysis_id] = {
@@ -191,6 +254,7 @@ async def analyze_permit(
 
     except Exception as e:
         # Cleanup on error
+        print(f"❌ Error: {str(e)}")
         if os.path.exists(temp_dir):
             shutil.rmtree(temp_dir)
         raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
@@ -273,4 +337,5 @@ async def login(email: str, password: str):
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
