@@ -3,460 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PermitPro AI - South Florida's Premier Permit Analysis Tool</title>
+    <title>PermitPro AI - South Florida Permit Checker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.cdnfonts.com/css/satoshi" rel="stylesheet">
+    <script>tailwind.config={theme:{extend:{fontFamily:{'outfit':['Outfit','sans-serif'],'mono':['JetBrains Mono','monospace']},colors:{'midnight':'#0a0a0f','obsidian':'#12121a','charcoal':'#1a1a24','electric':'#00f0ff','lime':'#c8ff00','coral':'#ff6b6b'}}}}</script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.3;
-            }
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        @keyframes shimmer {
-            0% {
-                background-position: -1000px 0;
-            }
-            100% {
-                background-position: 1000px 0;
-            }
-        }
-
-        * {
-            font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        }
-        
-        .animate-fadeInUp {
-            animation: fadeInUp 0.8s ease-out;
-        }
-        
-        .animate-slideIn {
-            animation: slideIn 0.5s ease-out;
-        }
-
-        .animate-float {
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .gradient-border {
-            position: relative;
-            background: linear-gradient(to right, #3b82f6, #06b6d4);
-            padding: 2px;
-            border-radius: 1rem;
-        }
-
-        .gradient-border-content {
-            background: white;
-            border-radius: calc(1rem - 2px);
-        }
-
-        .shimmer {
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            background-size: 200% 100%;
-            animation: shimmer 2s infinite;
-        }
-
-        .glass-effect {
-            background: rgba(191, 219, 254, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
+        *{font-family:'Outfit',sans-serif}body{background:#0a0a0f}
+        .hero-gradient{background:radial-gradient(ellipse 80% 50% at 50% -20%,rgba(0,240,255,0.15),transparent),radial-gradient(ellipse 60% 40% at 80% 50%,rgba(200,255,0,0.08),transparent),radial-gradient(ellipse 50% 30% at 20% 80%,rgba(0,240,255,0.1),transparent)}
+        .grid-pattern{background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:60px 60px}
+        .glow-border{position:relative;background:linear-gradient(135deg,#1a1a24 0%,#12121a 100%);border:1px solid rgba(0,240,255,0.2)}
+        .glow-border::before{content:'';position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:linear-gradient(135deg,rgba(0,240,255,0.4),transparent 50%,rgba(200,255,0,0.3));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+        .scan-line{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#00f0ff,transparent);animation:scan 3s ease-in-out infinite;opacity:0.6}
+        @keyframes scan{0%,100%{transform:translateY(0);opacity:0}10%{opacity:0.6}90%{opacity:0.6}100%{transform:translateY(100%);opacity:0}}
+        .particle{position:absolute;width:4px;height:4px;background:#00f0ff;border-radius:50%;animation:float-particle 8s ease-in-out infinite;opacity:0.4}
+        @keyframes float-particle{0%,100%{transform:translateY(0) translateX(0)}25%{transform:translateY(-20px) translateX(10px)}50%{transform:translateY(-10px) translateX(-10px)}75%{transform:translateY(-30px) translateX(5px)}}
+        .btn-primary{background:linear-gradient(135deg,#00f0ff 0%,#00c4d4 100%);transition:all 0.3s cubic-bezier(0.4,0,0.2,1);box-shadow:0 0 30px rgba(0,240,255,0.3)}
+        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 50px rgba(0,240,255,0.5),0 10px 40px rgba(0,240,255,0.3)}
+        .btn-secondary{background:transparent;border:1px solid rgba(0,240,255,0.3);transition:all 0.3s ease}
+        .btn-secondary:hover{background:rgba(0,240,255,0.1);border-color:rgba(0,240,255,0.6);box-shadow:0 0 30px rgba(0,240,255,0.2)}
+        .drop-zone{border:2px dashed rgba(0,240,255,0.3);transition:all 0.3s ease;background:rgba(0,240,255,0.02)}
+        .drop-zone:hover,.drop-zone-active{border-color:#00f0ff;background:rgba(0,240,255,0.08);box-shadow:inset 0 0 60px rgba(0,240,255,0.1)}
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#12121a}::-webkit-scrollbar-thumb{background:#00f0ff40;border-radius:3px}
+        select{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2300f0ff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");background-position:right 1rem center;background-repeat:no-repeat;background-size:1.2em 1.2em}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}.animate-fadeUp{animation:fadeUp 0.8s ease-out forwards}
+        .stagger-1{animation-delay:0.1s;opacity:0}.stagger-2{animation-delay:0.2s;opacity:0}.stagger-3{animation-delay:0.3s;opacity:0}.stagger-4{animation-delay:0.4s;opacity:0}
+        .city-card{background:linear-gradient(135deg,rgba(26,26,36,0.8) 0%,rgba(18,18,26,0.8) 100%);border:1px solid rgba(0,240,255,0.1);transition:all 0.4s cubic-bezier(0.4,0,0.2,1)}
+        .city-card:hover{border-color:rgba(0,240,255,0.4);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,0.4),0 0 30px rgba(0,240,255,0.1)}
+        .price-card{background:linear-gradient(180deg,#1a1a24 0%,#12121a 100%);border:1px solid rgba(255,255,255,0.05)}
+        .price-card-featured{background:linear-gradient(180deg,rgba(0,240,255,0.1) 0%,#12121a 50%);border:1px solid rgba(0,240,255,0.3)}
+        .file-item{transition:all 0.2s ease}.file-item:hover{background:rgba(0,240,255,0.05)}
+        .progress-bar{background:linear-gradient(90deg,#00f0ff,#c8ff00);transition:width 0.3s ease-out;box-shadow:0 0 20px rgba(0,240,255,0.5)}
+        .status-ready{background:rgba(0,255,136,0.15);color:#00ff88;border:1px solid rgba(0,255,136,0.3)}
+        .status-attention{background:rgba(255,200,0,0.15);color:#ffc800;border:1px solid rgba(255,200,0,0.3)}
+        .status-incomplete{background:rgba(255,107,107,0.15);color:#ff6b6b;border:1px solid rgba(255,107,107,0.3)}
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-blue-100 via-teal-100 to-cyan-100">
-    
-    <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-teal-300/50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div class="w-11 h-11 bg-gradient-to-br from-blue-600 via-teal-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/30 transform hover:scale-105 transition-transform">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h1 class="text-xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">PermitPro AI</h1>
-                        <p class="text-[11px] text-teal-600 font-semibold -mt-0.5">South Florida</p>
-                    </div>
-                </div>
-                <div class="hidden md:flex items-center gap-8">
-                    <a href="#features" class="text-sm font-semibold text-slate-700 hover:text-teal-600 transition-colors">Features</a>
-                    <a href="#cities" class="text-sm font-semibold text-slate-700 hover:text-teal-600 transition-colors">Coverage</a>
-                    <a href="#process" class="text-sm font-semibold text-slate-700 hover:text-teal-600 transition-colors">How it Works</a>
-                </div>
-                <button class="px-6 py-3 bg-gradient-to-r from-slate-900 to-slate-800 hover:from-slate-800 hover:to-slate-700 text-white text-sm font-bold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-slate-900/30 hover:scale-105">
-                    Get Started
-                </button>
-            </div>
-        </div>
+<body class="text-white min-h-screen">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-midnight/80 backdrop-blur-xl border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8"><div class="flex justify-between items-center h-20">
+            <div class="flex items-center space-x-3"><div class="w-10 h-10 rounded-xl bg-gradient-to-br from-electric to-cyan-400 flex items-center justify-center"><svg class="w-5 h-5 text-midnight" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><span class="text-xl font-bold tracking-tight">PermitPro<span class="text-electric">AI</span></span></div>
+            <div class="hidden md:flex items-center space-x-8"><a href="#features" class="text-gray-400 hover:text-electric transition-colors text-sm font-medium">Features</a><a href="#cities" class="text-gray-400 hover:text-electric transition-colors text-sm font-medium">Cities</a><a href="#pricing" class="text-gray-400 hover:text-electric transition-colors text-sm font-medium">Pricing</a></div>
+        </div></div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="pt-36 pb-24 px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid lg:grid-cols-2 gap-20 items-center">
-                <!-- Left: Value Prop -->
-                <div class="space-y-8 animate-fadeInUp">
-                    <div class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-50 to-teal-50 border border-teal-200/60 rounded-full shadow-sm">
-                        <div class="w-2 h-2 bg-teal-500 rounded-full animate-pulse"></div>
-                        <span class="text-sm font-bold text-teal-700">AI-Powered Permit Analysis</span>
-                    </div>
-                    
-                    <h1 class="text-5xl lg:text-7xl font-black text-slate-900 leading-[1.05] tracking-tight">
-                        Stop the Permit
-                        <span class="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-teal-500 to-cyan-500 mt-2">
-                            Rejection Loop
-                        </span>
-                    </h1>
-                    
-                    <p class="text-xl text-slate-600 leading-relaxed max-w-xl font-medium">
-                        Our AI scans building permits against <span class="font-bold text-slate-900 bg-yellow-100 px-1 rounded">local zoning codes</span> before submission. Catch errors in seconds, not weeks.
-                    </p>
+    <section class="relative min-h-screen hero-gradient grid-pattern flex items-center pt-20">
+        <div class="particle" style="top:20%;left:10%"></div><div class="particle" style="top:60%;left:85%;animation-delay:-2s"></div><div class="particle" style="top:80%;left:25%;animation-delay:-4s"></div><div class="particle" style="top:30%;left:70%;animation-delay:-6s"></div>
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 py-20"><div class="max-w-4xl">
+            <div class="animate-fadeUp stagger-1"><div class="inline-flex items-center px-4 py-2 rounded-full bg-electric/10 border border-electric/30 text-electric text-sm font-medium mb-8"><span class="w-2 h-2 bg-electric rounded-full mr-3 animate-pulse"></span>AI-Powered Analysis</div></div>
+            <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6 animate-fadeUp stagger-2">South Florida<br><span class="bg-gradient-to-r from-electric via-cyan-400 to-lime bg-clip-text text-transparent">Permit Checker</span></h1>
+            <p class="text-xl text-gray-400 mb-10 max-w-2xl leading-relaxed animate-fadeUp stagger-3">Upload your complete permit package and get instant AI analysis against municipal requirements. Stop guessing, start knowing.</p>
+            <div class="flex flex-col sm:flex-row gap-4 animate-fadeUp stagger-4"><a href="#analyzer" class="btn-primary px-8 py-4 rounded-xl text-midnight font-semibold text-center">Start Analysis</a><a href="#features" class="btn-secondary px-8 py-4 rounded-xl text-electric font-medium text-center">Learn More</a></div>
+        </div></div>
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce"><svg class="w-6 h-6 text-electric/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg></div>
+    </section>
 
-                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                        <button class="group px-8 py-4 bg-gradient-to-r from-blue-600 via-teal-600 to-cyan-600 hover:from-blue-700 hover:via-teal-700 hover:to-cyan-700 text-white font-bold text-lg rounded-2xl transition-all duration-300 hover:shadow-2xl hover:shadow-teal-500/40 hover:scale-105 flex items-center justify-center gap-3">
-                            Try Demo Analysis
-                            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                            </svg>
-                        </button>
-                        <button class="px-8 py-4 bg-blue-50 hover:bg-white text-slate-900 font-bold text-lg rounded-2xl border-2 border-teal-300 hover:border-teal-500 transition-all duration-300 hover:shadow-lg">
-                            Watch 2-Min Demo
-                        </button>
-                    </div>
-
-                    <!-- Trust Indicators -->
-                    <div class="flex flex-wrap items-center gap-8 pt-6">
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="text-2xl font-black text-slate-900">99.7%</div>
-                                <div class="text-xs font-semibold text-slate-500 -mt-1">Accuracy</div>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-10 h-10 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/20">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="text-2xl font-black text-slate-900">5-Min</div>
-                                <div class="text-xs font-semibold text-slate-500 -mt-1">Analysis</div>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/20">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="text-2xl font-black text-slate-900">6 Cities</div>
-                                <div class="text-xs font-semibold text-slate-500 -mt-1">Covered</div>
-                            </div>
-                        </div>
+    <section id="analyzer" class="py-24 px-6 lg:px-8 relative">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12"><h2 class="text-3xl sm:text-4xl font-bold mb-4">Analyze Your <span class="text-electric">Permit Package</span></h2><p class="text-gray-400 max-w-xl mx-auto">Select your city and permit type, then upload your documents for instant compliance analysis.</p></div>
+            <div class="glow-border rounded-3xl p-8 lg:p-10 relative overflow-hidden"><div class="scan-line"></div>
+                <div class="mb-10">
+                    <div class="flex items-center mb-6"><div class="w-10 h-10 rounded-xl bg-electric/20 text-electric flex items-center justify-center font-mono font-bold mr-4">01</div><h3 class="text-xl font-semibold">Location & Permit Type</h3></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="block text-sm text-gray-400 mb-2 font-medium">City</label><select id="citySelect" class="w-full px-5 py-4 bg-charcoal border border-white/10 rounded-xl text-white focus:border-electric focus:outline-none focus:ring-1 focus:ring-electric transition-all appearance-none cursor-pointer"><option value="">Select a city...</option><option value="Fort Lauderdale">Fort Lauderdale</option><option value="Pompano Beach">Pompano Beach</option><option value="Hollywood">Hollywood</option><option value="Coral Springs">Coral Springs</option><option value="Boca Raton">Boca Raton</option><option value="Lauderdale-by-the-Sea">Lauderdale-by-the-Sea</option></select></div>
+                        <div><label class="block text-sm text-gray-400 mb-2 font-medium">Permit Type</label><select id="permitSelect" class="w-full px-5 py-4 bg-charcoal border border-white/10 rounded-xl text-white focus:border-electric focus:outline-none focus:ring-1 focus:ring-electric transition-all appearance-none cursor-pointer"><option value="">Select permit type...</option><option value="building">Building Permit</option><option value="electrical">Electrical Permit</option><option value="plumbing">Plumbing Permit</option><option value="mechanical">Mechanical / HVAC</option><option value="roofing">Roofing Permit</option><option value="dock">Dock / Marine</option><option value="seawall">Seawall Permit</option></select></div>
                     </div>
                 </div>
-
-                <!-- Right: Interactive Preview -->
-                <div class="relative animate-float">
-                    <div class="relative bg-gradient-to-br from-blue-50 to-teal-50 rounded-3xl shadow-2xl shadow-blue-900/20 border-2 border-teal-300/50 overflow-hidden">
-                        <!-- Mock UI Header -->
-                        <div class="bg-gradient-to-r from-blue-200 via-teal-100 to-blue-200 px-6 py-5 border-b-2 border-teal-300/80">
-                            <div class="flex items-center gap-3">
-                                <div class="flex gap-2">
-                                    <div class="w-3.5 h-3.5 rounded-full bg-red-500 shadow-sm"></div>
-                                    <div class="w-3.5 h-3.5 rounded-full bg-yellow-500 shadow-sm"></div>
-                                    <div class="w-3.5 h-3.5 rounded-full bg-green-500 shadow-sm"></div>
-                                </div>
-                                <div class="flex-1 bg-white rounded-lg px-4 py-2.5 text-sm font-semibold text-slate-700 border-2 border-teal-300 shadow-sm">
-                                    permit_submission.pdf
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Analysis Content -->
-                        <div class="p-8 space-y-4 min-h-[500px]">
-                            <div id="uploadArea" class="cursor-pointer h-[450px] border-3 border-dashed border-teal-300 rounded-3xl flex flex-col items-center justify-center gap-6 hover:border-teal-500 hover:bg-gradient-to-br hover:from-blue-50 hover:to-teal-50 transition-all duration-300 group">
-                                <input type="file" id="fileInput" hidden accept=".pdf,.png,.jpg,.jpeg">
-                                
-                                <div class="w-24 h-24 bg-gradient-to-br from-blue-500 to-teal-500 rounded-3xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 shadow-xl shadow-teal-500/30">
-                                    <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                                    </svg>
-                                </div>
-                                <div class="text-center">
-                                    <p class="text-xl font-black text-slate-900">Drop your permit here</p>
-                                    <p class="text-sm text-slate-600 font-semibold mt-2">or click to upload • PDF, PNG, JPG</p>
-                                </div>
-                                <div class="px-8 py-3.5 bg-gradient-to-r from-blue-600 to-teal-600 text-white text-sm font-bold rounded-xl group-hover:shadow-2xl group-hover:shadow-teal-500/40 transition-all group-hover:scale-105">
-                                    Select Files
-                                </div>
-                            </div>
-                        </div>
+                <div class="mb-10">
+                    <div class="flex items-center mb-6"><div class="w-10 h-10 rounded-xl bg-electric/20 text-electric flex items-center justify-center font-mono font-bold mr-4">02</div><h3 class="text-xl font-semibold">Upload Permit Package</h3></div>
+                    <div id="dropZone" class="drop-zone rounded-2xl p-10 text-center cursor-pointer relative">
+                        <input type="file" id="folderInput" webkitdirectory directory multiple accept=".pdf,.png,.jpg,.jpeg" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                        <div class="mb-6"><div class="w-20 h-20 mx-auto rounded-2xl bg-electric/10 border border-electric/30 flex items-center justify-center mb-4"><svg class="w-10 h-10 text-electric" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg></div></div>
+                        <p class="text-lg font-medium text-white mb-2">Drop your permit folder here</p><p class="text-gray-500 mb-6">or click to browse</p>
+                        <button type="button" id="selectFolderBtn" class="px-6 py-3 bg-electric/20 hover:bg-electric/30 border border-electric/30 text-electric rounded-xl font-medium transition-all">Select Permit Folder</button>
+                        <p class="text-xs text-gray-600 mt-6 font-mono">PDF, PNG, JPG • Max 50 files • Max 200MB</p>
                     </div>
-
-                    <!-- Floating badge -->
-                    <div class="absolute -top-6 -right-6 px-5 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl shadow-xl shadow-emerald-500/30 border-2 border-teal-200">
-                        <div class="flex items-center gap-2">
-                            <div class="w-2.5 h-2.5 bg-white rounded-full animate-pulse"></div>
-                            <span class="text-sm font-black text-white">Live Demo</span>
+                    <div id="filePreview" class="hidden mt-6">
+                        <div class="flex items-center justify-between mb-4"><h4 class="font-semibold text-white">Selected Files</h4><button id="clearFilesBtn" class="text-sm text-coral hover:text-red-400 font-medium transition-colors">Clear All</button></div>
+                        <div class="grid grid-cols-3 gap-3 mb-4">
+                            <div class="bg-charcoal rounded-xl p-4 text-center border border-white/5"><div id="fileCount" class="text-2xl font-bold text-electric font-mono">0</div><div class="text-xs text-gray-500 mt-1">Files</div></div>
+                            <div class="bg-charcoal rounded-xl p-4 text-center border border-white/5"><div id="totalSize" class="text-2xl font-bold text-electric font-mono">0 MB</div><div class="text-xs text-gray-500 mt-1">Total Size</div></div>
+                            <div class="bg-charcoal rounded-xl p-4 text-center border border-white/5"><div id="validCount" class="text-2xl font-bold text-lime font-mono">0</div><div class="text-xs text-gray-500 mt-1">Valid</div></div>
                         </div>
+                        <div id="sizeWarning" class="hidden mb-4 p-4 rounded-xl flex items-center"></div>
+                        <div id="invalidFilesWarning" class="hidden mb-4 p-4 bg-coral/10 border border-coral/30 rounded-xl"><div class="flex items-center text-coral font-medium mb-2"><svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>Invalid Files</div><ul id="invalidFilesList" class="text-sm text-coral/80 pl-7 list-disc"></ul></div>
+                        <div class="max-h-56 overflow-y-auto rounded-xl border border-white/5 bg-obsidian"><ul id="fileList" class="divide-y divide-white/5"></ul></div>
                     </div>
-
-                    <!-- Decorative gradient orbs -->
-                    <div class="absolute -z-10 -top-20 -left-20 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl"></div>
-                    <div class="absolute -z-10 -bottom-20 -right-20 w-72 h-72 bg-teal-400/20 rounded-full blur-3xl"></div>
                 </div>
+                <div class="text-center"><button id="analyzeBtn" disabled class="btn-primary px-12 py-5 rounded-xl text-midnight font-bold text-lg disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none w-full sm:w-auto"><span id="analyzeBtnText">Select files to analyze</span></button></div>
             </div>
         </div>
     </section>
 
-    <!-- Cities Section -->
-    <section class="py-20 bg-gradient-to-br from-blue-200/40 via-teal-200/40 to-cyan-200/40 border-y-2 border-teal-300/50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <div class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-50 to-teal-50 border border-teal-200/60 rounded-full mb-6">
-                    <svg class="w-4 h-4 text-teal-600" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path>
-                    </svg>
-                    <span class="text-sm font-bold text-teal-700">Coverage Area</span>
-                </div>
-                <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-4">Covering 6 South Florida Cities</h2>
-                <p class="text-lg text-slate-600 font-medium max-w-2xl mx-auto">Comprehensive permit analysis across major municipalities in Broward and Palm Beach counties</p>
-            </div>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-6xl mx-auto">
-                <div class="group p-6 bg-gradient-to-br from-blue-100 to-teal-100 hover:from-blue-50 hover:to-teal-50 border-2 border-teal-300/50 hover:border-teal-500 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10 hover:-translate-y-1">
-                    <div class="text-sm font-black text-slate-900 mb-1">Fort Lauderdale</div>
-                    <div class="text-xs text-teal-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Broward County</div>
-                </div>
-                <div class="group p-6 bg-gradient-to-br from-blue-100 to-teal-100 hover:from-blue-50 hover:to-teal-50 border-2 border-teal-300/50 hover:border-teal-500 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10 hover:-translate-y-1">
-                    <div class="text-sm font-black text-slate-900 mb-1">Pompano Beach</div>
-                    <div class="text-xs text-teal-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Broward County</div>
-                </div>
-                <div class="group p-6 bg-gradient-to-br from-blue-100 to-teal-100 hover:from-blue-50 hover:to-teal-50 border-2 border-teal-300/50 hover:border-teal-500 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10 hover:-translate-y-1">
-                    <div class="text-sm font-black text-slate-900 mb-1">Hollywood</div>
-                    <div class="text-xs text-teal-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Broward County</div>
-                </div>
-                <div class="group p-6 bg-gradient-to-br from-blue-100 to-teal-100 hover:from-blue-50 hover:to-teal-50 border-2 border-teal-300/50 hover:border-teal-500 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10 hover:-translate-y-1">
-                    <div class="text-sm font-black text-slate-900 mb-1">Coral Springs</div>
-                    <div class="text-xs text-teal-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Broward County</div>
-                </div>
-                <div class="group p-6 bg-gradient-to-br from-blue-100 to-teal-100 hover:from-blue-50 hover:to-teal-50 border-2 border-teal-300/50 hover:border-teal-500 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10 hover:-translate-y-1">
-                    <div class="text-sm font-black text-slate-900 mb-1">Boca Raton</div>
-                    <div class="text-xs text-teal-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Palm Beach County</div>
-                </div>
-                <div class="group p-6 bg-gradient-to-br from-blue-100 to-teal-100 hover:from-blue-50 hover:to-teal-50 border-2 border-teal-300/50 hover:border-teal-500 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10 hover:-translate-y-1">
-                    <div class="text-sm font-black text-slate-900 mb-1">Lauderdale-by-the-Sea</div>
-                    <div class="text-xs text-teal-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Broward County</div>
-                </div>
+    <div id="loadingOverlay" class="hidden fixed inset-0 bg-midnight/95 backdrop-blur-xl z-50 flex items-center justify-center">
+        <div class="text-center max-w-md w-full mx-6">
+            <div class="w-24 h-24 mx-auto mb-8 relative"><div class="absolute inset-0 border-2 border-electric/20 rounded-full"></div><div class="absolute inset-0 border-2 border-electric rounded-full border-t-transparent animate-spin"></div><div class="absolute inset-4 border-2 border-lime/30 rounded-full border-b-transparent animate-spin" style="animation-direction:reverse;animation-duration:1.5s"></div></div>
+            <h3 class="text-2xl font-bold text-white mb-3">Analyzing Package</h3>
+            <p id="loadingStatus" class="text-gray-400 mb-6">Uploading files...</p>
+            <div class="w-full bg-charcoal rounded-full h-2 mb-4 overflow-hidden"><div id="progressBar" class="progress-bar h-2 rounded-full" style="width:0%"></div></div>
+            <p id="currentFile" class="text-sm text-gray-500 font-mono truncate"></p>
+        </div>
+    </div>
+
+    <section id="resultsSection" class="hidden py-24 px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto"><div class="glow-border rounded-3xl overflow-hidden">
+            <div id="resultsHeader" class="p-8 border-b border-white/5"></div>
+            <div id="filesAnalyzed" class="p-6 bg-obsidian/50 border-b border-white/5"></div>
+            <div id="resultsContent" class="p-8"></div>
+            <div class="p-6 bg-obsidian/50 border-t border-white/5 flex flex-col sm:flex-row gap-4 justify-center"><button id="newAnalysisBtn" class="btn-primary px-8 py-4 rounded-xl text-midnight font-semibold">New Analysis</button><button id="downloadBtn" class="btn-secondary px-8 py-4 rounded-xl text-electric font-medium">Download Report</button></div>
+        </div></div>
+    </section>
+
+    <section id="features" class="py-24 px-6 lg:px-8 relative">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16"><h2 class="text-3xl sm:text-4xl font-bold mb-4">Why <span class="text-electric">PermitPro</span>?</h2><p class="text-gray-400 max-w-xl mx-auto">Purpose-built for South Florida contractors who need fast, accurate permit compliance checks.</p></div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glow-border rounded-2xl p-8"><div class="w-14 h-14 rounded-xl bg-gradient-to-br from-electric/20 to-transparent border border-electric/30 flex items-center justify-center mb-6"><svg class="w-7 h-7 text-electric" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div><h3 class="text-xl font-semibold mb-3">Instant Analysis</h3><p class="text-gray-400 leading-relaxed">Get comprehensive feedback on your entire permit package in seconds, not hours of manual review.</p></div>
+                <div class="glow-border rounded-2xl p-8"><div class="w-14 h-14 rounded-xl bg-gradient-to-br from-lime/20 to-transparent border border-lime/30 flex items-center justify-center mb-6"><svg class="w-7 h-7 text-lime" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div><h3 class="text-xl font-semibold mb-3">City-Specific</h3><p class="text-gray-400 leading-relaxed">Requirements tailored to each South Florida municipality's specific codes and regulations.</p></div>
+                <div class="glow-border rounded-2xl p-8"><div class="w-14 h-14 rounded-xl bg-gradient-to-br from-coral/20 to-transparent border border-coral/30 flex items-center justify-center mb-6"><svg class="w-7 h-7 text-coral" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg></div><h3 class="text-xl font-semibold mb-3">Full Package</h3><p class="text-gray-400 leading-relaxed">Upload up to 50 files (200MB total) for comprehensive package review across all documents.</p></div>
             </div>
         </div>
     </section>
 
-    <!-- CTA -->
-    <section class="py-24 px-6 bg-gradient-to-br from-blue-900 via-teal-900 to-cyan-900 text-center relative overflow-hidden">
-        <!-- Background decoration -->
-        <div class="absolute inset-0 bg-grid-white/5"></div>
-        <div class="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl"></div>
-        
-        <div class="max-w-4xl mx-auto relative z-10">
-            <h2 class="text-4xl md:text-6xl font-black text-white mb-6 leading-tight">
-                Ready to Stop Wasting Time on Rejections?
-            </h2>
-            <p class="text-xl md:text-2xl text-teal-100 font-medium mb-12 leading-relaxed">
-                Join contractors and developers across South Florida who are getting permits approved faster.
-            </p>
-            <button class="px-12 py-5 bg-white hover:bg-teal-50 text-slate-900 font-black text-xl rounded-2xl transition-all duration-300 hover:shadow-2xl hover:shadow-white/20 hover:scale-105">
-                Start Free Analysis
-            </button>
-            
-            <!-- Trust badges -->
-            <div class="flex flex-wrap justify-center gap-8 mt-16 pt-12 border-t border-white/10">
-                <div class="flex items-center gap-2 text-white/80">
-                    <svg class="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="text-sm font-semibold">No credit card required</span>
-                </div>
-                <div class="flex items-center gap-2 text-white/80">
-                    <svg class="w-5 h-5 text-teal-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="text-sm font-semibold">Instant results</span>
-                </div>
-                <div class="flex items-center gap-2 text-white/80">
-                    <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="text-sm font-semibold">Cancel anytime</span>
-                </div>
+    <section id="cities" class="py-24 px-6 lg:px-8 relative hero-gradient">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16"><h2 class="text-3xl sm:text-4xl font-bold mb-4">Supported <span class="text-electric">Cities</span></h2><p class="text-gray-400">Coverage across South Florida's major municipalities</p></div>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div class="city-card rounded-xl p-5 text-center"><p class="font-semibold text-white text-sm">Fort Lauderdale</p><p class="text-xs text-gray-500 mt-1">Broward County</p></div>
+                <div class="city-card rounded-xl p-5 text-center"><p class="font-semibold text-white text-sm">Pompano Beach</p><p class="text-xs text-gray-500 mt-1">Broward County</p></div>
+                <div class="city-card rounded-xl p-5 text-center"><p class="font-semibold text-white text-sm">Hollywood</p><p class="text-xs text-gray-500 mt-1">Broward County</p></div>
+                <div class="city-card rounded-xl p-5 text-center"><p class="font-semibold text-white text-sm">Coral Springs</p><p class="text-xs text-gray-500 mt-1">Broward County</p></div>
+                <div class="city-card rounded-xl p-5 text-center"><p class="font-semibold text-white text-sm">Boca Raton</p><p class="text-xs text-gray-500 mt-1">Palm Beach County</p></div>
+                <div class="city-card rounded-xl p-5 text-center"><p class="font-semibold text-white text-sm">Lauderdale-by-the-Sea</p><p class="text-xs text-gray-500 mt-1">Broward County</p></div>
             </div>
         </div>
     </section>
 
-    <script>
-        const API_URL = 'https://permit-pro-ai-production.up.railway.app';
-        const uploadArea = document.getElementById('uploadArea');
-        const fileInput = document.getElementById('fileInput');
+    <section id="pricing" class="py-24 px-6 lg:px-8">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16"><h2 class="text-3xl sm:text-4xl font-bold mb-4">Simple <span class="text-electric">Pricing</span></h2><p class="text-gray-400">Choose the plan that fits your workflow</p></div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="price-card rounded-2xl p-8"><h3 class="text-lg font-semibold text-gray-400 mb-2">Free</h3><div class="text-4xl font-bold text-white mb-1">$0</div><p class="text-gray-500 text-sm mb-8">per month</p><ul class="space-y-4 mb-8"><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>3 analyses / month</li><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>6 cities covered</li><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Email support</li></ul><button class="w-full py-4 rounded-xl border border-white/10 text-white font-medium hover:bg-white/5 transition-all">Get Started</button></div>
+                <div class="price-card-featured rounded-2xl p-8 relative transform md:-translate-y-4"><div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-electric text-midnight text-xs font-bold rounded-full">POPULAR</div><h3 class="text-lg font-semibold text-electric mb-2">Contractor Pro</h3><div class="text-4xl font-bold text-white mb-1">$49</div><p class="text-gray-500 text-sm mb-8">per month</p><ul class="space-y-4 mb-8"><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Unlimited analyses</li><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>All South Florida cities</li><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>200MB folder uploads</li><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Priority support</li></ul><button class="btn-primary w-full py-4 rounded-xl text-midnight font-bold">Start Pro Trial</button></div>
+                <div class="price-card rounded-2xl p-8"><h3 class="text-lg font-semibold text-gray-400 mb-2">Business</h3><div class="text-4xl font-bold text-white mb-1">$149</div><p class="text-gray-500 text-sm mb-8">per month</p><ul class="space-y-4 mb-8"><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Everything in Pro</li><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>5 team members</li><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>API access</li><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>White-label reports</li></ul><button class="w-full py-4 rounded-xl border border-white/10 text-white font-medium hover:bg-white/5 transition-all">Contact Sales</button></div>
+            </div>
+        </div>
+    </section>
 
-        uploadArea.addEventListener('click', () => fileInput.click());
-
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.classList.add('border-teal-500', 'bg-teal-50');
-        });
-
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.classList.remove('border-teal-500', 'bg-teal-50');
-        });
-
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.classList.remove('border-teal-500', 'bg-teal-50');
-            handleFiles(e.dataTransfer.files);
-        });
-
-        fileInput.addEventListener('change', (e) => {
-            handleFiles(e.target.files);
-        });
-
-        function formatAnalysis(analysis) {
-            if (typeof analysis === 'string') {
-                // Replace actual newline characters with line breaks
-                return analysis
-                    .split('\n')
-                    .map(line => {
-                        const trimmed = line.trim();
-                        if (!trimmed) {
-                            return '<div class="h-2"></div>';
-                        }
-                        if (trimmed.startsWith('##')) {
-                            // Section headers
-                            return `<div class="font-bold text-slate-900 mt-4 mb-2 text-lg">${trimmed}</div>`;
-                        }
-                        if (trimmed.startsWith('•')) {
-                            // Bullet points
-                            return `<div class="flex gap-3 py-1 ml-4"><span class="text-teal-600 font-bold flex-shrink-0">•</span><span>${trimmed.substring(1).trim()}</span></div>`;
-                        }
-                        // Regular text
-                        return `<div class="py-1">${trimmed}</div>`;
-                    })
-                    .join('');
+    <footer class="py-12 px-6 lg:px-8 border-t border-white/5">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center space-x-3 mb-4 md:mb-0"><div class="w-8 h-8 rounded-lg bg-electric/20 flex items-center justify-center"><svg class="w-4 h-4 text-electric" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><span class="font-semibold">PermitPro<span class="text-electric">AI</span></span></div>
+            <p class="text-gray-500 text-sm">© 2025 PermitPro AI. All rights reserved.</p>
+        </div>
+    </footer>
+                progressBar.style.width='100%';loadingStatus.textContent='Analysis complete!';
+                await new Promise(resolve=>setTimeout(resolve,500));displayResults(result)
+            }catch(error){
+                console.error('Analysis error:',error);loadingOverlay.classList.add('hidden');resultsSection.classList.remove('hidden');
+                resultsHeader.innerHTML='<div class="flex items-center text-coral"><svg class="w-8 h-8 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><div><h3 class="text-xl font-bold">Analysis Failed</h3><p class="text-sm text-coral/70">'+error.message+'</p></div></div>';
+                filesAnalyzed.innerHTML='';resultsContent.innerHTML='<div class="text-center py-8"><p class="text-gray-400 mb-6">Please try again or contact support.</p><button onclick="location.reload()" class="btn-secondary px-6 py-3 rounded-xl text-electric">Try Again</button></div>'
             }
-            return `<pre class="whitespace-pre-wrap break-words font-mono text-xs">${JSON.stringify(analysis, null, 2)}</pre>`;
+        });
+
+        function displayResults(result){
+            loadingOverlay.classList.add('hidden');resultsSection.classList.remove('hidden');resultsSection.scrollIntoView({behavior:'smooth'});
+            const analysis=result.analysis||{},status=analysis.overall_status||'UNKNOWN',score=analysis.compliance_score||0;
+            const statusClasses={'READY':'status-ready','NEEDS_ATTENTION':'status-attention','INCOMPLETE':'status-incomplete','ERROR':'status-incomplete','NEEDS_REVIEW':'status-attention'};
+            const statusLabels={'READY':'Ready to Submit','NEEDS_ATTENTION':'Needs Attention','INCOMPLETE':'Incomplete','ERROR':'Error','NEEDS_REVIEW':'Needs Review'};
+            resultsHeader.innerHTML='<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6"><div><h3 class="text-2xl font-bold text-white mb-1">Analysis Complete</h3><p class="text-gray-400">'+result.city+' &bull; '+result.permit_type+'</p></div><div class="flex items-center gap-4"><span class="px-4 py-2 rounded-lg text-sm font-semibold '+(statusClasses[status]||'status-attention')+'">'+(statusLabels[status]||status)+'</span><div class="text-center"><div class="text-3xl font-bold font-mono '+(score>=70?'text-lime':score>=40?'text-yellow-500':'text-coral')+'">'+score+'%</div><div class="text-xs text-gray-500">Compliance</div></div></div></div>';
+            if(result.file_tree&&result.file_tree.length>0){filesAnalyzed.innerHTML='<h4 class="font-semibold text-white mb-3">Files Analyzed: '+result.files_analyzed+'</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-2">'+result.file_tree.map(f=>'<div class="flex items-center text-sm text-gray-400 bg-charcoal/50 rounded-lg px-3 py-2"><span class="text-electric/50 mr-2 font-mono">|--</span><span class="truncate flex-1">'+f.name+'</span><span class="text-gray-600 ml-2 font-mono text-xs">'+f.size+'</span></div>').join('')+'</div>'+(result.total_size?'<p class="text-sm text-gray-500 mt-3 font-mono">Total: '+result.total_size+'</p>':'')}
+            let contentHTML='';
+            if(analysis.summary)contentHTML+='<div class="mb-8"><h4 class="text-lg font-semibold text-white mb-3">Summary</h4><p class="text-gray-400 leading-relaxed">'+analysis.summary+'</p></div>';
+            if(analysis.items_found&&analysis.items_found.length>0){const statusBadge={'FOUND':'<span class="px-2 py-1 bg-lime/20 text-lime text-xs rounded font-medium">Found</span>','MISSING':'<span class="px-2 py-1 bg-coral/20 text-coral text-xs rounded font-medium">Missing</span>','PARTIAL':'<span class="px-2 py-1 bg-yellow-500/20 text-yellow-500 text-xs rounded font-medium">Partial</span>','UNCLEAR':'<span class="px-2 py-1 bg-gray-500/20 text-gray-400 text-xs rounded font-medium">Unclear</span>'};contentHTML+='<div class="mb-8"><h4 class="text-lg font-semibold text-white mb-4">Requirements Check</h4><div class="space-y-3">'+analysis.items_found.map(item=>'<div class="flex items-start gap-3 p-4 bg-charcoal/50 rounded-xl border border-white/5">'+(statusBadge[item.status]||'')+'<div class="flex-1 min-w-0"><p class="text-sm text-gray-300">'+item.requirement+'</p>'+(item.note?'<p class="text-xs text-gray-500 mt-1">'+item.note+'</p>':'')+(item.files?'<p class="text-xs text-electric/70 mt-1">Found in: '+item.files.join(', ')+'</p>':'')+'</div></div>').join('')+'</div></div>'}
+            if(analysis.critical_issues&&analysis.critical_issues.length>0)contentHTML+='<div class="mb-8"><h4 class="text-lg font-semibold text-coral mb-4">Critical Issues</h4><ul class="space-y-2">'+analysis.critical_issues.map(issue=>'<li class="flex items-start text-coral/90 text-sm"><span class="mr-3 text-coral">•</span><span>'+issue+'</span></li>').join('')+'</ul></div>';
+            if(analysis.missing_documents&&analysis.missing_documents.length>0)contentHTML+='<div class="mb-8"><h4 class="text-lg font-semibold text-yellow-500 mb-4">Missing Documents</h4><ul class="space-y-2">'+analysis.missing_documents.map(doc=>'<li class="flex items-start text-yellow-500/90 text-sm"><span class="mr-3 text-yellow-500">•</span><span>'+doc+'</span></li>').join('')+'</ul></div>';
+            if(analysis.recommendations&&analysis.recommendations.length>0)contentHTML+='<div class="mb-8"><h4 class="text-lg font-semibold text-electric mb-4">Recommendations</h4><ul class="space-y-2">'+analysis.recommendations.map(rec=>'<li class="flex items-start text-gray-400 text-sm"><span class="mr-3 text-electric">•</span><span>'+rec+'</span></li>').join('')+'</ul></div>';
+            if(analysis.next_steps&&analysis.next_steps.length>0)contentHTML+='<div class="mb-4"><h4 class="text-lg font-semibold text-lime mb-4">Next Steps</h4><ol class="space-y-2 list-decimal list-inside">'+analysis.next_steps.map(step=>'<li class="text-gray-400 text-sm">'+step+'</li>').join('')+'</ol></div>';
+            resultsContent.innerHTML=contentHTML||'<p class="text-gray-500 text-center py-8">No detailed analysis available.</p>'
         }
 
-        async function handleFiles(files) {
-            if (files.length === 0) return;
-            
-            const file = files[0];
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('city', 'Fort Lauderdale');
-            formData.append('permit_type', 'Building');
-            
-            try {
-                uploadArea.innerHTML = `
-                    <div class="flex flex-col items-center justify-center gap-4">
-                        <div class="animate-spin">
-                            <svg class="w-12 h-12 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                            </svg>
-                        </div>
-                        <p class="text-lg font-bold text-slate-900">Analyzing your permit...</p>
-                        <p class="text-sm text-slate-600">This usually takes 30-60 seconds</p>
-                    </div>
-                `;
-                
-                const response = await fetch(`${API_URL}/api/analyze-permit`, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok) {
-                    uploadArea.innerHTML = `
-                        <div class="text-center p-6 w-full max-h-[450px] overflow-y-auto">
-                            <div class="text-5xl mb-4">✅</div>
-                            <p class="text-2xl font-bold text-slate-900 mb-4">Analysis Complete!</p>
-                            <div class="bg-blue-50 p-6 rounded-2xl text-left border-2 border-teal-300">
-                                <div class="text-sm text-slate-700 space-y-0">
-                                    ${formatAnalysis(data.analysis)}
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    uploadArea.innerHTML = `
-                        <div class="text-center">
-                            <div class="text-4xl mb-4">❌</div>
-                            <p class="text-lg font-bold text-red-600">${data.detail || 'Analysis failed'}</p>
-                            <button onclick="location.reload()" class="mt-4 px-6 py-2 bg-teal-600 text-white font-bold rounded-lg hover:bg-teal-700">
-                                Try Again
-                            </button>
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                uploadArea.innerHTML = `
-                    <div class="text-center">
-                        <div class="text-4xl mb-4">⚠️</div>
-                        <p class="text-lg font-bold text-red-600">Error: ${error.message}</p>
-                        <p class="text-sm text-slate-600 mt-2">Make sure the backend is running</p>
-                        <button onclick="location.reload()" class="mt-4 px-6 py-2 bg-teal-600 text-white font-bold rounded-lg hover:bg-teal-700">
-                            Try Again
-                        </button>
-                    </div>
-                `;
-            }
-        }
+        newAnalysisBtn.addEventListener('click',()=>{clearFiles();resultsSection.classList.add('hidden');document.getElementById('analyzer').scrollIntoView({behavior:'smooth'})});
+        updateAnalyzeButton()
     </script>
-
 </body>
 </html>
