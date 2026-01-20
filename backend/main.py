@@ -1,3 +1,5 @@
+Copy
+
 from fastapi import FastAPI, UploadFile, File, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -31,19 +33,19 @@ from analyzer import analyze_document_with_claude
 
 app = FastAPI(title="South Florida Permit Checker API")
 
-# CORS - allows your React frontend to talk to this API
-# ✅ UPDATED: Added your Vercel domain
+# CORS - allows your frontend to talk to this API
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
         "http://localhost:5173",
+        "https://permit-pro-ai.vercel.app",
         "https://south-florida-permit-helper-production.up.railway.app",
         "https://frontend-nine-mu-19.vercel.app",
-        "https://south-florida-permit-helper.vercel.app",  # ← ADD YOUR VERCEL URL HERE
-        "https://*.vercel.app",  # Allows all Vercel preview deployments
+        "https://south-florida-permit-helper.vercel.app",
+        "*",  # Allow all origins for development
     ],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -300,7 +302,7 @@ async def get_pricing():
                     "Save analysis history",
                     "Download PDF reports",
                 ],
-                "stripe_price_id": "price_xxx",  # Add your Stripe price ID
+                "stripe_price_id": "price_xxx",
             },
             {
                 "name": "Business",
@@ -313,7 +315,7 @@ async def get_pricing():
                     "Dedicated support",
                     "Training sessions",
                 ],
-                "stripe_price_id": "price_yyy",  # Add your Stripe price ID
+                "stripe_price_id": "price_yyy",
             },
         ]
     }
