@@ -1,14 +1,434 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="AI-powered permit checking for South Florida contractors. Analyze building permits instantly." />
-    <title>South Florida Permit Checker | AI-Powered Analysis</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PermitPro AI - South Florida's Premier Permit Analysis Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.cdnfonts.com/css/satoshi" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        * {
+            font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
+        .animate-fadeInUp {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .animate-slideIn {
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .gradient-border {
+            position: relative;
+            background: linear-gradient(to right, #3b82f6, #06b6d4);
+            padding: 2px;
+            border-radius: 1rem;
+        }
+
+        .gradient-border-content {
+            background: white;
+            border-radius: calc(1rem - 2px);
+        }
+
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        .glass-effect {
+            background: rgba(191, 219, 254, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-100 via-teal-100 to-cyan-100">
+    
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-teal-300/50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 bg-gradient-to-br from-blue-600 via-teal-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/30 transform hover:scale-105 transition-transform">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">PermitPro AI</h1>
+                        <p class="text-[11px] text-teal-600 font-semibold -mt-0.5">South Florida</p>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#features" class="text-sm font-semibold text-slate-700 hover:text-teal-600 transition-colors">Features</a>
+                    <a href="#cities" class="text-sm font-semibold text-slate-700 hover:text-teal-600 transition-colors">Coverage</a>
+                    <a href="#process" class="text-sm font-semibold text-slate-700 hover:text-teal-600 transition-colors">How it Works</a>
+                </div>
+                <button class="px-6 py-3 bg-gradient-to-r from-slate-900 to-slate-800 hover:from-slate-800 hover:to-slate-700 text-white text-sm font-bold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-slate-900/30 hover:scale-105">
+                    Get Started
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-36 pb-24 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-20 items-center">
+                <!-- Left: Value Prop -->
+                <div class="space-y-8 animate-fadeInUp">
+                    <div class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-50 to-teal-50 border border-teal-200/60 rounded-full shadow-sm">
+                        <div class="w-2 h-2 bg-teal-500 rounded-full animate-pulse"></div>
+                        <span class="text-sm font-bold text-teal-700">AI-Powered Permit Analysis</span>
+                    </div>
+                    
+                    <h1 class="text-5xl lg:text-7xl font-black text-slate-900 leading-[1.05] tracking-tight">
+                        Stop the Permit
+                        <span class="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-teal-500 to-cyan-500 mt-2">
+                            Rejection Loop
+                        </span>
+                    </h1>
+                    
+                    <p class="text-xl text-slate-600 leading-relaxed max-w-xl font-medium">
+                        Our AI scans building permits against <span class="font-bold text-slate-900 bg-yellow-100 px-1 rounded">local zoning codes</span> before submission. Catch errors in seconds, not weeks.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                        <button class="group px-8 py-4 bg-gradient-to-r from-blue-600 via-teal-600 to-cyan-600 hover:from-blue-700 hover:via-teal-700 hover:to-cyan-700 text-white font-bold text-lg rounded-2xl transition-all duration-300 hover:shadow-2xl hover:shadow-teal-500/40 hover:scale-105 flex items-center justify-center gap-3">
+                            Try Demo Analysis
+                            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </button>
+                        <button class="px-8 py-4 bg-blue-50 hover:bg-white text-slate-900 font-bold text-lg rounded-2xl border-2 border-teal-300 hover:border-teal-500 transition-all duration-300 hover:shadow-lg">
+                            Watch 2-Min Demo
+                        </button>
+                    </div>
+
+                    <!-- Trust Indicators -->
+                    <div class="flex flex-wrap items-center gap-8 pt-6">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-black text-slate-900">99.7%</div>
+                                <div class="text-xs font-semibold text-slate-500 -mt-1">Accuracy</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-10 h-10 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/20">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-black text-slate-900">5-Min</div>
+                                <div class="text-xs font-semibold text-slate-500 -mt-1">Analysis</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/20">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-black text-slate-900">6 Cities</div>
+                                <div class="text-xs font-semibold text-slate-500 -mt-1">Covered</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Interactive Preview -->
+                <div class="relative animate-float">
+                    <div class="relative bg-gradient-to-br from-blue-50 to-teal-50 rounded-3xl shadow-2xl shadow-blue-900/20 border-2 border-teal-300/50 overflow-hidden">
+                        <!-- Mock UI Header -->
+                        <div class="bg-gradient-to-r from-blue-200 via-teal-100 to-blue-200 px-6 py-5 border-b-2 border-teal-300/80">
+                            <div class="flex items-center gap-3">
+                                <div class="flex gap-2">
+                                    <div class="w-3.5 h-3.5 rounded-full bg-red-500 shadow-sm"></div>
+                                    <div class="w-3.5 h-3.5 rounded-full bg-yellow-500 shadow-sm"></div>
+                                    <div class="w-3.5 h-3.5 rounded-full bg-green-500 shadow-sm"></div>
+                                </div>
+                                <div class="flex-1 bg-white rounded-lg px-4 py-2.5 text-sm font-semibold text-slate-700 border-2 border-teal-300 shadow-sm">
+                                    permit_submission.pdf
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Analysis Content -->
+                        <div class="p-8 space-y-4 min-h-[500px]">
+                            <div id="uploadArea" class="cursor-pointer h-[450px] border-3 border-dashed border-teal-300 rounded-3xl flex flex-col items-center justify-center gap-6 hover:border-teal-500 hover:bg-gradient-to-br hover:from-blue-50 hover:to-teal-50 transition-all duration-300 group">
+                                <input type="file" id="fileInput" hidden accept=".pdf,.png,.jpg,.jpeg">
+                                
+                                <div class="w-24 h-24 bg-gradient-to-br from-blue-500 to-teal-500 rounded-3xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 shadow-xl shadow-teal-500/30">
+                                    <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                    </svg>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-xl font-black text-slate-900">Drop your permit here</p>
+                                    <p class="text-sm text-slate-600 font-semibold mt-2">or click to upload • PDF, PNG, JPG</p>
+                                </div>
+                                <div class="px-8 py-3.5 bg-gradient-to-r from-blue-600 to-teal-600 text-white text-sm font-bold rounded-xl group-hover:shadow-2xl group-hover:shadow-teal-500/40 transition-all group-hover:scale-105">
+                                    Select Files
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating badge -->
+                    <div class="absolute -top-6 -right-6 px-5 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl shadow-xl shadow-emerald-500/30 border-2 border-teal-200">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2.5 h-2.5 bg-white rounded-full animate-pulse"></div>
+                            <span class="text-sm font-black text-white">Live Demo</span>
+                        </div>
+                    </div>
+
+                    <!-- Decorative gradient orbs -->
+                    <div class="absolute -z-10 -top-20 -left-20 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl"></div>
+                    <div class="absolute -z-10 -bottom-20 -right-20 w-72 h-72 bg-teal-400/20 rounded-full blur-3xl"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cities Section -->
+    <section class="py-20 bg-gradient-to-br from-blue-200/40 via-teal-200/40 to-cyan-200/40 border-y-2 border-teal-300/50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-50 to-teal-50 border border-teal-200/60 rounded-full mb-6">
+                    <svg class="w-4 h-4 text-teal-600" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path>
+                    </svg>
+                    <span class="text-sm font-bold text-teal-700">Coverage Area</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-4">Covering 6 South Florida Cities</h2>
+                <p class="text-lg text-slate-600 font-medium max-w-2xl mx-auto">Comprehensive permit analysis across major municipalities in Broward and Palm Beach counties</p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-6xl mx-auto">
+                <div class="group p-6 bg-gradient-to-br from-blue-100 to-teal-100 hover:from-blue-50 hover:to-teal-50 border-2 border-teal-300/50 hover:border-teal-500 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10 hover:-translate-y-1">
+                    <div class="text-sm font-black text-slate-900 mb-1">Fort Lauderdale</div>
+                    <div class="text-xs text-teal-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Broward County</div>
+                </div>
+                <div class="group p-6 bg-gradient-to-br from-blue-100 to-teal-100 hover:from-blue-50 hover:to-teal-50 border-2 border-teal-300/50 hover:border-teal-500 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10 hover:-translate-y-1">
+                    <div class="text-sm font-black text-slate-900 mb-1">Pompano Beach</div>
+                    <div class="text-xs text-teal-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Broward County</div>
+                </div>
+                <div class="group p-6 bg-gradient-to-br from-blue-100 to-teal-100 hover:from-blue-50 hover:to-teal-50 border-2 border-teal-300/50 hover:border-teal-500 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10 hover:-translate-y-1">
+                    <div class="text-sm font-black text-slate-900 mb-1">Hollywood</div>
+                    <div class="text-xs text-teal-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Broward County</div>
+                </div>
+                <div class="group p-6 bg-gradient-to-br from-blue-100 to-teal-100 hover:from-blue-50 hover:to-teal-50 border-2 border-teal-300/50 hover:border-teal-500 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10 hover:-translate-y-1">
+                    <div class="text-sm font-black text-slate-900 mb-1">Coral Springs</div>
+                    <div class="text-xs text-teal-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Broward County</div>
+                </div>
+                <div class="group p-6 bg-gradient-to-br from-blue-100 to-teal-100 hover:from-blue-50 hover:to-teal-50 border-2 border-teal-300/50 hover:border-teal-500 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10 hover:-translate-y-1">
+                    <div class="text-sm font-black text-slate-900 mb-1">Boca Raton</div>
+                    <div class="text-xs text-teal-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Palm Beach County</div>
+                </div>
+                <div class="group p-6 bg-gradient-to-br from-blue-100 to-teal-100 hover:from-blue-50 hover:to-teal-50 border-2 border-teal-300/50 hover:border-teal-500 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10 hover:-translate-y-1">
+                    <div class="text-sm font-black text-slate-900 mb-1">Lauderdale-by-the-Sea</div>
+                    <div class="text-xs text-teal-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Broward County</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-24 px-6 bg-gradient-to-br from-blue-900 via-teal-900 to-cyan-900 text-center relative overflow-hidden">
+        <!-- Background decoration -->
+        <div class="absolute inset-0 bg-grid-white/5"></div>
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl"></div>
+        
+        <div class="max-w-4xl mx-auto relative z-10">
+            <h2 class="text-4xl md:text-6xl font-black text-white mb-6 leading-tight">
+                Ready to Stop Wasting Time on Rejections?
+            </h2>
+            <p class="text-xl md:text-2xl text-teal-100 font-medium mb-12 leading-relaxed">
+                Join contractors and developers across South Florida who are getting permits approved faster.
+            </p>
+            <button class="px-12 py-5 bg-white hover:bg-teal-50 text-slate-900 font-black text-xl rounded-2xl transition-all duration-300 hover:shadow-2xl hover:shadow-white/20 hover:scale-105">
+                Start Free Analysis
+            </button>
+            
+            <!-- Trust badges -->
+            <div class="flex flex-wrap justify-center gap-8 mt-16 pt-12 border-t border-white/10">
+                <div class="flex items-center gap-2 text-white/80">
+                    <svg class="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="text-sm font-semibold">No credit card required</span>
+                </div>
+                <div class="flex items-center gap-2 text-white/80">
+                    <svg class="w-5 h-5 text-teal-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="text-sm font-semibold">Instant results</span>
+                </div>
+                <div class="flex items-center gap-2 text-white/80">
+                    <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="text-sm font-semibold">Cancel anytime</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const API_URL = 'https://permit-pro-ai-production.up.railway.app';
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('border-teal-500', 'bg-teal-50');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('border-teal-500', 'bg-teal-50');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('border-teal-500', 'bg-teal-50');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        async function handleFiles(files) {
+            if (files.length === 0) return;
+            
+            const file = files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('city', 'Fort Lauderdale');
+            formData.append('permit_type', 'Building');
+            
+            try {
+                uploadArea.innerHTML = `
+                    <div class="flex flex-col items-center justify-center gap-4">
+                        <div class="animate-spin">
+                            <svg class="w-12 h-12 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <p class="text-lg font-bold text-slate-900">Analyzing your permit...</p>
+                        <p class="text-sm text-slate-600">This usually takes 30-60 seconds</p>
+                    </div>
+                `;
+                
+                const response = await fetch(`${API_URL}/api/analyze-permit`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    uploadArea.innerHTML = `
+                        <div class="text-center p-6 w-full">
+                            <div class="text-5xl mb-4">✅</div>
+                            <p class="text-2xl font-bold text-slate-900 mb-4">Analysis Complete!</p>
+                            <div class="bg-blue-50 p-6 rounded-2xl text-left max-h-96 overflow-auto border-2 border-teal-300">
+                                <pre class="text-sm text-slate-700 whitespace-pre-wrap break-words font-mono">${JSON.stringify(data.analysis, null, 2)}</pre>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    uploadArea.innerHTML = `
+                        <div class="text-center">
+                            <div class="text-4xl mb-4">❌</div>
+                            <p class="text-lg font-bold text-red-600">${data.detail || 'Analysis failed'}</p>
+                            <button onclick="location.reload()" class="mt-4 px-6 py-2 bg-teal-600 text-white font-bold rounded-lg hover:bg-teal-700">
+                                Try Again
+                            </button>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                uploadArea.innerHTML = `
+                    <div class="text-center">
+                        <div class="text-4xl mb-4">⚠️</div>
+                        <p class="text-lg font-bold text-red-600">Error: ${error.message}</p>
+                        <p class="text-sm text-slate-600 mt-2">Make sure the backend is running</p>
+                        <button onclick="location.reload()" class="mt-4 px-6 py-2 bg-teal-600 text-white font-bold rounded-lg hover:bg-teal-700">
+                            Try Again
+                        </button>
+                    </div>
+                `;
+            }
+        }
+    </script>
+
+</body>
 </html>
