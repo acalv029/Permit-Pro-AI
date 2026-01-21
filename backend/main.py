@@ -21,7 +21,6 @@ import tempfile
 import shutil
 import uuid
 import re
-import magic
 import json
 from datetime import datetime
 from typing import Optional, List
@@ -355,15 +354,17 @@ def validate_file_type(filename: str) -> tuple[bool, str]:
 
 
 def validate_mime_type(file_path: str) -> tuple[bool, str]:
-    """Validate file MIME type server-side"""
-    try:
-        mime = magic.Magic(mime=True)
-        detected_type = mime.from_file(file_path)
-        if detected_type not in ALLOWED_MIME_TYPES:
-            return False, f"Invalid file type detected: {detected_type}"
-        return True, detected_type
-    except Exception as e:
-        return False, f"Could not verify file type: {str(e)}"
+    """Validate file type by extension (simplified - no libmagic dependency)"""
+    ext = os.path.splitext(file_path)[1].lower()
+    ext_to_mime = {
+        ".pdf": "application/pdf",
+        ".png": "image/png",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+    }
+    if ext in ext_to_mime:
+        return True, ext_to_mime[ext]
+    return False, f"Invalid file type: {ext}"
 
 
 def format_file_size(size_bytes: int) -> str:
