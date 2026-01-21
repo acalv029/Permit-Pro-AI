@@ -6,183 +6,790 @@
     <title>PermitPro AI - South Florida Permit Checker</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>tailwind.config={theme:{extend:{fontFamily:{'outfit':['Outfit','sans-serif'],'mono':['JetBrains Mono','monospace']},colors:{'midnight':'#0a0a0f','obsidian':'#12121a','charcoal':'#1a1a24','electric':'#00f0ff','lime':'#c8ff00','coral':'#ff6b6b'}}}}</script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 'outfit': ['Outfit', 'sans-serif'], 'mono': ['JetBrains Mono', 'monospace'] },
+                    colors: { 'midnight': '#0a0a0f', 'obsidian': '#12121a', 'charcoal': '#1a1a24', 'electric': '#00f0ff', 'lime': '#c8ff00', 'coral': '#ff6b6b' }
+                }
+            }
+        }
+    </script>
     <style>
-        *{font-family:'Outfit',sans-serif}body{background:#0a0a0f}
-        .hero-gradient{background:radial-gradient(ellipse 80% 50% at 50% -20%,rgba(0,240,255,0.15),transparent),radial-gradient(ellipse 60% 40% at 80% 50%,rgba(200,255,0,0.08),transparent),radial-gradient(ellipse 50% 30% at 20% 80%,rgba(0,240,255,0.1),transparent)}
-        .grid-pattern{background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:60px 60px}
-        .glow-border{position:relative;background:linear-gradient(135deg,#1a1a24 0%,#12121a 100%);border:1px solid rgba(0,240,255,0.2)}
-        .glow-border::before{content:'';position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:linear-gradient(135deg,rgba(0,240,255,0.4),transparent 50%,rgba(200,255,0,0.3));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
-        .scan-line{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#00f0ff,transparent);animation:scan 3s ease-in-out infinite;opacity:0.6}
-        @keyframes scan{0%,100%{transform:translateY(0);opacity:0}10%{opacity:0.6}90%{opacity:0.6}100%{transform:translateY(100%);opacity:0}}
-        .particle{position:absolute;width:4px;height:4px;background:#00f0ff;border-radius:50%;animation:float-particle 8s ease-in-out infinite;opacity:0.4}
-        @keyframes float-particle{0%,100%{transform:translateY(0) translateX(0)}25%{transform:translateY(-20px) translateX(10px)}50%{transform:translateY(-10px) translateX(-10px)}75%{transform:translateY(-30px) translateX(5px)}}
-        .btn-primary{background:linear-gradient(135deg,#00f0ff 0%,#00c4d4 100%);transition:all 0.3s cubic-bezier(0.4,0,0.2,1);box-shadow:0 0 30px rgba(0,240,255,0.3)}
-        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 50px rgba(0,240,255,0.5),0 10px 40px rgba(0,240,255,0.3)}
-        .btn-secondary{background:transparent;border:1px solid rgba(0,240,255,0.3);transition:all 0.3s ease}
-        .btn-secondary:hover{background:rgba(0,240,255,0.1);border-color:rgba(0,240,255,0.6);box-shadow:0 0 30px rgba(0,240,255,0.2)}
-        .drop-zone{border:2px dashed rgba(0,240,255,0.3);transition:all 0.3s ease;background:rgba(0,240,255,0.02)}
-        .drop-zone:hover,.drop-zone-active{border-color:#00f0ff;background:rgba(0,240,255,0.08);box-shadow:inset 0 0 60px rgba(0,240,255,0.1)}
-        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#12121a}::-webkit-scrollbar-thumb{background:#00f0ff40;border-radius:3px}
-        select{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2300f0ff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");background-position:right 1rem center;background-repeat:no-repeat;background-size:1.2em 1.2em}
-        @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}.animate-fadeUp{animation:fadeUp 0.8s ease-out forwards}
-        .stagger-1{animation-delay:0.1s;opacity:0}.stagger-2{animation-delay:0.2s;opacity:0}.stagger-3{animation-delay:0.3s;opacity:0}.stagger-4{animation-delay:0.4s;opacity:0}
-        .city-card{background:linear-gradient(135deg,rgba(26,26,36,0.8) 0%,rgba(18,18,26,0.8) 100%);border:1px solid rgba(0,240,255,0.1);transition:all 0.4s cubic-bezier(0.4,0,0.2,1)}
-        .city-card:hover{border-color:rgba(0,240,255,0.4);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,0.4),0 0 30px rgba(0,240,255,0.1)}
-        .price-card{background:linear-gradient(180deg,#1a1a24 0%,#12121a 100%);border:1px solid rgba(255,255,255,0.05)}
-        .price-card-featured{background:linear-gradient(180deg,rgba(0,240,255,0.1) 0%,#12121a 50%);border:1px solid rgba(0,240,255,0.3)}
-        .file-item{transition:all 0.2s ease}.file-item:hover{background:rgba(0,240,255,0.05)}
-        .progress-bar{background:linear-gradient(90deg,#00f0ff,#c8ff00);transition:width 0.3s ease-out;box-shadow:0 0 20px rgba(0,240,255,0.5)}
-        .status-ready{background:rgba(0,255,136,0.15);color:#00ff88;border:1px solid rgba(0,255,136,0.3)}
-        .status-attention{background:rgba(255,200,0,0.15);color:#ffc800;border:1px solid rgba(255,200,0,0.3)}
-        .status-incomplete{background:rgba(255,107,107,0.15);color:#ff6b6b;border:1px solid rgba(255,107,107,0.3)}
+        * { font-family: 'Outfit', sans-serif; }
+        body { background: #0a0a0f; }
+        .hero-gradient { background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0,240,255,0.15), transparent), radial-gradient(ellipse 60% 40% at 80% 50%, rgba(200,255,0,0.08), transparent), radial-gradient(ellipse 50% 30% at 20% 80%, rgba(0,240,255,0.1), transparent); }
+        .grid-pattern { background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 60px 60px; }
+        .glow-border { position: relative; background: linear-gradient(135deg, #1a1a24 0%, #12121a 100%); border: 1px solid rgba(0,240,255,0.2); }
+        .glow-border::before { content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; background: linear-gradient(135deg, rgba(0,240,255,0.4), transparent 50%, rgba(200,255,0,0.3)); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
+        .scan-line { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #00f0ff, transparent); animation: scan 3s ease-in-out infinite; opacity: 0.6; }
+        @keyframes scan { 0%, 100% { transform: translateY(0); opacity: 0; } 10% { opacity: 0.6; } 90% { opacity: 0.6; } 100% { transform: translateY(100%); opacity: 0; } }
+        .particle { position: absolute; width: 4px; height: 4px; background: #00f0ff; border-radius: 50%; animation: float-particle 8s ease-in-out infinite; opacity: 0.4; }
+        @keyframes float-particle { 0%, 100% { transform: translateY(0) translateX(0); } 25% { transform: translateY(-20px) translateX(10px); } 50% { transform: translateY(-10px) translateX(-10px); } 75% { transform: translateY(-30px) translateX(5px); } }
+        .btn-primary { background: linear-gradient(135deg, #00f0ff 0%, #00c4d4 100%); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 30px rgba(0,240,255,0.3); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(0,240,255,0.5), 0 10px 40px rgba(0,240,255,0.3); }
+        .btn-secondary { background: transparent; border: 1px solid rgba(0,240,255,0.3); transition: all 0.3s ease; }
+        .btn-secondary:hover { background: rgba(0,240,255,0.1); border-color: rgba(0,240,255,0.6); box-shadow: 0 0 30px rgba(0,240,255,0.2); }
+        .drop-zone { border: 2px dashed rgba(0,240,255,0.3); transition: all 0.3s ease; background: rgba(0,240,255,0.02); }
+        .drop-zone:hover, .drop-zone-active { border-color: #00f0ff; background: rgba(0,240,255,0.08); box-shadow: inset 0 0 60px rgba(0,240,255,0.1); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #12121a; }
+        ::-webkit-scrollbar-thumb { background: #00f0ff40; border-radius: 3px; }
+        select { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2300f0ff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 1rem center; background-repeat: no-repeat; background-size: 1.2em 1.2em; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeUp { animation: fadeUp 0.8s ease-out forwards; }
+        .stagger-1 { animation-delay: 0.1s; opacity: 0; }
+        .stagger-2 { animation-delay: 0.2s; opacity: 0; }
+        .stagger-3 { animation-delay: 0.3s; opacity: 0; }
+        .stagger-4 { animation-delay: 0.4s; opacity: 0; }
+        .city-card { background: linear-gradient(135deg, rgba(26,26,36,0.8) 0%, rgba(18,18,26,0.8) 100%); border: 1px solid rgba(0,240,255,0.1); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .city-card:hover { border-color: rgba(0,240,255,0.4); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 30px rgba(0,240,255,0.1); }
+        .price-card { background: linear-gradient(180deg, #1a1a24 0%, #12121a 100%); border: 1px solid rgba(255,255,255,0.05); }
+        .price-card-featured { background: linear-gradient(180deg, rgba(0,240,255,0.1) 0%, #12121a 50%); border: 1px solid rgba(0,240,255,0.3); }
+        .file-item { transition: all 0.2s ease; }
+        .file-item:hover { background: rgba(0,240,255,0.05); }
+        .progress-bar { background: linear-gradient(90deg, #00f0ff, #c8ff00); transition: width 0.3s ease-out; box-shadow: 0 0 20px rgba(0,240,255,0.5); }
+        .status-ready { background: rgba(0,255,136,0.15); color: #00ff88; border: 1px solid rgba(0,255,136,0.3); }
+        .status-attention { background: rgba(255,200,0,0.15); color: #ffc800; border: 1px solid rgba(255,200,0,0.3); }
+        .status-incomplete { background: rgba(255,107,107,0.15); color: #ff6b6b; border: 1px solid rgba(255,107,107,0.3); }
     </style>
 </head>
 <body class="text-white min-h-screen">
+    <!-- Navigation -->
     <nav class="fixed top-0 left-0 right-0 z-50 bg-midnight/80 backdrop-blur-xl border-b border-white/5">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8"><div class="flex justify-between items-center h-20">
-            <div class="flex items-center space-x-3"><div class="w-10 h-10 rounded-xl bg-gradient-to-br from-electric to-cyan-400 flex items-center justify-center"><svg class="w-5 h-5 text-midnight" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><span class="text-xl font-bold tracking-tight">PermitPro<span class="text-electric">AI</span></span></div>
-            <div class="hidden md:flex items-center space-x-8"><a href="#features" class="text-gray-400 hover:text-electric transition-colors text-sm font-medium">Features</a><a href="#cities" class="text-gray-400 hover:text-electric transition-colors text-sm font-medium">Cities</a><a href="#pricing" class="text-gray-400 hover:text-electric transition-colors text-sm font-medium">Pricing</a></div>
-        </div></div>
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-electric to-cyan-400 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-midnight" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <span class="text-xl font-bold tracking-tight">PermitPro<span class="text-electric">AI</span></span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-gray-400 hover:text-electric transition-colors text-sm font-medium">Features</a>
+                    <a href="#cities" class="text-gray-400 hover:text-electric transition-colors text-sm font-medium">Cities</a>
+                    <a href="#pricing" class="text-gray-400 hover:text-electric transition-colors text-sm font-medium">Pricing</a>
+                </div>
+            </div>
+        </div>
     </nav>
 
+    <!-- Hero Section -->
     <section class="relative min-h-screen hero-gradient grid-pattern flex items-center pt-20">
-        <div class="particle" style="top:20%;left:10%"></div><div class="particle" style="top:60%;left:85%;animation-delay:-2s"></div><div class="particle" style="top:80%;left:25%;animation-delay:-4s"></div><div class="particle" style="top:30%;left:70%;animation-delay:-6s"></div>
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 py-20"><div class="max-w-4xl">
-            <div class="animate-fadeUp stagger-1"><div class="inline-flex items-center px-4 py-2 rounded-full bg-electric/10 border border-electric/30 text-electric text-sm font-medium mb-8"><span class="w-2 h-2 bg-electric rounded-full mr-3 animate-pulse"></span>AI-Powered Analysis</div></div>
-            <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6 animate-fadeUp stagger-2">South Florida<br><span class="bg-gradient-to-r from-electric via-cyan-400 to-lime bg-clip-text text-transparent">Permit Checker</span></h1>
-            <p class="text-xl text-gray-400 mb-10 max-w-2xl leading-relaxed animate-fadeUp stagger-3">Upload your complete permit package and get instant AI analysis against municipal requirements. Stop guessing, start knowing.</p>
-            <div class="flex flex-col sm:flex-row gap-4 animate-fadeUp stagger-4"><a href="#analyzer" class="btn-primary px-8 py-4 rounded-xl text-midnight font-semibold text-center">Start Analysis</a><a href="#features" class="btn-secondary px-8 py-4 rounded-xl text-electric font-medium text-center">Learn More</a></div>
-        </div></div>
-        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce"><svg class="w-6 h-6 text-electric/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg></div>
-    </section>
-
-    <section id="analyzer" class="py-24 px-6 lg:px-8 relative">
-        <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-12"><h2 class="text-3xl sm:text-4xl font-bold mb-4">Analyze Your <span class="text-electric">Permit Package</span></h2><p class="text-gray-400 max-w-xl mx-auto">Select your city and permit type, then upload your documents for instant compliance analysis.</p></div>
-            <div class="glow-border rounded-3xl p-8 lg:p-10 relative overflow-hidden"><div class="scan-line"></div>
-                <div class="mb-10">
-                    <div class="flex items-center mb-6"><div class="w-10 h-10 rounded-xl bg-electric/20 text-electric flex items-center justify-center font-mono font-bold mr-4">01</div><h3 class="text-xl font-semibold">Location & Permit Type</h3></div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div><label class="block text-sm text-gray-400 mb-2 font-medium">City</label><select id="citySelect" class="w-full px-5 py-4 bg-charcoal border border-white/10 rounded-xl text-white focus:border-electric focus:outline-none focus:ring-1 focus:ring-electric transition-all appearance-none cursor-pointer"><option value="">Select a city...</option><option value="Fort Lauderdale">Fort Lauderdale</option><option value="Pompano Beach">Pompano Beach</option><option value="Hollywood">Hollywood</option><option value="Coral Springs">Coral Springs</option><option value="Boca Raton">Boca Raton</option><option value="Lauderdale-by-the-Sea">Lauderdale-by-the-Sea</option></select></div>
-                        <div><label class="block text-sm text-gray-400 mb-2 font-medium">Permit Type</label><select id="permitSelect" class="w-full px-5 py-4 bg-charcoal border border-white/10 rounded-xl text-white focus:border-electric focus:outline-none focus:ring-1 focus:ring-electric transition-all appearance-none cursor-pointer"><option value="">Select permit type...</option><option value="building">Building Permit</option><option value="electrical">Electrical Permit</option><option value="plumbing">Plumbing Permit</option><option value="mechanical">Mechanical / HVAC</option><option value="roofing">Roofing Permit</option><option value="dock">Dock / Marine</option><option value="seawall">Seawall Permit</option></select></div>
+        <div class="particle" style="top: 20%; left: 10%;"></div>
+        <div class="particle" style="top: 60%; left: 85%; animation-delay: -2s;"></div>
+        <div class="particle" style="top: 80%; left: 25%; animation-delay: -4s;"></div>
+        <div class="particle" style="top: 30%; left: 70%; animation-delay: -6s;"></div>
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 py-20">
+            <div class="max-w-4xl">
+                <div class="animate-fadeUp stagger-1">
+                    <div class="inline-flex items-center px-4 py-2 rounded-full bg-electric/10 border border-electric/30 text-electric text-sm font-medium mb-8">
+                        <span class="w-2 h-2 bg-electric rounded-full mr-3 animate-pulse"></span>
+                        AI-Powered Analysis
                     </div>
                 </div>
+                <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6 animate-fadeUp stagger-2">
+                    South Florida<br>
+                    <span class="bg-gradient-to-r from-electric via-cyan-400 to-lime bg-clip-text text-transparent">Permit Checker</span>
+                </h1>
+                <p class="text-xl text-gray-400 mb-10 max-w-2xl leading-relaxed animate-fadeUp stagger-3">
+                    Upload your complete permit package and get instant AI analysis against municipal requirements. Stop guessing, start knowing.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 animate-fadeUp stagger-4">
+                    <a href="#analyzer" class="btn-primary px-8 py-4 rounded-xl text-midnight font-semibold text-center">Start Analysis</a>
+                    <a href="#features" class="btn-secondary px-8 py-4 rounded-xl text-electric font-medium text-center">Learn More</a>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+            <svg class="w-6 h-6 text-electric/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Analyzer Section -->
+    <section id="analyzer" class="py-24 px-6 lg:px-8 relative">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">Analyze Your <span class="text-electric">Permit Package</span></h2>
+                <p class="text-gray-400 max-w-xl mx-auto">Select your city and permit type, then upload your documents for instant compliance analysis.</p>
+            </div>
+            <div class="glow-border rounded-3xl p-8 lg:p-10 relative overflow-hidden">
+                <div class="scan-line"></div>
+                
+                <!-- Step 1 -->
                 <div class="mb-10">
-                    <div class="flex items-center mb-6"><div class="w-10 h-10 rounded-xl bg-electric/20 text-electric flex items-center justify-center font-mono font-bold mr-4">02</div><h3 class="text-xl font-semibold">Upload Permit Package</h3></div>
+                    <div class="flex items-center mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-electric/20 text-electric flex items-center justify-center font-mono font-bold mr-4">01</div>
+                        <h3 class="text-xl font-semibold">Location & Permit Type</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2 font-medium">City</label>
+                            <select id="citySelect" class="w-full px-5 py-4 bg-charcoal border border-white/10 rounded-xl text-white focus:border-electric focus:outline-none focus:ring-1 focus:ring-electric transition-all appearance-none cursor-pointer">
+                                <option value="">Select a city...</option>
+                                <option value="Fort Lauderdale">Fort Lauderdale</option>
+                                <option value="Pompano Beach">Pompano Beach</option>
+                                <option value="Hollywood">Hollywood</option>
+                                <option value="Coral Springs">Coral Springs</option>
+                                <option value="Boca Raton">Boca Raton</option>
+                                <option value="Lauderdale-by-the-Sea">Lauderdale-by-the-Sea</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2 font-medium">Permit Type</label>
+                            <select id="permitSelect" class="w-full px-5 py-4 bg-charcoal border border-white/10 rounded-xl text-white focus:border-electric focus:outline-none focus:ring-1 focus:ring-electric transition-all appearance-none cursor-pointer">
+                                <option value="">Select permit type...</option>
+                                <option value="building">Building Permit</option>
+                                <option value="electrical">Electrical Permit</option>
+                                <option value="plumbing">Plumbing Permit</option>
+                                <option value="mechanical">Mechanical / HVAC</option>
+                                <option value="roofing">Roofing Permit</option>
+                                <option value="dock">Dock / Marine</option>
+                                <option value="seawall">Seawall Permit</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="mb-10">
+                    <div class="flex items-center mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-electric/20 text-electric flex items-center justify-center font-mono font-bold mr-4">02</div>
+                        <h3 class="text-xl font-semibold">Upload Permit Package</h3>
+                    </div>
                     <div id="dropZone" class="drop-zone rounded-2xl p-10 text-center cursor-pointer relative">
                         <input type="file" id="folderInput" webkitdirectory directory multiple accept=".pdf,.png,.jpg,.jpeg" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                        <div class="mb-6"><div class="w-20 h-20 mx-auto rounded-2xl bg-electric/10 border border-electric/30 flex items-center justify-center mb-4"><svg class="w-10 h-10 text-electric" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg></div></div>
-                        <p class="text-lg font-medium text-white mb-2">Drop your permit folder here</p><p class="text-gray-500 mb-6">or click to browse</p>
+                        <div class="mb-6">
+                            <div class="w-20 h-20 mx-auto rounded-2xl bg-electric/10 border border-electric/30 flex items-center justify-center mb-4">
+                                <svg class="w-10 h-10 text-electric" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-lg font-medium text-white mb-2">Drop your permit folder here</p>
+                        <p class="text-gray-500 mb-6">or click to browse</p>
                         <button type="button" id="selectFolderBtn" class="px-6 py-3 bg-electric/20 hover:bg-electric/30 border border-electric/30 text-electric rounded-xl font-medium transition-all">Select Permit Folder</button>
                         <p class="text-xs text-gray-600 mt-6 font-mono">PDF, PNG, JPG • Max 50 files • Max 200MB</p>
                     </div>
+
+                    <!-- File Preview -->
                     <div id="filePreview" class="hidden mt-6">
-                        <div class="flex items-center justify-between mb-4"><h4 class="font-semibold text-white">Selected Files</h4><button id="clearFilesBtn" class="text-sm text-coral hover:text-red-400 font-medium transition-colors">Clear All</button></div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="font-semibold text-white">Selected Files</h4>
+                            <button id="clearFilesBtn" class="text-sm text-coral hover:text-red-400 font-medium transition-colors">Clear All</button>
+                        </div>
                         <div class="grid grid-cols-3 gap-3 mb-4">
-                            <div class="bg-charcoal rounded-xl p-4 text-center border border-white/5"><div id="fileCount" class="text-2xl font-bold text-electric font-mono">0</div><div class="text-xs text-gray-500 mt-1">Files</div></div>
-                            <div class="bg-charcoal rounded-xl p-4 text-center border border-white/5"><div id="totalSize" class="text-2xl font-bold text-electric font-mono">0 MB</div><div class="text-xs text-gray-500 mt-1">Total Size</div></div>
-                            <div class="bg-charcoal rounded-xl p-4 text-center border border-white/5"><div id="validCount" class="text-2xl font-bold text-lime font-mono">0</div><div class="text-xs text-gray-500 mt-1">Valid</div></div>
+                            <div class="bg-charcoal rounded-xl p-4 text-center border border-white/5">
+                                <div id="fileCount" class="text-2xl font-bold text-electric font-mono">0</div>
+                                <div class="text-xs text-gray-500 mt-1">Files</div>
+                            </div>
+                            <div class="bg-charcoal rounded-xl p-4 text-center border border-white/5">
+                                <div id="totalSize" class="text-2xl font-bold text-electric font-mono">0 MB</div>
+                                <div class="text-xs text-gray-500 mt-1">Total Size</div>
+                            </div>
+                            <div class="bg-charcoal rounded-xl p-4 text-center border border-white/5">
+                                <div id="validCount" class="text-2xl font-bold text-lime font-mono">0</div>
+                                <div class="text-xs text-gray-500 mt-1">Valid</div>
+                            </div>
                         </div>
                         <div id="sizeWarning" class="hidden mb-4 p-4 rounded-xl flex items-center"></div>
-                        <div id="invalidFilesWarning" class="hidden mb-4 p-4 bg-coral/10 border border-coral/30 rounded-xl"><div class="flex items-center text-coral font-medium mb-2"><svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>Invalid Files</div><ul id="invalidFilesList" class="text-sm text-coral/80 pl-7 list-disc"></ul></div>
-                        <div class="max-h-56 overflow-y-auto rounded-xl border border-white/5 bg-obsidian"><ul id="fileList" class="divide-y divide-white/5"></ul></div>
+                        <div id="invalidFilesWarning" class="hidden mb-4 p-4 bg-coral/10 border border-coral/30 rounded-xl">
+                            <div class="flex items-center text-coral font-medium mb-2">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                </svg>
+                                Invalid Files
+                            </div>
+                            <ul id="invalidFilesList" class="text-sm text-coral/80 pl-7 list-disc"></ul>
+                        </div>
+                        <div class="max-h-56 overflow-y-auto rounded-xl border border-white/5 bg-obsidian">
+                            <ul id="fileList" class="divide-y divide-white/5"></ul>
+                        </div>
                     </div>
                 </div>
-                <div class="text-center"><button id="analyzeBtn" disabled class="btn-primary px-12 py-5 rounded-xl text-midnight font-bold text-lg disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none w-full sm:w-auto"><span id="analyzeBtnText">Select files to analyze</span></button></div>
+
+                <!-- Analyze Button -->
+                <div class="text-center">
+                    <button id="analyzeBtn" disabled class="btn-primary px-12 py-5 rounded-xl text-midnight font-bold text-lg disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none w-full sm:w-auto">
+                        <span id="analyzeBtnText">Select files to analyze</span>
+                    </button>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- Loading Overlay -->
     <div id="loadingOverlay" class="hidden fixed inset-0 bg-midnight/95 backdrop-blur-xl z-50 flex items-center justify-center">
         <div class="text-center max-w-md w-full mx-6">
-            <div class="w-24 h-24 mx-auto mb-8 relative"><div class="absolute inset-0 border-2 border-electric/20 rounded-full"></div><div class="absolute inset-0 border-2 border-electric rounded-full border-t-transparent animate-spin"></div><div class="absolute inset-4 border-2 border-lime/30 rounded-full border-b-transparent animate-spin" style="animation-direction:reverse;animation-duration:1.5s"></div></div>
+            <div class="w-24 h-24 mx-auto mb-8 relative">
+                <div class="absolute inset-0 border-2 border-electric/20 rounded-full"></div>
+                <div class="absolute inset-0 border-2 border-electric rounded-full border-t-transparent animate-spin"></div>
+                <div class="absolute inset-4 border-2 border-lime/30 rounded-full border-b-transparent animate-spin" style="animation-direction: reverse; animation-duration: 1.5s;"></div>
+            </div>
             <h3 class="text-2xl font-bold text-white mb-3">Analyzing Package</h3>
             <p id="loadingStatus" class="text-gray-400 mb-6">Uploading files...</p>
-            <div class="w-full bg-charcoal rounded-full h-2 mb-4 overflow-hidden"><div id="progressBar" class="progress-bar h-2 rounded-full" style="width:0%"></div></div>
+            <div class="w-full bg-charcoal rounded-full h-2 mb-4 overflow-hidden">
+                <div id="progressBar" class="progress-bar h-2 rounded-full" style="width: 0%"></div>
+            </div>
             <p id="currentFile" class="text-sm text-gray-500 font-mono truncate"></p>
         </div>
     </div>
 
+    <!-- Results Section -->
     <section id="resultsSection" class="hidden py-24 px-6 lg:px-8">
-        <div class="max-w-4xl mx-auto"><div class="glow-border rounded-3xl overflow-hidden">
-            <div id="resultsHeader" class="p-8 border-b border-white/5"></div>
-            <div id="filesAnalyzed" class="p-6 bg-obsidian/50 border-b border-white/5"></div>
-            <div id="resultsContent" class="p-8"></div>
-            <div class="p-6 bg-obsidian/50 border-t border-white/5 flex flex-col sm:flex-row gap-4 justify-center"><button id="newAnalysisBtn" class="btn-primary px-8 py-4 rounded-xl text-midnight font-semibold">New Analysis</button><button id="downloadBtn" class="btn-secondary px-8 py-4 rounded-xl text-electric font-medium">Download Report</button></div>
-        </div></div>
+        <div class="max-w-4xl mx-auto">
+            <div class="glow-border rounded-3xl overflow-hidden">
+                <div id="resultsHeader" class="p-8 border-b border-white/5"></div>
+                <div id="filesAnalyzed" class="p-6 bg-obsidian/50 border-b border-white/5"></div>
+                <div id="resultsContent" class="p-8"></div>
+                <div class="p-6 bg-obsidian/50 border-t border-white/5 flex flex-col sm:flex-row gap-4 justify-center">
+                    <button id="newAnalysisBtn" class="btn-primary px-8 py-4 rounded-xl text-midnight font-semibold">New Analysis</button>
+                    <button id="downloadBtn" class="btn-secondary px-8 py-4 rounded-xl text-electric font-medium">Download Report</button>
+                </div>
+            </div>
+        </div>
     </section>
 
+    <!-- Features Section -->
     <section id="features" class="py-24 px-6 lg:px-8 relative">
         <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-16"><h2 class="text-3xl sm:text-4xl font-bold mb-4">Why <span class="text-electric">PermitPro</span>?</h2><p class="text-gray-400 max-w-xl mx-auto">Purpose-built for South Florida contractors who need fast, accurate permit compliance checks.</p></div>
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">Why <span class="text-electric">PermitPro</span>?</h2>
+                <p class="text-gray-400 max-w-xl mx-auto">Purpose-built for South Florida contractors who need fast, accurate permit compliance checks.</p>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="glow-border rounded-2xl p-8"><div class="w-14 h-14 rounded-xl bg-gradient-to-br from-electric/20 to-transparent border border-electric/30 flex items-center justify-center mb-6"><svg class="w-7 h-7 text-electric" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div><h3 class="text-xl font-semibold mb-3">Instant Analysis</h3><p class="text-gray-400 leading-relaxed">Get comprehensive feedback on your entire permit package in seconds, not hours of manual review.</p></div>
-                <div class="glow-border rounded-2xl p-8"><div class="w-14 h-14 rounded-xl bg-gradient-to-br from-lime/20 to-transparent border border-lime/30 flex items-center justify-center mb-6"><svg class="w-7 h-7 text-lime" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div><h3 class="text-xl font-semibold mb-3">City-Specific</h3><p class="text-gray-400 leading-relaxed">Requirements tailored to each South Florida municipality's specific codes and regulations.</p></div>
-                <div class="glow-border rounded-2xl p-8"><div class="w-14 h-14 rounded-xl bg-gradient-to-br from-coral/20 to-transparent border border-coral/30 flex items-center justify-center mb-6"><svg class="w-7 h-7 text-coral" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg></div><h3 class="text-xl font-semibold mb-3">Full Package</h3><p class="text-gray-400 leading-relaxed">Upload up to 50 files (200MB total) for comprehensive package review across all documents.</p></div>
+                <div class="glow-border rounded-2xl p-8">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-electric/20 to-transparent border border-electric/30 flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-electric" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Instant Analysis</h3>
+                    <p class="text-gray-400 leading-relaxed">Get comprehensive feedback on your entire permit package in seconds, not hours of manual review.</p>
+                </div>
+                <div class="glow-border rounded-2xl p-8">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-lime/20 to-transparent border border-lime/30 flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-lime" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">City-Specific</h3>
+                    <p class="text-gray-400 leading-relaxed">Requirements tailored to each South Florida municipality's specific codes and regulations.</p>
+                </div>
+                <div class="glow-border rounded-2xl p-8">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-coral/20 to-transparent border border-coral/30 flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-coral" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Full Package</h3>
+                    <p class="text-gray-400 leading-relaxed">Upload up to 50 files (200MB total) for comprehensive package review across all documents.</p>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- Cities Section -->
     <section id="cities" class="py-24 px-6 lg:px-8 relative hero-gradient">
         <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-16"><h2 class="text-3xl sm:text-4xl font-bold mb-4">Supported <span class="text-electric">Cities</span></h2><p class="text-gray-400">Coverage across South Florida's major municipalities</p></div>
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">Supported <span class="text-electric">Cities</span></h2>
+                <p class="text-gray-400">Coverage across South Florida's major municipalities</p>
+            </div>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                <div class="city-card rounded-xl p-5 text-center"><p class="font-semibold text-white text-sm">Fort Lauderdale</p><p class="text-xs text-gray-500 mt-1">Broward County</p></div>
-                <div class="city-card rounded-xl p-5 text-center"><p class="font-semibold text-white text-sm">Pompano Beach</p><p class="text-xs text-gray-500 mt-1">Broward County</p></div>
-                <div class="city-card rounded-xl p-5 text-center"><p class="font-semibold text-white text-sm">Hollywood</p><p class="text-xs text-gray-500 mt-1">Broward County</p></div>
-                <div class="city-card rounded-xl p-5 text-center"><p class="font-semibold text-white text-sm">Coral Springs</p><p class="text-xs text-gray-500 mt-1">Broward County</p></div>
-                <div class="city-card rounded-xl p-5 text-center"><p class="font-semibold text-white text-sm">Boca Raton</p><p class="text-xs text-gray-500 mt-1">Palm Beach County</p></div>
-                <div class="city-card rounded-xl p-5 text-center"><p class="font-semibold text-white text-sm">Lauderdale-by-the-Sea</p><p class="text-xs text-gray-500 mt-1">Broward County</p></div>
+                <div class="city-card rounded-xl p-5 text-center">
+                    <p class="font-semibold text-white text-sm">Fort Lauderdale</p>
+                    <p class="text-xs text-gray-500 mt-1">Broward County</p>
+                </div>
+                <div class="city-card rounded-xl p-5 text-center">
+                    <p class="font-semibold text-white text-sm">Pompano Beach</p>
+                    <p class="text-xs text-gray-500 mt-1">Broward County</p>
+                </div>
+                <div class="city-card rounded-xl p-5 text-center">
+                    <p class="font-semibold text-white text-sm">Hollywood</p>
+                    <p class="text-xs text-gray-500 mt-1">Broward County</p>
+                </div>
+                <div class="city-card rounded-xl p-5 text-center">
+                    <p class="font-semibold text-white text-sm">Coral Springs</p>
+                    <p class="text-xs text-gray-500 mt-1">Broward County</p>
+                </div>
+                <div class="city-card rounded-xl p-5 text-center">
+                    <p class="font-semibold text-white text-sm">Boca Raton</p>
+                    <p class="text-xs text-gray-500 mt-1">Palm Beach County</p>
+                </div>
+                <div class="city-card rounded-xl p-5 text-center">
+                    <p class="font-semibold text-white text-sm">Lauderdale-by-the-Sea</p>
+                    <p class="text-xs text-gray-500 mt-1">Broward County</p>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- Pricing Section -->
     <section id="pricing" class="py-24 px-6 lg:px-8">
         <div class="max-w-5xl mx-auto">
-            <div class="text-center mb-16"><h2 class="text-3xl sm:text-4xl font-bold mb-4">Simple <span class="text-electric">Pricing</span></h2><p class="text-gray-400">Choose the plan that fits your workflow</p></div>
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">Simple <span class="text-electric">Pricing</span></h2>
+                <p class="text-gray-400">Choose the plan that fits your workflow</p>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="price-card rounded-2xl p-8"><h3 class="text-lg font-semibold text-gray-400 mb-2">Free</h3><div class="text-4xl font-bold text-white mb-1">$0</div><p class="text-gray-500 text-sm mb-8">per month</p><ul class="space-y-4 mb-8"><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>3 analyses / month</li><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>6 cities covered</li><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Email support</li></ul><button class="w-full py-4 rounded-xl border border-white/10 text-white font-medium hover:bg-white/5 transition-all">Get Started</button></div>
-                <div class="price-card-featured rounded-2xl p-8 relative transform md:-translate-y-4"><div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-electric text-midnight text-xs font-bold rounded-full">POPULAR</div><h3 class="text-lg font-semibold text-electric mb-2">Contractor Pro</h3><div class="text-4xl font-bold text-white mb-1">$49</div><p class="text-gray-500 text-sm mb-8">per month</p><ul class="space-y-4 mb-8"><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Unlimited analyses</li><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>All South Florida cities</li><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>200MB folder uploads</li><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Priority support</li></ul><button class="btn-primary w-full py-4 rounded-xl text-midnight font-bold">Start Pro Trial</button></div>
-                <div class="price-card rounded-2xl p-8"><h3 class="text-lg font-semibold text-gray-400 mb-2">Business</h3><div class="text-4xl font-bold text-white mb-1">$149</div><p class="text-gray-500 text-sm mb-8">per month</p><ul class="space-y-4 mb-8"><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Everything in Pro</li><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>5 team members</li><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>API access</li><li class="flex items-center text-gray-300 text-sm"><svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>White-label reports</li></ul><button class="w-full py-4 rounded-xl border border-white/10 text-white font-medium hover:bg-white/5 transition-all">Contact Sales</button></div>
+                <div class="price-card rounded-2xl p-8">
+                    <h3 class="text-lg font-semibold text-gray-400 mb-2">Free</h3>
+                    <div class="text-4xl font-bold text-white mb-1">$0</div>
+                    <p class="text-gray-500 text-sm mb-8">per month</p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center text-gray-300 text-sm">
+                            <svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            3 analyses / month
+                        </li>
+                        <li class="flex items-center text-gray-300 text-sm">
+                            <svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            6 cities covered
+                        </li>
+                        <li class="flex items-center text-gray-300 text-sm">
+                            <svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            Email support
+                        </li>
+                    </ul>
+                    <button class="w-full py-4 rounded-xl border border-white/10 text-white font-medium hover:bg-white/5 transition-all">Get Started</button>
+                </div>
+                <div class="price-card-featured rounded-2xl p-8 relative transform md:-translate-y-4">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-electric text-midnight text-xs font-bold rounded-full">POPULAR</div>
+                    <h3 class="text-lg font-semibold text-electric mb-2">Contractor Pro</h3>
+                    <div class="text-4xl font-bold text-white mb-1">$49</div>
+                    <p class="text-gray-500 text-sm mb-8">per month</p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center text-gray-300 text-sm">
+                            <svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            Unlimited analyses
+                        </li>
+                        <li class="flex items-center text-gray-300 text-sm">
+                            <svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            All South Florida cities
+                        </li>
+                        <li class="flex items-center text-gray-300 text-sm">
+                            <svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            200MB folder uploads
+                        </li>
+                        <li class="flex items-center text-gray-300 text-sm">
+                            <svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            Priority support
+                        </li>
+                    </ul>
+                    <button class="btn-primary w-full py-4 rounded-xl text-midnight font-bold">Start Pro Trial</button>
+                </div>
+                <div class="price-card rounded-2xl p-8">
+                    <h3 class="text-lg font-semibold text-gray-400 mb-2">Business</h3>
+                    <div class="text-4xl font-bold text-white mb-1">$149</div>
+                    <p class="text-gray-500 text-sm mb-8">per month</p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center text-gray-300 text-sm">
+                            <svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            Everything in Pro
+                        </li>
+                        <li class="flex items-center text-gray-300 text-sm">
+                            <svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            5 team members
+                        </li>
+                        <li class="flex items-center text-gray-300 text-sm">
+                            <svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            API access
+                        </li>
+                        <li class="flex items-center text-gray-300 text-sm">
+                            <svg class="w-5 h-5 text-electric mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                            White-label reports
+                        </li>
+                    </ul>
+                    <button class="w-full py-4 rounded-xl border border-white/10 text-white font-medium hover:bg-white/5 transition-all">Contact Sales</button>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- Footer -->
     <footer class="py-12 px-6 lg:px-8 border-t border-white/5">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
-            <div class="flex items-center space-x-3 mb-4 md:mb-0"><div class="w-8 h-8 rounded-lg bg-electric/20 flex items-center justify-center"><svg class="w-4 h-4 text-electric" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><span class="font-semibold">PermitPro<span class="text-electric">AI</span></span></div>
+            <div class="flex items-center space-x-3 mb-4 md:mb-0">
+                <div class="w-8 h-8 rounded-lg bg-electric/20 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-electric" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <span class="font-semibold">PermitPro<span class="text-electric">AI</span></span>
+            </div>
             <p class="text-gray-500 text-sm">© 2025 PermitPro AI. All rights reserved.</p>
         </div>
     </footer>
-                progressBar.style.width='100%';loadingStatus.textContent='Analysis complete!';
-                await new Promise(resolve=>setTimeout(resolve,500));displayResults(result)
-            }catch(error){
-                console.error('Analysis error:',error);loadingOverlay.classList.add('hidden');resultsSection.classList.remove('hidden');
-                resultsHeader.innerHTML='<div class="flex items-center text-coral"><svg class="w-8 h-8 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><div><h3 class="text-xl font-bold">Analysis Failed</h3><p class="text-sm text-coral/70">'+error.message+'</p></div></div>';
-                filesAnalyzed.innerHTML='';resultsContent.innerHTML='<div class="text-center py-8"><p class="text-gray-400 mb-6">Please try again or contact support.</p><button onclick="location.reload()" class="btn-secondary px-6 py-3 rounded-xl text-electric">Try Again</button></div>'
+
+    <!-- JavaScript -->
+    <script>
+        const API_BASE_URL = 'https://south-florida-permit-helper-production.up.railway.app';
+        const MAX_FILES = 50;
+        const MAX_FILE_SIZE_MB = 25;
+        const MAX_TOTAL_SIZE_MB = 200;
+        const ALLOWED_EXTENSIONS = ['.pdf', '.png', '.jpg', '.jpeg'];
+        
+        let selectedFiles = [];
+        let validFiles = [];
+        let invalidFiles = [];
+        
+        // DOM Elements
+        const citySelect = document.getElementById('citySelect');
+        const permitSelect = document.getElementById('permitSelect');
+        const folderInput = document.getElementById('folderInput');
+        const dropZone = document.getElementById('dropZone');
+        const selectFolderBtn = document.getElementById('selectFolderBtn');
+        const filePreview = document.getElementById('filePreview');
+        const fileList = document.getElementById('fileList');
+        const fileCount = document.getElementById('fileCount');
+        const totalSize = document.getElementById('totalSize');
+        const validCount = document.getElementById('validCount');
+        const sizeWarning = document.getElementById('sizeWarning');
+        const invalidFilesWarning = document.getElementById('invalidFilesWarning');
+        const invalidFilesList = document.getElementById('invalidFilesList');
+        const clearFilesBtn = document.getElementById('clearFilesBtn');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const analyzeBtnText = document.getElementById('analyzeBtnText');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const loadingStatus = document.getElementById('loadingStatus');
+        const progressBar = document.getElementById('progressBar');
+        const currentFile = document.getElementById('currentFile');
+        const resultsSection = document.getElementById('resultsSection');
+        const resultsHeader = document.getElementById('resultsHeader');
+        const filesAnalyzed = document.getElementById('filesAnalyzed');
+        const resultsContent = document.getElementById('resultsContent');
+        const newAnalysisBtn = document.getElementById('newAnalysisBtn');
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        function getFileExtension(filename) {
+            return '.' + filename.split('.').pop().toLowerCase();
+        }
+
+        function isValidFileType(filename) {
+            return ALLOWED_EXTENSIONS.includes(getFileExtension(filename));
+        }
+
+        function validateFiles(files) {
+            validFiles = [];
+            invalidFiles = [];
+            let totalBytes = 0;
+            
+            for (const file of files) {
+                if (!isValidFileType(file.name)) {
+                    invalidFiles.push({ name: file.name, reason: 'Invalid type' });
+                    continue;
+                }
+                if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+                    invalidFiles.push({ name: file.name, reason: 'Too large' });
+                    continue;
+                }
+                if (validFiles.length >= MAX_FILES) {
+                    invalidFiles.push({ name: file.name, reason: 'Exceeds limit' });
+                    continue;
+                }
+                validFiles.push(file);
+                totalBytes += file.size;
+            }
+            return { validFiles, invalidFiles, totalBytes };
+        }
+
+        function updateFilePreview() {
+            const { totalBytes } = validateFiles(selectedFiles);
+            
+            if (validFiles.length === 0 && invalidFiles.length === 0) {
+                filePreview.classList.add('hidden');
+                updateAnalyzeButton();
+                return;
+            }
+            
+            filePreview.classList.remove('hidden');
+            fileCount.textContent = selectedFiles.length;
+            totalSize.textContent = formatFileSize(totalBytes);
+            validCount.textContent = validFiles.length;
+            
+            const sizePercentage = (totalBytes / (MAX_TOTAL_SIZE_MB * 1024 * 1024)) * 100;
+            
+            if (sizePercentage > 100) {
+                sizeWarning.classList.remove('hidden');
+                sizeWarning.className = 'mb-4 p-4 rounded-xl flex items-center bg-coral/10 border border-coral/30 text-coral';
+                sizeWarning.innerHTML = '<svg class="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>Total size exceeds ' + MAX_TOTAL_SIZE_MB + 'MB limit';
+            } else if (sizePercentage > 80) {
+                sizeWarning.classList.remove('hidden');
+                sizeWarning.className = 'mb-4 p-4 rounded-xl flex items-center bg-yellow-500/10 border border-yellow-500/30 text-yellow-500';
+                sizeWarning.innerHTML = '<svg class="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>Approaching limit (' + sizePercentage.toFixed(0) + '% used)';
+            } else {
+                sizeWarning.classList.add('hidden');
+            }
+            
+            if (invalidFiles.length > 0) {
+                invalidFilesWarning.classList.remove('hidden');
+                invalidFilesList.innerHTML = invalidFiles.map(f => '<li>' + f.name + ': ' + f.reason + '</li>').join('');
+            } else {
+                invalidFilesWarning.classList.add('hidden');
+            }
+            
+            fileList.innerHTML = validFiles.map(function(file) {
+                return '<li class="file-item flex items-center justify-between px-4 py-3"><div class="flex items-center min-w-0"><svg class="w-4 h-4 text-electric/50 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg><span class="truncate text-gray-300 text-sm">' + file.name + '</span></div><span class="text-xs text-gray-500 ml-4 flex-shrink-0 font-mono">' + formatFileSize(file.size) + '</span></li>';
+            }).join('');
+            
+            updateAnalyzeButton();
+        }
+
+        function updateAnalyzeButton() {
+            const city = citySelect.value;
+            const permit = permitSelect.value;
+            const hasValidFiles = validFiles.length > 0;
+            const totalBytes = validFiles.reduce(function(sum, f) { return sum + f.size; }, 0);
+            const underSizeLimit = totalBytes <= MAX_TOTAL_SIZE_MB * 1024 * 1024;
+            const canAnalyze = city && permit && hasValidFiles && underSizeLimit;
+            
+            analyzeBtn.disabled = !canAnalyze;
+            
+            if (!city || !permit) {
+                analyzeBtnText.textContent = 'Select city and permit type';
+            } else if (!hasValidFiles) {
+                analyzeBtnText.textContent = 'Select files to analyze';
+            } else if (!underSizeLimit) {
+                analyzeBtnText.textContent = 'Files exceed size limit';
+            } else {
+                analyzeBtnText.textContent = 'Analyze ' + validFiles.length + ' file' + (validFiles.length > 1 ? 's' : '') + ' (' + formatFileSize(totalBytes) + ')';
+            }
+        }
+
+        function clearFiles() {
+            selectedFiles = [];
+            validFiles = [];
+            invalidFiles = [];
+            folderInput.value = '';
+            filePreview.classList.add('hidden');
+            updateAnalyzeButton();
+        }
+
+        // Event Listeners
+        selectFolderBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            folderInput.click();
+        });
+
+        dropZone.addEventListener('click', function() {
+            folderInput.click();
+        });
+
+        folderInput.addEventListener('change', function(e) {
+            selectedFiles = Array.from(e.target.files);
+            updateFilePreview();
+        });
+
+        dropZone.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            dropZone.classList.add('drop-zone-active');
+        });
+
+        dropZone.addEventListener('dragleave', function() {
+            dropZone.classList.remove('drop-zone-active');
+        });
+
+        dropZone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            dropZone.classList.remove('drop-zone-active');
+            var filesArray = [];
+            for (var i = 0; i < e.dataTransfer.items.length; i++) {
+                if (e.dataTransfer.items[i].kind === 'file') {
+                    var file = e.dataTransfer.items[i].getAsFile();
+                    if (file) filesArray.push(file);
+                }
+            }
+            if (filesArray.length > 0) {
+                selectedFiles = filesArray;
+                updateFilePreview();
             }
         });
 
-        function displayResults(result){
-            loadingOverlay.classList.add('hidden');resultsSection.classList.remove('hidden');resultsSection.scrollIntoView({behavior:'smooth'});
-            const analysis=result.analysis||{},status=analysis.overall_status||'UNKNOWN',score=analysis.compliance_score||0;
-            const statusClasses={'READY':'status-ready','NEEDS_ATTENTION':'status-attention','INCOMPLETE':'status-incomplete','ERROR':'status-incomplete','NEEDS_REVIEW':'status-attention'};
-            const statusLabels={'READY':'Ready to Submit','NEEDS_ATTENTION':'Needs Attention','INCOMPLETE':'Incomplete','ERROR':'Error','NEEDS_REVIEW':'Needs Review'};
-            resultsHeader.innerHTML='<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6"><div><h3 class="text-2xl font-bold text-white mb-1">Analysis Complete</h3><p class="text-gray-400">'+result.city+' &bull; '+result.permit_type+'</p></div><div class="flex items-center gap-4"><span class="px-4 py-2 rounded-lg text-sm font-semibold '+(statusClasses[status]||'status-attention')+'">'+(statusLabels[status]||status)+'</span><div class="text-center"><div class="text-3xl font-bold font-mono '+(score>=70?'text-lime':score>=40?'text-yellow-500':'text-coral')+'">'+score+'%</div><div class="text-xs text-gray-500">Compliance</div></div></div></div>';
-            if(result.file_tree&&result.file_tree.length>0){filesAnalyzed.innerHTML='<h4 class="font-semibold text-white mb-3">Files Analyzed: '+result.files_analyzed+'</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-2">'+result.file_tree.map(f=>'<div class="flex items-center text-sm text-gray-400 bg-charcoal/50 rounded-lg px-3 py-2"><span class="text-electric/50 mr-2 font-mono">|--</span><span class="truncate flex-1">'+f.name+'</span><span class="text-gray-600 ml-2 font-mono text-xs">'+f.size+'</span></div>').join('')+'</div>'+(result.total_size?'<p class="text-sm text-gray-500 mt-3 font-mono">Total: '+result.total_size+'</p>':'')}
-            let contentHTML='';
-            if(analysis.summary)contentHTML+='<div class="mb-8"><h4 class="text-lg font-semibold text-white mb-3">Summary</h4><p class="text-gray-400 leading-relaxed">'+analysis.summary+'</p></div>';
-            if(analysis.items_found&&analysis.items_found.length>0){const statusBadge={'FOUND':'<span class="px-2 py-1 bg-lime/20 text-lime text-xs rounded font-medium">Found</span>','MISSING':'<span class="px-2 py-1 bg-coral/20 text-coral text-xs rounded font-medium">Missing</span>','PARTIAL':'<span class="px-2 py-1 bg-yellow-500/20 text-yellow-500 text-xs rounded font-medium">Partial</span>','UNCLEAR':'<span class="px-2 py-1 bg-gray-500/20 text-gray-400 text-xs rounded font-medium">Unclear</span>'};contentHTML+='<div class="mb-8"><h4 class="text-lg font-semibold text-white mb-4">Requirements Check</h4><div class="space-y-3">'+analysis.items_found.map(item=>'<div class="flex items-start gap-3 p-4 bg-charcoal/50 rounded-xl border border-white/5">'+(statusBadge[item.status]||'')+'<div class="flex-1 min-w-0"><p class="text-sm text-gray-300">'+item.requirement+'</p>'+(item.note?'<p class="text-xs text-gray-500 mt-1">'+item.note+'</p>':'')+(item.files?'<p class="text-xs text-electric/70 mt-1">Found in: '+item.files.join(', ')+'</p>':'')+'</div></div>').join('')+'</div></div>'}
-            if(analysis.critical_issues&&analysis.critical_issues.length>0)contentHTML+='<div class="mb-8"><h4 class="text-lg font-semibold text-coral mb-4">Critical Issues</h4><ul class="space-y-2">'+analysis.critical_issues.map(issue=>'<li class="flex items-start text-coral/90 text-sm"><span class="mr-3 text-coral">•</span><span>'+issue+'</span></li>').join('')+'</ul></div>';
-            if(analysis.missing_documents&&analysis.missing_documents.length>0)contentHTML+='<div class="mb-8"><h4 class="text-lg font-semibold text-yellow-500 mb-4">Missing Documents</h4><ul class="space-y-2">'+analysis.missing_documents.map(doc=>'<li class="flex items-start text-yellow-500/90 text-sm"><span class="mr-3 text-yellow-500">•</span><span>'+doc+'</span></li>').join('')+'</ul></div>';
-            if(analysis.recommendations&&analysis.recommendations.length>0)contentHTML+='<div class="mb-8"><h4 class="text-lg font-semibold text-electric mb-4">Recommendations</h4><ul class="space-y-2">'+analysis.recommendations.map(rec=>'<li class="flex items-start text-gray-400 text-sm"><span class="mr-3 text-electric">•</span><span>'+rec+'</span></li>').join('')+'</ul></div>';
-            if(analysis.next_steps&&analysis.next_steps.length>0)contentHTML+='<div class="mb-4"><h4 class="text-lg font-semibold text-lime mb-4">Next Steps</h4><ol class="space-y-2 list-decimal list-inside">'+analysis.next_steps.map(step=>'<li class="text-gray-400 text-sm">'+step+'</li>').join('')+'</ol></div>';
-            resultsContent.innerHTML=contentHTML||'<p class="text-gray-500 text-center py-8">No detailed analysis available.</p>'
+        clearFilesBtn.addEventListener('click', clearFiles);
+        citySelect.addEventListener('change', updateAnalyzeButton);
+        permitSelect.addEventListener('change', updateAnalyzeButton);
+
+        analyzeBtn.addEventListener('click', async function() {
+            const city = citySelect.value;
+            const permit = permitSelect.value;
+            
+            if (!city || !permit || validFiles.length === 0) {
+                alert('Please select city, permit type, and upload files.');
+                return;
+            }
+            
+            loadingOverlay.classList.remove('hidden');
+            resultsSection.classList.add('hidden');
+            progressBar.style.width = '0%';
+            loadingStatus.textContent = 'Preparing upload...';
+            currentFile.textContent = '';
+            
+            try {
+                const formData = new FormData();
+                formData.append('city', city);
+                formData.append('permit_type', permit);
+                
+                for (let i = 0; i < validFiles.length; i++) {
+                    formData.append('files', validFiles[i]);
+                    progressBar.style.width = ((i + 1) / validFiles.length * 50) + '%';
+                    currentFile.textContent = validFiles[i].name;
+                }
+                
+                loadingStatus.textContent = 'Uploading files...';
+                progressBar.style.width = '50%';
+                
+                const response = await fetch(API_BASE_URL + '/api/analyze-permit-folder', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                progressBar.style.width = '80%';
+                loadingStatus.textContent = 'AI analyzing documents...';
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(function() { return {}; });
+                    throw new Error(errorData.detail || 'Server error: ' + response.status);
+                }
+                
+                const result = await response.json();
+                progressBar.style.width = '100%';
+                loadingStatus.textContent = 'Analysis complete!';
+                
+                await new Promise(function(resolve) { setTimeout(resolve, 500); });
+                displayResults(result);
+                
+            } catch (error) {
+                console.error('Analysis error:', error);
+                loadingOverlay.classList.add('hidden');
+                resultsSection.classList.remove('hidden');
+                resultsHeader.innerHTML = '<div class="flex items-center text-coral"><svg class="w-8 h-8 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><div><h3 class="text-xl font-bold">Analysis Failed</h3><p class="text-sm text-coral/70">' + error.message + '</p></div></div>';
+                filesAnalyzed.innerHTML = '';
+                resultsContent.innerHTML = '<div class="text-center py-8"><p class="text-gray-400 mb-6">Please try again or contact support.</p><button onclick="location.reload()" class="btn-secondary px-6 py-3 rounded-xl text-electric">Try Again</button></div>';
+            }
+        });
+
+        function displayResults(result) {
+            loadingOverlay.classList.add('hidden');
+            resultsSection.classList.remove('hidden');
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+            
+            const analysis = result.analysis || {};
+            const status = analysis.overall_status || 'UNKNOWN';
+            const score = analysis.compliance_score || 0;
+            
+            const statusClasses = {
+                'READY': 'status-ready',
+                'NEEDS_ATTENTION': 'status-attention',
+                'INCOMPLETE': 'status-incomplete',
+                'ERROR': 'status-incomplete',
+                'NEEDS_REVIEW': 'status-attention'
+            };
+            
+            const statusLabels = {
+                'READY': 'Ready to Submit',
+                'NEEDS_ATTENTION': 'Needs Attention',
+                'INCOMPLETE': 'Incomplete',
+                'ERROR': 'Error',
+                'NEEDS_REVIEW': 'Needs Review'
+            };
+            
+            const scoreColor = score >= 70 ? 'text-lime' : (score >= 40 ? 'text-yellow-500' : 'text-coral');
+            
+            resultsHeader.innerHTML = '<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6"><div><h3 class="text-2xl font-bold text-white mb-1">Analysis Complete</h3><p class="text-gray-400">' + result.city + ' - ' + result.permit_type + '</p></div><div class="flex items-center gap-4"><span class="px-4 py-2 rounded-lg text-sm font-semibold ' + (statusClasses[status] || 'status-attention') + '">' + (statusLabels[status] || status) + '</span><div class="text-center"><div class="text-3xl font-bold font-mono ' + scoreColor + '">' + score + '%</div><div class="text-xs text-gray-500">Compliance</div></div></div></div>';
+            
+            if (result.file_tree && result.file_tree.length > 0) {
+                let fileTreeHtml = '<h4 class="font-semibold text-white mb-3">Files Analyzed: ' + result.files_analyzed + '</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-2">';
+                for (let i = 0; i < result.file_tree.length; i++) {
+                    const f = result.file_tree[i];
+                    fileTreeHtml += '<div class="flex items-center text-sm text-gray-400 bg-charcoal/50 rounded-lg px-3 py-2"><span class="text-electric/50 mr-2 font-mono">|--</span><span class="truncate flex-1">' + f.name + '</span><span class="text-gray-600 ml-2 font-mono text-xs">' + f.size + '</span></div>';
+                }
+                fileTreeHtml += '</div>';
+                if (result.total_size) {
+                    fileTreeHtml += '<p class="text-sm text-gray-500 mt-3 font-mono">Total: ' + result.total_size + '</p>';
+                }
+                filesAnalyzed.innerHTML = fileTreeHtml;
+            } else {
+                filesAnalyzed.innerHTML = '';
+            }
+            
+            let contentHTML = '';
+            
+            if (analysis.summary) {
+                contentHTML += '<div class="mb-8"><h4 class="text-lg font-semibold text-white mb-3">Summary</h4><p class="text-gray-400 leading-relaxed">' + analysis.summary + '</p></div>';
+            }
+            
+            if (analysis.items_found && analysis.items_found.length > 0) {
+                const statusBadge = {
+                    'FOUND': '<span class="px-2 py-1 bg-lime/20 text-lime text-xs rounded font-medium">Found</span>',
+                    'MISSING': '<span class="px-2 py-1 bg-coral/20 text-coral text-xs rounded font-medium">Missing</span>',
+                    'PARTIAL': '<span class="px-2 py-1 bg-yellow-500/20 text-yellow-500 text-xs rounded font-medium">Partial</span>',
+                    'UNCLEAR': '<span class="px-2 py-1 bg-gray-500/20 text-gray-400 text-xs rounded font-medium">Unclear</span>'
+                };
+                
+                contentHTML += '<div class="mb-8"><h4 class="text-lg font-semibold text-white mb-4">Requirements Check</h4><div class="space-y-3">';
+                for (let i = 0; i < analysis.items_found.length; i++) {
+                    const item = analysis.items_found[i];
+                    contentHTML += '<div class="flex items-start gap-3 p-4 bg-charcoal/50 rounded-xl border border-white/5">' + (statusBadge[item.status] || '') + '<div class="flex-1 min-w-0"><p class="text-sm text-gray-300">' + item.requirement + '</p>';
+                    if (item.note) contentHTML += '<p class="text-xs text-gray-500 mt-1">' + item.note + '</p>';
+                    if (item.files) contentHTML += '<p class="text-xs text-electric/70 mt-1">Found in: ' + item.files.join(', ') + '</p>';
+                    contentHTML += '</div></div>';
+                }
+                contentHTML += '</div></div>';
+            }
+            
+            if (analysis.critical_issues && analysis.critical_issues.length > 0) {
+                contentHTML += '<div class="mb-8"><h4 class="text-lg font-semibold text-coral mb-4">Critical Issues</h4><ul class="space-y-2">';
+                for (let i = 0; i < analysis.critical_issues.length; i++) {
+                    contentHTML += '<li class="flex items-start text-coral/90 text-sm"><span class="mr-3 text-coral">•</span><span>' + analysis.critical_issues[i] + '</span></li>';
+                }
+                contentHTML += '</ul></div>';
+            }
+            
+            if (analysis.missing_documents && analysis.missing_documents.length > 0) {
+                contentHTML += '<div class="mb-8"><h4 class="text-lg font-semibold text-yellow-500 mb-4">Missing Documents</h4><ul class="space-y-2">';
+                for (let i = 0; i < analysis.missing_documents.length; i++) {
+                    contentHTML += '<li class="flex items-start text-yellow-500/90 text-sm"><span class="mr-3 text-yellow-500">•</span><span>' + analysis.missing_documents[i] + '</span></li>';
+                }
+                contentHTML += '</ul></div>';
+            }
+            
+            if (analysis.recommendations && analysis.recommendations.length > 0) {
+                contentHTML += '<div class="mb-8"><h4 class="text-lg font-semibold text-electric mb-4">Recommendations</h4><ul class="space-y-2">';
+                for (let i = 0; i < analysis.recommendations.length; i++) {
+                    contentHTML += '<li class="flex items-start text-gray-400 text-sm"><span class="mr-3 text-electric">•</span><span>' + analysis.recommendations[i] + '</span></li>';
+                }
+                contentHTML += '</ul></div>';
+            }
+            
+            if (analysis.next_steps && analysis.next_steps.length > 0) {
+                contentHTML += '<div class="mb-4"><h4 class="text-lg font-semibold text-lime mb-4">Next Steps</h4><ol class="space-y-2 list-decimal list-inside">';
+                for (let i = 0; i < analysis.next_steps.length; i++) {
+                    contentHTML += '<li class="text-gray-400 text-sm">' + analysis.next_steps[i] + '</li>';
+                }
+                contentHTML += '</ol></div>';
+            }
+            
+            resultsContent.innerHTML = contentHTML || '<p class="text-gray-500 text-center py-8">No detailed analysis available.</p>';
         }
 
-        newAnalysisBtn.addEventListener('click',()=>{clearFiles();resultsSection.classList.add('hidden');document.getElementById('analyzer').scrollIntoView({behavior:'smooth'})});
-        updateAnalyzeButton()
+        newAnalysisBtn.addEventListener('click', function() {
+            clearFiles();
+            resultsSection.classList.add('hidden');
+            document.getElementById('analyzer').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Initialize
+        updateAnalyzeButton();
     </script>
 </body>
 </html>
