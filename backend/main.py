@@ -246,11 +246,9 @@ app = FastAPI(
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-# Add security middlewares
-app.add_middleware(SecurityHeadersMiddleware)
-app.add_middleware(IPBlocklistMiddleware)
-
-# CORS Configuration - Production Ready (NO wildcards)
+# ============================================================================
+# CORS Configuration - MUST BE ADDED FIRST (runs last, wraps everything)
+# ============================================================================
 ALLOWED_ORIGINS = [
     # Local development
     "http://localhost:3000",
@@ -266,15 +264,20 @@ ALLOWED_ORIGINS = [
     "https://south-florida-permit-helper-production.up.railway.app",
 ]
 
+# CORS MUST be the first middleware added so it runs last and wraps all responses
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
     allow_origin_regex=r"https://.*\.vercel\.app",  # Allow Vercel preview deployments
     allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["Content-Type", "Authorization", "X-Request-ID"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allow_headers=["*"],  # Allow all headers for flexibility
     expose_headers=["X-Request-ID"],
 )
+
+# Add security middlewares AFTER CORS
+app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(IPBlocklistMiddleware)
 
 # In-memory storage (replace with database in production)
 analysis_results = {}
