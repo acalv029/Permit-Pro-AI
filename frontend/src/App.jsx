@@ -1,341 +1,459 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PermitPro AI - South Florida's Premier Permit Analysis Tool</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.cdnfonts.com/css/satoshi" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+import { useState, useEffect } from 'react'
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
+const API_BASE_URL = 'https://south-florida-permit-helper-production.up.railway.app'
 
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.3;
-            }
-        }
+export default function App() {
+  const [currentUser, setCurrentUser] = useState(null)
+  const [authToken, setAuthToken] = useState(null)
+  const [showLogin, setShowLogin] = useState(false)
+  const [showRegister, setShowRegister] = useState(false)
+  const [page, setPage] = useState('home')
+  const [city, setCity] = useState('')
+  const [permitType, setPermitType] = useState('')
+  const [files, setFiles] = useState([])
+  const [validFiles, setValidFiles] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [loadingStatus, setLoadingStatus] = useState('')
+  const [progress, setProgress] = useState(0)
+  const [results, setResults] = useState(null)
+  const [history, setHistory] = useState([])
+  const [historyLoading, setHistoryLoading] = useState(false)
+  const [error, setError] = useState('')
 
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
+  useEffect(() => {
+    const token = localStorage.getItem('authToken')
+    const user = localStorage.getItem('currentUser')
+    if (token && user) {
+      setAuthToken(token)
+      setCurrentUser(JSON.parse(user))
+    }
+  }, [])
 
-        @keyframes shimmer {
-            0% {
-                background-position: -1000px 0;
-            }
-            100% {
-                background-position: 1000px 0;
-            }
-        }
+  const handleLogin = async (e) => {
+    e.preventDefault()
+    setError('')
+    const email = e.target.email.value
+    const password = e.target.password.value
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      })
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.detail || 'Login failed')
+      }
+      const data = await res.json()
+      setAuthToken(data.access_token)
+      setCurrentUser(data.user)
+      localStorage.setItem('authToken', data.access_token)
+      localStorage.setItem('currentUser', JSON.stringify(data.user))
+      setShowLogin(false)
+    } catch (err) {
+      setError(err.message)
+    }
+  }
 
-        * {
-            font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        }
-        
-        .animate-fadeInUp {
-            animation: fadeInUp 0.8s ease-out;
-        }
-        
-        .animate-slideIn {
-            animation: slideIn 0.5s ease-out;
-        }
+  const handleRegister = async (e) => {
+    e.preventDefault()
+    setError('')
+    const email = e.target.email.value
+    const password = e.target.password.value
+    const full_name = e.target.fullName.value || null
+    const company_name = e.target.company.value || null
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, full_name, company_name })
+      })
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.detail || 'Registration failed')
+      }
+      const data = await res.json()
+      setAuthToken(data.access_token)
+      setCurrentUser(data.user)
+      localStorage.setItem('authToken', data.access_token)
+      localStorage.setItem('currentUser', JSON.stringify(data.user))
+      setShowRegister(false)
+    } catch (err) {
+      setError(err.message)
+    }
+  }
 
-        .animate-float {
-            animation: float 3s ease-in-out infinite;
-        }
+  const logout = () => {
+    setAuthToken(null)
+    setCurrentUser(null)
+    localStorage.removeItem('authToken')
+    localStorage.removeItem('currentUser')
+    setPage('home')
+  }
 
-        .gradient-border {
-            position: relative;
-            background: linear-gradient(to right, #3b82f6, #06b6d4);
-            padding: 2px;
-            border-radius: 1rem;
-        }
+  const handleFiles = (e) => {
+    const fileList = Array.from(e.target.files)
+    setFiles(fileList)
+    const valid = fileList.filter(f => {
+      const ext = f.name.split('.').pop().toLowerCase()
+      return ['pdf', 'png', 'jpg', 'jpeg'].includes(ext) && f.size <= 25 * 1024 * 1024
+    }).slice(0, 50)
+    setValidFiles(valid)
+  }
 
-        .gradient-border-content {
-            background: white;
-            border-radius: calc(1rem - 2px);
-        }
+  const clearFiles = () => {
+    setFiles([])
+    setValidFiles([])
+  }
 
-        .shimmer {
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            background-size: 200% 100%;
-            animation: shimmer 2s infinite;
-        }
+  const formatSize = (bytes) => {
+    if (bytes < 1024) return bytes + ' B'
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB'
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB'
+  }
 
-        .glass-effect {
-            background: rgba(191, 219, 254, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-    </style>
-</head>
-<body class="min-h-screen bg-gradient-to-br from-blue-100 via-teal-100 to-cyan-100">
-    
-    <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-teal-300/50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div class="w-11 h-11 bg-gradient-to-br from-blue-600 via-teal-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/30 transform hover:scale-105 transition-transform">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h1 class="text-xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">PermitPro AI</h1>
-                        <p class="text-[11px] text-teal-600 font-semibold -mt-0.5">South Florida</p>
-                    </div>
-                </div>
-                <div class="hidden md:flex items-center gap-8">
-                    <a href="#features" class="text-sm font-semibold text-slate-700 hover:text-teal-600 transition-colors">Features</a>
-                    <a href="#cities" class="text-sm font-semibold text-slate-700 hover:text-teal-600 transition-colors">Coverage</a>
-                    <a href="#process" class="text-sm font-semibold text-slate-700 hover:text-teal-600 transition-colors">How it Works</a>
-                </div>
-                <button class="px-6 py-3 bg-gradient-to-r from-slate-900 to-slate-800 hover:from-slate-800 hover:to-slate-700 text-white text-sm font-bold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-slate-900/30 hover:scale-105">
-                    Get Started
-                </button>
+  const totalSize = validFiles.reduce((sum, f) => sum + f.size, 0)
+
+  const analyze = async () => {
+    if (!city || !permitType || validFiles.length === 0) return
+    setLoading(true)
+    setProgress(0)
+    setLoadingStatus('Preparing files...')
+    try {
+      const formData = new FormData()
+      formData.append('city', city)
+      formData.append('permit_type', permitType)
+      validFiles.forEach((f, i) => {
+        formData.append('files', f)
+        setProgress(((i + 1) / validFiles.length) * 50)
+      })
+      setLoadingStatus('Uploading...')
+      setProgress(50)
+      const headers = {}
+      if (authToken) headers['Authorization'] = `Bearer ${authToken}`
+      const res = await fetch(`${API_BASE_URL}/api/analyze-permit-folder`, {
+        method: 'POST',
+        headers,
+        body: formData
+      })
+      setProgress(80)
+      setLoadingStatus('Analyzing...')
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        throw new Error(err.detail || 'Analysis failed')
+      }
+      const data = await res.json()
+      setProgress(100)
+      setResults(data)
+      setPage('results')
+    } catch (err) {
+      alert('Error: ' + err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const loadHistory = async () => {
+    setHistoryLoading(true)
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/history`, {
+        headers: { 'Authorization': `Bearer ${authToken}` }
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setHistory(data.analyses || [])
+      }
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setHistoryLoading(false)
+    }
+  }
+
+  const viewAnalysis = async (uuid) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/history/${uuid}`, {
+        headers: { 'Authorization': `Bearer ${authToken}` }
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setResults({
+          city: data.city,
+          permit_type: data.permit_type,
+          files_analyzed: data.files_analyzed,
+          file_tree: data.file_list,
+          analysis: data.analysis
+        })
+        setPage('results')
+      }
+    } catch (err) {
+      alert('Error loading analysis')
+    }
+  }
+
+  useEffect(() => {
+    if (page === 'history' && authToken) loadHistory()
+  }, [page])
+
+  const canAnalyze = city && permitType && validFiles.length > 0 && totalSize <= 200 * 1024 * 1024
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-teal-100 to-cyan-100">
+      {/* Nav */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-blue-100/80 backdrop-blur-xl border-b border-teal-300/50">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => { setPage('home'); setResults(null) }}>
+            <div className="w-11 h-11 bg-gradient-to-br from-blue-600 to-teal-500 rounded-xl flex items-center justify-center">
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
             </div>
+            <div>
+              <h1 className="text-xl font-bold text-slate-900">PermitPro AI</h1>
+              <p className="text-xs text-teal-600 font-semibold">South Florida</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            {currentUser ? (
+              <>
+                <button onClick={() => setPage('history')} className="text-sm font-semibold text-slate-700 hover:text-teal-600">History</button>
+                <span className="text-sm text-slate-600">{currentUser.email}</span>
+                <button onClick={logout} className="text-sm text-red-600 hover:text-red-700">Logout</button>
+              </>
+            ) : (
+              <>
+                <button onClick={() => setShowLogin(true)} className="text-sm font-semibold text-slate-700 hover:text-teal-600">Log In</button>
+                <button onClick={() => setShowRegister(true)} className="px-5 py-2.5 bg-gradient-to-r from-slate-900 to-slate-800 text-white text-sm font-bold rounded-xl hover:scale-105 transition-transform">Sign Up</button>
+              </>
+            )}
+          </div>
         </div>
-    </nav>
+      </nav>
 
-    <!-- Hero Section -->
-    <section class="pt-36 pb-24 px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid lg:grid-cols-2 gap-20 items-center">
-                <!-- Left: Value Prop -->
-                <div class="space-y-8 animate-fadeInUp">
-                    <div class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-50 to-teal-50 border border-teal-200/60 rounded-full shadow-sm">
-                        <div class="w-2 h-2 bg-teal-500 rounded-full animate-pulse"></div>
-                        <span class="text-sm font-bold text-teal-700">AI-Powered Permit Analysis</span>
-                    </div>
-                    
-                    <h1 class="text-5xl lg:text-7xl font-black text-slate-900 leading-[1.05] tracking-tight">
-                        Stop the Permit
-                        <span class="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-teal-500 to-cyan-500 mt-2">
-                            Rejection Loop
-                        </span>
-                    </h1>
-                    
-                    <p class="text-xl text-slate-600 leading-relaxed max-w-xl font-medium">
-                        Our AI scans building permits against <span class="font-bold text-slate-900 bg-yellow-100 px-1 rounded">local zoning codes</span> before submission. Catch errors in seconds, not weeks.
-                    </p>
-
-                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                        <button class="group px-8 py-4 bg-gradient-to-r from-blue-600 via-teal-600 to-cyan-600 hover:from-blue-700 hover:via-teal-700 hover:to-cyan-700 text-white font-bold text-lg rounded-2xl transition-all duration-300 hover:shadow-2xl hover:shadow-teal-500/40 hover:scale-105 flex items-center justify-center gap-3">
-                            Try Demo Analysis
-                            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                            </svg>
-                        </button>
-                        <button class="px-8 py-4 bg-blue-50 hover:bg-white text-slate-900 font-bold text-lg rounded-2xl border-2 border-teal-300 hover:border-teal-500 transition-all duration-300 hover:shadow-lg">
-                            Watch 2-Min Demo
-                        </button>
-                    </div>
-
-                    <!-- Trust Indicators -->
-                    <div class="flex flex-wrap items-center gap-8 pt-6">
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="text-2xl font-black text-slate-900">99.7%</div>
-                                <div class="text-xs font-semibold text-slate-500 -mt-1">Accuracy</div>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-10 h-10 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/20">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="text-2xl font-black text-slate-900">5-Min</div>
-                                <div class="text-xs font-semibold text-slate-500 -mt-1">Analysis</div>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/20">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="text-2xl font-black text-slate-900">6 Cities</div>
-                                <div class="text-xs font-semibold text-slate-500 -mt-1">Covered</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right: Interactive Preview -->
-                <div class="relative animate-float">
-                    <div class="relative bg-gradient-to-br from-blue-50 to-teal-50 rounded-3xl shadow-2xl shadow-blue-900/20 border-2 border-teal-300/50 overflow-hidden">
-                        <!-- Mock UI Header -->
-                        <div class="bg-gradient-to-r from-blue-200 via-teal-100 to-blue-200 px-6 py-5 border-b-2 border-teal-300/80">
-                            <div class="flex items-center gap-3">
-                                <div class="flex gap-2">
-                                    <div class="w-3.5 h-3.5 rounded-full bg-red-500 shadow-sm"></div>
-                                    <div class="w-3.5 h-3.5 rounded-full bg-yellow-500 shadow-sm"></div>
-                                    <div class="w-3.5 h-3.5 rounded-full bg-green-500 shadow-sm"></div>
-                                </div>
-                                <div class="flex-1 bg-white rounded-lg px-4 py-2.5 text-sm font-semibold text-slate-700 border-2 border-teal-300 shadow-sm">
-                                    permit_submission.pdf
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Analysis Content -->
-                        <div class="p-8 space-y-4 min-h-[500px]">
-                            <div class="cursor-pointer h-[450px] border-3 border-dashed border-teal-300 rounded-3xl flex flex-col items-center justify-center gap-6 hover:border-teal-500 hover:bg-gradient-to-br hover:from-blue-50 hover:to-teal-50 transition-all duration-300 group">
-                                <div class="w-24 h-24 bg-gradient-to-br from-blue-500 to-teal-500 rounded-3xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 shadow-xl shadow-teal-500/30">
-                                    <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                                    </svg>
-                                </div>
-                                <div class="text-center">
-                                    <p class="text-xl font-black text-slate-900">Drop your permit here</p>
-                                    <p class="text-sm text-slate-600 font-semibold mt-2">or click to upload • PDF, PNG, JPG</p>
-                                </div>
-                                <div class="px-8 py-3.5 bg-gradient-to-r from-blue-600 to-teal-600 text-white text-sm font-bold rounded-xl group-hover:shadow-2xl group-hover:shadow-teal-500/40 transition-all group-hover:scale-105">
-                                    Select Files
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Floating badge -->
-                    <div class="absolute -top-6 -right-6 px-5 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl shadow-xl shadow-emerald-500/30 border-2 border-teal-200">
-                        <div class="flex items-center gap-2">
-                            <div class="w-2.5 h-2.5 bg-white rounded-full animate-pulse"></div>
-                            <span class="text-sm font-black text-white">Live Demo</span>
-                        </div>
-                    </div>
-
-                    <!-- Decorative gradient orbs -->
-                    <div class="absolute -z-10 -top-20 -left-20 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl"></div>
-                    <div class="absolute -z-10 -bottom-20 -right-20 w-72 h-72 bg-teal-400/20 rounded-full blur-3xl"></div>
-                </div>
+      {/* Login Modal */}
+      {showLogin && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold">Log In</h2>
+              <button onClick={() => { setShowLogin(false); setError('') }} className="text-2xl text-gray-500">&times;</button>
             </div>
+            <form onSubmit={handleLogin}>
+              <input name="email" type="email" required placeholder="Email" className="w-full px-4 py-3 border rounded-xl mb-4" />
+              <input name="password" type="password" required placeholder="Password" className="w-full px-4 py-3 border rounded-xl mb-4" />
+              {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+              <button type="submit" className="w-full py-3 bg-gradient-to-r from-blue-600 to-teal-600 text-white font-bold rounded-xl">Log In</button>
+            </form>
+            <p className="text-center mt-4 text-sm text-gray-600">No account? <button onClick={() => { setShowLogin(false); setShowRegister(true); setError('') }} className="text-teal-600">Sign up</button></p>
+          </div>
         </div>
-    </section>
+      )}
 
-    <!-- Cities Section -->
-    <section class="py-20 bg-gradient-to-br from-blue-200/40 via-teal-200/40 to-cyan-200/40 border-y-2 border-teal-300/50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <div class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-50 to-teal-50 border border-teal-200/60 rounded-full mb-6">
-                    <svg class="w-4 h-4 text-teal-600" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path>
-                    </svg>
-                    <span class="text-sm font-bold text-teal-700">Coverage Area</span>
-                </div>
-                <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-4">Covering 6 South Florida Cities</h2>
-                <p class="text-lg text-slate-600 font-medium max-w-2xl mx-auto">Comprehensive permit analysis across major municipalities in Broward and Palm Beach counties</p>
+      {/* Register Modal */}
+      {showRegister && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold">Create Account</h2>
+              <button onClick={() => { setShowRegister(false); setError('') }} className="text-2xl text-gray-500">&times;</button>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-6xl mx-auto">
-                <div class="group p-6 bg-gradient-to-br from-blue-100 to-teal-100 hover:from-blue-50 hover:to-teal-50 border-2 border-teal-300/50 hover:border-teal-500 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10 hover:-translate-y-1">
-                    <div class="text-sm font-black text-slate-900 mb-1">Fort Lauderdale</div>
-                    <div class="text-xs text-teal-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Broward County</div>
-                </div>
-                <div class="group p-6 bg-gradient-to-br from-blue-100 to-teal-100 hover:from-blue-50 hover:to-teal-50 border-2 border-teal-300/50 hover:border-teal-500 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10 hover:-translate-y-1">
-                    <div class="text-sm font-black text-slate-900 mb-1">Pompano Beach</div>
-                    <div class="text-xs text-teal-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Broward County</div>
-                </div>
-                <div class="group p-6 bg-gradient-to-br from-blue-100 to-teal-100 hover:from-blue-50 hover:to-teal-50 border-2 border-teal-300/50 hover:border-teal-500 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10 hover:-translate-y-1">
-                    <div class="text-sm font-black text-slate-900 mb-1">Hollywood</div>
-                    <div class="text-xs text-teal-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Broward County</div>
-                </div>
-                <div class="group p-6 bg-gradient-to-br from-blue-100 to-teal-100 hover:from-blue-50 hover:to-teal-50 border-2 border-teal-300/50 hover:border-teal-500 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10 hover:-translate-y-1">
-                    <div class="text-sm font-black text-slate-900 mb-1">Coral Springs</div>
-                    <div class="text-xs text-teal-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Broward County</div>
-                </div>
-                <div class="group p-6 bg-gradient-to-br from-blue-100 to-teal-100 hover:from-blue-50 hover:to-teal-50 border-2 border-teal-300/50 hover:border-teal-500 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10 hover:-translate-y-1">
-                    <div class="text-sm font-black text-slate-900 mb-1">Boca Raton</div>
-                    <div class="text-xs text-teal-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Palm Beach County</div>
-                </div>
-                <div class="group p-6 bg-gradient-to-br from-blue-100 to-teal-100 hover:from-blue-50 hover:to-teal-50 border-2 border-teal-300/50 hover:border-teal-500 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10 hover:-translate-y-1">
-                    <div class="text-sm font-black text-slate-900 mb-1">Lauderdale-by-the-Sea</div>
-                    <div class="text-xs text-teal-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Broward County</div>
-                </div>
-            </div>
+            <form onSubmit={handleRegister}>
+              <input name="email" type="email" required placeholder="Email" className="w-full px-4 py-3 border rounded-xl mb-4" />
+              <input name="password" type="password" required minLength="8" placeholder="Password (min 8)" className="w-full px-4 py-3 border rounded-xl mb-4" />
+              <input name="fullName" type="text" placeholder="Full Name (optional)" className="w-full px-4 py-3 border rounded-xl mb-4" />
+              <input name="company" type="text" placeholder="Company (optional)" className="w-full px-4 py-3 border rounded-xl mb-4" />
+              {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+              <button type="submit" className="w-full py-3 bg-gradient-to-r from-blue-600 to-teal-600 text-white font-bold rounded-xl">Create Account</button>
+            </form>
+            <p className="text-center mt-4 text-sm text-gray-600">Have an account? <button onClick={() => { setShowRegister(false); setShowLogin(true); setError('') }} className="text-teal-600">Log in</button></p>
+          </div>
         </div>
-    </section>
+      )}
 
-    <!-- CTA -->
-    <section class="py-24 px-6 bg-gradient-to-br from-blue-900 via-teal-900 to-cyan-900 text-center relative overflow-hidden">
-        <!-- Background decoration -->
-        <div class="absolute inset-0 bg-grid-white/5"></div>
-        <div class="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl"></div>
-        
-        <div class="max-w-4xl mx-auto relative z-10">
-            <h2 class="text-4xl md:text-6xl font-black text-white mb-6 leading-tight">
-                Ready to Stop Wasting Time on Rejections?
-            </h2>
-            <p class="text-xl md:text-2xl text-teal-100 font-medium mb-12 leading-relaxed">
-                Join contractors and developers across South Florida who are getting permits approved faster.
-            </p>
-            <button class="px-12 py-5 bg-white hover:bg-teal-50 text-slate-900 font-black text-xl rounded-2xl transition-all duration-300 hover:shadow-2xl hover:shadow-white/20 hover:scale-105">
-                Start Free Analysis
-            </button>
-            
-            <!-- Trust badges -->
-            <div class="flex flex-wrap justify-center gap-8 mt-16 pt-12 border-t border-white/10">
-                <div class="flex items-center gap-2 text-white/80">
-                    <svg class="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="text-sm font-semibold">No credit card required</span>
-                </div>
-                <div class="flex items-center gap-2 text-white/80">
-                    <svg class="w-5 h-5 text-teal-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="text-sm font-semibold">Instant results</span>
-                </div>
-                <div class="flex items-center gap-2 text-white/80">
-                    <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="text-sm font-semibold">Cancel anytime</span>
-                </div>
+      {/* Loading Overlay */}
+      {loading && (
+        <div className="fixed inset-0 z-50 bg-slate-900/90 flex items-center justify-center">
+          <div className="text-center text-white">
+            <div className="w-16 h-16 border-4 border-teal-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <h3 className="text-xl font-bold mb-2">Analyzing...</h3>
+            <p className="text-teal-300 mb-4">{loadingStatus}</p>
+            <div className="w-64 h-2 bg-slate-700 rounded-full mx-auto">
+              <div className="h-2 bg-teal-500 rounded-full transition-all" style={{ width: `${progress}%` }}></div>
             </div>
+          </div>
         </div>
-    </section>
+      )}
 
-</body>
-</html>
+      {/* Main Content */}
+      <div className="pt-24 px-6 pb-12">
+        {page === 'home' && (
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">South Florida Permit Checker</h1>
+              <p className="text-xl text-slate-600">Upload your permit package for instant AI analysis</p>
+            </div>
+
+            <div className="bg-white rounded-3xl shadow-xl p-8 border-2 border-teal-200">
+              {/* City & Permit */}
+              <div className="grid md:grid-cols-2 gap-4 mb-8">
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">City</label>
+                  <select value={city} onChange={e => setCity(e.target.value)} className="w-full px-4 py-3 border-2 border-teal-200 rounded-xl focus:border-teal-500 outline-none">
+                    <option value="">Select city...</option>
+                    <option value="Fort Lauderdale">Fort Lauderdale</option>
+                    <option value="Pompano Beach">Pompano Beach</option>
+                    <option value="Hollywood">Hollywood</option>
+                    <option value="Coral Springs">Coral Springs</option>
+                    <option value="Boca Raton">Boca Raton</option>
+                    <option value="Lauderdale-by-the-Sea">Lauderdale-by-the-Sea</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">Permit Type</label>
+                  <select value={permitType} onChange={e => setPermitType(e.target.value)} className="w-full px-4 py-3 border-2 border-teal-200 rounded-xl focus:border-teal-500 outline-none">
+                    <option value="">Select type...</option>
+                    <option value="building">Building</option>
+                    <option value="electrical">Electrical</option>
+                    <option value="plumbing">Plumbing</option>
+                    <option value="mechanical">Mechanical/HVAC</option>
+                    <option value="roofing">Roofing</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Upload */}
+              <div className="mb-8">
+                <label className="block text-sm font-semibold text-slate-700 mb-2">Upload Files</label>
+                <div className="border-2 border-dashed border-teal-300 rounded-2xl p-8 text-center hover:border-teal-500 transition-colors">
+                  <input type="file" multiple webkitdirectory="" directory="" onChange={handleFiles} className="hidden" id="fileInput" />
+                  <label htmlFor="fileInput" className="cursor-pointer">
+                    <div className="w-16 h-16 bg-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                      <svg className="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                      </svg>
+                    </div>
+                    <p className="font-bold text-slate-900">Drop your permit folder here</p>
+                    <p className="text-sm text-slate-500 mt-1">PDF, PNG, JPG • Max 50 files • 200MB total</p>
+                  </label>
+                </div>
+
+                {validFiles.length > 0 && (
+                  <div className="mt-4 p-4 bg-teal-50 rounded-xl">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="font-semibold text-slate-700">{validFiles.length} files selected ({formatSize(totalSize)})</span>
+                      <button onClick={clearFiles} className="text-sm text-red-600">Clear</button>
+                    </div>
+                    <div className="max-h-32 overflow-y-auto text-sm text-slate-600">
+                      {validFiles.map((f, i) => <div key={i}>{f.name}</div>)}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Analyze Button */}
+              <button onClick={analyze} disabled={!canAnalyze} className={`w-full py-4 rounded-xl font-bold text-lg transition-all ${canAnalyze ? 'bg-gradient-to-r from-blue-600 to-teal-600 text-white hover:scale-105' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`}>
+                {canAnalyze ? `Analyze ${validFiles.length} Files` : 'Select city, permit type & files'}
+              </button>
+              {!currentUser && <p className="text-center text-sm text-slate-500 mt-3">Sign up to save your analysis history</p>}
+            </div>
+          </div>
+        )}
+
+        {page === 'history' && (
+          <div className="max-w-4xl mx-auto">
+            <div className="flex justify-between items-center mb-8">
+              <h1 className="text-3xl font-bold text-slate-900">Analysis History</h1>
+              <button onClick={() => setPage('home')} className="px-6 py-3 bg-gradient-to-r from-blue-600 to-teal-600 text-white font-bold rounded-xl">New Analysis</button>
+            </div>
+            {historyLoading ? (
+              <div className="text-center py-12"><div className="w-8 h-8 border-2 border-teal-500 border-t-transparent rounded-full animate-spin mx-auto"></div></div>
+            ) : history.length === 0 ? (
+              <div className="text-center py-12 bg-white rounded-2xl"><p className="text-slate-500">No analyses yet</p></div>
+            ) : (
+              <div className="bg-white rounded-2xl overflow-hidden">
+                <table className="w-full">
+                  <thead className="bg-teal-50">
+                    <tr>
+                      <th className="text-left px-6 py-4 text-sm font-semibold text-slate-700">Date</th>
+                      <th className="text-left px-6 py-4 text-sm font-semibold text-slate-700">City</th>
+                      <th className="text-left px-6 py-4 text-sm font-semibold text-slate-700">Type</th>
+                      <th className="text-left px-6 py-4 text-sm font-semibold text-slate-700">Score</th>
+                      <th className="px-6 py-4"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {history.map(h => (
+                      <tr key={h.analysis_uuid} className="border-t hover:bg-teal-50">
+                        <td className="px-6 py-4 text-sm">{new Date(h.created_at).toLocaleDateString()}</td>
+                        <td className="px-6 py-4 text-sm font-semibold">{h.city}</td>
+                        <td className="px-6 py-4 text-sm">{h.permit_type}</td>
+                        <td className="px-6 py-4 text-sm font-bold text-teal-600">{h.compliance_score || '-'}%</td>
+                        <td className="px-6 py-4"><button onClick={() => viewAnalysis(h.analysis_uuid)} className="text-teal-600 hover:underline text-sm">View</button></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+
+        {page === 'results' && results && (
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
+              <div className="p-8 border-b bg-gradient-to-r from-teal-50 to-blue-50">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h2 className="text-2xl font-bold text-slate-900">Analysis Complete</h2>
+                    <p className="text-slate-600">{results.city} - {results.permit_type}</p>
+                  </div>
+                  <div className="text-center">
+                    <div className={`text-4xl font-black ${(results.analysis?.compliance_score || 0) >= 70 ? 'text-emerald-500' : (results.analysis?.compliance_score || 0) >= 40 ? 'text-amber-500' : 'text-red-500'}`}>
+                      {results.analysis?.compliance_score || 0}%
+                    </div>
+                    <div className="text-sm text-slate-500">Compliance</div>
+                  </div>
+                </div>
+              </div>
+              <div className="p-8">
+                {results.analysis?.summary && (
+                  <div className="mb-6">
+                    <h3 className="font-bold text-slate-900 mb-2">Summary</h3>
+                    <p className="text-slate-600">{results.analysis.summary}</p>
+                  </div>
+                )}
+                {results.analysis?.critical_issues?.length > 0 && (
+                  <div className="mb-6">
+                    <h3 className="font-bold text-red-600 mb-2">Critical Issues</h3>
+                    <ul className="list-disc pl-5 text-red-600 space-y-1">
+                      {results.analysis.critical_issues.map((issue, i) => <li key={i}>{issue}</li>)}
+                    </ul>
+                  </div>
+                )}
+                {results.analysis?.missing_documents?.length > 0 && (
+                  <div className="mb-6">
+                    <h3 className="font-bold text-amber-600 mb-2">Missing Documents</h3>
+                    <ul className="list-disc pl-5 text-amber-600 space-y-1">
+                      {results.analysis.missing_documents.map((doc, i) => <li key={i}>{doc}</li>)}
+                    </ul>
+                  </div>
+                )}
+                {results.analysis?.recommendations?.length > 0 && (
+                  <div className="mb-6">
+                    <h3 className="font-bold text-teal-600 mb-2">Recommendations</h3>
+                    <ul className="list-disc pl-5 text-slate-600 space-y-1">
+                      {results.analysis.recommendations.map((rec, i) => <li key={i}>{rec}</li>)}
+                    </ul>
+                  </div>
+                )}
+              </div>
+              <div className="p-6 bg-slate-50 border-t flex justify-center">
+                <button onClick={() => { setPage('home'); setResults(null); clearFiles() }} className="px-8 py-3 bg-gradient-to-r from-blue-600 to-teal-600 text-white font-bold rounded-xl">New Analysis</button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
