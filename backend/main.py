@@ -1,6 +1,6 @@
 """
 PermitPro AI - South Florida Permit Checker API
-Production-ready FastAPI backend with security hardening
+Production-ready FastAPI backend with security hardening and user authentication
 """
 
 from fastapi import (
@@ -22,6 +22,7 @@ import shutil
 import uuid
 import re
 import magic
+import json
 from datetime import datetime
 from typing import Optional, List
 from dotenv import load_dotenv
@@ -31,7 +32,7 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 
-# Database preparation (for future use)
+# Database
 from sqlalchemy import (
     create_engine,
     Column,
@@ -41,9 +42,10 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     Boolean,
+    JSON as SQLAlchemyJSON,
 )
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.orm import sessionmaker, relationship, Session
 import bcrypt
 
 # Load environment variables
@@ -54,15 +56,55 @@ from reader import get_document_text
 from permit_data import get_permit_requirements, get_city_key, get_permit_types
 from analyzer import analyze_document_with_claude
 
+# Auth imports
+from auth import (
+    UserRegister,
+    UserLogin,
+    UserResponse,
+    TokenResponse,
+    AnalysisHistoryItem,
+    hash_password,
+    verify_password,
+    create_access_token,
+    get_current_user_id,
+)
+
 # ============================================================================
-# DATABASE MODELS (Structure only - for future implementation)
+# DATABASE SETUP
 # ============================================================================
 
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./permitpro.db")
+
+# Handle PostgreSQL URL format from Railway/Heroku
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+# Create engine
+if DATABASE_URL.startswith("sqlite"):
+    engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+else:
+    engine = create_engine(DATABASE_URL)
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 
+def get_db():
+    """Dependency to get database session"""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+# ============================================================================
+# DATABASE MODELS
+# ============================================================================
+
+
 class User(Base):
-    """User model with bcrypt password hashing"""
+    """User model"""
 
     __tablename__ = "users"
 
@@ -72,71 +114,50 @@ class User(Base):
     full_name = Column(String(255))
     company_name = Column(String(255))
     is_active = Column(Boolean, default=True)
-    is_verified = Column(Boolean, default=False)
     subscription_tier = Column(String(50), default="free")
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationships
-    api_keys = relationship("UserAPIKey", back_populates="user")
-    analysis_results = relationship("AnalysisResult", back_populates="user")
-
-    @staticmethod
-    def hash_password(password: str) -> str:
-        """Hash password using bcrypt"""
-        return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
-
-    def verify_password(self, password: str) -> bool:
-        """Verify password against hash"""
-        return bcrypt.checkpw(
-            password.encode("utf-8"), self.hashed_password.encode("utf-8")
-        )
+    analyses = relationship(
+        "AnalysisHistory",
+        back_populates="user",
+        order_by="desc(AnalysisHistory.created_at)",
+    )
 
 
-class UserAPIKey(Base):
-    """API Key management model"""
+class AnalysisHistory(Base):
+    """Analysis history - stores past permit analyses"""
 
-    __tablename__ = "user_api_keys"
-
-    id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    key_hash = Column(String(255), nullable=False, unique=True)
-    key_prefix = Column(String(10), nullable=False)  # First 8 chars for identification
-    name = Column(String(100))  # User-friendly name for the key
-    is_active = Column(Boolean, default=True)
-    last_used_at = Column(DateTime)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    expires_at = Column(DateTime)
-
-    # Relationship
-    user = relationship("User", back_populates="api_keys")
-
-    @staticmethod
-    def hash_key(api_key: str) -> str:
-        """Hash API key using bcrypt"""
-        return bcrypt.hashpw(api_key.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
-
-
-class AnalysisResult(Base):
-    """Analysis result storage model"""
-
-    __tablename__ = "analysis_results"
+    __tablename__ = "analysis_history"
 
     id = Column(Integer, primary_key=True, index=True)
     analysis_uuid = Column(String(36), unique=True, index=True, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    city = Column(String(100))
-    permit_type = Column(String(100))
+
+    # Analysis metadata
+    city = Column(String(100), nullable=False)
+    permit_type = Column(String(100), nullable=False)
     files_analyzed = Column(Integer, default=0)
-    file_list = Column(Text)  # JSON string of analyzed files
     total_size_bytes = Column(Integer)
-    analysis_text = Column(Text)  # Full analysis JSON
+
+    # Results
     overall_status = Column(String(50))
     compliance_score = Column(Integer)
+
+    # Detailed data (stored as JSON text)
+    file_list = Column(Text)  # JSON string
+    analysis_data = Column(Text)  # JSON string
+
     created_at = Column(DateTime, default=datetime.utcnow)
 
     # Relationship
-    user = relationship("User", back_populates="analysis_results")
+    user = relationship("User", back_populates="analyses")
+
+
+# Create tables
+Base.metadata.create_all(bind=engine)
+print("✅ Database tables initialized")
 
 
 # ============================================================================
@@ -356,6 +377,215 @@ def format_file_size(size_bytes: int) -> str:
 
 
 # ============================================================================
+# AUTHENTICATION ENDPOINTS
+# ============================================================================
+
+
+@app.post("/api/auth/register", response_model=TokenResponse)
+async def register(user_data: UserRegister, db: Session = Depends(get_db)):
+    """Register a new user"""
+    # Check if email already exists
+    existing_user = db.query(User).filter(User.email == user_data.email).first()
+    if existing_user:
+        raise HTTPException(status_code=400, detail="Email already registered")
+
+    # Validate password length
+    if len(user_data.password) < 8:
+        raise HTTPException(
+            status_code=400, detail="Password must be at least 8 characters"
+        )
+
+    # Create new user
+    new_user = User(
+        email=user_data.email,
+        hashed_password=hash_password(user_data.password),
+        full_name=user_data.full_name,
+        company_name=user_data.company_name,
+    )
+
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+
+    # Create access token
+    access_token = create_access_token(new_user.id, new_user.email)
+
+    return TokenResponse(
+        access_token=access_token,
+        user=UserResponse(
+            id=new_user.id,
+            email=new_user.email,
+            full_name=new_user.full_name,
+            company_name=new_user.company_name,
+            subscription_tier=new_user.subscription_tier,
+            created_at=new_user.created_at,
+        ),
+    )
+
+
+@app.post("/api/auth/login", response_model=TokenResponse)
+async def login(user_data: UserLogin, db: Session = Depends(get_db)):
+    """Login and get access token"""
+    # Find user by email
+    user = db.query(User).filter(User.email == user_data.email).first()
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+
+    # Verify password
+    if not verify_password(user_data.password, user.hashed_password):
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+
+    # Check if user is active
+    if not user.is_active:
+        raise HTTPException(status_code=401, detail="Account is disabled")
+
+    # Create access token
+    access_token = create_access_token(user.id, user.email)
+
+    return TokenResponse(
+        access_token=access_token,
+        user=UserResponse(
+            id=user.id,
+            email=user.email,
+            full_name=user.full_name,
+            company_name=user.company_name,
+            subscription_tier=user.subscription_tier,
+            created_at=user.created_at,
+        ),
+    )
+
+
+@app.get("/api/auth/me", response_model=UserResponse)
+async def get_current_user(
+    user_id: int = Depends(get_current_user_id), db: Session = Depends(get_db)
+):
+    """Get current user info"""
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return UserResponse(
+        id=user.id,
+        email=user.email,
+        full_name=user.full_name,
+        company_name=user.company_name,
+        subscription_tier=user.subscription_tier,
+        created_at=user.created_at,
+    )
+
+
+# ============================================================================
+# ANALYSIS HISTORY ENDPOINTS
+# ============================================================================
+
+
+@app.get("/api/history")
+async def get_analysis_history(
+    user_id: int = Depends(get_current_user_id),
+    db: Session = Depends(get_db),
+    limit: int = 20,
+    offset: int = 0,
+):
+    """Get user's analysis history"""
+    analyses = (
+        db.query(AnalysisHistory)
+        .filter(AnalysisHistory.user_id == user_id)
+        .order_by(AnalysisHistory.created_at.desc())
+        .offset(offset)
+        .limit(limit)
+        .all()
+    )
+
+    total = db.query(AnalysisHistory).filter(AnalysisHistory.user_id == user_id).count()
+
+    return {
+        "analyses": [
+            {
+                "id": a.id,
+                "analysis_uuid": a.analysis_uuid,
+                "city": a.city,
+                "permit_type": a.permit_type,
+                "files_analyzed": a.files_analyzed,
+                "overall_status": a.overall_status,
+                "compliance_score": a.compliance_score,
+                "created_at": a.created_at.isoformat(),
+            }
+            for a in analyses
+        ],
+        "total": total,
+        "limit": limit,
+        "offset": offset,
+    }
+
+
+@app.get("/api/history/{analysis_uuid}")
+async def get_analysis_detail(
+    analysis_uuid: str,
+    user_id: int = Depends(get_current_user_id),
+    db: Session = Depends(get_db),
+):
+    """Get detailed analysis by UUID"""
+    analysis = (
+        db.query(AnalysisHistory)
+        .filter(
+            AnalysisHistory.analysis_uuid == analysis_uuid,
+            AnalysisHistory.user_id == user_id,
+        )
+        .first()
+    )
+
+    if not analysis:
+        raise HTTPException(status_code=404, detail="Analysis not found")
+
+    # Parse JSON fields
+    file_list = json.loads(analysis.file_list) if analysis.file_list else []
+    analysis_data = json.loads(analysis.analysis_data) if analysis.analysis_data else {}
+
+    return {
+        "id": analysis.id,
+        "analysis_uuid": analysis.analysis_uuid,
+        "city": analysis.city,
+        "permit_type": analysis.permit_type,
+        "files_analyzed": analysis.files_analyzed,
+        "file_list": file_list,
+        "total_size_bytes": analysis.total_size_bytes,
+        "overall_status": analysis.overall_status,
+        "compliance_score": analysis.compliance_score,
+        "analysis": analysis_data,
+        "created_at": analysis.created_at.isoformat(),
+    }
+
+
+def save_analysis_to_history(
+    db: Session,
+    user_id: int,
+    analysis_uuid: str,
+    city: str,
+    permit_type: str,
+    files_analyzed: int,
+    file_list: list,
+    total_size_bytes: int,
+    analysis_data: dict,
+):
+    """Helper function to save analysis to history"""
+    history = AnalysisHistory(
+        analysis_uuid=analysis_uuid,
+        user_id=user_id,
+        city=city,
+        permit_type=permit_type,
+        files_analyzed=files_analyzed,
+        file_list=json.dumps(file_list),
+        total_size_bytes=total_size_bytes,
+        overall_status=analysis_data.get("overall_status"),
+        compliance_score=analysis_data.get("compliance_score"),
+        analysis_data=json.dumps(analysis_data),
+    )
+    db.add(history)
+    db.commit()
+    return history
+
+
+# ============================================================================
 # HEALTH & STATUS ENDPOINTS
 # ============================================================================
 
@@ -366,12 +596,14 @@ async def root():
     api_key = get_api_key()
     return {
         "service": "PermitPro AI - South Florida Permit Checker",
-        "version": "1.1.0",
+        "version": "1.2.0",
         "status": "running",
         "api_key_configured": bool(api_key),
         "documentation": "/docs",
         "endpoints": {
             "health": "/health",
+            "auth": "/api/auth/register, /api/auth/login, /api/auth/me",
+            "history": "/api/history",
             "cities": "/api/cities",
             "permits": "/api/permits/{city_key}",
             "analyze": "/api/analyze-permit (POST)",
@@ -395,7 +627,7 @@ async def health_check():
         "status": "healthy",
         "api_key_present": bool(api_key),
         "timestamp": datetime.now().isoformat(),
-        "version": "1.1.0",
+        "version": "1.2.0",
     }
 
 
@@ -650,17 +882,31 @@ async def analyze_permit_folder(
     city: str = Form(...),
     permit_type: str = Form(...),
     authorization: Optional[str] = Header(None),
+    db: Session = Depends(get_db),
 ):
     """
     Upload and analyze multiple permit documents (folder) against city requirements.
+    If logged in (JWT token), saves analysis to history.
 
     - **files**: Multiple PDF, PNG, or JPG documents (max 50 files, 200MB total)
     - **city**: City name (e.g., "Fort Lauderdale")
     - **permit_type**: Type of permit (e.g., "building", "electrical")
     """
 
-    # Verify authorization
-    if not verify_authorization(authorization):
+    # Try to get user from JWT token (optional - for history saving)
+    user_id = None
+    if authorization and authorization.startswith("Bearer "):
+        token = authorization[7:]
+        try:
+            from auth import decode_access_token
+
+            payload = decode_access_token(token)
+            user_id = int(payload.get("sub"))
+        except:
+            pass  # Not a valid JWT, might be API key
+
+    # Verify authorization (API key OR valid JWT)
+    if not verify_authorization(authorization) and not user_id:
         client_ip = request.client.host if request.client else "unknown"
         print(
             f"⚠️ UNAUTHORIZED: Folder upload from {client_ip} with invalid/missing auth"
@@ -872,6 +1118,24 @@ IMPORTANT: You are analyzing a COMPLETE PERMIT PACKAGE containing multiple files
         }
 
         analysis_results[analysis_id] = result
+
+        # Save to history if user is logged in
+        if user_id:
+            try:
+                save_analysis_to_history(
+                    db=db,
+                    user_id=user_id,
+                    analysis_uuid=analysis_id,
+                    city=city,
+                    permit_type=requirements["name"],
+                    files_analyzed=len(processed_files),
+                    file_list=file_tree,
+                    total_size_bytes=total_size,
+                    analysis_data=analysis,
+                )
+                print(f"💾 Analysis saved to history for user {user_id}")
+            except Exception as e:
+                print(f"⚠️ Failed to save to history: {str(e)}")
 
         # Cleanup
         shutil.rmtree(temp_dir)
