@@ -79,12 +79,14 @@ class AnalysisHistoryItem(BaseModel):
 
 def hash_password(password: str) -> str:
     """Hash a password using passlib bcrypt"""
-    return pwd_context.hash(password)
+    # bcrypt has a 72-byte limit - truncate to prevent errors
+    return pwd_context.hash(password[:72])
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a password against its hash"""
-    return pwd_context.verify(plain_password, hashed_password)
+    # bcrypt has a 72-byte limit - truncate to match hashing
+    return pwd_context.verify(plain_password[:72], hashed_password)
 
 
 # ============================================================================
