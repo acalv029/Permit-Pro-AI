@@ -909,16 +909,11 @@ async def analyze_permit_folder(
         except:
             pass  # Not a valid JWT, might be API key
 
-    # Verify authorization (API key OR valid JWT)
-    if not verify_authorization(authorization) and not user_id:
-        client_ip = request.client.host if request.client else "unknown"
-        print(
-            f"⚠️ UNAUTHORIZED: Folder upload from {client_ip} with invalid/missing auth"
-        )
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid or missing API key. Please provide a valid Authorization header.",
-        )
+    # Authorization optional - logged in users get history saved
+    if user_id:
+        print(f"✅ Authenticated user: {user_id}")
+    else:
+        print(f"👤 Anonymous request (rate limited)")
 
     # Validate file count
     if len(files) > MAX_FILES_PER_UPLOAD:
