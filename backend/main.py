@@ -261,7 +261,7 @@ ALLOWED_ORIGINS = [
     "https://south-florida-permit-helper.vercel.app",
     "https://frontend-nine-mu-19.vercel.app",
     # Railway backend (for health checks)
-    "https://south-florida-permit-helper-production.up.railway.app",
+    "https://permit-pro-ai-production.up.railway.app",
 ]
 
 # CORS MUST be the first middleware added so it runs last and wraps all responses

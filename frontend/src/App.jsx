@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-const API_BASE_URL = 'https://south-florida-permit-helper-production.up.railway.app'
+const API_BASE_URL = 'https://permit-pro-ai-production.up.railway.app'
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState(null)
