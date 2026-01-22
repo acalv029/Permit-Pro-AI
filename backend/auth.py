@@ -10,15 +10,14 @@ from fastapi import HTTPException, Depends, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, EmailStr
 from jose import JWTError, jwt
-from passlib.context import CryptContext
+import bcrypt as _bcrypt
 
 # JWT Configuration
 SECRET_KEY = os.getenv("JWT_SECRET_KEY", "your-secret-key-change-in-production")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_HOURS = 24
 
-# Password hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Security scheme for FastAPI
 
 security = HTTPBearer()
 
@@ -78,15 +77,17 @@ class AnalysisHistoryItem(BaseModel):
 
 
 def hash_password(password: str) -> str:
-    """Hash a password using passlib bcrypt"""
-    # bcrypt has a 72-byte limit - truncate to prevent errors
-    return pwd_context.hash(password[:72])
+    """Hash a password using bcrypt directly"""
+    password_bytes = password[:72].encode("utf-8")
+    salt = _bcrypt.gensalt()
+    return _bcrypt.hashpw(password_bytes, salt).decode("utf-8")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a password against its hash"""
-    # bcrypt has a 72-byte limit - truncate to match hashing
-    return pwd_context.verify(plain_password[:72], hashed_password)
+    password_bytes = plain_password[:72].encode("utf-8")
+    hashed_bytes = hashed_password.encode("utf-8")
+    return _bcrypt.checkpw(password_bytes, hashed_bytes)
 
 
 # ============================================================================
