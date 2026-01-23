@@ -1,5 +1,5 @@
 """
-PermitFlo AI - South Florida Permit Checker API
+Flo Permit - South Florida Permit Checker API
 Production-ready FastAPI backend with user authentication and profiles
 """
 
@@ -73,7 +73,7 @@ from auth import (
 # ============================================================================
 
 resend.api_key = os.getenv("RESEND_API_KEY")
-FRONTEND_URL = os.getenv("FRONTEND_URL", "https://permit-pro-ai.vercel.app")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "https://flopermit.vercel.app")
 
 # ============================================================================
 # DATABASE SETUP
@@ -193,7 +193,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 # ============================================================================
 
 app = FastAPI(
-    title="PermitFlo AI",
+    title="Flo Permit",
     description="AI-powered permit analysis for South Florida",
     version="1.4.0",
     docs_url="/docs",
@@ -208,10 +208,9 @@ ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:3000",
     "http://127.0.0.1:5173",
+    "https://flopermit.vercel.app",
     "https://permit-pro-ai.vercel.app",
     "https://permitpro-ai.vercel.app",
-    "https://permitflo.ai",
-    "https://www.permitflo.ai",
 ]
 
 app.add_middleware(
@@ -278,13 +277,13 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
         reset_link = f"{FRONTEND_URL}/reset-password?token={reset_token}"
 
         params = {
-            "from": "PermitFlo AI <onboarding@resend.dev>",
+            "from": "Flo Permit <onboarding@resend.dev>",
             "to": [email],
-            "subject": "Reset Your PermitFlo AI Password",
+            "subject": "Reset Your Flo Permit Password",
             "html": f"""
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                 <div style="background: linear-gradient(135deg, #06b6d4, #10b981); padding: 30px; text-align: center;">
-                    <h1 style="color: white; margin: 0;">PermitFlo AI</h1>
+                    <h1 style="color: white; margin: 0;">Flo Permit</h1>
                 </div>
                 <div style="padding: 30px; background: #f9fafb;">
                     <h2 style="color: #111827;">Reset Your Password</h2>
@@ -301,7 +300,7 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
                     </p>
                     <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
                     <p style="color: #9ca3af; font-size: 12px; text-align: center;">
-                        © 2025 PermitFlo AI - South Florida Permit Analysis
+                        © 2025 Flo Permit - South Florida Permit Analysis
                     </p>
                 </div>
             </div>
@@ -808,7 +807,7 @@ def save_analysis_to_history(
 
 @app.get("/")
 async def root():
-    return {"service": "PermitFlo AI", "version": "1.4.0", "status": "running"}
+    return {"service": "Flo Permit", "version": "1.4.0", "status": "running"}
 
 
 @app.get("/health")
@@ -1057,7 +1056,7 @@ Return JSON:
 
 @app.on_event("startup")
 async def startup():
-    print("🚀 PermitFlo AI v1.4.0 Started")
+    print("🚀 Flo Permit v1.4.0 Started")
     print(f"   API Key: {'✅' if get_api_key() else '❌'}")
     print(f"   JWT Key: {'✅' if os.getenv('JWT_SECRET_KEY') else '❌'}")
     print(f"   Resend Key: {'✅' if os.getenv('RESEND_API_KEY') else '❌'}")

@@ -1,5 +1,5 @@
 """
-Authentication module for PermitFlo AI
+Authentication module for Flo Permit
 JWT-based authentication with bcrypt password hashing
 """
 

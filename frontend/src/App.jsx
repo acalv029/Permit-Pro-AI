@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-const API_BASE_URL = 'https://permit-pro-ai-production.up.railway.app'
+const API_BASE_URL = 'https://permit-pro-ai-production.up.railway.app' // TODO: Update if Railway URL changes
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState(null)
@@ -288,7 +288,7 @@ export default function App() {
             <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
           </div>
           <div>
-            <h1 className="text-xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">PermitFlo AI</h1>
+            <h1 className="text-xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Flo Permit</h1>
             <p className="text-xs text-cyan-500 font-semibold">SOUTH FLORIDA</p>
           </div>
         </div>
@@ -348,7 +348,7 @@ export default function App() {
         <div className="max-w-3xl mx-auto bg-gray-900/80 rounded-3xl p-8 border border-gray-800">
           <h1 className="text-3xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-6">Terms of Service & Disclaimer</h1>
           <div className="space-y-6 text-gray-300">
-            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl"><h2 className="text-lg font-bold text-red-400 mb-2">⚠️ IMPORTANT</h2><p>PermitFlo AI is an <strong className="text-white">informational tool only</strong>. NOT official permit advice.</p></div>
+            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl"><h2 className="text-lg font-bold text-red-400 mb-2">⚠️ IMPORTANT</h2><p>Flo Permit is an <strong className="text-white">informational tool only</strong>. NOT official permit advice.</p></div>
             <p><strong className="text-white">1. NOT OFFICIAL:</strong> We are NOT affiliated with any government office. We do NOT issue permits or guarantee approval.</p>
             <p><strong className="text-white">2. NO LIABILITY:</strong> We are NOT liable for permit denials, delays, fees, or any damages. USE AT YOUR OWN RISK.</p>
             <p><strong className="text-white">3. USER RESPONSIBILITY:</strong> You MUST verify all information with your local permitting office.</p>
@@ -596,7 +596,7 @@ export default function App() {
       </div>
       <footer className="relative z-10 border-t border-gray-800 bg-black/50 mt-auto">
         <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-gray-500 text-sm">© 2025 PermitFlo AI</p>
+          <p className="text-gray-500 text-sm">© 2025 Flo Permit</p>
           <div className="flex items-center gap-6"><button onClick={() => setPage('terms')} className="text-gray-500 hover:text-cyan-400 text-sm">Terms</button><span className="text-gray-700">|</span><span className="text-gray-500 text-sm">South Florida</span></div>
         </div>
       </footer>
