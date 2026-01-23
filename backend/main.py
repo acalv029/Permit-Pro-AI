@@ -1,5 +1,5 @@
 """
-PermitPro AI - South Florida Permit Checker API
+PermitFlo AI - South Florida Permit Checker API
 Production-ready FastAPI backend with user authentication and profiles
 """
 
@@ -24,6 +24,7 @@ import uuid
 import re
 import json
 import traceback
+import resend
 from datetime import datetime
 from typing import Optional, List
 from dotenv import load_dotenv
@@ -56,11 +57,23 @@ from auth import (
     UserLogin,
     UserResponse,
     TokenResponse,
+    ForgotPasswordRequest,
+    ResetPasswordRequest,
     hash_password,
     verify_password,
     create_access_token,
     get_current_user_id,
+    generate_reset_token,
+    get_reset_token_expiry,
+    is_token_expired,
 )
+
+# ============================================================================
+# EMAIL CONFIGURATION
+# ============================================================================
+
+resend.api_key = os.getenv("RESEND_API_KEY")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "https://permit-pro-ai.vercel.app")
 
 # ============================================================================
 # DATABASE SETUP
@@ -111,6 +124,11 @@ class User(Base):
         back_populates="user",
         order_by="desc(AnalysisHistory.created_at)",
     )
+    reset_tokens = relationship(
+        "PasswordResetToken",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
 
 
 class AnalysisHistory(Base):
@@ -130,6 +148,19 @@ class AnalysisHistory(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="analyses")
+
+
+class PasswordResetToken(Base):
+    __tablename__ = "password_reset_tokens"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    token = Column(String(255), unique=True, index=True, nullable=False)
+    expires_at = Column(DateTime, nullable=False)
+    used = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User", back_populates="reset_tokens")
 
 
 Base.metadata.create_all(bind=engine)
@@ -162,9 +193,9 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 # ============================================================================
 
 app = FastAPI(
-    title="PermitPro AI",
+    title="PermitFlo AI",
     description="AI-powered permit analysis for South Florida",
-    version="1.3.0",
+    version="1.4.0",
     docs_url="/docs",
 )
 
@@ -179,6 +210,8 @@ ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
     "https://permit-pro-ai.vercel.app",
     "https://permitpro-ai.vercel.app",
+    "https://permitflo.ai",
+    "https://www.permitflo.ai",
 ]
 
 app.add_middleware(
@@ -237,6 +270,49 @@ def format_file_size(size_bytes: int) -> str:
     elif size_bytes < 1024 * 1024:
         return f"{size_bytes / 1024:.1f}KB"
     return f"{size_bytes / (1024 * 1024):.1f}MB"
+
+
+def send_password_reset_email(email: str, reset_token: str) -> bool:
+    """Send password reset email via Resend"""
+    try:
+        reset_link = f"{FRONTEND_URL}/reset-password?token={reset_token}"
+
+        params = {
+            "from": "PermitFlo AI <onboarding@resend.dev>",
+            "to": [email],
+            "subject": "Reset Your PermitFlo AI Password",
+            "html": f"""
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <div style="background: linear-gradient(135deg, #06b6d4, #10b981); padding: 30px; text-align: center;">
+                    <h1 style="color: white; margin: 0;">PermitFlo AI</h1>
+                </div>
+                <div style="padding: 30px; background: #f9fafb;">
+                    <h2 style="color: #111827;">Reset Your Password</h2>
+                    <p style="color: #4b5563; font-size: 16px;">
+                        We received a request to reset your password. Click the button below to create a new password:
+                    </p>
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="{reset_link}" style="background: linear-gradient(135deg, #06b6d4, #10b981); color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">
+                            Reset Password
+                        </a>
+                    </div>
+                    <p style="color: #6b7280; font-size: 14px;">
+                        This link will expire in 30 minutes. If you didn't request a password reset, you can safely ignore this email.
+                    </p>
+                    <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+                    <p style="color: #9ca3af; font-size: 12px; text-align: center;">
+                        © 2025 PermitFlo AI - South Florida Permit Analysis
+                    </p>
+                </div>
+            </div>
+            """,
+        }
+
+        resend.Emails.send(params)
+        return True
+    except Exception as e:
+        print(f"❌ Failed to send reset email: {str(e)}")
+        return False
 
 
 # ============================================================================
@@ -341,6 +417,113 @@ async def get_current_user(
         subscription_tier=user.subscription_tier,
         created_at=user.created_at,
     )
+
+
+# ============================================================================
+# PASSWORD RESET ENDPOINTS
+# ============================================================================
+
+
+@app.post("/api/auth/forgot-password")
+async def forgot_password(
+    request_data: ForgotPasswordRequest, db: Session = Depends(get_db)
+):
+    """Request a password reset email"""
+    try:
+        # Always return success to prevent email enumeration
+        user = db.query(User).filter(User.email == request_data.email).first()
+
+        if user:
+            # Invalidate any existing reset tokens for this user
+            db.query(PasswordResetToken).filter(
+                PasswordResetToken.user_id == user.id, PasswordResetToken.used == False
+            ).update({"used": True})
+
+            # Generate new token
+            token = generate_reset_token()
+            reset_token = PasswordResetToken(
+                user_id=user.id,
+                token=token,
+                expires_at=get_reset_token_expiry(),
+            )
+            db.add(reset_token)
+            db.commit()
+
+            # Send email
+            send_password_reset_email(user.email, token)
+
+        # Always return success (security: don't reveal if email exists)
+        return {
+            "success": True,
+            "message": "If an account exists with this email, you will receive a password reset link.",
+        }
+    except Exception as e:
+        print(f"❌ Forgot password error: {str(e)}")
+        print(traceback.format_exc())
+        # Still return success for security
+        return {
+            "success": True,
+            "message": "If an account exists with this email, you will receive a password reset link.",
+        }
+
+
+@app.post("/api/auth/reset-password")
+async def reset_password(
+    request_data: ResetPasswordRequest, db: Session = Depends(get_db)
+):
+    """Reset password using token"""
+    try:
+        # Find the token
+        reset_token = (
+            db.query(PasswordResetToken)
+            .filter(
+                PasswordResetToken.token == request_data.token,
+                PasswordResetToken.used == False,
+            )
+            .first()
+        )
+
+        if not reset_token:
+            raise HTTPException(status_code=400, detail="Invalid or expired reset link")
+
+        if is_token_expired(reset_token.expires_at):
+            reset_token.used = True
+            db.commit()
+            raise HTTPException(
+                status_code=400,
+                detail="Reset link has expired. Please request a new one.",
+            )
+
+        # Validate new password
+        if len(request_data.new_password) < 8:
+            raise HTTPException(
+                status_code=400, detail="Password must be at least 8 characters"
+            )
+
+        # Update password
+        user = db.query(User).filter(User.id == reset_token.user_id).first()
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+
+        user.hashed_password = hash_password(request_data.new_password)
+        user.updated_at = datetime.utcnow()
+
+        # Mark token as used
+        reset_token.used = True
+
+        db.commit()
+
+        return {
+            "success": True,
+            "message": "Password has been reset successfully. You can now log in with your new password.",
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"❌ Reset password error: {str(e)}")
+        print(traceback.format_exc())
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Password reset failed: {str(e)}")
 
 
 # ============================================================================
@@ -625,7 +808,7 @@ def save_analysis_to_history(
 
 @app.get("/")
 async def root():
-    return {"service": "PermitPro AI", "version": "1.3.0", "status": "running"}
+    return {"service": "PermitFlo AI", "version": "1.4.0", "status": "running"}
 
 
 @app.get("/health")
@@ -825,14 +1008,21 @@ REQUIREMENTS:
 DOCUMENTS:
 {text}
 
+Analyze the documents and identify:
+1. Which required documents ARE present and correct
+2. Which required documents are MISSING
+3. Any critical issues or problems found
+4. Recommendations to improve the package
+
 Return JSON:
 {{
-    "summary": "brief summary",
+    "summary": "brief summary of the permit package status",
     "overall_status": "READY|NEEDS_ATTENTION|INCOMPLETE",
     "compliance_score": 0-100,
-    "critical_issues": ["issues"],
-    "missing_documents": ["missing"],
-    "recommendations": ["recommendations"]
+    "documents_found": ["list of required documents that ARE present and appear correct - be specific about what you found"],
+    "missing_documents": ["list of required documents that are MISSING"],
+    "critical_issues": ["any problems or issues found in the submitted documents"],
+    "recommendations": ["specific recommendations to improve or complete the package"]
 }}"""
 
     try:
@@ -867,9 +1057,10 @@ Return JSON:
 
 @app.on_event("startup")
 async def startup():
-    print("🚀 PermitPro AI v1.3.0 Started")
+    print("🚀 PermitFlo AI v1.4.0 Started")
     print(f"   API Key: {'✅' if get_api_key() else '❌'}")
     print(f"   JWT Key: {'✅' if os.getenv('JWT_SECRET_KEY') else '❌'}")
+    print(f"   Resend Key: {'✅' if os.getenv('RESEND_API_KEY') else '❌'}")
 
 
 if __name__ == "__main__":

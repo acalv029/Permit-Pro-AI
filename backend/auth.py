@@ -1,9 +1,10 @@
 """
-Authentication module for PermitPro AI
-JWT-based authentication with passlib password hashing
+Authentication module for PermitFlo AI
+JWT-based authentication with bcrypt password hashing
 """
 
 import os
+import secrets
 from datetime import datetime, timedelta
 from typing import Optional
 from fastapi import HTTPException, Depends, status
@@ -16,8 +17,7 @@ import bcrypt as _bcrypt
 SECRET_KEY = os.getenv("JWT_SECRET_KEY", "your-secret-key-change-in-production")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_HOURS = 24
-
-# Security scheme for FastAPI
+PASSWORD_RESET_EXPIRE_MINUTES = 30
 
 security = HTTPBearer()
 
@@ -57,6 +57,15 @@ class TokenResponse(BaseModel):
     user: UserResponse
 
 
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
+
+
 class AnalysisHistoryItem(BaseModel):
     id: int
     analysis_uuid: str
@@ -72,7 +81,7 @@ class AnalysisHistoryItem(BaseModel):
 
 
 # ============================================================================
-# PASSWORD UTILITIES
+# PASSWORD UTILITIES (using bcrypt directly)
 # ============================================================================
 
 
@@ -88,6 +97,26 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     password_bytes = plain_password[:72].encode("utf-8")
     hashed_bytes = hashed_password.encode("utf-8")
     return _bcrypt.checkpw(password_bytes, hashed_bytes)
+
+
+# ============================================================================
+# PASSWORD RESET TOKEN UTILITIES
+# ============================================================================
+
+
+def generate_reset_token() -> str:
+    """Generate a secure random token for password reset"""
+    return secrets.token_urlsafe(32)
+
+
+def get_reset_token_expiry() -> datetime:
+    """Get expiry time for password reset token"""
+    return datetime.utcnow() + timedelta(minutes=PASSWORD_RESET_EXPIRE_MINUTES)
+
+
+def is_token_expired(expiry: datetime) -> bool:
+    """Check if a reset token has expired"""
+    return datetime.utcnow() > expiry
 
 
 # ============================================================================
