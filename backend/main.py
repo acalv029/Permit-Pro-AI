@@ -277,7 +277,7 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
         reset_link = f"{FRONTEND_URL}/reset-password?token={reset_token}"
 
         params = {
-            "from": "Flo Permit <onboarding@resend.dev>",
+            "from": "Flo Permit <noreply@flopermit.com>",
             "to": [email],
             "subject": "Reset Your Flo Permit Password",
             "html": f"""
