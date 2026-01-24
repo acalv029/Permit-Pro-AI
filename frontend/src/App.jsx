@@ -1,4 +1,12 @@
 import { useState, useEffect } from 'react'
+import * as Sentry from '@sentry/react'
+
+Sentry.init({
+  dsn: "https://5050de9310d5abe8bf79c51d6949f50c@o4510766662352896.ingest.us.sentry.io/4510766693548032",
+  integrations: [Sentry.browserTracingIntegration()],
+  tracesSampleRate: 0.1,
+  environment: "production",
+})
 
 const API_BASE_URL = 'https://permit-pro-ai-production.up.railway.app'
 
