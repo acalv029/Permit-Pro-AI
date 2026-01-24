@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react'
 import * as Sentry from '@sentry/react'
 
-Sentry.init({
-  dsn: "https://5050de9310d5abe8bf79c51d6949f50c@o4510766662352896.ingest.us.sentry.io/4510766693548032",
-  integrations: [Sentry.browserTracingIntegration()],
-  tracesSampleRate: 0.1,
-  environment: "production",
-})
+const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN
+if (SENTRY_DSN) {
+  Sentry.init({
+    dsn: SENTRY_DSN,
+    integrations: [Sentry.browserTracingIntegration()],
+    tracesSampleRate: 0.1,
+    environment: import.meta.env.MODE,
+  })
+}
 
 const API_BASE_URL = 'https://permit-pro-ai-production.up.railway.app'
 
@@ -35,6 +38,11 @@ export default function App() {
   const [profileLoading, setProfileLoading] = useState(false)
   const [editingProfile, setEditingProfile] = useState(false)
   const [resetToken, setResetToken] = useState(null)
+  const [adminStats, setAdminStats] = useState(null)
+  const [adminLoading, setAdminLoading] = useState(false)
+
+  const ADMIN_EMAILS = ['toshygluestick@gmail.com']
+  const isAdmin = currentUser && ADMIN_EMAILS.includes(currentUser.email)
   const [resetPasswordLoading, setResetPasswordLoading] = useState(false)
   const [contactLoading, setContactLoading] = useState(false)
 
@@ -135,12 +143,13 @@ export default function App() {
   }
 
   const loadHistory = async () => { setHistoryLoading(true); try { const res = await fetch(`${API_BASE_URL}/api/history`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setHistory(data.analyses || []) } } catch (err) { console.error(err) } finally { setHistoryLoading(false) } }
+  const loadAdminStats = async () => { if (!authToken) return; setAdminLoading(true); try { const res = await fetch(`${API_BASE_URL}/api/admin/stats`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setAdminStats(data) } } catch (err) { console.error(err) } finally { setAdminLoading(false) } }
   const loadProfile = async () => { if (!authToken) return; setProfileLoading(true); try { const res = await fetch(`${API_BASE_URL}/api/profile`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setProfile(data) } } catch (err) { console.error(err) } finally { setProfileLoading(false) } }
   const updateProfile = async (data) => { try { const res = await fetch(`${API_BASE_URL}/api/profile`, { method: 'PUT', headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); if (res.ok) { await loadProfile(); setEditingProfile(false) } } catch (err) { alert('Error updating profile') } }
   const viewAnalysis = async (uuid) => { try { const res = await fetch(`${API_BASE_URL}/api/history/${uuid}`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setResults({ city: data.city, permit_type: data.permit_type, files_analyzed: data.files_analyzed, file_tree: data.file_list, analysis: data.analysis }); setPage('results') } } catch (err) { alert('Error loading analysis') } }
   const deleteAnalysis = async (uuid) => { if (!confirm('Delete this analysis?')) return; try { await fetch(`${API_BASE_URL}/api/history/${uuid}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${authToken}` } }); loadHistory() } catch (err) { alert('Error deleting') } }
 
-  useEffect(() => { if (page === 'history' && authToken) loadHistory(); if (page === 'profile' && authToken) loadProfile() }, [page])
+  useEffect(() => { if (page === 'history' && authToken) loadHistory(); if (page === 'profile' && authToken) loadProfile(); if (page === 'admin' && authToken && isAdmin) loadAdminStats() }, [page])
 
   const canAnalyze = city && permitType && validFiles.length > 0 && totalSize <= 200 * 1024 * 1024 && agreedToTerms
   const getPermitTypes = () => {
@@ -162,7 +171,7 @@ export default function App() {
         </div>
         <div className="flex items-center gap-4">
           {showBack && <button onClick={() => setPage('home')} className="text-gray-400 hover:text-white">← Back</button>}
-          {!showBack && currentUser && (<><button onClick={() => setPage('profile')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Profile</button><button onClick={() => setPage('history')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">History</button><button onClick={logout} className="text-sm text-red-400 hover:text-red-300">Logout</button></>)}
+          {!showBack && currentUser && (<>{isAdmin && <button onClick={() => setPage('admin')} className="text-sm font-semibold text-purple-400 hover:text-purple-300">Admin</button>}<button onClick={() => setPage('profile')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Profile</button><button onClick={() => setPage('history')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">History</button><button onClick={logout} className="text-sm text-red-400 hover:text-red-300">Logout</button></>)}
           {!showBack && !currentUser && (<><button onClick={() => setShowLogin(true)} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Log In</button><button onClick={() => setShowRegister(true)} className="relative group"><div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-xl blur opacity-60 group-hover:opacity-100"></div><div className="relative px-5 py-2.5 bg-black text-white text-sm font-bold rounded-xl">Sign Up</div></button></>)}
         </div>
       </div>
@@ -234,6 +243,79 @@ export default function App() {
             <div><h2 className="text-lg font-bold text-white mb-2">7. Contact</h2><p>For privacy questions, contact us at <a href="mailto:support@flopermit.com" className="text-cyan-400">support@flopermit.com</a></p></div>
           </div>
           <div className="mt-8 text-center"><button onClick={() => setPage('home')} className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Back to Home</button></div>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  )
+
+  if (page === 'admin' && isAdmin) return (
+    <div className="min-h-screen bg-black text-white flex flex-col">
+      <div className="fixed inset-0 z-0"><div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div></div>
+      <NavBar />
+      <div className="relative z-10 pt-24 px-6 pb-12 flex-grow">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center justify-between mb-8">
+            <h1 className="text-3xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Admin Dashboard</h1>
+            <button onClick={loadAdminStats} className="px-4 py-2 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30">↻ Refresh</button>
+          </div>
+          {adminLoading ? <div className="text-center py-12"><div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto"></div></div> : adminStats ? (
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="bg-gray-900/80 rounded-xl p-4 border border-gray-800"><p className="text-gray-500 text-sm">Total Users</p><p className="text-3xl font-black text-white">{adminStats.overview.total_users}</p><p className="text-emerald-400 text-sm">+{adminStats.overview.new_users_this_month} this month</p></div>
+                <div className="bg-gray-900/80 rounded-xl p-4 border border-gray-800"><p className="text-gray-500 text-sm">Total Analyses</p><p className="text-3xl font-black text-white">{adminStats.overview.total_analyses}</p><p className="text-cyan-400 text-sm">+{adminStats.overview.analyses_this_month} this month</p></div>
+                <div className="bg-gray-900/80 rounded-xl p-4 border border-gray-800"><p className="text-gray-500 text-sm">Avg Score</p><p className="text-3xl font-black text-white">{adminStats.overview.average_compliance_score}%</p></div>
+                <div className="bg-gray-900/80 rounded-xl p-4 border border-gray-800"><p className="text-gray-500 text-sm">API Requests</p><p className="text-3xl font-black text-white">{adminStats.overview.api_requests_today}</p><p className="text-purple-400 text-sm">{adminStats.overview.api_requests_this_month} this month</p></div>
+              </div>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-gray-900/80 rounded-xl p-6 border border-gray-800">
+                  <h3 className="font-bold text-white mb-4">Popular Cities</h3>
+                  {adminStats.popular_cities.length === 0 ? <p className="text-gray-500">No data yet</p> : adminStats.popular_cities.map((c, i) => (
+                    <div key={i} className="flex justify-between py-2 border-b border-gray-800 last:border-0"><span className="text-gray-300">{c.city}</span><span className="text-cyan-400 font-bold">{c.count}</span></div>
+                  ))}
+                </div>
+                <div className="bg-gray-900/80 rounded-xl p-6 border border-gray-800">
+                  <h3 className="font-bold text-white mb-4">Popular Permit Types</h3>
+                  {adminStats.popular_permits.length === 0 ? <p className="text-gray-500">No data yet</p> : adminStats.popular_permits.map((p, i) => (
+                    <div key={i} className="flex justify-between py-2 border-b border-gray-800 last:border-0"><span className="text-gray-300">{p.permit_type}</span><span className="text-emerald-400 font-bold">{p.count}</span></div>
+                  ))}
+                </div>
+              </div>
+              <div className="bg-gray-900/80 rounded-xl p-6 border border-gray-800">
+                <h3 className="font-bold text-white mb-4">Recent Users</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead><tr className="text-gray-500 border-b border-gray-800"><th className="text-left py-2">Email</th><th className="text-left py-2">Name</th><th className="text-left py-2">Company</th><th className="text-left py-2">Joined</th></tr></thead>
+                    <tbody>{adminStats.recent_users.map(u => (
+                      <tr key={u.id} className="border-b border-gray-800/50"><td className="py-2 text-white">{u.email}</td><td className="py-2 text-gray-400">{u.full_name || '-'}</td><td className="py-2 text-gray-400">{u.company_name || '-'}</td><td className="py-2 text-gray-500">{new Date(u.created_at).toLocaleDateString()}</td></tr>
+                    ))}</tbody>
+                  </table>
+                </div>
+              </div>
+              <div className="bg-gray-900/80 rounded-xl p-6 border border-gray-800">
+                <h3 className="font-bold text-white mb-4">Recent Analyses</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead><tr className="text-gray-500 border-b border-gray-800"><th className="text-left py-2">City</th><th className="text-left py-2">Type</th><th className="text-left py-2">Files</th><th className="text-left py-2">Score</th><th className="text-left py-2">Date</th></tr></thead>
+                    <tbody>{adminStats.recent_analyses.map(a => (
+                      <tr key={a.id} className="border-b border-gray-800/50"><td className="py-2 text-white">{a.city}</td><td className="py-2 text-gray-400">{a.permit_type}</td><td className="py-2 text-gray-400">{a.files_analyzed}</td><td className={`py-2 font-bold ${a.compliance_score >= 70 ? 'text-emerald-400' : a.compliance_score >= 40 ? 'text-amber-400' : 'text-red-400'}`}>{a.compliance_score}%</td><td className="py-2 text-gray-500">{new Date(a.created_at).toLocaleDateString()}</td></tr>
+                    ))}</tbody>
+                  </table>
+                </div>
+              </div>
+              <div className="bg-gray-900/80 rounded-xl p-6 border border-gray-800">
+                <h3 className="font-bold text-white mb-4">API Endpoint Stats (This Month)</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead><tr className="text-gray-500 border-b border-gray-800"><th className="text-left py-2">Endpoint</th><th className="text-left py-2">Requests</th><th className="text-left py-2">Avg Response</th></tr></thead>
+                    <tbody>{adminStats.endpoint_stats.map((e, i) => (
+                      <tr key={i} className="border-b border-gray-800/50"><td className="py-2 text-white font-mono text-xs">{e.endpoint}</td><td className="py-2 text-cyan-400 font-bold">{e.count}</td><td className="py-2 text-gray-400">{e.avg_response_ms}ms</td></tr>
+                    ))}</tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          ) : <p className="text-gray-500 text-center">Failed to load stats</p>}
         </div>
       </div>
       <Footer />
