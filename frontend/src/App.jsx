@@ -151,7 +151,7 @@ export default function App() {
 
   useEffect(() => { if (page === 'history' && authToken) loadHistory(); if (page === 'profile' && authToken) loadProfile(); if (page === 'admin' && authToken && isAdmin) loadAdminStats() }, [page])
 
-  const canAnalyze = currentUser && city && permitType && validFiles.length > 0 && totalSize <= 200 * 1024 * 1024 && agreedToTerms
+  const canAnalyze = city && permitType && validFiles.length > 0 && totalSize <= 200 * 1024 * 1024 && agreedToTerms
   const getPermitTypes = () => {
     const basePermits = [{ value: 'building', label: 'Building' }, { value: 'electrical', label: 'Electrical' }, { value: 'plumbing', label: 'Plumbing' }, { value: 'mechanical', label: 'Mechanical/HVAC' }, { value: 'roofing', label: 'Roofing' }]
     const waterfrontCities = ['Fort Lauderdale', 'Pompano Beach', 'Hollywood', 'Lauderdale-by-the-Sea', 'Boca Raton', 'Deerfield Beach']
@@ -455,7 +455,114 @@ export default function App() {
     </div>
   )
 
+  // ============================================================================
+  // LANDING PAGE (NOT LOGGED IN)
+  // ============================================================================
+  if (!currentUser) return (
+    <div className="min-h-screen bg-black text-white overflow-hidden flex flex-col">
+      <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+        <div className="absolute inset-0 opacity-20" style={{backgroundImage: 'linear-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(6, 182, 212, 0.1) 1px, transparent 1px)', backgroundSize: '50px 50px'}}></div>
+      </div>
 
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-cyan-500/20">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-xl flex items-center justify-center">
+              <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+            </div>
+            <div><h1 className="text-xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Flo Permit</h1><p className="text-xs text-cyan-500 font-semibold">SOUTH FLORIDA</p></div>
+          </div>
+        </div>
+      </nav>
+
+      <div className="relative z-10 flex-grow flex items-center justify-center px-6 py-24">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+          
+          {/* Left side - Hero */}
+          <div className="text-center md:text-left">
+            <span className="px-4 py-1.5 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-sm font-semibold">AI-POWERED PERMIT ANALYSIS</span>
+            <h1 className="text-4xl md:text-5xl font-black mt-4 mb-6">
+              <span className="bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">South Florida</span><br/>
+              <span className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Permit Checker</span>
+            </h1>
+            <p className="text-lg text-gray-400 mb-8">Upload your permit package and get instant AI-powered analysis. Know what's missing before you submit.</p>
+            <div className="grid grid-cols-3 gap-4">
+              {[{icon:'⚡',title:'Instant'},{icon:'🎯',title:'Accurate'},{icon:'📋',title:'Complete'}].map((f,i) => (
+                <div key={i} className="text-center p-3 bg-gray-900/50 rounded-xl border border-gray-800">
+                  <div className="text-2xl mb-1">{f.icon}</div>
+                  <p className="text-sm text-gray-400">{f.title}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right side - Auth Form */}
+          <div className="relative">
+            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/50 via-emerald-500/50 to-purple-500/50 rounded-3xl blur-xl opacity-30"></div>
+            <div className="relative bg-gray-900/90 backdrop-blur-xl rounded-2xl p-8 border border-gray-800">
+              
+              {showForgotPassword ? (
+                <>
+                  <h2 className="text-2xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-6">Reset Password</h2>
+                  {successMessage ? (
+                    <div className="text-center">
+                      <div className="w-16 h-16 mx-auto mb-4 bg-emerald-500/20 rounded-full flex items-center justify-center"><svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg></div>
+                      <p className="text-emerald-400 mb-4">{successMessage}</p>
+                      <button onClick={() => { setShowForgotPassword(false); setSuccessMessage('') }} className="text-cyan-400 hover:text-cyan-300 text-sm">← Back to login</button>
+                    </div>
+                  ) : (
+                    <>
+                      <p className="text-gray-400 text-sm mb-6">Enter your email and we'll send you a reset link.</p>
+                      <form onSubmit={handleForgotPassword}>
+                        <input name="email" type="email" required placeholder="Email" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
+                        {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
+                        <button type="submit" className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Send Reset Link</button>
+                      </form>
+                      <p className="text-center mt-4 text-sm text-gray-500"><button onClick={() => { setShowForgotPassword(false); setError('') }} className="text-cyan-400 hover:text-cyan-300">← Back to login</button></p>
+                    </>
+                  )}
+                </>
+              ) : showRegister ? (
+                <>
+                  <h2 className="text-2xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-6">Create Account</h2>
+                  <form onSubmit={handleRegister}>
+                    <input name="fullName" type="text" placeholder="Full Name" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
+                    <input name="company" type="text" placeholder="Company (optional)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
+                    <input name="email" type="email" required placeholder="Email" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
+                    <input name="password" type="password" required minLength="8" placeholder="Password (min 8 characters)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
+                    {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
+                    <button type="submit" className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Create Account</button>
+                  </form>
+                  <p className="text-center mt-4 text-sm text-gray-500">Already have an account? <button onClick={() => { setShowRegister(false); setError('') }} className="text-cyan-400 hover:text-cyan-300">Log in</button></p>
+                </>
+              ) : (
+                <>
+                  <h2 className="text-2xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-6">Welcome Back</h2>
+                  <form onSubmit={handleLogin}>
+                    <input name="email" type="email" required placeholder="Email" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
+                    <input name="password" type="password" required placeholder="Password" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
+                    {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
+                    <button type="submit" className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Log In</button>
+                  </form>
+                  <div className="mt-4 text-center"><button onClick={() => { setShowForgotPassword(true); setError('') }} className="text-cyan-400 hover:text-cyan-300 text-sm">Forgot password?</button></div>
+                  <div className="relative my-6"><div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-700"></div></div><div className="relative flex justify-center text-sm"><span className="px-4 bg-gray-900 text-gray-500">or</span></div></div>
+                  <button onClick={() => { setShowRegister(true); setError('') }} className="w-full py-3 border border-gray-700 text-white font-bold rounded-xl hover:bg-gray-800">Create New Account</button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  )
+
+  // ============================================================================
+  // MAIN APP (LOGGED IN)
+  // ============================================================================
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden flex flex-col">
       <div className="fixed inset-0 z-0">
@@ -555,11 +662,7 @@ export default function App() {
                 {validFiles.length > 0 && <div className="mt-4 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl"><div className="flex justify-between"><span className="text-emerald-400 font-semibold">{validFiles.length} files ({formatSize(totalSize)})</span><button onClick={clearFiles} className="text-red-400 text-sm">Clear</button></div></div>}
               </div>
               <div className="mb-6"><label className="flex items-start gap-3 cursor-pointer"><input type="checkbox" checked={agreedToTerms} onChange={e => setAgreedToTerms(e.target.checked)} className="mt-1 w-5 h-5 rounded border-gray-600 bg-black/50 text-cyan-500" /><span className="text-sm text-gray-400">I agree to the <button type="button" onClick={() => setPage('terms')} className="text-cyan-400 underline">Terms of Service</button></span></label></div>
-              {!currentUser ? (
-                <button onClick={() => setShowRegister(true)} className="w-full py-4 rounded-xl font-bold text-lg bg-gradient-to-r from-cyan-500 to-emerald-500 text-black">Sign Up to Analyze</button>
-              ) : (
-                <button onClick={analyze} disabled={!canAnalyze} className={`w-full py-4 rounded-xl font-bold text-lg ${canAnalyze ? 'bg-gradient-to-r from-cyan-500 to-emerald-500 text-black' : 'bg-gray-800 text-gray-500 cursor-not-allowed'}`}>{canAnalyze ? `Analyze ${validFiles.length} Files` : 'Select city, permit type & files'}</button>
-              )}
+              <button onClick={analyze} disabled={!canAnalyze} className={`w-full py-4 rounded-xl font-bold text-lg ${canAnalyze ? 'bg-gradient-to-r from-cyan-500 to-emerald-500 text-black' : 'bg-gray-800 text-gray-500 cursor-not-allowed'}`}>{canAnalyze ? `Analyze ${validFiles.length} Files` : 'Select city, permit type & files'}</button>
             </div>
           </div>
           <div className="grid md:grid-cols-3 gap-6 mt-12">
