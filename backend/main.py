@@ -3,6 +3,18 @@ Flo Permit - South Florida Permit Checker API
 Production-ready FastAPI backend with user authentication and profiles
 """
 
+import sentry_sdk
+from sentry_sdk.integrations.fastapi import FastApiIntegration
+from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
+
+sentry_sdk.init(
+    dsn="https://3f9a93681b25aef3b2f84e791fe3ce53@o4510766662352896.ingest.us.sentry.io/4510766667333632",
+    integrations=[FastApiIntegration(), SqlalchemyIntegration()],
+    traces_sample_rate=0.1,
+    send_default_pii=False,
+    environment="production",
+)
+
 from fastapi import (
     FastAPI,
     UploadFile,
