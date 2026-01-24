@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-const API_BASE_URL = 'https://permit-pro-ai-production.up.railway.app' // TODO: Update if Railway URL changes
+const API_BASE_URL = 'https://permit-pro-ai-production.up.railway.app'
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState(null)
@@ -28,249 +28,111 @@ export default function App() {
   const [editingProfile, setEditingProfile] = useState(false)
   const [resetToken, setResetToken] = useState(null)
   const [resetPasswordLoading, setResetPasswordLoading] = useState(false)
+  const [contactLoading, setContactLoading] = useState(false)
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const token = params.get('token')
-    if (token) {
-      setResetToken(token)
-      setPage('reset-password')
-      window.history.replaceState({}, document.title, window.location.pathname)
-    }
+    if (token) { setResetToken(token); setPage('reset-password'); window.history.replaceState({}, document.title, window.location.pathname) }
   }, [])
 
   useEffect(() => {
     const token = localStorage.getItem('authToken')
     const user = localStorage.getItem('currentUser')
-    if (token && user) {
-      setAuthToken(token)
-      setCurrentUser(JSON.parse(user))
-    }
+    if (token && user) { setAuthToken(token); setCurrentUser(JSON.parse(user)) }
   }, [])
 
   const handleLogin = async (e) => {
-    e.preventDefault()
-    setError('')
-    const email = e.target.email.value
-    const password = e.target.password.value
+    e.preventDefault(); setError('')
     try {
-      const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      })
-      if (!res.ok) {
-        const data = await res.json()
-        throw new Error(data.detail || 'Login failed')
-      }
+      const res = await fetch(`${API_BASE_URL}/api/auth/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: e.target.email.value, password: e.target.password.value }) })
+      if (!res.ok) { const data = await res.json(); throw new Error(data.detail || 'Login failed') }
       const data = await res.json()
-      setAuthToken(data.access_token)
-      setCurrentUser(data.user)
-      localStorage.setItem('authToken', data.access_token)
-      localStorage.setItem('currentUser', JSON.stringify(data.user))
+      setAuthToken(data.access_token); setCurrentUser(data.user)
+      localStorage.setItem('authToken', data.access_token); localStorage.setItem('currentUser', JSON.stringify(data.user))
       setShowLogin(false)
-    } catch (err) {
-      setError(err.message)
-    }
+    } catch (err) { setError(err.message) }
   }
 
   const handleRegister = async (e) => {
-    e.preventDefault()
-    setError('')
-    const email = e.target.email.value
-    const password = e.target.password.value
-    const full_name = e.target.fullName.value || null
-    const company_name = e.target.company.value || null
+    e.preventDefault(); setError('')
     try {
-      const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, full_name, company_name })
-      })
-      if (!res.ok) {
-        const data = await res.json()
-        throw new Error(data.detail || 'Registration failed')
-      }
+      const res = await fetch(`${API_BASE_URL}/api/auth/register`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: e.target.email.value, password: e.target.password.value, full_name: e.target.fullName.value || null, company_name: e.target.company.value || null }) })
+      if (!res.ok) { const data = await res.json(); throw new Error(data.detail || 'Registration failed') }
       const data = await res.json()
-      setAuthToken(data.access_token)
-      setCurrentUser(data.user)
-      localStorage.setItem('authToken', data.access_token)
-      localStorage.setItem('currentUser', JSON.stringify(data.user))
+      setAuthToken(data.access_token); setCurrentUser(data.user)
+      localStorage.setItem('authToken', data.access_token); localStorage.setItem('currentUser', JSON.stringify(data.user))
       setShowRegister(false)
-    } catch (err) {
-      setError(err.message)
-    }
+    } catch (err) { setError(err.message) }
   }
 
   const handleForgotPassword = async (e) => {
-    e.preventDefault()
-    setError('')
-    setSuccessMessage('')
-    const email = e.target.email.value
+    e.preventDefault(); setError(''); setSuccessMessage('')
     try {
-      const res = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-      })
+      const res = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: e.target.email.value }) })
       const data = await res.json()
-      setSuccessMessage(data.message || 'If an account exists, you will receive a reset link.')
-      e.target.reset()
-    } catch (err) {
-      setSuccessMessage('If an account exists with this email, you will receive a password reset link.')
-    }
+      setSuccessMessage(data.message || 'If an account exists, you will receive a reset link.'); e.target.reset()
+    } catch (err) { setSuccessMessage('If an account exists with this email, you will receive a password reset link.') }
   }
 
   const handleResetPassword = async (e) => {
-    e.preventDefault()
-    setError('')
-    setResetPasswordLoading(true)
-    const newPassword = e.target.newPassword.value
-    const confirmPassword = e.target.confirmPassword.value
-    if (newPassword !== confirmPassword) {
-      setError('Passwords do not match')
-      setResetPasswordLoading(false)
-      return
-    }
-    if (newPassword.length < 8) {
-      setError('Password must be at least 8 characters')
-      setResetPasswordLoading(false)
-      return
-    }
+    e.preventDefault(); setError(''); setResetPasswordLoading(true)
+    const newPassword = e.target.newPassword.value, confirmPassword = e.target.confirmPassword.value
+    if (newPassword !== confirmPassword) { setError('Passwords do not match'); setResetPasswordLoading(false); return }
+    if (newPassword.length < 8) { setError('Password must be at least 8 characters'); setResetPasswordLoading(false); return }
     try {
-      const res = await fetch(`${API_BASE_URL}/api/auth/reset-password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: resetToken, new_password: newPassword })
-      })
+      const res = await fetch(`${API_BASE_URL}/api/auth/reset-password`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: resetToken, new_password: newPassword }) })
       const data = await res.json()
       if (!res.ok) throw new Error(data.detail || 'Password reset failed')
-      setSuccessMessage(data.message)
-      setResetToken(null)
-      setTimeout(() => {
-        setPage('home')
-        setShowLogin(true)
-        setSuccessMessage('')
-      }, 3000)
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setResetPasswordLoading(false)
-    }
+      setSuccessMessage(data.message); setResetToken(null)
+      setTimeout(() => { setPage('home'); setShowLogin(true); setSuccessMessage('') }, 3000)
+    } catch (err) { setError(err.message) } finally { setResetPasswordLoading(false) }
   }
 
-  const logout = () => {
-    setAuthToken(null)
-    setCurrentUser(null)
-    setProfile(null)
-    localStorage.removeItem('authToken')
-    localStorage.removeItem('currentUser')
-    setPage('home')
+  const handleContact = async (e) => {
+    e.preventDefault(); setError(''); setSuccessMessage(''); setContactLoading(true)
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/contact`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: e.target.name.value, email: e.target.email.value, subject: e.target.subject.value, message: e.target.message.value }) })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.detail || 'Failed to send message')
+      setSuccessMessage(data.message); e.target.reset()
+    } catch (err) { setError(err.message) } finally { setContactLoading(false) }
   }
+
+  const logout = () => { setAuthToken(null); setCurrentUser(null); setProfile(null); localStorage.removeItem('authToken'); localStorage.removeItem('currentUser'); setPage('home') }
 
   const handleFiles = (e) => {
-    const fileList = Array.from(e.target.files)
-    setFiles(fileList)
-    const valid = fileList.filter(f => {
-      const ext = f.name.split('.').pop().toLowerCase()
-      return ['pdf', 'png', 'jpg', 'jpeg'].includes(ext) && f.size <= 25 * 1024 * 1024
-    }).slice(0, 50)
+    const fileList = Array.from(e.target.files); setFiles(fileList)
+    const valid = fileList.filter(f => { const ext = f.name.split('.').pop().toLowerCase(); return ['pdf', 'png', 'jpg', 'jpeg'].includes(ext) && f.size <= 25 * 1024 * 1024 }).slice(0, 50)
     setValidFiles(valid)
   }
 
   const clearFiles = () => { setFiles([]); setValidFiles([]) }
-  const formatSize = (bytes) => {
-    if (bytes < 1024) return bytes + ' B'
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB'
-    return (bytes / (1024 * 1024)).toFixed(1) + ' MB'
-  }
+  const formatSize = (bytes) => { if (bytes < 1024) return bytes + ' B'; if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB'; return (bytes / (1024 * 1024)).toFixed(1) + ' MB' }
   const totalSize = validFiles.reduce((sum, f) => sum + f.size, 0)
 
   const analyze = async () => {
     if (!city || !permitType || validFiles.length === 0 || !agreedToTerms) return
-    setLoading(true)
-    setProgress(0)
-    setLoadingStatus('Preparing files...')
+    setLoading(true); setProgress(0); setLoadingStatus('Preparing files...')
     try {
-      const formData = new FormData()
-      formData.append('city', city)
-      formData.append('permit_type', permitType)
+      const formData = new FormData(); formData.append('city', city); formData.append('permit_type', permitType)
       validFiles.forEach((f) => formData.append('files', f))
-      setLoadingStatus('Uploading...')
-      setProgress(50)
-      const headers = {}
-      if (authToken) headers['Authorization'] = `Bearer ${authToken}`
+      setLoadingStatus('Uploading...'); setProgress(50)
+      const headers = {}; if (authToken) headers['Authorization'] = `Bearer ${authToken}`
       const res = await fetch(`${API_BASE_URL}/api/analyze-permit-folder`, { method: 'POST', headers, body: formData })
-      setProgress(80)
-      setLoadingStatus('Analyzing with AI...')
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}))
-        throw new Error(err.detail || 'Analysis failed')
-      }
-      const data = await res.json()
-      setProgress(100)
-      setResults(data)
-      setPage('results')
-    } catch (err) {
-      alert('Error: ' + err.message)
-    } finally {
-      setLoading(false)
-    }
+      setProgress(80); setLoadingStatus('Analyzing with AI...')
+      if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.detail || 'Analysis failed') }
+      const data = await res.json(); setProgress(100); setResults(data); setPage('results')
+    } catch (err) { alert('Error: ' + err.message) } finally { setLoading(false) }
   }
 
-  const loadHistory = async () => {
-    setHistoryLoading(true)
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/history`, { headers: { 'Authorization': `Bearer ${authToken}` } })
-      if (res.ok) { const data = await res.json(); setHistory(data.analyses || []) }
-    } catch (err) { console.error(err) }
-    finally { setHistoryLoading(false) }
-  }
+  const loadHistory = async () => { setHistoryLoading(true); try { const res = await fetch(`${API_BASE_URL}/api/history`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setHistory(data.analyses || []) } } catch (err) { console.error(err) } finally { setHistoryLoading(false) } }
+  const loadProfile = async () => { if (!authToken) return; setProfileLoading(true); try { const res = await fetch(`${API_BASE_URL}/api/profile`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setProfile(data) } } catch (err) { console.error(err) } finally { setProfileLoading(false) } }
+  const updateProfile = async (data) => { try { const res = await fetch(`${API_BASE_URL}/api/profile`, { method: 'PUT', headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); if (res.ok) { await loadProfile(); setEditingProfile(false) } } catch (err) { alert('Error updating profile') } }
+  const viewAnalysis = async (uuid) => { try { const res = await fetch(`${API_BASE_URL}/api/history/${uuid}`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setResults({ city: data.city, permit_type: data.permit_type, files_analyzed: data.files_analyzed, file_tree: data.file_list, analysis: data.analysis }); setPage('results') } } catch (err) { alert('Error loading analysis') } }
+  const deleteAnalysis = async (uuid) => { if (!confirm('Delete this analysis?')) return; try { await fetch(`${API_BASE_URL}/api/history/${uuid}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${authToken}` } }); loadHistory() } catch (err) { alert('Error deleting') } }
 
-  const loadProfile = async () => {
-    if (!authToken) return
-    setProfileLoading(true)
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/profile`, { headers: { 'Authorization': `Bearer ${authToken}` } })
-      if (res.ok) { const data = await res.json(); setProfile(data) }
-    } catch (err) { console.error(err) }
-    finally { setProfileLoading(false) }
-  }
-
-  const updateProfile = async (data) => {
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/profile`, {
-        method: 'PUT',
-        headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      })
-      if (res.ok) { await loadProfile(); setEditingProfile(false) }
-    } catch (err) { alert('Error updating profile') }
-  }
-
-  const viewAnalysis = async (uuid) => {
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/history/${uuid}`, { headers: { 'Authorization': `Bearer ${authToken}` } })
-      if (res.ok) {
-        const data = await res.json()
-        setResults({ city: data.city, permit_type: data.permit_type, files_analyzed: data.files_analyzed, file_tree: data.file_list, analysis: data.analysis })
-        setPage('results')
-      }
-    } catch (err) { alert('Error loading analysis') }
-  }
-
-  const deleteAnalysis = async (uuid) => {
-    if (!confirm('Delete this analysis?')) return
-    try {
-      await fetch(`${API_BASE_URL}/api/history/${uuid}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${authToken}` } })
-      loadHistory()
-    } catch (err) { alert('Error deleting') }
-  }
-
-  useEffect(() => {
-    if (page === 'history' && authToken) loadHistory()
-    if (page === 'profile' && authToken) loadProfile()
-  }, [page])
+  useEffect(() => { if (page === 'history' && authToken) loadHistory(); if (page === 'profile' && authToken) loadProfile() }, [page])
 
   const canAnalyze = city && permitType && validFiles.length > 0 && totalSize <= 200 * 1024 * 1024 && agreedToTerms
   const getPermitTypes = () => {
@@ -280,6 +142,7 @@ export default function App() {
     return basePermits
   }
 
+
   const NavBar = ({ showBack = false }) => (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-cyan-500/20">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -287,46 +150,99 @@ export default function App() {
           <div className="w-11 h-11 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-xl flex items-center justify-center">
             <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
           </div>
-          <div>
-            <h1 className="text-xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Flo Permit</h1>
-            <p className="text-xs text-cyan-500 font-semibold">SOUTH FLORIDA</p>
-          </div>
+          <div><h1 className="text-xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Flo Permit</h1><p className="text-xs text-cyan-500 font-semibold">SOUTH FLORIDA</p></div>
         </div>
         <div className="flex items-center gap-4">
           {showBack && <button onClick={() => setPage('home')} className="text-gray-400 hover:text-white">← Back</button>}
-          {!showBack && currentUser && (<>
-            <button onClick={() => setPage('profile')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Profile</button>
-            <button onClick={() => setPage('history')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">History</button>
-            <button onClick={logout} className="text-sm text-red-400 hover:text-red-300">Logout</button>
-          </>)}
-          {!showBack && !currentUser && (<>
-            <button onClick={() => setShowLogin(true)} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Log In</button>
-            <button onClick={() => setShowRegister(true)} className="relative group">
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-xl blur opacity-60 group-hover:opacity-100"></div>
-              <div className="relative px-5 py-2.5 bg-black text-white text-sm font-bold rounded-xl">Sign Up</div>
-            </button>
-          </>)}
+          {!showBack && currentUser && (<><button onClick={() => setPage('profile')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Profile</button><button onClick={() => setPage('history')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">History</button><button onClick={logout} className="text-sm text-red-400 hover:text-red-300">Logout</button></>)}
+          {!showBack && !currentUser && (<><button onClick={() => setShowLogin(true)} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Log In</button><button onClick={() => setShowRegister(true)} className="relative group"><div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-xl blur opacity-60 group-hover:opacity-100"></div><div className="relative px-5 py-2.5 bg-black text-white text-sm font-bold rounded-xl">Sign Up</div></button></>)}
         </div>
       </div>
     </nav>
   )
 
-  if (page === 'reset-password') return (
-    <div className="min-h-screen bg-black text-white">
+  const Footer = () => (
+    <footer className="relative z-10 border-t border-gray-800 bg-black/50 mt-auto">
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="grid md:grid-cols-4 gap-8 mb-8">
+          <div><div className="flex items-center gap-2 mb-4"><div className="w-8 h-8 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-lg flex items-center justify-center"><svg className="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg></div><span className="font-bold text-white">Flo Permit</span></div><p className="text-gray-500 text-sm">AI-powered permit analysis for South Florida contractors and homeowners.</p></div>
+          <div><h4 className="font-semibold text-white mb-4">Product</h4><ul className="space-y-2"><li><button onClick={() => setPage('home')} className="text-gray-500 hover:text-cyan-400 text-sm">Analyze Permits</button></li></ul></div>
+          <div><h4 className="font-semibold text-white mb-4">Legal</h4><ul className="space-y-2"><li><button onClick={() => setPage('terms')} className="text-gray-500 hover:text-cyan-400 text-sm">Terms of Service</button></li><li><button onClick={() => setPage('privacy')} className="text-gray-500 hover:text-cyan-400 text-sm">Privacy Policy</button></li></ul></div>
+          <div><h4 className="font-semibold text-white mb-4">Support</h4><ul className="space-y-2"><li><button onClick={() => setPage('contact')} className="text-gray-500 hover:text-cyan-400 text-sm">Contact Us</button></li><li><a href="mailto:support@flopermit.com" className="text-gray-500 hover:text-cyan-400 text-sm">support@flopermit.com</a></li></ul></div>
+        </div>
+        <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row items-center justify-between gap-4"><p className="text-gray-500 text-sm">© 2025 Flo Permit. All rights reserved.</p><p className="text-gray-600 text-xs">Serving Broward & Palm Beach Counties</p></div>
+      </div>
+    </footer>
+  )
+
+  if (page === 'contact') return (
+    <div className="min-h-screen bg-black text-white flex flex-col">
       <div className="fixed inset-0 z-0"><div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div></div>
       <NavBar showBack />
-      <div className="relative z-10 pt-24 px-6 pb-12 flex items-center justify-center min-h-screen">
+      <div className="relative z-10 pt-24 px-6 pb-12 flex-grow">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12"><h1 className="text-4xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-4">Contact Us</h1><p className="text-gray-400">Have a question? We'd love to hear from you.</p></div>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800">
+              <h2 className="text-xl font-bold text-white mb-6">Send us a message</h2>
+              {successMessage ? (<div className="text-center py-8"><div className="w-16 h-16 mx-auto mb-4 bg-emerald-500/20 rounded-full flex items-center justify-center"><svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg></div><p className="text-emerald-400 mb-4">{successMessage}</p><button onClick={() => setSuccessMessage('')} className="text-cyan-400 hover:text-cyan-300 text-sm">Send another message</button></div>) : (
+                <form onSubmit={handleContact} className="space-y-4">
+                  <div><label className="block text-sm text-gray-400 mb-1">Name</label><input name="name" required className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:border-cyan-500 focus:outline-none" /></div>
+                  <div><label className="block text-sm text-gray-400 mb-1">Email</label><input name="email" type="email" required className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:border-cyan-500 focus:outline-none" /></div>
+                  <div><label className="block text-sm text-gray-400 mb-1">Subject</label><input name="subject" required className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:border-cyan-500 focus:outline-none" /></div>
+                  <div><label className="block text-sm text-gray-400 mb-1">Message</label><textarea name="message" required rows="4" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:border-cyan-500 focus:outline-none resize-none"></textarea></div>
+                  {error && <p className="text-red-400 text-sm">{error}</p>}
+                  <button type="submit" disabled={contactLoading} className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl disabled:opacity-50">{contactLoading ? 'Sending...' : 'Send Message'}</button>
+                </form>
+              )}
+            </div>
+            <div className="space-y-6">
+              <div className="bg-gray-900/80 rounded-2xl p-6 border border-gray-800"><div className="flex items-center gap-4"><div className="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center"><svg className="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg></div><div><h3 className="font-bold text-white">Email</h3><a href="mailto:support@flopermit.com" className="text-cyan-400">support@flopermit.com</a></div></div></div>
+              <div className="bg-gray-900/80 rounded-2xl p-6 border border-gray-800"><div className="flex items-center gap-4"><div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center"><svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div><div><h3 className="font-bold text-white">Response Time</h3><p className="text-gray-400">Within 24 hours</p></div></div></div>
+              <div className="bg-gray-900/80 rounded-2xl p-6 border border-gray-800"><div className="flex items-center gap-4"><div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center"><svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg></div><div><h3 className="font-bold text-white">Service Area</h3><p className="text-gray-400">Broward & Palm Beach Counties</p></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  )
+
+  if (page === 'privacy') return (
+    <div className="min-h-screen bg-black text-white flex flex-col">
+      <div className="fixed inset-0 z-0"><div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div></div>
+      <NavBar showBack />
+      <div className="relative z-10 pt-24 px-6 pb-12 flex-grow">
+        <div className="max-w-3xl mx-auto bg-gray-900/80 rounded-3xl p-8 border border-gray-800">
+          <h1 className="text-3xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-6">Privacy Policy</h1>
+          <p className="text-gray-500 text-sm mb-6">Last updated: January 2025</p>
+          <div className="space-y-6 text-gray-300">
+            <div><h2 className="text-lg font-bold text-white mb-2">1. Information We Collect</h2><p>We collect information you provide directly: name, email, company name, and uploaded permit documents. We also collect usage data like pages visited and features used.</p></div>
+            <div><h2 className="text-lg font-bold text-white mb-2">2. How We Use Your Information</h2><p>We use your information to: provide permit analysis services, send account-related emails, improve our services, and respond to support requests.</p></div>
+            <div><h2 className="text-lg font-bold text-white mb-2">3. Document Storage</h2><p>Uploaded documents are processed for analysis and stored securely. Documents are automatically deleted after 30 days unless you choose to save them to your account history.</p></div>
+            <div><h2 className="text-lg font-bold text-white mb-2">4. Data Sharing</h2><p>We do not sell your personal information. We may share data with: service providers who assist our operations (hosting, email), and when required by law.</p></div>
+            <div><h2 className="text-lg font-bold text-white mb-2">5. Data Security</h2><p>We implement industry-standard security measures including encryption in transit and at rest, secure password hashing, and regular security audits.</p></div>
+            <div><h2 className="text-lg font-bold text-white mb-2">6. Your Rights</h2><p>You can: access your data, request deletion of your account, opt out of marketing emails, and export your analysis history.</p></div>
+            <div><h2 className="text-lg font-bold text-white mb-2">7. Contact</h2><p>For privacy questions, contact us at <a href="mailto:support@flopermit.com" className="text-cyan-400">support@flopermit.com</a></p></div>
+          </div>
+          <div className="mt-8 text-center"><button onClick={() => setPage('home')} className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Back to Home</button></div>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  )
+
+
+  if (page === 'reset-password') return (
+    <div className="min-h-screen bg-black text-white flex flex-col">
+      <div className="fixed inset-0 z-0"><div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div></div>
+      <NavBar showBack />
+      <div className="relative z-10 pt-24 px-6 pb-12 flex items-center justify-center flex-grow">
         <div className="relative max-w-md w-full">
           <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-3xl blur-lg opacity-50"></div>
           <div className="relative bg-gray-900 rounded-2xl p-8 border border-cyan-500/20">
             <h2 className="text-2xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-6">Reset Your Password</h2>
-            {successMessage ? (
-              <div className="text-center">
-                <div className="w-16 h-16 mx-auto mb-4 bg-emerald-500/20 rounded-full flex items-center justify-center"><svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg></div>
-                <p className="text-emerald-400 mb-4">{successMessage}</p>
-                <p className="text-gray-500 text-sm">Redirecting to login...</p>
-              </div>
-            ) : (
+            {successMessage ? (<div className="text-center"><div className="w-16 h-16 mx-auto mb-4 bg-emerald-500/20 rounded-full flex items-center justify-center"><svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg></div><p className="text-emerald-400 mb-4">{successMessage}</p><p className="text-gray-500 text-sm">Redirecting to login...</p></div>) : (
               <form onSubmit={handleResetPassword}>
                 <div className="mb-4"><label className="block text-sm text-gray-400 mb-2">New Password</label><input name="newPassword" type="password" required minLength="8" placeholder="Min 8 characters" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" /></div>
                 <div className="mb-4"><label className="block text-sm text-gray-400 mb-2">Confirm Password</label><input name="confirmPassword" type="password" required minLength="8" placeholder="Confirm password" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" /></div>
@@ -337,14 +253,15 @@ export default function App() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   )
 
   if (page === 'terms') return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white flex flex-col">
       <div className="fixed inset-0 z-0"><div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div></div>
       <NavBar showBack />
-      <div className="relative z-10 pt-24 px-6 pb-12">
+      <div className="relative z-10 pt-24 px-6 pb-12 flex-grow">
         <div className="max-w-3xl mx-auto bg-gray-900/80 rounded-3xl p-8 border border-gray-800">
           <h1 className="text-3xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-6">Terms of Service & Disclaimer</h1>
           <div className="space-y-6 text-gray-300">
@@ -358,14 +275,15 @@ export default function App() {
           <div className="mt-8 text-center"><button onClick={() => setPage('home')} className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Back to Home</button></div>
         </div>
       </div>
+      <Footer />
     </div>
   )
 
   if (page === 'profile' && currentUser) return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white flex flex-col">
       <div className="fixed inset-0 z-0"><div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div></div>
       <NavBar />
-      <div className="relative z-10 pt-24 px-6 pb-12">
+      <div className="relative z-10 pt-24 px-6 pb-12 flex-grow">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-8">My Profile</h1>
           {profileLoading ? <div className="text-center py-12"><div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto"></div></div> : profile ? (
@@ -383,83 +301,54 @@ export default function App() {
                   </form>
                 ) : (
                   <div className="space-y-4">
-                    <div className="flex items-center gap-4">
-                      <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-emerald-500 rounded-full flex items-center justify-center text-2xl font-bold text-black">{(profile.user.full_name || profile.user.email)[0].toUpperCase()}</div>
-                      <div><h3 className="text-lg font-bold text-white">{profile.user.full_name || 'No name set'}</h3><p className="text-gray-400">{profile.user.email}</p></div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-800">
-                      <div><span className="text-gray-500 text-sm">Company</span><p className="text-white">{profile.user.company_name || '-'}</p></div>
-                      <div><span className="text-gray-500 text-sm">Phone</span><p className="text-white">{profile.user.phone || '-'}</p></div>
-                      <div><span className="text-gray-500 text-sm">Member Since</span><p className="text-white">{new Date(profile.user.created_at).toLocaleDateString()}</p></div>
-                    </div>
+                    <div className="flex items-center gap-4"><div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-emerald-500 rounded-full flex items-center justify-center text-2xl font-bold text-black">{(profile.user.full_name || profile.user.email)[0].toUpperCase()}</div><div><h3 className="text-lg font-bold text-white">{profile.user.full_name || 'No name set'}</h3><p className="text-gray-400">{profile.user.email}</p></div></div>
+                    <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-800"><div><span className="text-gray-500 text-sm">Company</span><p className="text-white">{profile.user.company_name || '-'}</p></div><div><span className="text-gray-500 text-sm">Phone</span><p className="text-white">{profile.user.phone || '-'}</p></div><div><span className="text-gray-500 text-sm">Member Since</span><p className="text-white">{new Date(profile.user.created_at).toLocaleDateString()}</p></div></div>
                   </div>
                 )}
               </div>
               <div className="bg-gray-900/80 rounded-2xl p-6 border border-gray-800">
                 <h2 className="text-xl font-bold text-white mb-4">Subscription</h2>
                 <div className={`inline-block px-3 py-1 rounded-full text-sm font-bold mb-4 ${profile.subscription.tier === 'pro' ? 'bg-cyan-500/20 text-cyan-400' : 'bg-gray-700 text-gray-300'}`}>{profile.subscription.tier.toUpperCase()}</div>
-                <div className="space-y-3">
-                  <div className="flex justify-between"><span className="text-gray-400">This Month</span><span className="text-white font-bold">{profile.subscription.analyses_this_month} analyses</span></div>
-                  {profile.subscription.analyses_remaining >= 0 && <div className="flex justify-between"><span className="text-gray-400">Remaining</span><span className="text-cyan-400 font-bold">{profile.subscription.analyses_remaining}</span></div>}
-                  <div className="flex justify-between"><span className="text-gray-400">Total</span><span className="text-white">{profile.stats.total_analyses}</span></div>
-                </div>
+                <div className="space-y-3"><div className="flex justify-between"><span className="text-gray-400">This Month</span><span className="text-white font-bold">{profile.subscription.analyses_this_month} analyses</span></div>{profile.subscription.analyses_remaining >= 0 && <div className="flex justify-between"><span className="text-gray-400">Remaining</span><span className="text-cyan-400 font-bold">{profile.subscription.analyses_remaining}</span></div>}<div className="flex justify-between"><span className="text-gray-400">Total</span><span className="text-white">{profile.stats.total_analyses}</span></div></div>
                 {profile.subscription.tier === 'free' && <button className="w-full mt-4 py-2 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-lg">Upgrade to Pro</button>}
-              </div>
-              <div className="md:col-span-3 bg-gray-900/80 rounded-2xl p-6 border border-gray-800">
-                <div className="flex justify-between items-center mb-4"><h2 className="text-xl font-bold text-white">Recent Analyses</h2><button onClick={() => setPage('history')} className="text-cyan-400 text-sm">View All →</button></div>
-                {profile.recent_analyses?.length === 0 ? <p className="text-gray-500 text-center py-4">No analyses yet</p> : (
-                  <div className="space-y-2">{profile.recent_analyses?.map(a => (
-                    <div key={a.id} className="flex items-center justify-between p-3 bg-black/30 rounded-lg hover:bg-black/50 cursor-pointer" onClick={() => viewAnalysis(a.analysis_uuid)}>
-                      <div><span className="text-white font-medium">{a.city}</span><span className="text-gray-500 mx-2">•</span><span className="text-gray-400">{a.permit_type}</span></div>
-                      <div className="flex items-center gap-4"><span className={`font-bold ${a.compliance_score >= 70 ? 'text-emerald-400' : a.compliance_score >= 40 ? 'text-amber-400' : 'text-red-400'}`}>{a.compliance_score}%</span><span className="text-gray-500 text-sm">{new Date(a.created_at).toLocaleDateString()}</span></div>
-                    </div>
-                  ))}</div>
-                )}
               </div>
             </div>
           ) : <p className="text-gray-500">Could not load profile</p>}
         </div>
       </div>
+      <Footer />
     </div>
   )
 
   if (page === 'history') return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white flex flex-col">
       <div className="fixed inset-0 z-0"><div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div></div>
       <NavBar />
-      <div className="relative z-10 pt-24 px-6 pb-12">
+      <div className="relative z-10 pt-24 px-6 pb-12 flex-grow">
         <div className="max-w-4xl mx-auto">
           <div className="flex justify-between items-center mb-8"><h1 className="text-3xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Analysis History</h1><button onClick={() => setPage('home')} className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">New Analysis</button></div>
           {historyLoading ? <div className="text-center py-12"><div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto"></div></div> : history.length === 0 ? <div className="text-center py-12 bg-gray-900/50 rounded-2xl border border-gray-800"><p className="text-gray-500">No analyses yet</p></div> : (
             <div className="space-y-3">{history.map(h => (
               <div key={h.analysis_uuid} className="bg-gray-900/50 rounded-xl border border-gray-800 p-4 flex items-center justify-between hover:border-gray-700">
-                <div className="flex-1 cursor-pointer" onClick={() => viewAnalysis(h.analysis_uuid)}>
-                  <div className="flex items-center gap-3"><span className="font-bold text-white">{h.city}</span><span className="text-gray-500">•</span><span className="text-gray-400">{h.permit_type}</span></div>
-                  <div className="text-sm text-gray-500 mt-1">{h.files_analyzed} files • {new Date(h.created_at).toLocaleDateString()}</div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <span className={`text-2xl font-black ${h.compliance_score >= 70 ? 'text-emerald-400' : h.compliance_score >= 40 ? 'text-amber-400' : 'text-red-400'}`}>{h.compliance_score || '-'}%</span>
-                  <button onClick={() => deleteAnalysis(h.analysis_uuid)} className="text-gray-500 hover:text-red-400 p-2"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
-                </div>
+                <div className="flex-1 cursor-pointer" onClick={() => viewAnalysis(h.analysis_uuid)}><div className="flex items-center gap-3"><span className="font-bold text-white">{h.city}</span><span className="text-gray-500">•</span><span className="text-gray-400">{h.permit_type}</span></div><div className="text-sm text-gray-500 mt-1">{h.files_analyzed} files • {new Date(h.created_at).toLocaleDateString()}</div></div>
+                <div className="flex items-center gap-4"><span className={`text-2xl font-black ${h.compliance_score >= 70 ? 'text-emerald-400' : h.compliance_score >= 40 ? 'text-amber-400' : 'text-red-400'}`}>{h.compliance_score || '-'}%</span><button onClick={() => deleteAnalysis(h.analysis_uuid)} className="text-gray-500 hover:text-red-400 p-2"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div>
               </div>
             ))}</div>
           )}
         </div>
       </div>
+      <Footer />
     </div>
   )
 
   if (page === 'results' && results) return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white flex flex-col">
       <div className="fixed inset-0 z-0"><div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div></div>
       <NavBar />
-      <div className="relative z-10 pt-24 px-6 pb-12">
+      <div className="relative z-10 pt-24 px-6 pb-12 flex-grow">
         <div className="max-w-4xl mx-auto">
           <div className="bg-gray-900/90 rounded-3xl overflow-hidden border border-gray-800">
-            <div className="p-8 border-b border-gray-800 bg-gradient-to-r from-cyan-500/10 to-emerald-500/10 flex justify-between items-center">
-              <div><h2 className="text-2xl font-black text-white">Analysis Complete</h2><p className="text-gray-400">{results.city} • {results.permit_type}</p></div>
-              <div className="text-center"><div className={`text-5xl font-black ${(results.analysis?.compliance_score || 0) >= 70 ? 'text-emerald-400' : (results.analysis?.compliance_score || 0) >= 40 ? 'text-amber-400' : 'text-red-400'}`}>{results.analysis?.compliance_score || 0}%</div><div className="text-sm text-gray-500">Compliance</div></div>
-            </div>
+            <div className="p-8 border-b border-gray-800 bg-gradient-to-r from-cyan-500/10 to-emerald-500/10 flex justify-between items-center"><div><h2 className="text-2xl font-black text-white">Analysis Complete</h2><p className="text-gray-400">{results.city} • {results.permit_type}</p></div><div className="text-center"><div className={`text-5xl font-black ${(results.analysis?.compliance_score || 0) >= 70 ? 'text-emerald-400' : (results.analysis?.compliance_score || 0) >= 40 ? 'text-amber-400' : 'text-red-400'}`}>{results.analysis?.compliance_score || 0}%</div><div className="text-sm text-gray-500">Compliance</div></div></div>
             <div className="p-8 space-y-6">
               {results.analysis?.summary && <div><h3 className="font-bold text-white mb-2">Summary</h3><p className="text-gray-400">{results.analysis.summary}</p></div>}
               {results.analysis?.documents_found?.length > 0 && <div><h3 className="font-bold text-emerald-400 mb-2">✓ Documents Found</h3><ul className="space-y-1">{results.analysis.documents_found.map((d,idx) => <li key={idx} className="text-emerald-300">✓ {d}</li>)}</ul></div>}
@@ -472,8 +361,10 @@ export default function App() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   )
+
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden flex flex-col">
@@ -508,19 +399,9 @@ export default function App() {
           <div className="relative"><div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-3xl blur-lg opacity-50"></div>
             <div className="relative bg-gray-900 rounded-2xl p-8 max-w-md w-full border border-cyan-500/20">
               <div className="flex justify-between items-center mb-6"><h2 className="text-2xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Reset Password</h2><button onClick={() => { setShowForgotPassword(false); setError(''); setSuccessMessage('') }} className="text-2xl text-gray-500 hover:text-white">&times;</button></div>
-              {successMessage ? (
-                <div className="text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-emerald-500/20 rounded-full flex items-center justify-center"><svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg></div>
-                  <p className="text-emerald-400 mb-4">{successMessage}</p>
-                  <button onClick={() => { setShowForgotPassword(false); setSuccessMessage('') }} className="text-cyan-400 hover:text-cyan-300 text-sm">Close</button>
-                </div>
-              ) : (<>
+              {successMessage ? (<div className="text-center"><div className="w-16 h-16 mx-auto mb-4 bg-emerald-500/20 rounded-full flex items-center justify-center"><svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg></div><p className="text-emerald-400 mb-4">{successMessage}</p><button onClick={() => { setShowForgotPassword(false); setSuccessMessage('') }} className="text-cyan-400 hover:text-cyan-300 text-sm">Close</button></div>) : (<>
                 <p className="text-gray-400 text-sm mb-6">Enter your email address and we'll send you a link to reset your password.</p>
-                <form onSubmit={handleForgotPassword}>
-                  <input name="email" type="email" required placeholder="Email" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
-                  {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
-                  <button type="submit" className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Send Reset Link</button>
-                </form>
+                <form onSubmit={handleForgotPassword}><input name="email" type="email" required placeholder="Email" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />{error && <p className="text-red-400 text-sm mb-4">{error}</p>}<button type="submit" className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Send Reset Link</button></form>
                 <p className="text-center mt-4 text-sm text-gray-500"><button onClick={() => { setShowForgotPassword(false); setShowLogin(true); setError('') }} className="text-cyan-400 hover:text-cyan-300">← Back to login</button></p>
               </>)}
             </div>
@@ -594,12 +475,7 @@ export default function App() {
           </div>
         </div>
       </div>
-      <footer className="relative z-10 border-t border-gray-800 bg-black/50 mt-auto">
-        <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-gray-500 text-sm">© 2025 Flo Permit</p>
-          <div className="flex items-center gap-6"><button onClick={() => setPage('terms')} className="text-gray-500 hover:text-cyan-400 text-sm">Terms</button><span className="text-gray-700">|</span><span className="text-gray-500 text-sm">South Florida</span></div>
-        </div>
-      </footer>
+      <Footer />
       <style>{`select option{background:#111;color:white;}`}</style>
     </div>
   )

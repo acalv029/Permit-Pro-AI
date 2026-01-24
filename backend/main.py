@@ -314,6 +314,89 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
         return False
 
 
+def send_welcome_email(email: str, full_name: str = None) -> bool:
+    """Send welcome email to new users"""
+    try:
+        name = full_name or "there"
+
+        params = {
+            "from": "Flo Permit <noreply@flopermit.com>",
+            "to": [email],
+            "subject": "Welcome to Flo Permit! 🎉",
+            "html": f"""
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <div style="background: linear-gradient(135deg, #06b6d4, #10b981); padding: 30px; text-align: center;">
+                    <h1 style="color: white; margin: 0;">Welcome to Flo Permit!</h1>
+                </div>
+                <div style="padding: 30px; background: #f9fafb;">
+                    <h2 style="color: #111827;">Hey {name}! 👋</h2>
+                    <p style="color: #4b5563; font-size: 16px;">
+                        Thanks for signing up for Flo Permit — your AI-powered permit analysis tool for South Florida.
+                    </p>
+                    <h3 style="color: #111827;">Here's what you can do:</h3>
+                    <ul style="color: #4b5563; font-size: 16px; line-height: 1.8;">
+                        <li>📄 Upload your permit documents (PDFs, images)</li>
+                        <li>🤖 Get instant AI analysis of your permit package</li>
+                        <li>✅ See what documents you have</li>
+                        <li>❌ Find out what's missing</li>
+                        <li>💡 Get recommendations to improve your submission</li>
+                    </ul>
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="{FRONTEND_URL}" style="background: linear-gradient(135deg, #06b6d4, #10b981); color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">
+                            Start Your First Analysis
+                        </a>
+                    </div>
+                    <p style="color: #6b7280; font-size: 14px;">
+                        Questions? Reply to this email or contact us at <a href="mailto:support@flopermit.com" style="color: #06b6d4;">support@flopermit.com</a>
+                    </p>
+                    <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+                    <p style="color: #9ca3af; font-size: 12px; text-align: center;">
+                        © 2025 Flo Permit - South Florida Permit Analysis
+                    </p>
+                </div>
+            </div>
+            """,
+        }
+
+        resend.Emails.send(params)
+        return True
+    except Exception as e:
+        print(f"❌ Failed to send welcome email: {str(e)}")
+        return False
+
+
+def send_contact_email(name: str, email: str, subject: str, message: str) -> bool:
+    """Send contact form submission to support"""
+    try:
+        params = {
+            "from": "Flo Permit <noreply@flopermit.com>",
+            "to": ["support@flopermit.com"],
+            "reply_to": email,
+            "subject": f"[Contact Form] {subject}",
+            "html": f"""
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <div style="background: linear-gradient(135deg, #06b6d4, #10b981); padding: 30px; text-align: center;">
+                    <h1 style="color: white; margin: 0;">New Contact Form Submission</h1>
+                </div>
+                <div style="padding: 30px; background: #f9fafb;">
+                    <p style="color: #4b5563; font-size: 16px;"><strong>From:</strong> {name}</p>
+                    <p style="color: #4b5563; font-size: 16px;"><strong>Email:</strong> {email}</p>
+                    <p style="color: #4b5563; font-size: 16px;"><strong>Subject:</strong> {subject}</p>
+                    <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;">
+                    <p style="color: #4b5563; font-size: 16px;"><strong>Message:</strong></p>
+                    <p style="color: #4b5563; font-size: 16px; white-space: pre-wrap;">{message}</p>
+                </div>
+            </div>
+            """,
+        }
+
+        resend.Emails.send(params)
+        return True
+    except Exception as e:
+        print(f"❌ Failed to send contact email: {str(e)}")
+        return False
+
+
 # ============================================================================
 # AUTHENTICATION ENDPOINTS
 # ============================================================================
@@ -342,6 +425,9 @@ async def register(user_data: UserRegister, db: Session = Depends(get_db)):
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
+
+        # Send welcome email
+        send_welcome_email(new_user.email, new_user.full_name)
 
         access_token = create_access_token(new_user.id, new_user.email)
 
@@ -807,12 +893,46 @@ def save_analysis_to_history(
 
 @app.get("/")
 async def root():
-    return {"service": "Flo Permit", "version": "1.4.0", "status": "running"}
+    return {"service": "Flo Permit", "version": "1.5.0", "status": "running"}
 
 
 @app.get("/health")
 async def health_check():
     return {"status": "healthy", "timestamp": datetime.now().isoformat()}
+
+
+# ============================================================================
+# CONTACT FORM
+# ============================================================================
+
+
+class ContactForm(BaseModel):
+    name: str
+    email: str
+    subject: str
+    message: str
+
+
+@app.post("/api/contact")
+async def submit_contact_form(form_data: ContactForm):
+    """Handle contact form submission"""
+    try:
+        success = send_contact_email(
+            name=form_data.name,
+            email=form_data.email,
+            subject=form_data.subject,
+            message=form_data.message,
+        )
+        if success:
+            return {
+                "success": True,
+                "message": "Message sent! We'll get back to you soon.",
+            }
+        else:
+            raise HTTPException(status_code=500, detail="Failed to send message")
+    except Exception as e:
+        print(f"❌ Contact form error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to send message")
 
 
 @app.get("/api/cities")
