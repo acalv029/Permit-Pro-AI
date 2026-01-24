@@ -151,7 +151,7 @@ export default function App() {
 
   useEffect(() => { if (page === 'history' && authToken) loadHistory(); if (page === 'profile' && authToken) loadProfile(); if (page === 'admin' && authToken && isAdmin) loadAdminStats() }, [page])
 
-  const canAnalyze = city && permitType && validFiles.length > 0 && totalSize <= 200 * 1024 * 1024 && agreedToTerms
+  const canAnalyze = currentUser && city && permitType && validFiles.length > 0 && totalSize <= 200 * 1024 * 1024 && agreedToTerms
   const getPermitTypes = () => {
     const basePermits = [{ value: 'building', label: 'Building' }, { value: 'electrical', label: 'Electrical' }, { value: 'plumbing', label: 'Plumbing' }, { value: 'mechanical', label: 'Mechanical/HVAC' }, { value: 'roofing', label: 'Roofing' }]
     const waterfrontCities = ['Fort Lauderdale', 'Pompano Beach', 'Hollywood', 'Lauderdale-by-the-Sea', 'Boca Raton', 'Deerfield Beach']
@@ -555,7 +555,11 @@ export default function App() {
                 {validFiles.length > 0 && <div className="mt-4 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl"><div className="flex justify-between"><span className="text-emerald-400 font-semibold">{validFiles.length} files ({formatSize(totalSize)})</span><button onClick={clearFiles} className="text-red-400 text-sm">Clear</button></div></div>}
               </div>
               <div className="mb-6"><label className="flex items-start gap-3 cursor-pointer"><input type="checkbox" checked={agreedToTerms} onChange={e => setAgreedToTerms(e.target.checked)} className="mt-1 w-5 h-5 rounded border-gray-600 bg-black/50 text-cyan-500" /><span className="text-sm text-gray-400">I agree to the <button type="button" onClick={() => setPage('terms')} className="text-cyan-400 underline">Terms of Service</button></span></label></div>
-              <button onClick={analyze} disabled={!canAnalyze} className={`w-full py-4 rounded-xl font-bold text-lg ${canAnalyze ? 'bg-gradient-to-r from-cyan-500 to-emerald-500 text-black' : 'bg-gray-800 text-gray-500 cursor-not-allowed'}`}>{canAnalyze ? `Analyze ${validFiles.length} Files` : 'Select city, permit type & files'}</button>
+              {!currentUser ? (
+                <button onClick={() => setShowRegister(true)} className="w-full py-4 rounded-xl font-bold text-lg bg-gradient-to-r from-cyan-500 to-emerald-500 text-black">Sign Up to Analyze</button>
+              ) : (
+                <button onClick={analyze} disabled={!canAnalyze} className={`w-full py-4 rounded-xl font-bold text-lg ${canAnalyze ? 'bg-gradient-to-r from-cyan-500 to-emerald-500 text-black' : 'bg-gray-800 text-gray-500 cursor-not-allowed'}`}>{canAnalyze ? `Analyze ${validFiles.length} Files` : 'Select city, permit type & files'}</button>
+              )}
             </div>
           </div>
           <div className="grid md:grid-cols-3 gap-6 mt-12">
