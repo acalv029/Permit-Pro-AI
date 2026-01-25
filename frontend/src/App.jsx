@@ -40,6 +40,8 @@ export default function App() {
   const [resetToken, setResetToken] = useState(null)
   const [adminStats, setAdminStats] = useState(null)
   const [adminLoading, setAdminLoading] = useState(false)
+  const [subscription, setSubscription] = useState(null)
+  const [checkoutLoading, setCheckoutLoading] = useState(false)
 
   const ADMIN_EMAILS = ['toshygluestick@gmail.com']
   const isAdmin = currentUser && ADMIN_EMAILS.includes(currentUser.email)
@@ -49,7 +51,10 @@ export default function App() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const token = params.get('token')
+    const payment = params.get('payment')
     if (token) { setResetToken(token); setPage('reset-password'); window.history.replaceState({}, document.title, window.location.pathname) }
+    if (payment === 'success') { setSuccessMessage('Payment successful! Your subscription is now active.'); setPage('profile'); window.history.replaceState({}, document.title, window.location.pathname) }
+    if (payment === 'cancelled') { window.history.replaceState({}, document.title, window.location.pathname) }
   }, [])
 
   useEffect(() => {
@@ -145,11 +150,32 @@ export default function App() {
   const loadHistory = async () => { setHistoryLoading(true); try { const res = await fetch(`${API_BASE_URL}/api/history`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setHistory(data.analyses || []) } } catch (err) { console.error(err) } finally { setHistoryLoading(false) } }
   const loadAdminStats = async () => { if (!authToken) return; setAdminLoading(true); try { const res = await fetch(`${API_BASE_URL}/api/admin/stats`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setAdminStats(data) } } catch (err) { console.error(err) } finally { setAdminLoading(false) } }
   const loadProfile = async () => { if (!authToken) return; setProfileLoading(true); try { const res = await fetch(`${API_BASE_URL}/api/profile`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setProfile(data) } } catch (err) { console.error(err) } finally { setProfileLoading(false) } }
+  const loadSubscription = async () => { if (!authToken) return; try { const res = await fetch(`${API_BASE_URL}/api/subscription`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setSubscription(data) } } catch (err) { console.error(err) } }
   const updateProfile = async (data) => { try { const res = await fetch(`${API_BASE_URL}/api/profile`, { method: 'PUT', headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); if (res.ok) { await loadProfile(); setEditingProfile(false) } } catch (err) { alert('Error updating profile') } }
   const viewAnalysis = async (uuid) => { try { const res = await fetch(`${API_BASE_URL}/api/history/${uuid}`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setResults({ city: data.city, permit_type: data.permit_type, files_analyzed: data.files_analyzed, file_tree: data.file_list, analysis: data.analysis }); setPage('results') } } catch (err) { alert('Error loading analysis') } }
   const deleteAnalysis = async (uuid) => { if (!confirm('Delete this analysis?')) return; try { await fetch(`${API_BASE_URL}/api/history/${uuid}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${authToken}` } }); loadHistory() } catch (err) { alert('Error deleting') } }
+  
+  const handleCheckout = async (tier) => {
+    setCheckoutLoading(true)
+    try {
+      const formData = new FormData()
+      formData.append('tier', tier)
+      const res = await fetch(`${API_BASE_URL}/api/stripe/create-checkout-session`, { method: 'POST', headers: { 'Authorization': `Bearer ${authToken}` }, body: formData })
+      if (res.ok) { const data = await res.json(); window.location.href = data.checkout_url }
+      else { const data = await res.json(); alert(data.detail || 'Checkout failed') }
+    } catch (err) { alert('Checkout error') }
+    finally { setCheckoutLoading(false) }
+  }
+  
+  const openBillingPortal = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/stripe/create-portal-session`, { method: 'POST', headers: { 'Authorization': `Bearer ${authToken}` } })
+      if (res.ok) { const data = await res.json(); window.location.href = data.portal_url }
+      else { alert('Could not open billing portal') }
+    } catch (err) { alert('Error opening billing portal') }
+  }
 
-  useEffect(() => { if (page === 'history' && authToken) loadHistory(); if (page === 'profile' && authToken) loadProfile(); if (page === 'admin' && authToken && isAdmin) loadAdminStats() }, [page])
+  useEffect(() => { if (page === 'history' && authToken) loadHistory(); if (page === 'profile' && authToken) { loadProfile(); loadSubscription() }; if (page === 'admin' && authToken && isAdmin) loadAdminStats(); if (page === 'pricing' && authToken) loadSubscription() }, [page])
 
   const canAnalyze = city && permitType && validFiles.length > 0 && totalSize <= 200 * 1024 * 1024 && agreedToTerms
   const getPermitTypes = () => {
@@ -164,8 +190,8 @@ export default function App() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-cyan-500/20">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3 cursor-pointer" onClick={() => { setPage('home'); setResults(null) }}>
-          <div className="w-11 h-11 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-xl flex items-center justify-center">
-            <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+          <div className="w-11 h-11 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-xl flex items-center justify-center p-1.5">
+            <img src="/permit_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" />
           </div>
           <div><h1 className="text-xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Flo Permit</h1><p className="text-xs text-cyan-500 font-semibold">SOUTH FLORIDA</p></div>
         </div>
@@ -182,10 +208,10 @@ export default function App() {
     <footer className="relative z-10 border-t border-gray-800 bg-black/50 mt-auto">
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
-          <div><div className="flex items-center gap-2 mb-4"><div className="w-8 h-8 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-lg flex items-center justify-center"><svg className="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg></div><span className="font-bold text-white">Flo Permit</span></div><p className="text-gray-500 text-sm">AI-powered permit analysis for South Florida contractors and homeowners.</p></div>
-          <div><h4 className="font-semibold text-white mb-4">Product</h4><ul className="space-y-2"><li><button onClick={() => setPage('home')} className="text-gray-500 hover:text-cyan-400 text-sm">Analyze Permits</button></li></ul></div>
+          <div><div className="flex items-center gap-2 mb-4"><div className="w-8 h-8 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-lg flex items-center justify-center p-1"><img src="/permit_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" /></div><span className="font-bold text-white">Flo Permit</span></div><p className="text-gray-500 text-sm">AI-powered permit analysis for South Florida contractors and homeowners.</p></div>
+          <div><h4 className="font-semibold text-white mb-4">Product</h4><ul className="space-y-2"><li><button onClick={() => setPage('home')} className="text-gray-500 hover:text-cyan-400 text-sm">Analyze Permits</button></li><li><button onClick={() => setPage('pricing')} className="text-gray-500 hover:text-cyan-400 text-sm">Pricing</button></li><li><button onClick={() => setPage('about')} className="text-gray-500 hover:text-cyan-400 text-sm">About Us</button></li><li><button onClick={() => setPage('faq')} className="text-gray-500 hover:text-cyan-400 text-sm">FAQ</button></li></ul></div>
           <div><h4 className="font-semibold text-white mb-4">Legal</h4><ul className="space-y-2"><li><button onClick={() => setPage('terms')} className="text-gray-500 hover:text-cyan-400 text-sm">Terms of Service</button></li><li><button onClick={() => setPage('privacy')} className="text-gray-500 hover:text-cyan-400 text-sm">Privacy Policy</button></li></ul></div>
-          <div><h4 className="font-semibold text-white mb-4">Support</h4><ul className="space-y-2"><li><button onClick={() => setPage('contact')} className="text-gray-500 hover:text-cyan-400 text-sm">Contact Us</button></li><li><a href="mailto:support@flopermit.com" className="text-gray-500 hover:text-cyan-400 text-sm">support@flopermit.com</a></li></ul></div>
+          <div><h4 className="font-semibold text-white mb-4">Support</h4><ul className="space-y-2"><li><button onClick={() => setPage('contact')} className="text-gray-500 hover:text-cyan-400 text-sm">Contact Us</button></li><li><button onClick={() => setPage('faq')} className="text-gray-500 hover:text-cyan-400 text-sm">FAQ</button></li><li><a href="mailto:support@flopermit.com" className="text-gray-500 hover:text-cyan-400 text-sm">support@flopermit.com</a></li></ul></div>
         </div>
         <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row items-center justify-between gap-4"><p className="text-gray-500 text-sm">© 2025 Flo Permit. All rights reserved.</p><p className="text-gray-600 text-xs">Serving Broward & Palm Beach Counties</p></div>
       </div>
@@ -243,6 +269,180 @@ export default function App() {
             <div><h2 className="text-lg font-bold text-white mb-2">7. Contact</h2><p>For privacy questions, contact us at <a href="mailto:support@flopermit.com" className="text-cyan-400">support@flopermit.com</a></p></div>
           </div>
           <div className="mt-8 text-center"><button onClick={() => setPage('home')} className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Back to Home</button></div>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  )
+
+  // === ABOUT PAGE ===
+  if (page === 'about') return (
+    <div className="min-h-screen bg-black text-white flex flex-col">
+      <div className="fixed inset-0 z-0"><div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div></div>
+      <NavBar showBack />
+      <div className="relative z-10 pt-24 px-6 pb-12 flex-grow">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-4">About Flo Permit</h1>
+            <p className="text-gray-400 text-lg">Simplifying the permit process for South Florida</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800">
+              <div className="w-14 h-14 bg-cyan-500/20 rounded-xl flex items-center justify-center mb-4"><span className="text-3xl">🎯</span></div>
+              <h2 className="text-xl font-bold text-white mb-3">Our Mission</h2>
+              <p className="text-gray-400">We're on a mission to make permit applications less stressful. No more guessing if your package is complete — get instant AI-powered feedback before you submit.</p>
+            </div>
+            <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800">
+              <div className="w-14 h-14 bg-emerald-500/20 rounded-xl flex items-center justify-center mb-4"><span className="text-3xl">⚡</span></div>
+              <h2 className="text-xl font-bold text-white mb-3">How It Works</h2>
+              <p className="text-gray-400">Upload your permit documents, select your city and permit type, and our AI analyzes everything in seconds. You'll know exactly what's missing and what needs attention.</p>
+            </div>
+            <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800">
+              <div className="w-14 h-14 bg-purple-500/20 rounded-xl flex items-center justify-center mb-4"><span className="text-3xl">🏗️</span></div>
+              <h2 className="text-xl font-bold text-white mb-3">Built for Professionals</h2>
+              <p className="text-gray-400">Whether you're a contractor, architect, engineer, or homeowner, Flo Permit helps you submit complete permit packages the first time.</p>
+            </div>
+            <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800">
+              <div className="w-14 h-14 bg-amber-500/20 rounded-xl flex items-center justify-center mb-4"><span className="text-3xl">📍</span></div>
+              <h2 className="text-xl font-bold text-white mb-3">South Florida Focus</h2>
+              <p className="text-gray-400">We specialize in Broward and Palm Beach counties — Fort Lauderdale, Pompano Beach, Hollywood, Boca Raton, and more. Local knowledge, local requirements.</p>
+            </div>
+          </div>
+          <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800 text-center">
+            <h2 className="text-2xl font-bold text-white mb-4">Ready to streamline your permits?</h2>
+            <p className="text-gray-400 mb-6">Join hundreds of South Florida professionals who trust Flo Permit.</p>
+            <button onClick={() => setPage('home')} className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Get Started Free</button>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  )
+
+  // === FAQ PAGE ===
+  if (page === 'faq') return (
+    <div className="min-h-screen bg-black text-white flex flex-col">
+      <div className="fixed inset-0 z-0"><div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div></div>
+      <NavBar showBack />
+      <div className="relative z-10 pt-24 px-6 pb-12 flex-grow">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-4">Frequently Asked Questions</h1>
+            <p className="text-gray-400">Everything you need to know about Flo Permit</p>
+          </div>
+          <div className="space-y-4">
+            {[
+              { q: "What is Flo Permit?", a: "Flo Permit is an AI-powered tool that analyzes your permit documents and tells you if your package is complete. Upload your files, and we'll identify missing documents, issues, and provide recommendations." },
+              { q: "Which cities do you support?", a: "We currently support Fort Lauderdale, Pompano Beach, Hollywood, Coral Springs, Boca Raton, Lauderdale-by-the-Sea, Deerfield Beach, and Pembroke Pines. More cities coming soon!" },
+              { q: "What permit types can you analyze?", a: "We support Building, Electrical, Plumbing, Mechanical/HVAC, Roofing permits. Waterfront cities also get Dock, Seawall, and Boat Lift permit analysis." },
+              { q: "What file types can I upload?", a: "We accept PDF, PNG, JPG, and JPEG files. You can upload up to 50 files at once, with a maximum total size of 200MB." },
+              { q: "Is my data secure?", a: "Yes! We use industry-standard encryption, secure password hashing, and your documents are processed securely. We never share your data with third parties." },
+              { q: "Does this guarantee my permit will be approved?", a: "No. Flo Permit is an informational tool only. We help identify potential issues, but you should always verify requirements with your local permitting office." },
+              { q: "Is there a free tier?", a: "Yes! Free accounts get 3 analyses per month. Need more? Contact us about Pro plans." },
+              { q: "How accurate is the AI analysis?", a: "Our AI is trained on South Florida permit requirements and is highly accurate. However, requirements can change, so always verify with your local office." },
+              { q: "Can I save my analysis history?", a: "Yes! Create a free account to save all your analyses and access them anytime." },
+              { q: "How do I contact support?", a: "Email us at support@flopermit.com or use the Contact page. We typically respond within 24 hours." },
+            ].map((faq, i) => (
+              <div key={i} className="bg-gray-900/80 rounded-xl p-6 border border-gray-800">
+                <h3 className="font-bold text-white mb-2">{faq.q}</h3>
+                <p className="text-gray-400">{faq.a}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-12 text-center">
+            <p className="text-gray-500 mb-4">Still have questions?</p>
+            <button onClick={() => setPage('contact')} className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Contact Us</button>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  )
+
+  // === PRICING PAGE ===
+  if (page === 'pricing') return (
+    <div className="min-h-screen bg-black text-white flex flex-col">
+      <div className="fixed inset-0 z-0"><div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div></div>
+      <NavBar showBack />
+      <div className="relative z-10 pt-24 px-6 pb-12 flex-grow">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-4">Simple, Transparent Pricing</h1>
+            <p className="text-gray-400 text-lg">Choose the plan that fits your needs</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {/* Free */}
+            <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800">
+              <h3 className="text-xl font-bold text-white mb-2">Free</h3>
+              <div className="mb-6"><span className="text-4xl font-black text-white">$0</span><span className="text-gray-500">/month</span></div>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>3 analyses/month</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Basic AI analysis</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Email support</li>
+              </ul>
+              {subscription?.tier === 'free' ? (
+                <button disabled className="w-full py-3 border border-gray-700 text-gray-500 font-bold rounded-xl">Current Plan</button>
+              ) : (
+                <button onClick={() => setPage('home')} className="w-full py-3 border border-gray-700 text-white font-bold rounded-xl hover:bg-gray-800">Get Started</button>
+              )}
+            </div>
+            {/* Pro */}
+            <div className="bg-gray-900/80 rounded-2xl p-8 border-2 border-cyan-500 relative">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-full text-black text-xs font-bold">POPULAR</div>
+              <h3 className="text-xl font-bold text-white mb-2">Pro</h3>
+              <div className="mb-6"><span className="text-4xl font-black text-white">$29</span><span className="text-gray-500">/month</span></div>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>50 analyses/month</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Priority AI analysis</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Priority support</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Analysis history</li>
+              </ul>
+              {subscription?.tier === 'pro' ? (
+                <button onClick={openBillingPortal} className="w-full py-3 border border-cyan-500 text-cyan-400 font-bold rounded-xl hover:bg-cyan-500/10">Manage Subscription</button>
+              ) : (
+                <button onClick={() => handleCheckout('pro')} disabled={checkoutLoading || !currentUser} className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl disabled:opacity-50">{checkoutLoading ? 'Loading...' : currentUser ? 'Upgrade to Pro' : 'Sign up first'}</button>
+              )}
+            </div>
+            {/* Business */}
+            <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800">
+              <h3 className="text-xl font-bold text-white mb-2">Business</h3>
+              <div className="mb-6"><span className="text-4xl font-black text-white">$99</span><span className="text-gray-500">/month</span></div>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Unlimited analyses</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Priority AI analysis</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Dedicated support</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Analysis history</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Team features (soon)</li>
+              </ul>
+              {subscription?.tier === 'business' ? (
+                <button onClick={openBillingPortal} className="w-full py-3 border border-purple-500 text-purple-400 font-bold rounded-xl hover:bg-purple-500/10">Manage Subscription</button>
+              ) : (
+                <button onClick={() => handleCheckout('business')} disabled={checkoutLoading || !currentUser} className="w-full py-3 border border-gray-700 text-white font-bold rounded-xl hover:bg-gray-800 disabled:opacity-50">{checkoutLoading ? 'Loading...' : currentUser ? 'Upgrade to Business' : 'Sign up first'}</button>
+              )}
+            </div>
+          </div>
+          {subscription && (
+            <div className="mt-8 p-4 bg-gray-900/50 rounded-xl border border-gray-800 text-center">
+              <p className="text-gray-400">Current usage: <span className="text-white font-bold">{subscription.analyses_this_month}</span> / {subscription.analyses_limit === -1 ? '∞' : subscription.analyses_limit} analyses this month</p>
+            </div>
+          )}
+        </div>
+      </div>
+      <Footer />
+    </div>
+  )
+
+  // === 404 PAGE ===
+  if (page === '404') return (
+    <div className="min-h-screen bg-black text-white flex flex-col">
+      <div className="fixed inset-0 z-0"><div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div></div>
+      <NavBar />
+      <div className="relative z-10 pt-24 px-6 pb-12 flex-grow flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-8xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-4">404</div>
+          <h1 className="text-2xl font-bold text-white mb-4">Page Not Found</h1>
+          <p className="text-gray-400 mb-8">Oops! The page you're looking for doesn't exist or has been moved.</p>
+          <button onClick={() => setPage('home')} className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Go Home</button>
         </div>
       </div>
       <Footer />
@@ -398,9 +598,13 @@ export default function App() {
               </div>
               <div className="bg-gray-900/80 rounded-2xl p-6 border border-gray-800">
                 <h2 className="text-xl font-bold text-white mb-4">Subscription</h2>
-                <div className={`inline-block px-3 py-1 rounded-full text-sm font-bold mb-4 ${profile.subscription.tier === 'pro' ? 'bg-cyan-500/20 text-cyan-400' : 'bg-gray-700 text-gray-300'}`}>{profile.subscription.tier.toUpperCase()}</div>
+                <div className={`inline-block px-3 py-1 rounded-full text-sm font-bold mb-4 ${profile.subscription.tier === 'pro' ? 'bg-cyan-500/20 text-cyan-400' : profile.subscription.tier === 'business' ? 'bg-purple-500/20 text-purple-400' : 'bg-gray-700 text-gray-300'}`}>{profile.subscription.tier.toUpperCase()}</div>
                 <div className="space-y-3"><div className="flex justify-between"><span className="text-gray-400">This Month</span><span className="text-white font-bold">{profile.subscription.analyses_this_month} analyses</span></div>{profile.subscription.analyses_remaining >= 0 && <div className="flex justify-between"><span className="text-gray-400">Remaining</span><span className="text-cyan-400 font-bold">{profile.subscription.analyses_remaining}</span></div>}<div className="flex justify-between"><span className="text-gray-400">Total</span><span className="text-white">{profile.stats.total_analyses}</span></div></div>
-                {profile.subscription.tier === 'free' && <button className="w-full mt-4 py-2 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-lg">Upgrade to Pro</button>}
+                {profile.subscription.tier === 'free' ? (
+                  <button onClick={() => setPage('pricing')} className="w-full mt-4 py-2 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-lg">Upgrade to Pro</button>
+                ) : (
+                  <button onClick={openBillingPortal} className="w-full mt-4 py-2 border border-gray-700 text-white font-bold rounded-lg hover:bg-gray-800">Manage Subscription</button>
+                )}
               </div>
             </div>
           ) : <p className="text-gray-500">Could not load profile</p>}
@@ -470,8 +674,8 @@ export default function App() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-cyan-500/20">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-xl flex items-center justify-center">
-              <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+            <div className="w-11 h-11 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-xl flex items-center justify-center p-1.5">
+              <img src="/permit_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" />
             </div>
             <div><h1 className="text-xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Flo Permit</h1><p className="text-xs text-cyan-500 font-semibold">SOUTH FLORIDA</p></div>
           </div>
