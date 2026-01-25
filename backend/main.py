@@ -3,17 +3,20 @@ Flo Permit - South Florida Permit Checker API
 Production-ready FastAPI backend with user authentication and profiles
 """
 
+import os
 import sentry_sdk
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 
-sentry_sdk.init(
-    dsn="https://3f9a93681b25aef3b2f84e791fe3ce53@o4510766662352896.ingest.us.sentry.io/4510766667333632",
-    integrations=[FastApiIntegration(), SqlalchemyIntegration()],
-    traces_sample_rate=0.1,
-    send_default_pii=False,
-    environment="production",
-)
+SENTRY_DSN = os.getenv("SENTRY_DSN")
+if SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[FastApiIntegration(), SqlalchemyIntegration()],
+        traces_sample_rate=0.1,
+        send_default_pii=False,
+        environment=os.getenv("ENVIRONMENT", "production"),
+    )
 
 from fastapi import (
     FastAPI,
@@ -175,6 +178,20 @@ class PasswordResetToken(Base):
     user = relationship("User", back_populates="reset_tokens")
 
 
+class APILog(Base):
+    __tablename__ = "api_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    endpoint = Column(String(255), nullable=False)
+    method = Column(String(10), nullable=False)
+    status_code = Column(Integer)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    ip_address = Column(String(50))
+    user_agent = Column(String(500))
+    response_time_ms = Column(Integer)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
 Base.metadata.create_all(bind=engine)
 print("✅ Database tables initialized")
 
@@ -197,6 +214,38 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["X-Frame-Options"] = "DENY"
         response.headers["X-XSS-Protection"] = "1; mode=block"
+        return response
+
+
+class APILoggingMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        import time
+
+        start_time = time.time()
+
+        response = await call_next(request)
+
+        # Calculate response time
+        response_time_ms = int((time.time() - start_time) * 1000)
+
+        # Skip logging for health checks and static files
+        if request.url.path not in ["/health", "/", "/docs", "/openapi.json"]:
+            try:
+                db = SessionLocal()
+                log = APILog(
+                    endpoint=request.url.path,
+                    method=request.method,
+                    status_code=response.status_code,
+                    ip_address=request.client.host if request.client else None,
+                    user_agent=request.headers.get("user-agent", "")[:500],
+                    response_time_ms=response_time_ms,
+                )
+                db.add(log)
+                db.commit()
+                db.close()
+            except Exception as e:
+                print(f"API logging error: {e}")
+
         return response
 
 
@@ -227,14 +276,14 @@ ALLOWED_ORIGINS = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for now to debug
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-    expose_headers=["*"],
 )
 
 app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(APILoggingMiddleware)
 
 analysis_results = {}
 
@@ -905,12 +954,159 @@ def save_analysis_to_history(
 
 @app.get("/")
 async def root():
-    return {"service": "Flo Permit", "version": "1.5.0", "status": "running"}
+    return {"service": "Flo Permit", "version": "1.6.0", "status": "running"}
 
 
 @app.get("/health")
 async def health_check():
     return {"status": "healthy", "timestamp": datetime.now().isoformat()}
+
+
+# ============================================================================
+# ADMIN DASHBOARD
+# ============================================================================
+
+ADMIN_EMAILS = ["toshygluestick@gmail.com"]
+
+
+def require_admin(user_id: int, db: Session):
+    """Check if user is an admin"""
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user or user.email not in ADMIN_EMAILS:
+        raise HTTPException(status_code=403, detail="Admin access required")
+    return user
+
+
+@app.get("/api/admin/stats")
+async def get_admin_stats(
+    authorization: str = Header(None), db: Session = Depends(get_db)
+):
+    """Get admin dashboard statistics"""
+    user_id = get_current_user_id(authorization)
+    require_admin(user_id, db)
+
+    from sqlalchemy import func
+
+    # Total users
+    total_users = db.query(User).count()
+
+    # Users this month
+    first_of_month = datetime.utcnow().replace(
+        day=1, hour=0, minute=0, second=0, microsecond=0
+    )
+    new_users_this_month = (
+        db.query(User).filter(User.created_at >= first_of_month).count()
+    )
+
+    # Total analyses
+    total_analyses = db.query(AnalysisHistory).count()
+
+    # Analyses this month
+    analyses_this_month = (
+        db.query(AnalysisHistory)
+        .filter(AnalysisHistory.created_at >= first_of_month)
+        .count()
+    )
+
+    # Average compliance score
+    avg_score = db.query(func.avg(AnalysisHistory.compliance_score)).scalar() or 0
+
+    # API requests today
+    today_start = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
+    api_requests_today = (
+        db.query(APILog).filter(APILog.created_at >= today_start).count()
+    )
+
+    # API requests this month
+    api_requests_month = (
+        db.query(APILog).filter(APILog.created_at >= first_of_month).count()
+    )
+
+    # Most popular cities
+    popular_cities = (
+        db.query(AnalysisHistory.city, func.count(AnalysisHistory.id).label("count"))
+        .group_by(AnalysisHistory.city)
+        .order_by(func.count(AnalysisHistory.id).desc())
+        .limit(5)
+        .all()
+    )
+
+    # Most popular permit types
+    popular_permits = (
+        db.query(
+            AnalysisHistory.permit_type, func.count(AnalysisHistory.id).label("count")
+        )
+        .group_by(AnalysisHistory.permit_type)
+        .order_by(func.count(AnalysisHistory.id).desc())
+        .limit(5)
+        .all()
+    )
+
+    # Recent users
+    recent_users = db.query(User).order_by(User.created_at.desc()).limit(10).all()
+
+    # Recent analyses
+    recent_analyses = (
+        db.query(AnalysisHistory)
+        .order_by(AnalysisHistory.created_at.desc())
+        .limit(10)
+        .all()
+    )
+
+    # API endpoint stats
+    endpoint_stats = (
+        db.query(
+            APILog.endpoint,
+            func.count(APILog.id).label("count"),
+            func.avg(APILog.response_time_ms).label("avg_time"),
+        )
+        .filter(APILog.created_at >= first_of_month)
+        .group_by(APILog.endpoint)
+        .order_by(func.count(APILog.id).desc())
+        .limit(10)
+        .all()
+    )
+
+    return {
+        "overview": {
+            "total_users": total_users,
+            "new_users_this_month": new_users_this_month,
+            "total_analyses": total_analyses,
+            "analyses_this_month": analyses_this_month,
+            "average_compliance_score": round(avg_score, 1),
+            "api_requests_today": api_requests_today,
+            "api_requests_this_month": api_requests_month,
+        },
+        "popular_cities": [{"city": c, "count": cnt} for c, cnt in popular_cities],
+        "popular_permits": [
+            {"permit_type": p, "count": cnt} for p, cnt in popular_permits
+        ],
+        "recent_users": [
+            {
+                "id": u.id,
+                "email": u.email,
+                "full_name": u.full_name,
+                "company_name": u.company_name,
+                "created_at": u.created_at.isoformat(),
+            }
+            for u in recent_users
+        ],
+        "recent_analyses": [
+            {
+                "id": a.id,
+                "city": a.city,
+                "permit_type": a.permit_type,
+                "compliance_score": a.compliance_score,
+                "files_analyzed": a.files_analyzed,
+                "created_at": a.created_at.isoformat(),
+            }
+            for a in recent_analyses
+        ],
+        "endpoint_stats": [
+            {"endpoint": e, "count": cnt, "avg_response_ms": round(avg or 0, 1)}
+            for e, cnt, avg in endpoint_stats
+        ],
+    }
 
 
 # ============================================================================
