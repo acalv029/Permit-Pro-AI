@@ -1318,28 +1318,37 @@ async def get_subscription(
     db: Session = Depends(get_db)
 ):
     """Get user's subscription status"""
-    user_id = get_current_user_id(authorization)
-    user = db.query(User).filter(User.id == user_id).first()
-    
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    
-    # Count analyses this month
-    first_of_month = datetime.utcnow().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    analyses_this_month = db.query(AnalysisHistory).filter(
-        AnalysisHistory.user_id == user.id,
-        AnalysisHistory.created_at >= first_of_month
-    ).count()
-    
-    tier_limit = TIER_LIMITS.get(user.subscription_tier, 3)
-    
-    return {
-        "tier": user.subscription_tier,
-        "analyses_this_month": analyses_this_month,
-        "analyses_limit": tier_limit,
-        "analyses_remaining": max(0, tier_limit - analyses_this_month) if tier_limit < 999999 else -1,
-        "has_subscription": user.stripe_subscription_id is not None,
-    }
+    try:
+        user_id = get_current_user_id(authorization)
+        user = db.query(User).filter(User.id == user_id).first()
+        
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        # Count analyses this month
+        first_of_month = datetime.utcnow().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        analyses_this_month = db.query(AnalysisHistory).filter(
+            AnalysisHistory.user_id == user.id,
+            AnalysisHistory.created_at >= first_of_month
+        ).count()
+        
+        tier = user.subscription_tier or "free"
+        tier_limit = TIER_LIMITS.get(tier, 3)
+        
+        return {
+            "tier": tier,
+            "analyses_this_month": analyses_this_month,
+            "analyses_limit": tier_limit,
+            "analyses_remaining": max(0, tier_limit - analyses_this_month) if tier_limit < 999999 else -1,
+            "has_subscription": bool(user.stripe_subscription_id),
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"❌ Subscription error: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Subscription error: {str(e)}")
 
 
 @app.get("/api/cities")
