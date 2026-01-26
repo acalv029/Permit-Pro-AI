@@ -1186,7 +1186,14 @@ async def create_checkout_session(
     db: Session = Depends(get_db)
 ):
     """Create Stripe checkout session for subscription"""
-    user_id = get_current_user_id(authorization)
+    # Parse token from authorization header
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
+    token = authorization[7:]  # Remove "Bearer " prefix
+    payload = decode_access_token(token)
+    user_id = int(payload.get("sub"))
+    
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -1295,7 +1302,14 @@ async def create_portal_session(
     db: Session = Depends(get_db)
 ):
     """Create Stripe billing portal session"""
-    user_id = get_current_user_id(authorization)
+    # Parse token from authorization header
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
+    token = authorization[7:]  # Remove "Bearer " prefix
+    payload = decode_access_token(token)
+    user_id = int(payload.get("sub"))
+    
     user = db.query(User).filter(User.id == user_id).first()
     
     if not user or not user.stripe_customer_id:
@@ -1319,7 +1333,14 @@ async def get_subscription(
 ):
     """Get user's subscription status"""
     try:
-        user_id = get_current_user_id(authorization)
+        # Parse token from authorization header
+        if not authorization or not authorization.startswith("Bearer "):
+            raise HTTPException(status_code=401, detail="Not authenticated")
+        
+        token = authorization[7:]  # Remove "Bearer " prefix
+        payload = decode_access_token(token)
+        user_id = int(payload.get("sub"))
+        
         user = db.query(User).filter(User.id == user_id).first()
         
         if not user:
