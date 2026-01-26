@@ -216,23 +216,30 @@ print("✅ Database tables initialized")
 
 # Migrate: Add Stripe columns if they don't exist
 def migrate_database():
-    from sqlalchemy import text
-    with engine.connect() as conn:
-        try:
-            # Check if stripe_customer_id column exists
-            conn.execute(text("SELECT stripe_customer_id FROM users LIMIT 1"))
-        except:
-            print("📦 Adding Stripe columns to users table...")
+    from sqlalchemy import text, inspect
+    inspector = inspect(engine)
+    columns = [col['name'] for col in inspector.get_columns('users')]
+    
+    if 'stripe_customer_id' not in columns:
+        print("📦 Adding Stripe columns to users table...")
+        for col_sql in [
+            "ALTER TABLE users ADD COLUMN IF NOT EXISTS stripe_customer_id VARCHAR(255)",
+            "ALTER TABLE users ADD COLUMN IF NOT EXISTS stripe_subscription_id VARCHAR(255)",
+            "ALTER TABLE users ADD COLUMN IF NOT EXISTS subscription_ends_at TIMESTAMP"
+        ]:
             try:
-                conn.execute(text("ALTER TABLE users ADD COLUMN stripe_customer_id VARCHAR(255)"))
-                conn.execute(text("ALTER TABLE users ADD COLUMN stripe_subscription_id VARCHAR(255)"))
-                conn.execute(text("ALTER TABLE users ADD COLUMN subscription_ends_at TIMESTAMP"))
-                conn.commit()
-                print("✅ Stripe columns added")
+                with engine.begin() as conn:
+                    conn.execute(text(col_sql))
             except Exception as e:
-                print(f"⚠️ Migration note: {e}")
+                print(f"⚠️ Column add note: {e}")
+        print("✅ Stripe columns migration complete")
+    else:
+        print("✅ Stripe columns already exist")
 
-migrate_database()
+try:
+    migrate_database()
+except Exception as e:
+    print(f"⚠️ Migration skipped: {e}")
 
 
 # ============================================================================
