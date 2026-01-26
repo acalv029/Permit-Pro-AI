@@ -78,6 +78,7 @@ from auth import (
     hash_password,
     verify_password,
     create_access_token,
+    decode_access_token,
     get_current_user_id,
     generate_reset_token,
     get_reset_token_expiry,
@@ -1186,22 +1187,22 @@ async def create_checkout_session(
     db: Session = Depends(get_db)
 ):
     """Create Stripe checkout session for subscription"""
-    # Parse token from authorization header
-    if not authorization or not authorization.startswith("Bearer "):
-        raise HTTPException(status_code=401, detail="Not authenticated")
-    
-    token = authorization[7:]  # Remove "Bearer " prefix
-    payload = decode_access_token(token)
-    user_id = int(payload.get("sub"))
-    
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    
-    if tier not in STRIPE_PRICES:
-        raise HTTPException(status_code=400, detail="Invalid tier")
-    
     try:
+        # Parse token from authorization header
+        if not authorization or not authorization.startswith("Bearer "):
+            raise HTTPException(status_code=401, detail="Not authenticated")
+        
+        token = authorization[7:]  # Remove "Bearer " prefix
+        payload = decode_access_token(token)
+        user_id = int(payload.get("sub"))
+        
+        user = db.query(User).filter(User.id == user_id).first()
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        if tier not in STRIPE_PRICES:
+            raise HTTPException(status_code=400, detail="Invalid tier")
+        
         # Create or get Stripe customer
         if not user.stripe_customer_id:
             customer = stripe.Customer.create(
