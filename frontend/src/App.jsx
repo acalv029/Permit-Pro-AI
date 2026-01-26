@@ -180,7 +180,7 @@ export default function App() {
   const canAnalyze = city && permitType && validFiles.length > 0 && totalSize <= 200 * 1024 * 1024 && agreedToTerms
   const getPermitTypes = () => {
     const basePermits = [{ value: 'building', label: 'Building' }, { value: 'electrical', label: 'Electrical' }, { value: 'plumbing', label: 'Plumbing' }, { value: 'mechanical', label: 'Mechanical/HVAC' }, { value: 'roofing', label: 'Roofing' }]
-    const waterfrontCities = ['Fort Lauderdale', 'Pompano Beach', 'Hollywood', 'Lauderdale-by-the-Sea', 'Boca Raton', 'Deerfield Beach']
+    const waterfrontCities = ['Fort Lauderdale', 'Pompano Beach', 'Hollywood', 'Lauderdale-by-the-Sea', 'Boca Raton', 'Deerfield Beach', 'Lighthouse Point', 'Delray Beach', 'Lake Worth', 'Boynton Beach', 'West Palm Beach']
     if (waterfrontCities.includes(city)) return [...basePermits, { value: 'dock', label: 'Dock/Marine Structure' }, { value: 'seawall', label: 'Seawall' }, { value: 'boat_lift', label: 'Boat Lift' }]
     return basePermits
   }
@@ -333,7 +333,7 @@ export default function App() {
           <div className="space-y-4">
             {[
               { q: "What is Flo Permit?", a: "Flo Permit is an AI-powered tool that analyzes your permit documents and tells you if your package is complete. Upload your files, and we'll identify missing documents, issues, and provide recommendations." },
-              { q: "Which cities do you support?", a: "We currently support Fort Lauderdale, Pompano Beach, Hollywood, Coral Springs, Boca Raton, Lauderdale-by-the-Sea, Deerfield Beach, and Pembroke Pines. More cities coming soon!" },
+              { q: "Which cities do you support?", a: "We support 18+ South Florida cities including Fort Lauderdale, Pompano Beach, Hollywood, Coral Springs, Boca Raton, Weston, Pembroke Pines, Davie, Plantation, Lighthouse Point, Delray Beach, West Palm Beach, and more!" },
               { q: "What permit types can you analyze?", a: "We support Building, Electrical, Plumbing, Mechanical/HVAC, Roofing permits. Waterfront cities also get Dock, Seawall, and Boat Lift permit analysis." },
               { q: "What file types can I upload?", a: "We accept PDF, PNG, JPG, and JPEG files. You can upload up to 50 files at once, with a maximum total size of 200MB." },
               { q: "Is my data secure?", a: "Yes! We use industry-standard encryption, secure password hashing, and your documents are processed securely. We never share your data with third parties." },

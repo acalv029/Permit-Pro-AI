@@ -1384,6 +1384,16 @@ async def get_cities():
         "Lauderdale-by-the-Sea": {"key": "lauderdale_by_the_sea", "county": "Broward"},
         "Deerfield Beach": {"key": "deerfield_beach", "county": "Broward"},
         "Pembroke Pines": {"key": "pembroke_pines", "county": "Broward"},
+        "Lighthouse Point": {"key": "lighthouse_point", "county": "Broward"},
+        "Weston": {"key": "weston", "county": "Broward"},
+        "Lake Worth": {"key": "lake_worth", "county": "Palm Beach"},
+        "Davie": {"key": "davie", "county": "Broward"},
+        "Plantation": {"key": "plantation", "county": "Broward"},
+        "Sunrise": {"key": "sunrise", "county": "Broward"},
+        "Miramar": {"key": "miramar", "county": "Broward"},
+        "Delray Beach": {"key": "delray_beach", "county": "Palm Beach"},
+        "Boynton Beach": {"key": "boynton_beach", "county": "Palm Beach"},
+        "West Palm Beach": {"key": "west_palm_beach", "county": "Palm Beach"},
     }
     return {"cities": cities}
 
@@ -1565,39 +1575,83 @@ async def analyze_permit_folder(
 def analyze_folder_with_claude(
     text: str, requirements: dict, api_key: str, file_count: int
 ) -> dict:
-    """Analyze with Claude"""
+    """Analyze with Claude - Enhanced version"""
     import anthropic
 
     client = anthropic.Anthropic(api_key=api_key)
     reqs = "\n".join([f"- {item}" for item in requirements.get("items", [])])
+    permit_name = requirements.get("name", "permit")
 
     if len(text) > 200000:
         text = text[:200000] + "\n[truncated]"
 
-    prompt = f"""Analyze this permit package ({file_count} files) for {requirements.get("name", "permit")}.
+    prompt = f"""You are an expert South Florida permit analyst with 20+ years of experience reviewing permit applications for Broward and Palm Beach counties. You have deep knowledge of Florida Building Code, local amendments, and what permit offices look for.
 
-REQUIREMENTS:
+TASK: Analyze this permit package ({file_count} files) for a {permit_name} application.
+
+REQUIRED DOCUMENTS FOR THIS PERMIT TYPE:
 {reqs}
 
-DOCUMENTS:
+UPLOADED DOCUMENTS CONTENT:
 {text}
 
-Analyze the documents and identify:
-1. Which required documents ARE present and correct
-2. Which required documents are MISSING
-3. Any critical issues or problems found
-4. Recommendations to improve the package
+ANALYSIS INSTRUCTIONS:
+1. **Document Identification**: Carefully identify EACH document in the package. Look for:
+   - Document titles, headers, stamps, signatures
+   - Professional seals (architect, engineer, contractor)
+   - Dates and revision numbers
+   - Drawing sheet numbers and titles
 
-Return JSON:
+2. **Completeness Check**: For EACH required document:
+   - Is it present? Look for explicit evidence.
+   - Is it properly signed/sealed where required?
+   - Is it dated within acceptable range (typically within 1 year)?
+   - Does it match the project scope?
+
+3. **Technical Review**: Check for common issues:
+   - Missing signatures or seals on drawings
+   - Incomplete NOC (Notice of Commencement)
+   - Energy calculations missing for HVAC/building permits
+   - Product approvals missing for roofing/windows
+   - Survey not signed/sealed
+   - Site plan missing setbacks or property lines
+   - Electrical load calculations missing
+   - Missing contractor license info
+
+4. **Scoring Guidelines**:
+   - 90-100: All documents present, properly executed, ready to submit
+   - 70-89: Minor issues, likely approved with small corrections
+   - 50-69: Significant gaps, will need resubmission
+   - Below 50: Major documents missing, not ready for submission
+
+5. **Be Specific**: Don't just say "plans missing" - specify WHICH plans (floor plan, elevation, electrical, etc.)
+
+Return your analysis as JSON:
 {{
-    "summary": "brief summary of the permit package status",
+    "summary": "2-3 sentence executive summary of package readiness",
     "overall_status": "READY|NEEDS_ATTENTION|INCOMPLETE",
-    "compliance_score": 0-100,
-    "documents_found": ["list of required documents that ARE present and appear correct - be specific about what you found"],
-    "missing_documents": ["list of required documents that are MISSING"],
-    "critical_issues": ["any problems or issues found in the submitted documents"],
-    "recommendations": ["specific recommendations to improve or complete the package"]
-}}"""
+    "compliance_score": <number 0-100>,
+    "documents_found": [
+        {{"name": "document name", "status": "complete|incomplete|needs_signature", "notes": "specific details about what was found"}}
+    ],
+    "missing_documents": [
+        {{"name": "document name", "importance": "critical|important|recommended", "notes": "why it's needed"}}
+    ],
+    "critical_issues": [
+        {{"issue": "description", "severity": "high|medium|low", "fix": "how to resolve"}}
+    ],
+    "recommendations": [
+        "Specific actionable recommendation 1",
+        "Specific actionable recommendation 2"
+    ],
+    "permit_office_tips": "Any specific tips for this permit type that will help at the permit office"
+}}
+
+IMPORTANT: 
+- Be thorough but practical - focus on what will actually cause permit delays
+- If you can't find evidence of a document, mark it as missing
+- South Florida permit offices are strict about signatures and seals
+- Energy code compliance is heavily scrutinized in Florida"""
 
     try:
         msg = client.messages.create(
@@ -1616,6 +1670,16 @@ Return JSON:
                 try:
                     parsed = json.loads(m.strip() if m.strip().startswith("{") else m)
                     if "summary" in parsed or "compliance_score" in parsed:
+                        # Ensure backwards compatibility - flatten documents_found if needed
+                        if parsed.get("documents_found") and isinstance(parsed["documents_found"][0], dict):
+                            parsed["documents_found_detailed"] = parsed["documents_found"]
+                            parsed["documents_found"] = [d.get("name", str(d)) for d in parsed["documents_found"]]
+                        if parsed.get("missing_documents") and isinstance(parsed["missing_documents"][0], dict):
+                            parsed["missing_documents_detailed"] = parsed["missing_documents"]
+                            parsed["missing_documents"] = [d.get("name", str(d)) for d in parsed["missing_documents"]]
+                        if parsed.get("critical_issues") and isinstance(parsed["critical_issues"][0], dict):
+                            parsed["critical_issues_detailed"] = parsed["critical_issues"]
+                            parsed["critical_issues"] = [d.get("issue", str(d)) for d in parsed["critical_issues"]]
                         return parsed
                 except:
                     continue
