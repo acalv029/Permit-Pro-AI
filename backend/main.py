@@ -40,6 +40,7 @@ import re
 import json
 import traceback
 import resend
+import stripe
 from datetime import datetime
 from typing import Optional, List
 from dotenv import load_dotenv
@@ -91,6 +92,21 @@ resend.api_key = os.getenv("RESEND_API_KEY")
 FRONTEND_URL = os.getenv("FRONTEND_URL", "https://flopermit.vercel.app")
 
 # ============================================================================
+# STRIPE CONFIGURATION
+# ============================================================================
+
+stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+STRIPE_PRICES = {
+    "pro": "price_1StYmAF8sW0Jp8OD2qc8v7d4",
+    "business": "price_1StYmUF8sW0Jp8ODrL2fEoQB",
+}
+TIER_LIMITS = {
+    "free": 3,
+    "pro": 50,
+    "business": 999999,  # unlimited
+}
+
+# ============================================================================
 # DATABASE SETUP
 # ============================================================================
 
@@ -131,6 +147,9 @@ class User(Base):
     phone = Column(String(50))
     is_active = Column(Boolean, default=True)
     subscription_tier = Column(String(50), default="free")
+    stripe_customer_id = Column(String(255), nullable=True)
+    stripe_subscription_id = Column(String(255), nullable=True)
+    subscription_ends_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -220,14 +239,13 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 class APILoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         import time
-
         start_time = time.time()
-
+        
         response = await call_next(request)
-
+        
         # Calculate response time
         response_time_ms = int((time.time() - start_time) * 1000)
-
+        
         # Skip logging for health checks and static files
         if request.url.path not in ["/health", "/", "/docs", "/openapi.json"]:
             try:
@@ -245,7 +263,7 @@ class APILoggingMiddleware(BaseHTTPMiddleware):
                 db.close()
             except Exception as e:
                 print(f"API logging error: {e}")
-
+        
         return response
 
 
@@ -336,7 +354,7 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
     """Send password reset email via Resend"""
     try:
         reset_link = f"{FRONTEND_URL}/reset-password?token={reset_token}"
-
+        
         params = {
             "from": "Flo Permit <noreply@flopermit.com>",
             "to": [email],
@@ -367,7 +385,7 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
             </div>
             """,
         }
-
+        
         resend.Emails.send(params)
         return True
     except Exception as e:
@@ -379,7 +397,7 @@ def send_welcome_email(email: str, full_name: str = None) -> bool:
     """Send welcome email to new users"""
     try:
         name = full_name or "there"
-
+        
         params = {
             "from": "Flo Permit <noreply@flopermit.com>",
             "to": [email],
@@ -418,7 +436,7 @@ def send_welcome_email(email: str, full_name: str = None) -> bool:
             </div>
             """,
         }
-
+        
         resend.Emails.send(params)
         return True
     except Exception as e:
@@ -450,7 +468,7 @@ def send_contact_email(name: str, email: str, subject: str, message: str) -> boo
             </div>
             """,
         }
-
+        
         resend.Emails.send(params)
         return True
     except Exception as e:
@@ -571,20 +589,19 @@ async def get_current_user(
 
 
 @app.post("/api/auth/forgot-password")
-async def forgot_password(
-    request_data: ForgotPasswordRequest, db: Session = Depends(get_db)
-):
+async def forgot_password(request_data: ForgotPasswordRequest, db: Session = Depends(get_db)):
     """Request a password reset email"""
     try:
         # Always return success to prevent email enumeration
         user = db.query(User).filter(User.email == request_data.email).first()
-
+        
         if user:
             # Invalidate any existing reset tokens for this user
             db.query(PasswordResetToken).filter(
-                PasswordResetToken.user_id == user.id, PasswordResetToken.used == False
+                PasswordResetToken.user_id == user.id,
+                PasswordResetToken.used == False
             ).update({"used": True})
-
+            
             # Generate new token
             token = generate_reset_token()
             reset_token = PasswordResetToken(
@@ -594,14 +611,14 @@ async def forgot_password(
             )
             db.add(reset_token)
             db.commit()
-
+            
             # Send email
             send_password_reset_email(user.email, token)
-
+        
         # Always return success (security: don't reveal if email exists)
         return {
             "success": True,
-            "message": "If an account exists with this email, you will receive a password reset link.",
+            "message": "If an account exists with this email, you will receive a password reset link."
         }
     except Exception as e:
         print(f"❌ Forgot password error: {str(e)}")
@@ -609,59 +626,48 @@ async def forgot_password(
         # Still return success for security
         return {
             "success": True,
-            "message": "If an account exists with this email, you will receive a password reset link.",
+            "message": "If an account exists with this email, you will receive a password reset link."
         }
 
 
 @app.post("/api/auth/reset-password")
-async def reset_password(
-    request_data: ResetPasswordRequest, db: Session = Depends(get_db)
-):
+async def reset_password(request_data: ResetPasswordRequest, db: Session = Depends(get_db)):
     """Reset password using token"""
     try:
         # Find the token
-        reset_token = (
-            db.query(PasswordResetToken)
-            .filter(
-                PasswordResetToken.token == request_data.token,
-                PasswordResetToken.used == False,
-            )
-            .first()
-        )
-
+        reset_token = db.query(PasswordResetToken).filter(
+            PasswordResetToken.token == request_data.token,
+            PasswordResetToken.used == False
+        ).first()
+        
         if not reset_token:
             raise HTTPException(status_code=400, detail="Invalid or expired reset link")
-
+        
         if is_token_expired(reset_token.expires_at):
             reset_token.used = True
             db.commit()
-            raise HTTPException(
-                status_code=400,
-                detail="Reset link has expired. Please request a new one.",
-            )
-
+            raise HTTPException(status_code=400, detail="Reset link has expired. Please request a new one.")
+        
         # Validate new password
         if len(request_data.new_password) < 8:
-            raise HTTPException(
-                status_code=400, detail="Password must be at least 8 characters"
-            )
-
+            raise HTTPException(status_code=400, detail="Password must be at least 8 characters")
+        
         # Update password
         user = db.query(User).filter(User.id == reset_token.user_id).first()
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
-
+        
         user.hashed_password = hash_password(request_data.new_password)
         user.updated_at = datetime.utcnow()
-
+        
         # Mark token as used
         reset_token.used = True
-
+        
         db.commit()
-
+        
         return {
             "success": True,
-            "message": "Password has been reset successfully. You can now log in with your new password.",
+            "message": "Password has been reset successfully. You can now log in with your new password."
         }
     except HTTPException:
         raise
@@ -979,94 +985,63 @@ def require_admin(user_id: int, db: Session):
 
 @app.get("/api/admin/stats")
 async def get_admin_stats(
-    authorization: str = Header(None), db: Session = Depends(get_db)
+    authorization: str = Header(None),
+    db: Session = Depends(get_db)
 ):
     """Get admin dashboard statistics"""
     user_id = get_current_user_id(authorization)
     require_admin(user_id, db)
-
+    
     from sqlalchemy import func
-
+    
     # Total users
     total_users = db.query(User).count()
-
+    
     # Users this month
-    first_of_month = datetime.utcnow().replace(
-        day=1, hour=0, minute=0, second=0, microsecond=0
-    )
-    new_users_this_month = (
-        db.query(User).filter(User.created_at >= first_of_month).count()
-    )
-
+    first_of_month = datetime.utcnow().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    new_users_this_month = db.query(User).filter(User.created_at >= first_of_month).count()
+    
     # Total analyses
     total_analyses = db.query(AnalysisHistory).count()
-
+    
     # Analyses this month
-    analyses_this_month = (
-        db.query(AnalysisHistory)
-        .filter(AnalysisHistory.created_at >= first_of_month)
-        .count()
-    )
-
+    analyses_this_month = db.query(AnalysisHistory).filter(AnalysisHistory.created_at >= first_of_month).count()
+    
     # Average compliance score
     avg_score = db.query(func.avg(AnalysisHistory.compliance_score)).scalar() or 0
-
+    
     # API requests today
     today_start = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
-    api_requests_today = (
-        db.query(APILog).filter(APILog.created_at >= today_start).count()
-    )
-
+    api_requests_today = db.query(APILog).filter(APILog.created_at >= today_start).count()
+    
     # API requests this month
-    api_requests_month = (
-        db.query(APILog).filter(APILog.created_at >= first_of_month).count()
-    )
-
+    api_requests_month = db.query(APILog).filter(APILog.created_at >= first_of_month).count()
+    
     # Most popular cities
-    popular_cities = (
-        db.query(AnalysisHistory.city, func.count(AnalysisHistory.id).label("count"))
-        .group_by(AnalysisHistory.city)
-        .order_by(func.count(AnalysisHistory.id).desc())
-        .limit(5)
-        .all()
-    )
-
+    popular_cities = db.query(
+        AnalysisHistory.city,
+        func.count(AnalysisHistory.id).label('count')
+    ).group_by(AnalysisHistory.city).order_by(func.count(AnalysisHistory.id).desc()).limit(5).all()
+    
     # Most popular permit types
-    popular_permits = (
-        db.query(
-            AnalysisHistory.permit_type, func.count(AnalysisHistory.id).label("count")
-        )
-        .group_by(AnalysisHistory.permit_type)
-        .order_by(func.count(AnalysisHistory.id).desc())
-        .limit(5)
-        .all()
-    )
-
+    popular_permits = db.query(
+        AnalysisHistory.permit_type,
+        func.count(AnalysisHistory.id).label('count')
+    ).group_by(AnalysisHistory.permit_type).order_by(func.count(AnalysisHistory.id).desc()).limit(5).all()
+    
     # Recent users
     recent_users = db.query(User).order_by(User.created_at.desc()).limit(10).all()
-
+    
     # Recent analyses
-    recent_analyses = (
-        db.query(AnalysisHistory)
-        .order_by(AnalysisHistory.created_at.desc())
-        .limit(10)
-        .all()
-    )
-
+    recent_analyses = db.query(AnalysisHistory).order_by(AnalysisHistory.created_at.desc()).limit(10).all()
+    
     # API endpoint stats
-    endpoint_stats = (
-        db.query(
-            APILog.endpoint,
-            func.count(APILog.id).label("count"),
-            func.avg(APILog.response_time_ms).label("avg_time"),
-        )
-        .filter(APILog.created_at >= first_of_month)
-        .group_by(APILog.endpoint)
-        .order_by(func.count(APILog.id).desc())
-        .limit(10)
-        .all()
-    )
-
+    endpoint_stats = db.query(
+        APILog.endpoint,
+        func.count(APILog.id).label('count'),
+        func.avg(APILog.response_time_ms).label('avg_time')
+    ).filter(APILog.created_at >= first_of_month).group_by(APILog.endpoint).order_by(func.count(APILog.id).desc()).limit(10).all()
+    
     return {
         "overview": {
             "total_users": total_users,
@@ -1078,9 +1053,7 @@ async def get_admin_stats(
             "api_requests_this_month": api_requests_month,
         },
         "popular_cities": [{"city": c, "count": cnt} for c, cnt in popular_cities],
-        "popular_permits": [
-            {"permit_type": p, "count": cnt} for p, cnt in popular_permits
-        ],
+        "popular_permits": [{"permit_type": p, "count": cnt} for p, cnt in popular_permits],
         "recent_users": [
             {
                 "id": u.id,
@@ -1129,18 +1102,212 @@ async def submit_contact_form(form_data: ContactForm):
             name=form_data.name,
             email=form_data.email,
             subject=form_data.subject,
-            message=form_data.message,
+            message=form_data.message
         )
         if success:
-            return {
-                "success": True,
-                "message": "Message sent! We'll get back to you soon.",
-            }
+            return {"success": True, "message": "Message sent! We'll get back to you soon."}
         else:
             raise HTTPException(status_code=500, detail="Failed to send message")
     except Exception as e:
         print(f"❌ Contact form error: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to send message")
+
+
+# ============================================================================
+# STRIPE PAYMENTS
+# ============================================================================
+
+
+@app.get("/api/pricing")
+async def get_pricing():
+    """Get pricing tiers"""
+    return {
+        "tiers": [
+            {
+                "id": "free",
+                "name": "Free",
+                "price": 0,
+                "period": "month",
+                "analyses": 3,
+                "features": ["3 analyses/month", "Basic AI analysis", "Email support"],
+            },
+            {
+                "id": "pro",
+                "name": "Pro",
+                "price": 29,
+                "period": "month",
+                "analyses": 50,
+                "features": ["50 analyses/month", "Priority AI analysis", "Priority support", "Analysis history"],
+                "popular": True,
+            },
+            {
+                "id": "business",
+                "name": "Business",
+                "price": 99,
+                "period": "month",
+                "analyses": -1,
+                "features": ["Unlimited analyses", "Priority AI analysis", "Dedicated support", "Analysis history", "Team features (coming soon)"],
+            },
+        ]
+    }
+
+
+@app.post("/api/stripe/create-checkout-session")
+async def create_checkout_session(
+    tier: str = Form(...),
+    authorization: str = Header(None),
+    db: Session = Depends(get_db)
+):
+    """Create Stripe checkout session for subscription"""
+    user_id = get_current_user_id(authorization)
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    if tier not in STRIPE_PRICES:
+        raise HTTPException(status_code=400, detail="Invalid tier")
+    
+    try:
+        # Create or get Stripe customer
+        if not user.stripe_customer_id:
+            customer = stripe.Customer.create(
+                email=user.email,
+                name=user.full_name,
+                metadata={"user_id": str(user.id)}
+            )
+            user.stripe_customer_id = customer.id
+            db.commit()
+        
+        # Create checkout session
+        session = stripe.checkout.Session.create(
+            customer=user.stripe_customer_id,
+            payment_method_types=["card"],
+            line_items=[{
+                "price": STRIPE_PRICES[tier],
+                "quantity": 1,
+            }],
+            mode="subscription",
+            success_url=f"{FRONTEND_URL}?payment=success&tier={tier}",
+            cancel_url=f"{FRONTEND_URL}?payment=cancelled",
+            metadata={
+                "user_id": str(user.id),
+                "tier": tier,
+            }
+        )
+        
+        return {"checkout_url": session.url, "session_id": session.id}
+    
+    except stripe.error.StripeError as e:
+        print(f"❌ Stripe error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Payment error")
+
+
+@app.post("/api/stripe/webhook")
+async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
+    """Handle Stripe webhooks"""
+    payload = await request.body()
+    sig_header = request.headers.get("stripe-signature")
+    webhook_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
+    
+    try:
+        if webhook_secret:
+            event = stripe.Webhook.construct_event(payload, sig_header, webhook_secret)
+        else:
+            event = json.loads(payload)
+    except Exception as e:
+        print(f"❌ Webhook error: {str(e)}")
+        raise HTTPException(status_code=400, detail="Webhook error")
+    
+    event_type = event.get("type", "")
+    data = event.get("data", {}).get("object", {})
+    
+    if event_type == "checkout.session.completed":
+        # Payment successful
+        customer_id = data.get("customer")
+        subscription_id = data.get("subscription")
+        tier = data.get("metadata", {}).get("tier", "pro")
+        
+        user = db.query(User).filter(User.stripe_customer_id == customer_id).first()
+        if user:
+            user.subscription_tier = tier
+            user.stripe_subscription_id = subscription_id
+            db.commit()
+            print(f"✅ User {user.email} upgraded to {tier}")
+    
+    elif event_type == "customer.subscription.deleted":
+        # Subscription cancelled
+        customer_id = data.get("customer")
+        user = db.query(User).filter(User.stripe_customer_id == customer_id).first()
+        if user:
+            user.subscription_tier = "free"
+            user.stripe_subscription_id = None
+            db.commit()
+            print(f"✅ User {user.email} downgraded to free")
+    
+    elif event_type == "customer.subscription.updated":
+        # Subscription updated
+        customer_id = data.get("customer")
+        status = data.get("status")
+        user = db.query(User).filter(User.stripe_customer_id == customer_id).first()
+        if user and status == "canceled":
+            user.subscription_tier = "free"
+            user.stripe_subscription_id = None
+            db.commit()
+    
+    return {"status": "success"}
+
+
+@app.post("/api/stripe/create-portal-session")
+async def create_portal_session(
+    authorization: str = Header(None),
+    db: Session = Depends(get_db)
+):
+    """Create Stripe billing portal session"""
+    user_id = get_current_user_id(authorization)
+    user = db.query(User).filter(User.id == user_id).first()
+    
+    if not user or not user.stripe_customer_id:
+        raise HTTPException(status_code=400, detail="No billing account found")
+    
+    try:
+        session = stripe.billing_portal.Session.create(
+            customer=user.stripe_customer_id,
+            return_url=f"{FRONTEND_URL}?page=profile",
+        )
+        return {"portal_url": session.url}
+    except stripe.error.StripeError as e:
+        print(f"❌ Portal error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Could not create portal session")
+
+
+@app.get("/api/subscription")
+async def get_subscription(
+    authorization: str = Header(None),
+    db: Session = Depends(get_db)
+):
+    """Get user's subscription status"""
+    user_id = get_current_user_id(authorization)
+    user = db.query(User).filter(User.id == user_id).first()
+    
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Count analyses this month
+    first_of_month = datetime.utcnow().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    analyses_this_month = db.query(AnalysisHistory).filter(
+        AnalysisHistory.user_id == user.id,
+        AnalysisHistory.created_at >= first_of_month
+    ).count()
+    
+    tier_limit = TIER_LIMITS.get(user.subscription_tier, 3)
+    
+    return {
+        "tier": user.subscription_tier,
+        "analyses_this_month": analyses_this_month,
+        "analyses_limit": tier_limit,
+        "analyses_remaining": max(0, tier_limit - analyses_this_month) if tier_limit < 999999 else -1,
+        "has_subscription": user.stripe_subscription_id is not None,
+    }
 
 
 @app.get("/api/cities")
@@ -1207,14 +1374,31 @@ async def analyze_permit_folder(
 ):
     """Analyze permit folder"""
     user_id = None
+    user = None
     if authorization and authorization.startswith("Bearer "):
         try:
             from auth import decode_access_token
 
             payload = decode_access_token(authorization[7:])
             user_id = int(payload.get("sub"))
+            user = db.query(User).filter(User.id == user_id).first()
         except:
             pass
+
+    # Check usage limits for authenticated users
+    if user:
+        first_of_month = datetime.utcnow().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        analyses_this_month = db.query(AnalysisHistory).filter(
+            AnalysisHistory.user_id == user.id,
+            AnalysisHistory.created_at >= first_of_month
+        ).count()
+        
+        tier_limit = TIER_LIMITS.get(user.subscription_tier, 3)
+        if analyses_this_month >= tier_limit:
+            raise HTTPException(
+                status_code=403, 
+                detail=f"Monthly limit reached ({tier_limit} analyses). Please upgrade your plan."
+            )
 
     if len(files) > MAX_FILES_PER_UPLOAD:
         raise HTTPException(status_code=400, detail=f"Max {MAX_FILES_PER_UPLOAD} files")
@@ -1393,4 +1577,4 @@ async def startup():
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
+    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000))
