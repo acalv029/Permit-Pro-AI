@@ -215,18 +215,20 @@ class APILog(Base):
 Base.metadata.create_all(bind=engine)
 print("✅ Database tables initialized")
 
+
 # Migrate: Add Stripe columns if they don't exist
 def migrate_database():
     from sqlalchemy import text, inspect
+
     inspector = inspect(engine)
-    columns = [col['name'] for col in inspector.get_columns('users')]
-    
-    if 'stripe_customer_id' not in columns:
+    columns = [col["name"] for col in inspector.get_columns("users")]
+
+    if "stripe_customer_id" not in columns:
         print("📦 Adding Stripe columns to users table...")
         for col_sql in [
             "ALTER TABLE users ADD COLUMN IF NOT EXISTS stripe_customer_id VARCHAR(255)",
             "ALTER TABLE users ADD COLUMN IF NOT EXISTS stripe_subscription_id VARCHAR(255)",
-            "ALTER TABLE users ADD COLUMN IF NOT EXISTS subscription_ends_at TIMESTAMP"
+            "ALTER TABLE users ADD COLUMN IF NOT EXISTS subscription_ends_at TIMESTAMP",
         ]:
             try:
                 with engine.begin() as conn:
@@ -236,6 +238,7 @@ def migrate_database():
         print("✅ Stripe columns migration complete")
     else:
         print("✅ Stripe columns already exist")
+
 
 try:
     migrate_database()
@@ -267,13 +270,14 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 class APILoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         import time
+
         start_time = time.time()
-        
+
         response = await call_next(request)
-        
+
         # Calculate response time
         response_time_ms = int((time.time() - start_time) * 1000)
-        
+
         # Skip logging for health checks and static files
         if request.url.path not in ["/health", "/", "/docs", "/openapi.json"]:
             try:
@@ -291,7 +295,7 @@ class APILoggingMiddleware(BaseHTTPMiddleware):
                 db.close()
             except Exception as e:
                 print(f"API logging error: {e}")
-        
+
         return response
 
 
@@ -382,7 +386,7 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
     """Send password reset email via Resend"""
     try:
         reset_link = f"{FRONTEND_URL}/reset-password?token={reset_token}"
-        
+
         params = {
             "from": "Flo Permit <noreply@flopermit.com>",
             "to": [email],
@@ -413,7 +417,7 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
             </div>
             """,
         }
-        
+
         resend.Emails.send(params)
         return True
     except Exception as e:
@@ -425,7 +429,7 @@ def send_welcome_email(email: str, full_name: str = None) -> bool:
     """Send welcome email to new users"""
     try:
         name = full_name or "there"
-        
+
         params = {
             "from": "Flo Permit <noreply@flopermit.com>",
             "to": [email],
@@ -464,7 +468,7 @@ def send_welcome_email(email: str, full_name: str = None) -> bool:
             </div>
             """,
         }
-        
+
         resend.Emails.send(params)
         return True
     except Exception as e:
@@ -496,7 +500,7 @@ def send_contact_email(name: str, email: str, subject: str, message: str) -> boo
             </div>
             """,
         }
-        
+
         resend.Emails.send(params)
         return True
     except Exception as e:
@@ -617,19 +621,20 @@ async def get_current_user(
 
 
 @app.post("/api/auth/forgot-password")
-async def forgot_password(request_data: ForgotPasswordRequest, db: Session = Depends(get_db)):
+async def forgot_password(
+    request_data: ForgotPasswordRequest, db: Session = Depends(get_db)
+):
     """Request a password reset email"""
     try:
         # Always return success to prevent email enumeration
         user = db.query(User).filter(User.email == request_data.email).first()
-        
+
         if user:
             # Invalidate any existing reset tokens for this user
             db.query(PasswordResetToken).filter(
-                PasswordResetToken.user_id == user.id,
-                PasswordResetToken.used == False
+                PasswordResetToken.user_id == user.id, PasswordResetToken.used == False
             ).update({"used": True})
-            
+
             # Generate new token
             token = generate_reset_token()
             reset_token = PasswordResetToken(
@@ -639,14 +644,14 @@ async def forgot_password(request_data: ForgotPasswordRequest, db: Session = Dep
             )
             db.add(reset_token)
             db.commit()
-            
+
             # Send email
             send_password_reset_email(user.email, token)
-        
+
         # Always return success (security: don't reveal if email exists)
         return {
             "success": True,
-            "message": "If an account exists with this email, you will receive a password reset link."
+            "message": "If an account exists with this email, you will receive a password reset link.",
         }
     except Exception as e:
         print(f"❌ Forgot password error: {str(e)}")
@@ -654,48 +659,59 @@ async def forgot_password(request_data: ForgotPasswordRequest, db: Session = Dep
         # Still return success for security
         return {
             "success": True,
-            "message": "If an account exists with this email, you will receive a password reset link."
+            "message": "If an account exists with this email, you will receive a password reset link.",
         }
 
 
 @app.post("/api/auth/reset-password")
-async def reset_password(request_data: ResetPasswordRequest, db: Session = Depends(get_db)):
+async def reset_password(
+    request_data: ResetPasswordRequest, db: Session = Depends(get_db)
+):
     """Reset password using token"""
     try:
         # Find the token
-        reset_token = db.query(PasswordResetToken).filter(
-            PasswordResetToken.token == request_data.token,
-            PasswordResetToken.used == False
-        ).first()
-        
+        reset_token = (
+            db.query(PasswordResetToken)
+            .filter(
+                PasswordResetToken.token == request_data.token,
+                PasswordResetToken.used == False,
+            )
+            .first()
+        )
+
         if not reset_token:
             raise HTTPException(status_code=400, detail="Invalid or expired reset link")
-        
+
         if is_token_expired(reset_token.expires_at):
             reset_token.used = True
             db.commit()
-            raise HTTPException(status_code=400, detail="Reset link has expired. Please request a new one.")
-        
+            raise HTTPException(
+                status_code=400,
+                detail="Reset link has expired. Please request a new one.",
+            )
+
         # Validate new password
         if len(request_data.new_password) < 8:
-            raise HTTPException(status_code=400, detail="Password must be at least 8 characters")
-        
+            raise HTTPException(
+                status_code=400, detail="Password must be at least 8 characters"
+            )
+
         # Update password
         user = db.query(User).filter(User.id == reset_token.user_id).first()
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
-        
+
         user.hashed_password = hash_password(request_data.new_password)
         user.updated_at = datetime.utcnow()
-        
+
         # Mark token as used
         reset_token.used = True
-        
+
         db.commit()
-        
+
         return {
             "success": True,
-            "message": "Password has been reset successfully. You can now log in with your new password."
+            "message": "Password has been reset successfully. You can now log in with your new password.",
         }
     except HTTPException:
         raise
@@ -1013,63 +1029,94 @@ def require_admin(user_id: int, db: Session):
 
 @app.get("/api/admin/stats")
 async def get_admin_stats(
-    authorization: str = Header(None),
-    db: Session = Depends(get_db)
+    authorization: str = Header(None), db: Session = Depends(get_db)
 ):
     """Get admin dashboard statistics"""
     user_id = get_current_user_id(authorization)
     require_admin(user_id, db)
-    
+
     from sqlalchemy import func
-    
+
     # Total users
     total_users = db.query(User).count()
-    
+
     # Users this month
-    first_of_month = datetime.utcnow().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    new_users_this_month = db.query(User).filter(User.created_at >= first_of_month).count()
-    
+    first_of_month = datetime.utcnow().replace(
+        day=1, hour=0, minute=0, second=0, microsecond=0
+    )
+    new_users_this_month = (
+        db.query(User).filter(User.created_at >= first_of_month).count()
+    )
+
     # Total analyses
     total_analyses = db.query(AnalysisHistory).count()
-    
+
     # Analyses this month
-    analyses_this_month = db.query(AnalysisHistory).filter(AnalysisHistory.created_at >= first_of_month).count()
-    
+    analyses_this_month = (
+        db.query(AnalysisHistory)
+        .filter(AnalysisHistory.created_at >= first_of_month)
+        .count()
+    )
+
     # Average compliance score
     avg_score = db.query(func.avg(AnalysisHistory.compliance_score)).scalar() or 0
-    
+
     # API requests today
     today_start = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
-    api_requests_today = db.query(APILog).filter(APILog.created_at >= today_start).count()
-    
+    api_requests_today = (
+        db.query(APILog).filter(APILog.created_at >= today_start).count()
+    )
+
     # API requests this month
-    api_requests_month = db.query(APILog).filter(APILog.created_at >= first_of_month).count()
-    
+    api_requests_month = (
+        db.query(APILog).filter(APILog.created_at >= first_of_month).count()
+    )
+
     # Most popular cities
-    popular_cities = db.query(
-        AnalysisHistory.city,
-        func.count(AnalysisHistory.id).label('count')
-    ).group_by(AnalysisHistory.city).order_by(func.count(AnalysisHistory.id).desc()).limit(5).all()
-    
+    popular_cities = (
+        db.query(AnalysisHistory.city, func.count(AnalysisHistory.id).label("count"))
+        .group_by(AnalysisHistory.city)
+        .order_by(func.count(AnalysisHistory.id).desc())
+        .limit(5)
+        .all()
+    )
+
     # Most popular permit types
-    popular_permits = db.query(
-        AnalysisHistory.permit_type,
-        func.count(AnalysisHistory.id).label('count')
-    ).group_by(AnalysisHistory.permit_type).order_by(func.count(AnalysisHistory.id).desc()).limit(5).all()
-    
+    popular_permits = (
+        db.query(
+            AnalysisHistory.permit_type, func.count(AnalysisHistory.id).label("count")
+        )
+        .group_by(AnalysisHistory.permit_type)
+        .order_by(func.count(AnalysisHistory.id).desc())
+        .limit(5)
+        .all()
+    )
+
     # Recent users
     recent_users = db.query(User).order_by(User.created_at.desc()).limit(10).all()
-    
+
     # Recent analyses
-    recent_analyses = db.query(AnalysisHistory).order_by(AnalysisHistory.created_at.desc()).limit(10).all()
-    
+    recent_analyses = (
+        db.query(AnalysisHistory)
+        .order_by(AnalysisHistory.created_at.desc())
+        .limit(10)
+        .all()
+    )
+
     # API endpoint stats
-    endpoint_stats = db.query(
-        APILog.endpoint,
-        func.count(APILog.id).label('count'),
-        func.avg(APILog.response_time_ms).label('avg_time')
-    ).filter(APILog.created_at >= first_of_month).group_by(APILog.endpoint).order_by(func.count(APILog.id).desc()).limit(10).all()
-    
+    endpoint_stats = (
+        db.query(
+            APILog.endpoint,
+            func.count(APILog.id).label("count"),
+            func.avg(APILog.response_time_ms).label("avg_time"),
+        )
+        .filter(APILog.created_at >= first_of_month)
+        .group_by(APILog.endpoint)
+        .order_by(func.count(APILog.id).desc())
+        .limit(10)
+        .all()
+    )
+
     return {
         "overview": {
             "total_users": total_users,
@@ -1081,7 +1128,9 @@ async def get_admin_stats(
             "api_requests_this_month": api_requests_month,
         },
         "popular_cities": [{"city": c, "count": cnt} for c, cnt in popular_cities],
-        "popular_permits": [{"permit_type": p, "count": cnt} for p, cnt in popular_permits],
+        "popular_permits": [
+            {"permit_type": p, "count": cnt} for p, cnt in popular_permits
+        ],
         "recent_users": [
             {
                 "id": u.id,
@@ -1130,10 +1179,13 @@ async def submit_contact_form(form_data: ContactForm):
             name=form_data.name,
             email=form_data.email,
             subject=form_data.subject,
-            message=form_data.message
+            message=form_data.message,
         )
         if success:
-            return {"success": True, "message": "Message sent! We'll get back to you soon."}
+            return {
+                "success": True,
+                "message": "Message sent! We'll get back to you soon.",
+            }
         else:
             raise HTTPException(status_code=500, detail="Failed to send message")
     except Exception as e:
@@ -1165,7 +1217,12 @@ async def get_pricing():
                 "price": 29,
                 "period": "month",
                 "analyses": 50,
-                "features": ["50 analyses/month", "Priority AI analysis", "Priority support", "Analysis history"],
+                "features": [
+                    "50 analyses/month",
+                    "Priority AI analysis",
+                    "Priority support",
+                    "Analysis history",
+                ],
                 "popular": True,
             },
             {
@@ -1174,7 +1231,13 @@ async def get_pricing():
                 "price": 99,
                 "period": "month",
                 "analyses": -1,
-                "features": ["Unlimited analyses", "Priority AI analysis", "Dedicated support", "Analysis history", "Team features (coming soon)"],
+                "features": [
+                    "Unlimited analyses",
+                    "Priority AI analysis",
+                    "Dedicated support",
+                    "Analysis history",
+                    "Team features (coming soon)",
+                ],
             },
         ]
     }
@@ -1184,60 +1247,63 @@ async def get_pricing():
 async def create_checkout_session(
     tier: str = Form(...),
     authorization: str = Header(None),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     """Create Stripe checkout session for subscription"""
     try:
         # Parse token from authorization header
         if not authorization or not authorization.startswith("Bearer "):
             raise HTTPException(status_code=401, detail="Not authenticated")
-        
+
         token = authorization[7:]  # Remove "Bearer " prefix
         payload = decode_access_token(token)
         user_id = int(payload.get("sub"))
-        
+
         user = db.query(User).filter(User.id == user_id).first()
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
-        
+
         if tier not in STRIPE_PRICES:
             raise HTTPException(status_code=400, detail="Invalid tier")
-        
+
         # Create or get Stripe customer
         if not user.stripe_customer_id:
             customer = stripe.Customer.create(
                 email=user.email,
                 name=user.full_name,
-                metadata={"user_id": str(user.id)}
+                metadata={"user_id": str(user.id)},
             )
             user.stripe_customer_id = customer.id
             db.commit()
-        
+
         # Create checkout session
         session = stripe.checkout.Session.create(
             customer=user.stripe_customer_id,
             payment_method_types=["card"],
-            line_items=[{
-                "price": STRIPE_PRICES[tier],
-                "quantity": 1,
-            }],
+            line_items=[
+                {
+                    "price": STRIPE_PRICES[tier],
+                    "quantity": 1,
+                }
+            ],
             mode="subscription",
             success_url=f"{FRONTEND_URL}?payment=success&tier={tier}",
             cancel_url=f"{FRONTEND_URL}?payment=cancelled",
             metadata={
                 "user_id": str(user.id),
                 "tier": tier,
-            }
+            },
         )
-        
+
         return {"checkout_url": session.url, "session_id": session.id}
-    
+
     except stripe.error.StripeError as e:
         print(f"❌ Stripe error: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Payment error: {str(e)}")
     except Exception as e:
         print(f"❌ Checkout error: {str(e)}")
         import traceback
+
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Checkout error: {str(e)}")
 
@@ -1248,7 +1314,7 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
     payload = await request.body()
     sig_header = request.headers.get("stripe-signature")
     webhook_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
-    
+
     try:
         if webhook_secret:
             event = stripe.Webhook.construct_event(payload, sig_header, webhook_secret)
@@ -1257,23 +1323,23 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
     except Exception as e:
         print(f"❌ Webhook error: {str(e)}")
         raise HTTPException(status_code=400, detail="Webhook error")
-    
+
     event_type = event.get("type", "")
     data = event.get("data", {}).get("object", {})
-    
+
     if event_type == "checkout.session.completed":
         # Payment successful
         customer_id = data.get("customer")
         subscription_id = data.get("subscription")
         tier = data.get("metadata", {}).get("tier", "pro")
-        
+
         user = db.query(User).filter(User.stripe_customer_id == customer_id).first()
         if user:
             user.subscription_tier = tier
             user.stripe_subscription_id = subscription_id
             db.commit()
             print(f"✅ User {user.email} upgraded to {tier}")
-    
+
     elif event_type == "customer.subscription.deleted":
         # Subscription cancelled
         customer_id = data.get("customer")
@@ -1283,7 +1349,7 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
             user.stripe_subscription_id = None
             db.commit()
             print(f"✅ User {user.email} downgraded to free")
-    
+
     elif event_type == "customer.subscription.updated":
         # Subscription updated
         customer_id = data.get("customer")
@@ -1293,29 +1359,28 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
             user.subscription_tier = "free"
             user.stripe_subscription_id = None
             db.commit()
-    
+
     return {"status": "success"}
 
 
 @app.post("/api/stripe/create-portal-session")
 async def create_portal_session(
-    authorization: str = Header(None),
-    db: Session = Depends(get_db)
+    authorization: str = Header(None), db: Session = Depends(get_db)
 ):
     """Create Stripe billing portal session"""
     # Parse token from authorization header
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Not authenticated")
-    
+
     token = authorization[7:]  # Remove "Bearer " prefix
     payload = decode_access_token(token)
     user_id = int(payload.get("sub"))
-    
+
     user = db.query(User).filter(User.id == user_id).first()
-    
+
     if not user or not user.stripe_customer_id:
         raise HTTPException(status_code=400, detail="No billing account found")
-    
+
     try:
         session = stripe.billing_portal.Session.create(
             customer=user.stripe_customer_id,
@@ -1329,39 +1394,46 @@ async def create_portal_session(
 
 @app.get("/api/subscription")
 async def get_subscription(
-    authorization: str = Header(None),
-    db: Session = Depends(get_db)
+    authorization: str = Header(None), db: Session = Depends(get_db)
 ):
     """Get user's subscription status"""
     try:
         # Parse token from authorization header
         if not authorization or not authorization.startswith("Bearer "):
             raise HTTPException(status_code=401, detail="Not authenticated")
-        
+
         token = authorization[7:]  # Remove "Bearer " prefix
         payload = decode_access_token(token)
         user_id = int(payload.get("sub"))
-        
+
         user = db.query(User).filter(User.id == user_id).first()
-        
+
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
-        
+
         # Count analyses this month
-        first_of_month = datetime.utcnow().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-        analyses_this_month = db.query(AnalysisHistory).filter(
-            AnalysisHistory.user_id == user.id,
-            AnalysisHistory.created_at >= first_of_month
-        ).count()
-        
+        first_of_month = datetime.utcnow().replace(
+            day=1, hour=0, minute=0, second=0, microsecond=0
+        )
+        analyses_this_month = (
+            db.query(AnalysisHistory)
+            .filter(
+                AnalysisHistory.user_id == user.id,
+                AnalysisHistory.created_at >= first_of_month,
+            )
+            .count()
+        )
+
         tier = user.subscription_tier or "free"
         tier_limit = TIER_LIMITS.get(tier, 3)
-        
+
         return {
             "tier": tier,
             "analyses_this_month": analyses_this_month,
             "analyses_limit": tier_limit,
-            "analyses_remaining": max(0, tier_limit - analyses_this_month) if tier_limit < 999999 else -1,
+            "analyses_remaining": max(0, tier_limit - analyses_this_month)
+            if tier_limit < 999999
+            else -1,
             "has_subscription": bool(user.stripe_subscription_id),
         }
     except HTTPException:
@@ -1369,6 +1441,7 @@ async def get_subscription(
     except Exception as e:
         print(f"❌ Subscription error: {str(e)}")
         import traceback
+
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Subscription error: {str(e)}")
 
@@ -1460,17 +1533,23 @@ async def analyze_permit_folder(
 
     # Check usage limits for authenticated users
     if user:
-        first_of_month = datetime.utcnow().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-        analyses_this_month = db.query(AnalysisHistory).filter(
-            AnalysisHistory.user_id == user.id,
-            AnalysisHistory.created_at >= first_of_month
-        ).count()
-        
+        first_of_month = datetime.utcnow().replace(
+            day=1, hour=0, minute=0, second=0, microsecond=0
+        )
+        analyses_this_month = (
+            db.query(AnalysisHistory)
+            .filter(
+                AnalysisHistory.user_id == user.id,
+                AnalysisHistory.created_at >= first_of_month,
+            )
+            .count()
+        )
+
         tier_limit = TIER_LIMITS.get(user.subscription_tier, 3)
         if analyses_this_month >= tier_limit:
             raise HTTPException(
-                status_code=403, 
-                detail=f"Monthly limit reached ({tier_limit} analyses). Please upgrade your plan."
+                status_code=403,
+                detail=f"Monthly limit reached ({tier_limit} analyses). Please upgrade your plan.",
             )
 
     if len(files) > MAX_FILES_PER_UPLOAD:
@@ -1575,67 +1654,779 @@ async def analyze_permit_folder(
 def analyze_folder_with_claude(
     text: str, requirements: dict, api_key: str, file_count: int
 ) -> dict:
-    """Analyze with Claude - Enhanced version"""
+    """Analyze with Claude - Enhanced version with city-specific knowledge"""
     import anthropic
 
     client = anthropic.Anthropic(api_key=api_key)
     reqs = "\n".join([f"- {item}" for item in requirements.get("items", [])])
     permit_name = requirements.get("name", "permit")
+    city_name = requirements.get("city", "South Florida")
+    city_key = requirements.get("city_key", "")
+    gotchas = requirements.get("gotchas", [])
+    tips = requirements.get("tips", [])
+    city_info = requirements.get("city_info", {})
 
     if len(text) > 200000:
         text = text[:200000] + "\n[truncated]"
 
-    prompt = f"""You are an expert South Florida permit analyst with 20+ years of experience reviewing permit applications for Broward and Palm Beach counties. You have deep knowledge of Florida Building Code, local amendments, and what permit offices look for.
+    # Build city-specific context
+    city_context = ""
+    if city_key == "fort_lauderdale":
+        city_context = """
+FORT LAUDERDALE SPECIFIC REQUIREMENTS:
+- Portal: LauderBuild (100% digital - NO paper applications accepted)
+- Plan sets: 2 required
+- Insurance holder MUST read exactly: "City of Fort Lauderdale, 700 NW 19th Avenue, Fort Lauderdale, FL 33311"
+- 50% of permit fee due at application
+- NOC threshold: $2,500 (roofing: $5,000)
+- Product approvals must be CIRCLED (not highlighted) on NOA documents
+- Hurricane mitigation affidavit required for re-roofs on homes assessed ≥$300,000
+- EPD approval must be obtained BEFORE city submittal
+- Permits expire 180 days without inspection
 
-TASK: Analyze this permit package ({file_count} files) for a {permit_name} application.
+FORT LAUDERDALE MARINE REQUIREMENTS:
+- Minimum seawall elevation: 3.9 feet NAVD88
+- Dock extension limit: 30% of waterway width
+- Side setback: 5 feet from extended property line
+- Reflector tape required on piles extending beyond limits
+- Substantial repair (>50% seawall length) = full code compliance required
+"""
+    elif city_key == "pompano_beach":
+        city_context = """
+POMPANO BEACH SPECIFIC REQUIREMENTS:
+- Portal: Click2Gov
+- Applications MUST be in BLACK INK - will be rejected otherwise!
+- Plan sets: Only 1 required (100% electronic review)
+- Fire Review Application REQUIRED for ALL permits (Pompano-specific)
+- Both owner AND contractor signatures required, notarized
+- NOC thresholds vary: General >$2,500, HVAC >$5,000, Roofing >$7,500
+- New/relocated electrical service must be UNDERGROUND (City Ordinance 152.07)
+- Emergency A/C repairs: Must notify Chief Mechanical Inspector BEFORE starting
+- EPD must be approved BEFORE city submittal
+- Work without permit = DOUBLE the permit fee
+
+POMPANO BEACH MARINE REQUIREMENTS:
+- Dock extension: 10% of waterway width OR 8 feet (whichever is less)
+- Boat lift: 20% of waterway width OR 20 feet (whichever is less)
+- Engineering permit fee: 4% of construction cost (min $100)
+"""
+    elif city_key == "lauderdale_by_the_sea":
+        city_context = """
+LAUDERDALE-BY-THE-SEA SPECIFIC REQUIREMENTS:
+- Portal: CitizenServe
+- Notice of Commencement must be RECORDED before submittal - #1 rejection reason!
+- Plan sets: 2 required (PDF, landscape oriented, electronically signed/sealed)
+- Insurance must list exactly: "Town of Lauderdale by the Sea"
+- Trade applications must be in BLACK INK
+- Contract must show itemized price breakdown for all trades
+- Fee structure: New construction 2%, Renovations 3%, Roofing 1.5%, Pools 5%
+- EPD approval required for: new construction, additions, alterations to non-residential, demolitions, generators
+- 50%+ renovation triggers EPD approval and may require flood zone compliance upgrades
+- Demolition permits expire in 60 days (shorter than other permits)
+- Work without permit = DOUBLE the permit fee
+"""
+    elif city_key == "lighthouse_point":
+        city_context = """
+LIGHTHOUSE POINT SPECIFIC REQUIREMENTS:
+- Portal: SmartGov
+- NO FAXED applications - will be rejected (distorts information)
+- Survey must be less than 1 year old OR submit Zoning Affidavit
+- Applications must be signed by BOTH owner AND contractor
+- Many applications require notarization
+- Values, SF, and quantities MUST be included on all applications
+- Permits must be picked up IN PERSON
+- Be home for inspections (except final zoning, final exterior, final fire)
+- Buildings over 25 years AND over 3,500 SF require 40-year safety inspection
+- Work without permit = 200% of standard fee (tripled!)
+- Application fees: New construction $1,000, Remodel $200
+
+LIGHTHOUSE POINT - NO OWNER/BUILDER ALLOWED FOR:
+- ALL electrical work
+- ALL roofing work  
+- ALL piling work
+Licensed contractors REQUIRED for these trades!
+
+LIGHTHOUSE POINT MARINE - CRITICAL:
+- Longshoreman Insurance REQUIRED (FEDERAL requirement)
+- State Workers' Compensation does NOT satisfy federal requirement
+- Waterfront properties require 2 signed/sealed engineer letters regarding seawall condition
+- Must provide updated dock/seawall survey before final inspection
+"""
+    elif city_key == "weston":
+        city_context = """
+WESTON SPECIFIC REQUIREMENTS:
+- Portal: Accela ePermits
+- FILE NAMING = AUTOMATIC DENIAL - Download 'Weston Electronic File Naming Conventions' FIRST
+- Digital signatures must follow City's specific Digital Sign and Seal Requirements
+- ORIGINAL SIGNATURES ONLY - copies NOT acceptable
+- Permit Acknowledgement Affidavit requires original notarized signature (residential)
+- Survey must be less than 1 YEAR old (FL Professional Surveyor with raised seal - 2 originals)
+- Broward County EPD approval required BEFORE Building Department submittal
+- Original DRC approved plans must be submitted (stamped/signed)
+- SEPARATE CHECKS REQUIRED for each trade permit - CASH NOT ACCEPTED
+- Work without permit = DOUBLE the permit fee
+- ISO Rating: Class 2 (High Standards)
+- Free virtual training available: Tues 11AM, Thurs 2PM
+
+WESTON HVHZ REQUIREMENTS:
+- Design wind speed: 175 mph
+- All exterior products require Miami-Dade NOA or FL Product Approval (HVHZ designation)
+- NOAs must be stamped by architect for windows, doors, louvers, shutters
+- Roof calculations must include complete package with NOAs and roof plan
+
+WESTON POOL PERMITS:
+- Pool Safety Affirmation required
+- Residential Pool Safety Act Form required
+- Barrier requirements: 48" min height, self-closing/latching gates
+- FL DOH Application required for commercial pools BEFORE building permit
+"""
+    elif city_key == "davie":
+        city_context = """
+DAVIE SPECIFIC REQUIREMENTS:
+- Portal: OAS (Online Application Submittal) - Starting Jan 12, 2026
+- Applications must be IN INK - ALL fields must be completed
+- BCPA Property Search printout from www.bcpa.net is ALWAYS REQUIRED
+- Survey must be less than 2 YEARS old (longer than most cities!)
+- Survey must show ALL easements and encumbrances - do NOT reduce size
+- Survey Affidavit required if using older survey
+- NEW Broward County form required as of 12/22/2025
+
+DAVIE NOC REQUIREMENTS - CRITICAL:
+- NOC MUST BE POSTED AT JOB SITE for first inspection
+- Without posted NOC: inspection NOT approved + re-inspection fee charged
+- NOC threshold: General $2,500, HVAC $7,500, Fence $5,000
+
+DAVIE WALK-THROUGH PERMITS:
+- Wednesdays 8AM-10:30AM ONLY (2 apps max per customer)
+- Single discipline only, paper packages with clips (no staples)
+- Available for: Re-roofs (residential), Garage Doors, Shutters, Windows/Doors, Service Change
+
+DAVIE INSPECTION RULES:
+- Cannot cancel inspections after 8:30 AM - late cancellation = fees
+- After 3rd failed re-inspection: QUALIFIER MUST BE PRESENT ($150 fee)
+- Roofing: Have OSHA-approved ladder set up and secured to roof on inspection day
+
+DAVIE MARINE - UNIQUE REQUIREMENT:
+- ALL DOCKS MUST HAVE HIP STYLE ROOF (Davie-specific!)
+
+DAVIE PRIVATE PROVIDER DISCOUNTS:
+- Plan Review Only: 20% discount
+- Inspection Only: 20% discount
+- Both Plan Review AND Inspection: 40% discount
+
+DAVIE OWNER-BUILDER:
+- Owner must bring application IN PERSON
+"""
+    elif city_key == "coral_springs":
+        city_context = """
+CORAL SPRINGS SPECIFIC REQUIREMENTS:
+- Portal: eTrakit (etrakit.coralsprings.gov)
+- Electronic submittals: 7 business days review
+- Hard copy submittals: 15 business days review
+- Once you choose format, ALL subsequent submittals must remain same format
+- Submit 3 sets of plans (city recommends)
+- NEW Broward County form required as of December 1, 2025
+- Deposits: $100 (SFR), $200 (all other)
+
+CORAL SPRINGS INSPECTION RULES:
+- Phone scheduling NO LONGER AVAILABLE (Feb 2025) - use eTrakit ONLY
+- Cancel before 8:00 AM day of inspection or face re-inspection fee
+- Truss drawings must be received BEFORE foundation inspection
+- Bearing capacity certification must be approved BEFORE foundation inspection
+- Fire Dept re-inspection fee ($235.72) MUCH higher than Building ($85.11)
+
+CORAL SPRINGS PLAN REVIEW REQUIREMENTS:
+- Plans must be sealed and dated - EACH sheet sealed for jobs >$15,000
+- Product approvals must be reviewed by designer of record BEFORE submission
+- Shop drawings must be reviewed by designer BEFORE submission to city
+- Missing ADA disproportionate cost documentation = rejection
+
+CORAL SPRINGS SPECIAL REQUIREMENTS:
+- Window restrictors required on ALL second-story bedroom windows
+- Roof color must be on approved list - get Zoning approval BEFORE permit
+- DRC approval must be completed BEFORE Zoning approval
+- Public Art Ordinance applies to commercial projects
+
+CORAL SPRINGS PRIVATE PROVIDER:
+- 30% discount for plan review + inspection
+- 15% discount for inspection only
+"""
+    elif city_key == "coconut_creek":
+        city_context = """
+COCONUT CREEK SPECIFIC REQUIREMENTS:
+- Portal: ePermits
+- Building Department is CLOSED ON FRIDAYS
+- Applications must be in BLACK INK
+- Hours: Monday-Thursday 7:00 AM - 6:00 PM only
+
+COCONUT CREEK SUBMISSION RULES:
+- PDF Portfolio uploads NOT compatible - must be regular unlocked PDF files
+- NOC must be recorded at County BEFORE submitting to Building Dept
+- Both owner AND contractor signatures required on application
+- Contractor must be registered with city
+- Values, SF, and quantities MUST be included on application
+
+COCONUT CREEK FEES:
+- Premium Service Fee: $107/hour for enhanced plan review
+- Minimum Base Permit Fee: $125
+- Structural Permit Fee: 1.85% of job value
+
+COCONUT CREEK MECHANICAL:
+- Email ebuilding@coconutcreek.gov for Mechanical Contractor Verification Letter
+"""
+    elif city_key == "boca_raton":
+        city_context = """
+BOCA RATON SPECIFIC REQUIREMENTS (PALM BEACH COUNTY):
+- Portal: Boca eHub (bocaehub.com)
+- DO NOT USE C2GOV for new applications - will be REJECTED
+- Use Boca ePlans/ProjectDox for plan review uploads
+- NOT in HVHZ (Palm Beach County)
+
+BOCA RATON PENALTIES - SEVERE:
+- Work without permit = TRIPLE the standard fee
+- Work before Development Order = TRIPLE the standard fee
+
+BOCA RATON OWNER/BUILDER RESTRICTIONS:
+- Property must be single-family home
+- You must be listed as owner
+- Property cannot be owned by a business
+- Must currently be living there (not renting it out)
+
+BOCA RATON COMMERCIAL:
+- CGL insurance: $1,000,000 each occurrence minimum
+- $2,000,000 general aggregate minimum
+- Community Appearance Board (CAB) approval required
+
+BOCA RATON MARINE CONSTRUCTION:
+- Outside agency approvals (DEP, County ERM, ACOE) required BEFORE city
+- Dock limits: <100ft waterway = 6ft max, ≥100ft = 8ft max projection
+- Dock setback from adjacent property: minimum 10 feet
+- Each dock requires ladder extending 2ft below mean low water
+
+BOCA RATON FEES:
+- TCO fees escalate: 1st extension $3-8K, 2nd $5-15K, 3rd $10-25K
+- HOA Affidavit required for HOA properties
+- NOAs must be stamped by architect verifying wind zone
+"""
+    elif city_key == "lake_worth_beach":
+        city_context = """
+LAKE WORTH BEACH SPECIFIC REQUIREMENTS (PALM BEACH COUNTY):
+- Walk-In Hours: 1st & 3rd Wednesdays 8AM-12PM only (no appointment)
+- Inspection requests must be made by 4:00 PM day before
+- NOT in HVHZ (Palm Beach County)
+
+LAKE WORTH BEACH PENALTIES:
+- Work without permit = Permit fee PLUS 3x fee (without surcharges)
+- Third plan review = $50 fee
+- Fourth+ plan review = 4x Plan Filing Fee
+
+LAKE WORTH BEACH HISTORIC DISTRICT - CRITICAL:
+- Properties in historic districts require Certificate of Appropriateness BEFORE permit
+- Full demolition fee: $500 (primary structure), $250 (accessory)
+- Certificate of Appropriateness adds time - start early
+
+LAKE WORTH BEACH SUBMISSION:
+- Contractor must be registered with city
+- NOC must be recorded with Clerk of Court AND posted on job site
+- Plan Filing Fee (50% of permit) is non-refundable
+
+LAKE WORTH BEACH EXEMPTIONS:
+- Permits under $1,000 for minor repairs may be exempt
+- Check exemption list before applying
+"""
+    elif city_key == "margate":
+        city_context = """
+MARGATE SPECIFIC REQUIREMENTS:
+- Portal: ProjectDox
+- Applications must be in BLACK INK
+- Applications must be signed by BOTH Owner AND Contractor
+- Signatures must be NOTARIZED
+- Fill in address on second page (mandatory field - causes rejections!)
+
+MARGATE INSPECTION SCHEDULE:
+- Building inspectors work Monday-Thursday ONLY
+- Building Department CLOSED Fridays for inspections
+- Call before 2:00 PM for next-business-day inspection
+
+MARGATE UNIQUE REQUIREMENTS:
+- Energy calculations: THREE SETS required (Margate-specific)
+- Proof of ownership required (beyond standard Broward requirements)
+- HOA approval required FIRST - city permit does NOT guarantee HOA approval
+- NOC threshold for AC: $7,500 (higher than standard $2,500)
+
+MARGATE ROOFING - CRITICAL:
+- AC stands for re-roofs: New energy code requires larger units - CONTACT CITY FIRST
+- Roofing inspections: Photos NOT accepted - must be in-person inspection
+- Tile calculations must use Method 1, 2, or 3 per RAS 127
+
+MARGATE MARINE:
+- Multi-agency approval (DPEP, Army Corps, DNR) required BEFORE city submission
+- Special Structural Inspector required per FBC 110.10.1.1
+
+MARGATE PENALTIES:
+- Work without permit = $200 or DOUBLE permit fee (whichever greater)
+- Continuing work after Stop Work Order = $500 penalty
+"""
+    elif city_key == "tamarac":
+        city_context = """
+TAMARAC SPECIFIC REQUIREMENTS:
+- Portal: ePermits (Click2Gov)
+- 100% PAPERLESS department since March 2014 - ALL electronic
+- Contractor must be REGISTERED with city (no fee to register)
+- IVR System for inspections/status - requires PIN
+
+TAMARAC SUBMISSION RULES:
+- Paper plans (up to 3 large pages) converted for additional fee
+- Plans with 3+ pages MUST be submitted online or flash drive/CD
+- NOC must be recorded BEFORE Building Dept submission
+- As of November 14, 2025: New Broward County form required
+- Notary Jurat form NO LONGER needed with new form version
+
+TAMARAC ROOFING - CRITICAL:
+- AC Stands: CONTACT BUILDING DEPT BEFORE submitting re-roof - especially condos
+- New Florida Building Energy Code requires larger AC units
+- Roofing inspections: Photos NOT accepted (FBC 1512.4.2) - in-person only
+- Renailing wood decks may be required per Chapter 16 (HVHZ)
+
+TAMARAC HVAC:
+- Smoke detector may be required with package unit ($122 extra)
+
+TAMARAC REVIEW TIMES:
+- 5-10 business days for minor projects
+- Up to 30 days for larger projects
+- Predevelopment meetings available - recommended for complex projects
+
+TAMARAC NOA NOTE:
+- For replacement permits (windows, doors, re-roof) NOAs don't need architect review
+
+TAMARAC PENALTIES:
+- Work without permit: $285 or DOUBLE (contractors), $190 or DOUBLE (homeowners)
+
+TAMARAC PRIVATE PROVIDER:
+- 5% discount for inspections only
+- 10% discount for plan review + inspections
+"""
+    elif city_key == "deerfield_beach":
+        city_context = """
+DEERFIELD BEACH SPECIFIC REQUIREMENTS:
+- Portal: ePermitsOneStop (Building services by CAP Government as of Dec 15, 2025)
+- Applications must be in BLACK INK
+- HOA Affidavit REQUIRED for ALL residential permits - #1 rejection reason!
+- Both owner AND trade contractor must sign application
+- Values, SF & quantities must be included
+
+DEERFIELD BEACH ASBESTOS - CRITICAL:
+- ASBESTOS STATEMENT IS MANDATORY for ALL re-roofs - no exceptions
+- Submit through Broward County
+
+DEERFIELD BEACH PRE-SUBMITTAL:
+- EPD approval required BEFORE Building Dept submittal
+- Elevator approval required BEFORE Building Dept (allow 1 week)
+- NOC must be recorded BEFORE permit submission (if over $2,500)
+
+DEERFIELD BEACH SPECIAL RULES:
+- Condo owners CANNOT do work themselves - must hire licensed contractor
+- Violation is a FELONY under Florida Statute 489.127(1)(f)
+- Turtle glass requirements apply in sea turtle nesting areas
+- Inspection requests by 3 PM for next business day
+
+DEERFIELD BEACH PRIVATE PROVIDER:
+- 25% discount for plan review + inspection
+- 15% discount for inspection only
+"""
+    elif city_key == "pembroke_pines":
+        city_context = """
+PEMBROKE PINES SPECIFIC REQUIREMENTS:
+- Portal: Development HUB (Energov)
+- All applications must be NOTARIZED - missing notarization = rejection
+- Qualifying contractor must sign (F.S. 713.135)
+- Cash NOT accepted - checks/money orders to 'The City of Pembroke Pines'
+
+PEMBROKE PINES NOC THRESHOLDS - DIFFERENT FROM OTHER CITIES:
+- General permits: $5,000 (not $2,500!)
+- A/C repair/replacement: $15,000 (much higher!)
+
+PEMBROKE PINES PLAN SUBMISSION:
+- Two (2) sets of plans required for ALL in-person permits
+- Online uploads must be BATCHED by trade - one file per discipline:
+  * All Structural sheets in ONE file
+  * All Mechanical sheets in ONE file
+  * All Electrical sheets in ONE file
+  * All Plumbing sheets in ONE file
+
+PEMBROKE PINES ROOFING - CRITICAL:
+- ALL roofs require NEW flashing - stucco stop and surface mount ONLY
+- Maximum residential permit fee is $500 regardless of roof cost
+- Roof-to-wall connection affidavit required for buildings $300,000+ value
+- Flashing requirements strictly enforced - will fail inspection without new flashing
+
+PEMBROKE PINES SPECIAL RULES:
+- Landscape Affidavit required for ALL exterior work
+- Revisions now require permit application with cost (effective 3/7/2024)
+- After-the-Fact permits NO LONGER ALLOWED as Owner/Builder (May 1, 2024)
+- 25-Year Building Safety Inspection (formerly 40 years)
+- After 2nd review rejection for same violation: 20% penalty
+- Permit card must be accessible OUTSIDE property
+"""
+    elif city_key == "hollywood":
+        city_context = """
+HOLLYWOOD SPECIFIC REQUIREMENTS:
+- Portal: ePermitsOneStop (BCLA/ACCELA)
+- Building Department CLOSED ON FRIDAYS
+- Applications must be signed AND notarized
+- HOA Affidavit MANDATORY for all residential permits
+- Use QLess for consultation appointments (Mon-Thu 7:30-9:30 AM)
+
+HOLLYWOOD NOC REQUIREMENTS:
+- General: $2,500 threshold
+- A/C repair/replacement: $7,500 threshold
+- NOC required before FIRST INSPECTION can be scheduled
+
+HOLLYWOOD PLAN REVIEW:
+- 30 working day review period
+- Does NOT include Planning, Zoning, Engineering, or Fire review time
+- Permit applications become NULL after 60 days if no action taken
+- Job value verified against R.S. Means Building Construction Cost Data
+
+HOLLYWOOD OWNER-BUILDER RESTRICTION:
+- Cannot sell house/duplex for 1 YEAR after final inspection
+
+HOLLYWOOD SPECIAL DISTRICTS:
+- Chain link fencing NOT permitted in RAC, TOC (front yard), or Historic District
+- PVC fencing NOT permitted in Historic District front yard
+- Tree removal permit from Engineering required for ALL properties
+- Landscape sub-permit required for new construction
+
+HOLLYWOOD EXPRESS PERMITS:
+- Available for simple A/C changeouts
+- Available for electrical service changes
+- Torque Certificate Affidavit required for certain electrical work
+
+HOLLYWOOD MARINE:
+- Seawall must meet wind load specifications
+- Verify framing meets uplift and lateral forces
+- Multiple agency approvals: City, Broward EPD, FL DEP, possibly Army Corps
+"""
+    elif city_key == "miramar":
+        city_context = """
+MIRAMAR SPECIFIC REQUIREMENTS:
+- Portal: Online Permitting System
+- Building Department CLOSED ON FRIDAYS
+- Applications must be in BLACK INK
+- Do NOT highlight any information on plans - will be REJECTED
+- All documents must be in TRUE PDF format
+
+MIRAMAR MANDATORY AFFIDAVITS:
+- Construction Debris Removal Affidavit MANDATORY for ALL permits
+- HOA Affidavit required EVEN IF property is NOT in an HOA
+- Affidavit of Identical Documents required for digitally signed plans
+
+MIRAMAR DEBRIS REQUIREMENT - CRITICAL:
+- Debris MUST be removed by Waste Pro of Florida ONLY
+- City Ordinance Section 18-7
+- Failure to comply = Code violation with fines/penalties
+
+MIRAMAR NOC THRESHOLDS - DIFFERENT:
+- General permits: $5,000 (not $2,500!)
+- A/C repair/replacement: $15,000 (much higher!)
+- NOC must be recorded PRIOR to Building Dept submittal
+
+MIRAMAR PLAN REQUIREMENTS:
+- FOUR (4) sets of plans required for engineered plans
+- Only NEW Broward County Uniform Permit Application accepted
+- Old form versions will be REJECTED
+- Schedule of Values required for permit pricing
+
+MIRAMAR PRE-SUBMITTAL:
+- EPD approval required BEFORE Building Dept submittal
+- Allow 1 week for elevator approval
+- ERC Letter + Impact Fee Receipt required for new construction
+
+MIRAMAR QUICK SERVICE:
+- Available for: Fence, Driveway, Shed, Re-Roof, Patio Slab
+- Windows/Doors, Shutters, Screen Enclosures
+- A/C changeout, Electrical service change, Water heater
+- Maximum 5 permits per contractor
+
+MIRAMAR PRIVATE PROVIDER:
+- 35% discount for plan review + inspections
+- 20% discount for inspections only
+
+MIRAMAR FEES:
+- After 3rd plan review: $500 flat fee per discipline
+- Expedited Review: $300 residential, $600 commercial per discipline
+"""
+    elif city_key == "plantation":
+        city_context = """
+PLANTATION SPECIFIC REQUIREMENTS:
+- Portal: Broward ePermits
+- Application must be signed and notarized by QUALIFIER
+- Walk-Thru permits: Mon, Wed, Fri 8-10 AM only (3 permit limit per person)
+- Insurance COI must list 'City of Plantation' as Certificate Holder
+
+PLANTATION WORK HOURS:
+- Monday-Friday: 7 AM - 8 PM
+- Saturday: 7 AM - 8 PM (pile-driving 8 AM - 5:30 PM only)
+- NO WORK on Sundays or holidays (City Ordinance Chapter 16, Sec 16-2)
+
+PLANTATION ROUTING - SKIP ZONING FOR:
+- A/C changeouts - go DIRECTLY to Building Division
+- Re-roofing - go DIRECTLY to Building Division
+- Interior work
+
+PLANTATION CRITICAL REQUIREMENTS:
+- Demolition permits MUST include Building AND Electrical permits together
+- Plenum ceilings require specs on Structural, Electrical, Mechanical AND Plumbing plans
+- Pre-fab buildings MUST have State approved drawings (Miami-Dade or Florida State)
+- Product Approvals must be stamped 'approved' by Architect of record
+- Plans must be mechanically reproduced - hand-drawn plans rejected
+
+PLANTATION SPECIAL RULES:
+- Preliminary Review SUSPENDED as of 05/16/2024
+- COA/HOA/POA approval NOT required for building permit (effective 05/08/2023)
+- Temporary Power requires notarized signatures from owner, GC, AND electrical contractor
+- Burglar alarms (SFR) require registration permit from Plantation Police Dept
+- Marine work requires US Longshoreman's and Harbor Workers insurance
+
+PLANTATION FEES:
+- $20 application fee
+- $10 per page of plans (first page free)
+- Fast Track available with $1,000 cost recovery account
+- Work without permit = 100% penalty fee added
+"""
+    elif city_key == "sunrise":
+        city_context = """
+SUNRISE SPECIFIC REQUIREMENTS:
+- Portal: sunrisefl.gov/openforbusiness
+- Signed Checklist is REQUIRED - most common rejection reason!
+- Professional Day: Wednesdays 8 AM - Noon (walk-in with Plans Examiners)
+- Contractor registration expires September 30th ANNUALLY
+
+SUNRISE TWO-STEP PROCESS:
+Step 1: Broward County ePermits (broward.org/epermits) for:
+- Demolition, additions, alterations, new construction
+
+Step 2: City of Sunrise after County approval
+
+SUNRISE - GO DIRECTLY TO BUILDING (skip Zoning):
+- Re-roofing
+- Interior renovations
+- Fencing
+- Interior plumbing repairs
+- Interior electrical repairs
+- A/C changeouts
+
+SUNRISE - REQUIRES ZONING FIRST:
+- New construction
+- Additions
+- Alterations
+- Exterior elevation changes
+
+SUNRISE CRITICAL REQUIREMENTS:
+- Energy calculations must be in 2 SETS
+- Special Inspection forms must be signed by BOTH inspector AND Owner
+- Truss drawings need Engineer seal AND Architect/Engineer of record acceptance
+- Schedule inspections by 3 PM one day in advance
+- Call Chief Inspectors between 8:00-8:30 AM for specific times
+
+SUNRISE PROCESSING TIMES:
+- Simple permits (fence, re-roof): ~2 days if correct
+- Single-family permits: 2-3 weeks if correct
+- Delays usually from plans not promptly corrected
+
+SUNRISE PENALTIES:
+- Work without permit = DOUBLE fee charged
+"""
+    elif city_key == "west_palm_beach":
+        city_context = """
+WEST PALM BEACH SPECIFIC REQUIREMENTS (PALM BEACH COUNTY):
+- Portal: EPL Civic Access Portal
+- NOT in HVHZ (Palm Beach County - still need Florida Product Approvals)
+- Insurance MUST list: 'City of West Palm Beach, 401 Clematis Street, West Palm Beach, FL 33401'
+
+WEST PALM BEACH NOC REQUIREMENTS:
+- NOC threshold: $5,000 general, $15,000 for HVAC
+- Must be recorded at Palm Beach County Recording Department
+- Include permit number when emailing recorded NOC to ds@wpb.org
+- Recording Location: 205 North Dixie Highway (4th Floor), West Palm Beach
+
+WEST PALM BEACH SPECIAL REQUIREMENTS:
+- Flood zone verification required before application
+- Elevation certificates required for certain flood zones
+- Historic district properties require additional Planning Division review
+- All materials must have Florida Product Approval
+- Mobility Fee adopted May 2025 for Downtown projects
+
+WEST PALM BEACH INSPECTIONS:
+- Find your inspector at 7:30 AM via Civic Access Portal → Today's Inspections
+- Call inspector for 2-hour window
+- Long wait times 11:30 AM - 2:30 PM - avoid these hours
+- Building Chief Inspector: (561) 805-6670
+
+WEST PALM BEACH ROOFING TIP:
+- Schedule Building Miscellaneous inspection BEFORE starting work
+- Take extensive photos during installation
+- Discuss expectations with inspector first
+
+WEST PALM BEACH PENALTIES:
+- Work without permit = 4x permit fee (Stop Work penalty)
+- Expired permits: Email expiredpermits@wpb.org early if selling property
+"""
+    elif city_key == "boynton_beach":
+        city_context = """
+BOYNTON BEACH SPECIFIC REQUIREMENTS (PALM BEACH COUNTY):
+- Portal: SagesGov (new permits) / Click2Gov (legacy permits)
+- NOT in HVHZ (Palm Beach County)
+- All documents must be UNPROTECTED - system rejects password-protected files!
+
+BOYNTON BEACH PORTAL ROUTING:
+- Permit #21-2804 or LOWER: Use Legacy system
+- New permits: Use SagesGov portal
+
+BOYNTON BEACH NOC REQUIREMENTS:
+- NOC threshold: $5,000 general, $15,000 for HVAC repair/replacement
+- Email recorded NOC to: BuildingM@bbfl.us
+
+BOYNTON BEACH INSPECTIONS - CRITICAL:
+- Requests after 3:00 PM NOT scheduled next day
+- Need permit application number AND 7-digit PIN
+
+BOYNTON BEACH RESUBMITTAL FEES - WARNING:
+- Wait for ALL reviews before submitting corrections
+- Same-issue rejections trigger escalating fees:
+  * 1st resubmittal: Free
+  * 2nd (same comments): $75 min OR 10% of original fee
+  * 3rd+ (same comments): 4x original permit fee!
+
+BOYNTON BEACH STREAMLINED PERMITS:
+- A/C, Water Heater: $55 each
+- Streamlined Program: $250/year for expedited processing
+- Expedited review for: Bioscience, medical, pharmaceutical, affordable housing, green-certified
+
+BOYNTON BEACH PENALTIES:
+- Work without permit = 4x permit fee
+"""
+    elif city_key == "delray_beach":
+        city_context = """
+DELRAY BEACH SPECIFIC REQUIREMENTS (PALM BEACH COUNTY):
+- Portal: eServices Portal
+- NOT in HVHZ (Palm Beach County)
+- ALL permits now DIGITAL ONLY through eServices
+- Paper submissions incur $25 scanning fee
+- All documents must be unprotected
+
+DELRAY BEACH EXPRESS PERMITS (3 days):
+- A/C Change-out
+- Water Heater Replacement
+- Re-roof
+- Emergency A/C and water heater can be permitted within 24 hours of work completion!
+
+DELRAY BEACH NOC REQUIREMENTS:
+- NOC threshold: $5,000 general, $15,000 for HVAC
+- Recording Location: Palm Beach County Court House, 200 W. Atlantic Ave
+
+DELRAY BEACH HISTORIC DISTRICT - CRITICAL:
+- Many properties unknowingly in Historic Districts - CHECK FIRST!
+- Use Historic District Map on city website
+- Historic Preservation Acknowledgement form required
+- HP review can add significant time to approval
+- May require Historic Preservation Board review
+
+DELRAY BEACH SPECIAL REQUIREMENTS:
+- 180 days without inspection = permit expired
+- Contractors must register BEFORE permit submittal
+- Owner-builders must appear IN PERSON
+- Check flood zone - required for any CO/CC issuance
+- Right-of-Way: Check Table MBL-1 of Mobile Element before new construction
+- Green Building: New construction 15,000+ SF requires certification
+
+DELRAY BEACH PENALTIES:
+- After-the-fact permit = 3x normal permit cost
+- Stop work notice issued by Code Enforcement
+- May require third-party engineering if work concealed
+"""
+    else:
+        city_context = f"""
+GENERAL SOUTH FLORIDA REQUIREMENTS:
+- Florida Building Code 8th Edition (2023) in effect
+- Florida Product Approval required for exterior products
+- Check if in HVHZ zone - Broward County is HVHZ, Palm Beach generally is not
+- Environmental approvals may be required before local permit
+"""
+
+    gotchas_text = ""
+    if gotchas:
+        gotchas_text = (
+            "\n\nKNOWN GOTCHAS FOR THIS CITY (common rejection reasons):\n"
+            + "\n".join([f"⚠️ {g}" for g in gotchas[:10]])
+        )
+
+    tips_text = ""
+    if tips:
+        tips_text = "\n\nPERMIT OFFICE TIPS:\n" + "\n".join([f"💡 {t}" for t in tips])
+
+    prompt = f"""You are an expert South Florida permit analyst with 20+ years of experience reviewing permit applications for Broward and Palm Beach counties. You have deep, specific knowledge of {city_name}'s building department requirements, processes, and common rejection reasons.
+
+TASK: Analyze this permit package ({file_count} files) for a {permit_name} application in {city_name}.
+
+{city_context}
 
 REQUIRED DOCUMENTS FOR THIS PERMIT TYPE:
 {reqs}
+{gotchas_text}
+{tips_text}
 
 UPLOADED DOCUMENTS CONTENT:
 {text}
 
 ANALYSIS INSTRUCTIONS:
-1. **Document Identification**: Carefully identify EACH document in the package. Look for:
+
+1. **Document Identification**: Carefully identify EACH document in the package:
    - Document titles, headers, stamps, signatures
    - Professional seals (architect, engineer, contractor)
    - Dates and revision numbers
    - Drawing sheet numbers and titles
+   - Look for NOAs (Notice of Acceptance) for products
 
-2. **Completeness Check**: For EACH required document:
-   - Is it present? Look for explicit evidence.
+2. **City-Specific Compliance**: Check for {city_name}-specific requirements:
+   - Correct forms used for this city
+   - Proper insurance certificate holder name (if visible)
+   - Required signatures and notarizations
+   - Pre-submittal approvals (EPD, etc.)
+
+3. **Completeness Check**: For EACH required document:
+   - Is it present? Look for explicit evidence
    - Is it properly signed/sealed where required?
    - Is it dated within acceptable range (typically within 1 year)?
    - Does it match the project scope?
 
-3. **Technical Review**: Check for common issues:
+4. **Technical Review**: Check for common issues:
    - Missing signatures or seals on drawings
    - Incomplete NOC (Notice of Commencement)
-   - Energy calculations missing for HVAC/building permits
-   - Product approvals missing for roofing/windows
-   - Survey not signed/sealed
-   - Site plan missing setbacks or property lines
-   - Electrical load calculations missing
+   - Energy calculations (Manual J for residential HVAC)
+   - Product approvals (NOAs) for roofing, windows, doors
+   - Survey not signed/sealed or outdated
+   - Site plan missing setbacks, property lines, or flood zone info
+   - Load calculations for electrical/HVAC
    - Missing contractor license info
+   - HVHZ compliance for impact products
 
-4. **Scoring Guidelines**:
+5. **Scoring Guidelines**:
    - 90-100: All documents present, properly executed, ready to submit
    - 70-89: Minor issues, likely approved with small corrections
    - 50-69: Significant gaps, will need resubmission
    - Below 50: Major documents missing, not ready for submission
 
-5. **Be Specific**: Don't just say "plans missing" - specify WHICH plans (floor plan, elevation, electrical, etc.)
-
 Return your analysis as JSON:
 {{
-    "summary": "2-3 sentence executive summary of package readiness",
+    "summary": "2-3 sentence executive summary of package readiness for {city_name}",
     "overall_status": "READY|NEEDS_ATTENTION|INCOMPLETE",
     "compliance_score": <number 0-100>,
     "documents_found": [
-        {{"name": "document name", "status": "complete|incomplete|needs_signature", "notes": "specific details about what was found"}}
+        {{"name": "document name", "status": "complete|incomplete|needs_signature", "notes": "specific details"}}
     ],
     "missing_documents": [
-        {{"name": "document name", "importance": "critical|important|recommended", "notes": "why it's needed"}}
+        {{"name": "document name", "importance": "critical|important|recommended", "notes": "why needed for {city_name}"}}
     ],
     "critical_issues": [
         {{"issue": "description", "severity": "high|medium|low", "fix": "how to resolve"}}
@@ -1644,14 +2435,17 @@ Return your analysis as JSON:
         "Specific actionable recommendation 1",
         "Specific actionable recommendation 2"
     ],
-    "permit_office_tips": "Any specific tips for this permit type that will help at the permit office"
+    "city_specific_warnings": [
+        "Any {city_name}-specific issues that could cause rejection"
+    ],
+    "permit_office_tips": "Specific tips for submitting to {city_name} building department"
 }}
 
 IMPORTANT: 
-- Be thorough but practical - focus on what will actually cause permit delays
+- Be thorough but practical - focus on what will actually cause permit delays in {city_name}
 - If you can't find evidence of a document, mark it as missing
-- South Florida permit offices are strict about signatures and seals
-- Energy code compliance is heavily scrutinized in Florida"""
+- {city_name} permit office is strict about signatures, seals, and proper forms
+- Flag any city-specific requirements that aren't met"""
 
     try:
         msg = client.messages.create(
@@ -1671,15 +2465,35 @@ IMPORTANT:
                     parsed = json.loads(m.strip() if m.strip().startswith("{") else m)
                     if "summary" in parsed or "compliance_score" in parsed:
                         # Ensure backwards compatibility - flatten documents_found if needed
-                        if parsed.get("documents_found") and isinstance(parsed["documents_found"][0], dict):
-                            parsed["documents_found_detailed"] = parsed["documents_found"]
-                            parsed["documents_found"] = [d.get("name", str(d)) for d in parsed["documents_found"]]
-                        if parsed.get("missing_documents") and isinstance(parsed["missing_documents"][0], dict):
-                            parsed["missing_documents_detailed"] = parsed["missing_documents"]
-                            parsed["missing_documents"] = [d.get("name", str(d)) for d in parsed["missing_documents"]]
-                        if parsed.get("critical_issues") and isinstance(parsed["critical_issues"][0], dict):
-                            parsed["critical_issues_detailed"] = parsed["critical_issues"]
-                            parsed["critical_issues"] = [d.get("issue", str(d)) for d in parsed["critical_issues"]]
+                        if parsed.get("documents_found") and isinstance(
+                            parsed["documents_found"][0], dict
+                        ):
+                            parsed["documents_found_detailed"] = parsed[
+                                "documents_found"
+                            ]
+                            parsed["documents_found"] = [
+                                d.get("name", str(d)) for d in parsed["documents_found"]
+                            ]
+                        if parsed.get("missing_documents") and isinstance(
+                            parsed["missing_documents"][0], dict
+                        ):
+                            parsed["missing_documents_detailed"] = parsed[
+                                "missing_documents"
+                            ]
+                            parsed["missing_documents"] = [
+                                d.get("name", str(d))
+                                for d in parsed["missing_documents"]
+                            ]
+                        if parsed.get("critical_issues") and isinstance(
+                            parsed["critical_issues"][0], dict
+                        ):
+                            parsed["critical_issues_detailed"] = parsed[
+                                "critical_issues"
+                            ]
+                            parsed["critical_issues"] = [
+                                d.get("issue", str(d))
+                                for d in parsed["critical_issues"]
+                            ]
                         return parsed
                 except:
                     continue

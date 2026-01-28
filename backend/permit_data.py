@@ -1,1014 +1,1211 @@
-# requirements.py - Permit Requirements for All Broward County Cities
+# permit_data.py - Comprehensive South Florida Permit Requirements
+# Last Updated: January 2026
+# Data sourced from official city building department documentation
 
-# ============================================================================
-# BROWARD COUNTY CITIES - All 18 municipalities
-# ============================================================================
+"""
+COMPLETE permit requirements for Fort Lauderdale, Pompano Beach,
+Lauderdale-by-the-Sea, and Lighthouse Point.
+"""
 
-BROWARD_CITIES = {
-    "fort_lauderdale": "Fort Lauderdale",
-    "pompano_beach": "Pompano Beach",
-    "hollywood": "Hollywood",
-    "coral_springs": "Coral Springs",
-    "pembroke_pines": "Pembroke Pines",
-    "lauderdale_by_the_sea": "Lauderdale-by-the-Sea",
-    "miramar": "Miramar",
-    "davie": "Davie",
-    "plantation": "Plantation",
-    "sunrise": "Sunrise",
-    "boca_raton": "Boca Raton",
-    "deerfield_beach": "Deerfield Beach",
-    "coconut_creek": "Coconut Creek",
-    "tamarac": "Tamarac",
-    "lauderhill": "Lauderhill",
-    "margate": "Margate",
-    "weston": "Weston",
-    "oakland_park": "Oakland Park",
-}
+# =============================================================================
+# CITY INFORMATION
+# =============================================================================
 
-
-# ============================================================================
-# FORT LAUDERDALE - Complete Requirements
-# ============================================================================
-
-FORT_LAUDERDALE_PERMITS = {
-    "building": {
-        "name": "Building Permit",
-        "items": [
-            "Two (2) sets of plans signed and sealed by a Florida licensed professional",
-            "Completed permit application signed by owner or authorized agent",
-            "Notice of Commencement (NOC) recorded with Broward County",
-            "Contractor must be registered with City of Fort Lauderdale",
-            "Proof of workers' compensation insurance or exemption",
-            "Owner-Builder Disclosure (if applicable)",
-            "Energy calculations (for new construction or additions)",
-            "Flood zone documentation if in flood area",
-            "HOA approval letter (if applicable)",
-        ],
+CITY_INFO = {
+    "fort_lauderdale": {
+        "name": "Fort Lauderdale",
+        "department": "Development Services Department",
+        "address": "700 NW 19th Avenue, Fort Lauderdale, FL 33311",
+        "phone": "954-828-8000",
+        "portal": "LauderBuild",
+        "submission": "100% Digital via LauderBuild - NO paper applications",
+        "plan_sets": 2,
+        "insurance_holder": "City of Fort Lauderdale, 700 NW 19th Avenue, Fort Lauderdale, FL 33311",
+        "fee_deposit": "50% due at application",
+        "noc_threshold": 2500,
+        "noc_threshold_roofing": 5000,
+        "hvhz": True,
     },
-    "electrical": {
-        "name": "Electrical Permit",
-        "items": [
-            "Completed electrical permit application",
-            "Licensed electrical contractor required",
-            "Site plan showing location of electrical work",
-            "Single-line diagram for service upgrades",
-            "Load calculations for service changes",
-            "Manufacturer specifications for equipment",
-        ],
+    "pompano_beach": {
+        "name": "Pompano Beach",
+        "department": "Building Inspections Division",
+        "address": "100 West Atlantic Boulevard, Pompano Beach, FL 33060",
+        "phone": "954-786-4669",
+        "portal": "Click2Gov",
+        "submission": "100% Electronic - Applications must be in BLACK INK",
+        "plan_sets": 1,
+        "fire_review_required": "YES - Required for ALL permits (Pompano-specific)",
+        "noc_threshold": 2500,
+        "noc_threshold_roofing": 7500,
+        "noc_threshold_hvac": 5000,
+        "hvhz": True,
     },
-    "plumbing": {
-        "name": "Plumbing Permit",
-        "items": [
-            "Completed plumbing permit application",
-            "Licensed plumbing contractor required",
-            "Site plan showing plumbing work location",
-            "Isometric drawings for new installations",
-            "Water heater specifications",
-            "Backflow preventer documentation (if required)",
-        ],
+    "lauderdale_by_the_sea": {
+        "name": "Lauderdale-by-the-Sea",
+        "department": "CAP Government, Inc.",
+        "address": "4501 North Ocean Drive, Lauderdale-By-The-Sea, FL 33308",
+        "phone": "954-640-4215",
+        "email": "building@lbts-fl.gov",
+        "portal": "CitizenServe",
+        "submission": "Online preferred - Plans must be PDF, landscape oriented",
+        "plan_sets": 2,
+        "insurance_holder": "Town of Lauderdale by the Sea",
+        "noc_threshold": 2500,
+        "noc_threshold_hvac": 7500,
+        "hvhz": True,
     },
-    "mechanical": {
-        "name": "Mechanical/HVAC Permit",
-        "items": [
-            "Completed mechanical permit application",
-            "Licensed HVAC contractor required",
-            "Equipment specifications and cut sheets",
-            "Load calculations (Manual J)",
-            "Duct layout drawings",
-            "Energy code compliance documentation",
-        ],
+    "lighthouse_point": {
+        "name": "Lighthouse Point",
+        "department": "City of Lighthouse Point Building Department",
+        "address": "2200 NE 38th Street, Lighthouse Point, FL 33064",
+        "phone": "954-943-6509",
+        "email": "lhpbuilding@lighthousepoint.com",
+        "portal": "SmartGov",
+        "submission": "Online or in person - NO FAXED applications",
+        "plan_sets": 2,
+        "payment": "Check payable to 'City of Lighthouse Point'",
+        "pickup_required": True,
+        "noc_threshold": 2500,
+        "hvhz": True,
+        "no_owner_builder": ["electrical", "roofing", "piling"],
+        "survey_max_age": "1 year (or Zoning Affidavit required)",
+        "marine_requires_longshoreman_insurance": True,
     },
-    "roofing": {
-        "name": "Roofing Permit",
-        "items": [
-            "Completed roofing permit application",
-            "Licensed roofing contractor required",
-            "Roof plan showing layout and dimensions",
-            "Product specifications and warranties",
-            "Wind speed calculations and uplift ratings",
-            "NOA (Notice of Acceptance) for products used",
-        ],
+    "weston": {
+        "name": "Weston",
+        "department": "City of Weston Building Department",
+        "address": "17250 Royal Palm Boulevard, Weston, FL 33326",
+        "phone": "954-385-0500",
+        "email": "building@westonfl.org",
+        "portal": "Accela ePermits",
+        "portal_url": "aca-prod.accela.com/weston",
+        "submission": "Electronic preferred - STRICT file naming conventions",
+        "plan_sets": 2,
+        "survey_max_age": "1 year",
+        "noc_threshold": 2500,
+        "noc_threshold_hvac": 7500,
+        "hvhz": True,
+        "iso_rating": "Class 2 (High Standards)",
+        "free_training": "Virtual Training Tues 11AM, Thurs 2PM",
+        "no_cash": True,
+        "separate_checks": "Trade permits require separate checks per trade",
     },
-    "dock": {
-        "name": "Dock/Marine Structure Permit - Fort Lauderdale",
-        "items": [
-            "Completed Seawall and Dock Permitting Checklist (available from DSD)",
-            "Broward County Uniform Building Permit Application",
-            "Licensed Marine Contractor or General Contractor required",
-            "Contractor must be registered with City of Fort Lauderdale",
-            "Current signed and sealed survey showing property lines extending into waterway",
-            "Survey must show existing seawall location and proposed dock location",
-            "Construction plans signed, sealed, and dated by Florida licensed engineer",
-            "Cross-section diagram of dock showing pilings, framing, decking, bolting, dimensions",
-            "Site plan showing location of proposed work relative to property lines",
-            "Dock cannot extend more than 30% of waterway width",
-            "Fixed docks must not exceed 10 inches above seawall elevation",
-            "Reflector tape required on mooring/dolphin piles (international orange or iridescent silver)",
-            "Notice of Commencement (NOC) if job value over $2,500",
-            "Proof of workers' compensation insurance or exemption",
-            "Certificates of liability insurance",
-            "Florida DEP Environmental Resource Permit or exemption verification",
-            "U.S. Army Corps of Engineers (ACOE) permit if required (federal waters/wetlands)",
-            "Broward County Environmental Resource General License",
-            "Marine Advisory Board approval required for docks on public waterways (Section 8-144)",
-            "Special Inspector Form if pile installation is utilized",
-            "Seawall Survey Review Cover Sheet (if seawall work included)",
-            "Submit via LauderBuild online portal",
-        ],
+    "davie": {
+        "name": "Davie",
+        "department": "Town of Davie Building Department",
+        "address": "8800 SW 36th Street, Building A, Davie, FL 33328",
+        "phone": "954-797-1111",
+        "email": "buildingdept@davie-fl.gov",
+        "portal": "OAS (Online Application Submittal)",
+        "submission": "Applications must be IN INK - all fields completed",
+        "plan_sets": 2,
+        "survey_max_age": "2 years",
+        "noc_threshold": 2500,
+        "noc_threshold_hvac": 7500,
+        "noc_threshold_fence": 5000,
+        "hvhz": True,
+        "walk_through": "Wednesdays 8AM-10:30AM only (2 apps max)",
+        "bcpa_required": True,
+        "noc_must_be_posted": True,
+        "private_provider_discount": "20-40%",
     },
-    "seawall": {
-        "name": "Seawall Permit - Fort Lauderdale",
-        "items": [
-            "Completed Seawall and Dock Permitting Checklist",
-            "Broward County Uniform Building Permit Application",
-            "Licensed Marine Contractor or General Contractor required",
-            "Contractor must be registered with City of Fort Lauderdale",
-            "Current signed and sealed survey showing existing seawall and property lines",
-            "Seawall Survey Review Cover Sheet",
-            "Construction plans signed, sealed, and dated by Florida licensed engineer",
-            "Structural calculations for seawall design",
-            "Minimum seawall cap elevation: 3.9 feet NAVD88 (per City ordinance)",
-            "Maximum elevation: Base Flood Elevation (BFE) per FEMA FIRM map",
-            "Substantial repair threshold: improvements over 50% of seawall length require full compliance",
-            "Notice of Commencement (NOC) if job value over $2,500",
-            "Proof of workers' compensation insurance or exemption",
-            "Certificates of liability insurance",
-            "Florida DEP Environmental Resource Permit or exemption verification",
-            "U.S. Army Corps of Engineers (ACOE) permit if required",
-            "Broward County Environmental Resource General License",
-            "Special Inspector Form signed/sealed by engineer",
-            "Special inspection required for reinforced masonry and pile installation",
-            "Flood zone documentation and elevation certificate",
-            "Submit via LauderBuild online portal",
-        ],
+    "coral_springs": {
+        "name": "Coral Springs",
+        "department": "Building Department",
+        "address": "9500 W. Sample Road, Coral Springs, FL 33065",
+        "phone": "954-344-1050",
+        "email": "buildingpermits@coralsprings.gov",
+        "portal": "eTrakit",
+        "portal_url": "etrakit.coralsprings.gov",
+        "submission": "Electronic preferred (7 days) vs Hard Copy (15 days)",
+        "plan_sets": 3,
+        "noc_threshold": 2500,
+        "hvhz": True,
+        "deposit_sfr": 100,
+        "deposit_other": 200,
+        "private_provider_discount": "30% plan review + inspection, 15% inspection only",
+        "electronic_review_days": 7,
+        "hardcopy_review_days": 15,
     },
-    "boat_lift": {
-        "name": "Boat Lift Permit - Fort Lauderdale",
-        "items": [
-            "Completed permit application",
-            "Licensed Marine Contractor required",
-            "Contractor must be registered with City of Fort Lauderdale",
-            "Site plan showing proposed boat lift location",
-            "Product specifications and installation instructions for boat lift",
-            "Florida Product Approval (FPA) or Notice of Acceptance (NOA) for boat lift",
-            "Structural calculations if required",
-            "Boat lift cross-section cannot exceed 1 square foot, max height 6.5 feet above lot grade",
-            "Lowest appendage of vessel may not be hoisted more than 1 foot above seawall cap",
-            "Notice of Commencement (NOC) if job value over $2,500",
-            "Proof of insurance",
-            "Electrical permit required if electrical connection needed",
-            "Submit via LauderBuild online portal",
-        ],
+    "coconut_creek": {
+        "name": "Coconut Creek",
+        "department": "Building Department",
+        "address": "4800 West Copans Road, Coconut Creek, FL 33063",
+        "phone": "954-973-6750",
+        "email": "ebuilding@coconutcreek.gov",
+        "portal": "ePermits",
+        "submission": "Applications must be in BLACK INK",
+        "plan_sets": 2,
+        "noc_threshold": 2500,
+        "hvhz": True,
+        "closed_fridays": True,
+        "noc_before_submittal": True,
     },
-}
-
-
-# ============================================================================
-# POMPANO BEACH - Complete Requirements
-# ============================================================================
-
-POMPANO_BEACH_PERMITS = {
-    "building": {
-        "name": "Building Permit",
-        "items": [
-            "Permit application in BLACK INK with values, square footage, and quantities - signed by owner AND contractor",
-            "Application must bear qualified applicant signature and seal of Notary Public",
-            "Owner signature with notary seal where applicable",
-            "Copy of contractor's license and insurance required",
-            "Notice of Commencement (NOC) - NOT required if work value under $2,500",
-            "Current survey copies required (not required for interiors only)",
-            "Energy calculations signed/sealed by engineer (not required for interiors only)",
-            "Structural calculations signed/sealed by engineer when work is structural",
-            "Special inspection forms signed/sealed by engineer and signed by owner",
-            "Original Development Review Committee plans (stamped/approved) if applicable",
-            "Owner/Agent letter with owner and agent notarized signatures",
-            "Fire Review Application required by Pompano",
-            "Notice of Acceptance (NOA) stamped by architect for windows, doors, louvers, shutters, etc.",
-            "Roof calculations (HVC) complete package with roof NOAs and roof plan",
-            "Roof truss shop drawings signed/sealed by engineer with all calculations",
-            "Fire sprinkler/alarm drawings with hydraulic calculations and cut sheets of all devices and panels",
-            "Submit one set or direct download (100% electronic system)",
-        ],
+    "boca_raton": {
+        "name": "Boca Raton",
+        "department": "Building Permits and Inspections, Development Services",
+        "address": "200 NW 2nd Avenue, Boca Raton, FL 33432",
+        "phone": "561-393-7930",
+        "email": "BuildingPermits@myboca.us",
+        "portal": "Boca eHub",
+        "portal_url": "bocaehub.com",
+        "submission": "Use Boca eHub ONLY - DO NOT use C2Gov",
+        "county": "Palm Beach",
+        "noc_threshold": 2500,
+        "hvhz": False,
+        "work_without_permit_penalty": "TRIPLE fee",
+        "private_provider_discount": "10-20%",
+        "cab_required": True,
     },
-    "electrical": {
-        "name": "Electrical Permit",
-        "items": [
-            "Permit application in BLACK INK - signed by owner and contractor",
-            "Application notarized with qualified applicant signature",
-            "Copy of contractor's license and insurance",
-            "Electrical plans (if commercial work)",
-            "Load calculations",
-            "NOC if work value over $2,500",
-        ],
+    "lake_worth_beach": {
+        "name": "Lake Worth Beach",
+        "department": "Building Division, Department of Community Sustainability",
+        "address": "1900 2nd Ave North, Lake Worth Beach, FL 33461",
+        "phone": "561-586-1647",
+        "email": "building@lakeworthbeachfl.gov",
+        "portal": "Online Portal",
+        "county": "Palm Beach",
+        "noc_threshold": 2500,
+        "hvhz": False,
+        "walk_in_hours": "1st & 3rd Wednesdays 8AM-12PM",
+        "inspection_request_deadline": "4:00 PM day before",
+        "work_without_permit_penalty": "Permit + 3x fee",
+        "historic_district": True,
     },
-    "plumbing": {
-        "name": "Plumbing Permit",
-        "items": [
-            "Permit application in BLACK INK - signed by owner and contractor",
-            "Application notarized with qualified applicant signature",
-            "Copy of contractor's license and insurance",
-            "Plumbing plans showing work location",
-            "NOC if work value over $2,500",
-            "Water heater specifications",
-        ],
+    "margate": {
+        "name": "Margate",
+        "department": "Building Department",
+        "address": "901 NW 66th Avenue, Margate, FL 33063",
+        "phone": "954-970-3004",
+        "email": "building@margatefl.com",
+        "portal": "ProjectDox",
+        "submission": "Electronic via ProjectDox - BLACK INK required",
+        "plan_sets": 2,
+        "noc_threshold": 2500,
+        "noc_threshold_hvac": 7500,
+        "hvhz": True,
+        "closed_fridays_inspections": True,
+        "energy_calc_sets": 3,
+        "proof_of_ownership_required": True,
+        "work_without_permit_penalty": "DOUBLE fee or $200 (whichever greater)",
     },
-    "mechanical": {
-        "name": "Mechanical/HVAC Permit",
-        "items": [
-            "Permit application in BLACK INK - signed by owner and contractor",
-            "Application notarized with qualified applicant signature",
-            "Copy of contractor's license and insurance",
-            "HVAC equipment specifications",
-            "Load calculations (Manual J)",
-            "NOC if work value over $2,500",
-        ],
+    "tamarac": {
+        "name": "Tamarac",
+        "department": "Building Department",
+        "address": "7525 NW 88th Avenue, Tamarac, FL 33321",
+        "phone": "954-597-3420",
+        "portal": "ePermits (Click2Gov)",
+        "submission": "100% PAPERLESS - all electronic since 2014",
+        "plan_sets": 0,
+        "noc_threshold": 2500,
+        "hvhz": True,
+        "paperless": True,
+        "ivr_system": True,
+        "private_provider_discount": "5% inspection, 10% plan review + inspection",
+        "work_without_permit_penalty": "DOUBLE fee or $285 contractors / $190 homeowners",
     },
-    "roofing": {
-        "name": "Roofing Permit",
-        "items": [
-            "Permit application in BLACK INK - signed by owner and contractor",
-            "Application notarized with qualified applicant signature",
-            "Copy of contractor's license and insurance",
-            "Roof calculations (HVC) complete package",
-            "Roof NOAs (Notice of Acceptance)",
-            "Roof plan drawings",
-            "Roof truss shop drawings signed/sealed by engineer with calculations",
-            "NOC if work value over $2,500",
-        ],
+    "deerfield_beach": {
+        "name": "Deerfield Beach",
+        "department": "Building Services (CAP Government)",
+        "address": "150 NE 2nd Avenue, Deerfield Beach, FL 33441",
+        "phone": "954-480-4250",
+        "portal": "ePermitsOneStop",
+        "submission": "Applications must be in BLACK INK",
+        "plan_sets": 2,
+        "noc_threshold": 2500,
+        "hvhz": True,
+        "hoa_affidavit_required": True,
+        "asbestos_required_reroofs": True,
+        "private_provider_discount": "25% plan review + inspection, 15% inspection only",
+        "work_without_permit_penalty": "DOUBLE permit fee",
     },
-    "dock": {
-        "name": "Dock/Marine Structure Permit - Pompano Beach",
-        "items": [
-            "Completed Broward County Uniform Permit Application (Building checked)",
-            "Completed Engineering Permit Application from licensed contractor",
-            "Licensed General Contractor or Marine Contractor required",
-            "Broward County Environmental Resource General License",
-            "Contract or Schedule of Values for the proposed work",
-            "Construction plans signed, sealed, and dated by Florida licensed engineer",
-            "Survey or site plan showing location of proposed work",
-            "Cross-section diagram of dock showing pilings, framing, decking, dimensions",
-            "Dock extension limited to 10% of waterway width OR 8 feet, whichever is less",
-            "Docks not permitted within 5 feet of side property line setback (without neighbor agreement)",
-            "Adjacent property owner agreement required if within 5 feet of property line (recorded with County)",
-            "Notice of Commencement (NOC) if job value over $2,500",
-            "Engineering permit fee: 4% of construction cost (minimum $100)",
-            "Special Inspector Form if pile installation utilized",
-            "Florida DEP Environmental Resource Permit or exemption",
-            "U.S. Army Corps of Engineers (ACOE) permit if required",
-            "Submit via City of Pompano Beach online portal",
-        ],
+    "pembroke_pines": {
+        "name": "Pembroke Pines",
+        "department": "Building Department",
+        "address": "601 City Center Way, Pembroke Pines, FL 33025",
+        "phone": "954-450-1060",
+        "email": "pinespermits@cgasolutions.com",
+        "portal": "Development HUB (Energov)",
+        "submission": "Applications must be NOTARIZED",
+        "plan_sets": 2,
+        "noc_threshold": 5000,
+        "noc_threshold_hvac": 15000,
+        "hvhz": True,
+        "notarization_required": True,
+        "landscape_affidavit_required": True,
+        "roof_max_fee_residential": 500,
+        "work_without_permit_penalty": "DOUBLE permit fee",
     },
-    "seawall": {
-        "name": "Seawall Permit - Pompano Beach",
-        "items": [
-            "Completed Broward County Uniform Permit Application (Building checked)",
-            "Completed Engineering Permit Application from licensed contractor",
-            "Licensed General Contractor or Marine Contractor required",
-            "Broward County Environmental Resource General License",
-            "Contract or Schedule of Values for the proposed work",
-            "Construction plans signed, sealed, and dated by Florida licensed engineer",
-            "Survey or site plan showing location of proposed seawall",
-            "Special Inspector Form if pile installation is utilized",
-            "Seawall cap must meet Broward County minimum elevation (5.0 NAVD88)",
-            "Notice of Commencement (NOC) if job value over $2,500",
-            "Engineering permit fee: 4% of construction cost (minimum $100)",
-            "Florida DEP Environmental Resource Permit or exemption",
-            "U.S. Army Corps of Engineers (ACOE) permit if required",
-            "Marine Permit Inspections required: Erosion Control, Footings, Panel Reinforcement, Engineer Reports, Final Structural",
-            "Engineering Inspections: Footer Form/Steel, Footer Final",
-            "Submit via City of Pompano Beach online portal",
-        ],
+    "hollywood": {
+        "name": "Hollywood",
+        "department": "Development Services Hub",
+        "address": "2600 Hollywood Blvd, 2nd Floor, Hollywood, FL 33020",
+        "phone": "954-921-3335",
+        "email": "ePermits@hollywoodfl.org",
+        "portal": "ePermitsOneStop (BCLA/ACCELA)",
+        "submission": "Applications must be signed AND notarized",
+        "plan_sets": 2,
+        "noc_threshold": 2500,
+        "noc_threshold_hvac": 7500,
+        "hvhz": True,
+        "hoa_affidavit_required": True,
+        "closed_fridays": True,
+        "qless_appointments": True,
+        "work_without_permit_penalty": "DOUBLE permit fee",
     },
-    "boat_lift": {
-        "name": "Boat Lift Permit - Pompano Beach",
-        "items": [
-            "Completed Broward County Uniform Permit Application",
-            "Completed Engineering Permit Application",
-            "Licensed Marine Contractor required",
-            "Contract or Schedule of Values",
-            "Product specifications and installation instructions",
-            "Florida Product Approval (FPA) or Notice of Acceptance (NOA)",
-            "Site plan showing proposed location",
-            "Boat lifts may extend up to 28 feet from measurement reference line (in waterways over 50 feet wide)",
-            "Notice of Commencement (NOC) if job value over $2,500",
-            "Engineering permit fee: 4% of construction cost (minimum $100)",
-            "Electrical permit required if electrical connection needed",
-        ],
+    "miramar": {
+        "name": "Miramar",
+        "department": "Building, Permits & Inspections",
+        "address": "2300 Civic Center Place, Miramar, FL 33025",
+        "phone": "954-602-4357",
+        "email": "customerservice@miramarfl.gov",
+        "portal": "Online Permitting System",
+        "submission": "BLACK INK required - Do NOT highlight plans",
+        "plan_sets": 4,
+        "noc_threshold": 5000,
+        "noc_threshold_hvac": 15000,
+        "hvhz": True,
+        "closed_fridays": True,
+        "debris_affidavit_required": True,
+        "hoa_affidavit_even_if_no_hoa": True,
+        "waste_pro_required": True,
+        "private_provider_discount": "35% plan review + inspection, 20% inspection only",
+        "work_without_permit_penalty": "DOUBLE permit fee",
     },
-}
-
-
-# ============================================================================
-# HOLLYWOOD - Complete Requirements
-# ============================================================================
-
-HOLLYWOOD_PERMITS = {
-    "building": {
-        "name": "Building Permit - Hollywood",
-        "items": [
-            "Permit application completed in entirety - signed by Property Owner/Agent AND Contractor",
-            "Proof of contractor license and insurance required",
-            "If work value under $2,500, only contractor signature needed",
-            "Contractor's Record Management Form - signed, notarized, with copy of qualifier's driver's license",
-            "Occupational license or business tax receipt, state certification or registration",
-            "Certificates of insurance or exemption showing City of Hollywood as certificate holder",
-            "Recorded NOC required before first inspection if job cost exceeds $2,500 (or $7,500+ for A/C)",
-            "NOC posted on job site prior to first inspections",
-            "Current signed/sealed survey and elevation certificate (for new buildings, structures, additions, site work)",
-            "Elevation certification required for any substantial improvement work",
-            "Spot survey required before first tie beam inspections with noted slab elevations",
-            "Final survey and elevation certificate required prior to final",
-            "Flood certifications for substantial improvements/damage determination",
-            "Florida registered Architect/Engineer must sign and seal all drawings",
-            "Energy calculations - 2 sets when required",
-            "Structural calculations - 2 copies signed/sealed by engineer of record",
-            "Special inspection forms signed/sealed by inspector, signed by Owner and Contractor",
-            "Pre-Application Conceptual Overview (PACO) and Technical Advisory Committee (TAC) review for larger projects",
-            "Broward County EPD Approval prior to permit issuance (when applicable)",
-            "Broward County Elevator submittal/approval prior to Building Dept approval (when applicable)",
-            "All NOAs reviewed and approved by design professional of record",
-            "Roof calculations (HVC) - 2 completed HVHZ uniform roofing permit applications with attachments",
-            "Truss package signed/sealed by truss engineer, reviewed by designer of record",
-            "Fire sprinkler/alarm drawings with signed/sealed drawings, hydraulic calculations, and cut sheets",
-            "All documents submitted digitally - email to ePermits@hollywoodfl.org",
-            "Follows Florida Building Code 8th Edition (2023)",
-        ],
+    "plantation": {
+        "name": "Plantation",
+        "department": "Building Safety Division",
+        "address": "401 NW 70th Terrace, Plantation, FL 33317",
+        "phone": "954-797-2765",
+        "inspection_line": "954-587-4456",
+        "portal": "Broward ePermits",
+        "submission": "Application must be signed and notarized by Qualifier",
+        "plan_sets": 3,
+        "noc_threshold": 2500,
+        "noc_threshold_hvac": 7500,
+        "hvhz": True,
+        "walk_thru_hours": "Mon, Wed, Fri 8-10 AM (3 permit limit)",
+        "saturday_work_allowed": True,
+        "sunday_work_prohibited": True,
+        "fast_track_available": True,
+        "fast_track_deposit": 1000,
+        "work_without_permit_penalty": "100% penalty added",
     },
-    "electrical": {
-        "name": "Electrical Permit - Hollywood",
-        "items": [
-            "Completed permit application signed by Property Owner/Agent and Contractor",
-            "Proof of contractor license and insurance",
-            "Certificates of insurance showing City of Hollywood as certificate holder",
-            "Contractor's Record Management Form signed and notarized",
-            "NOC required before first inspection if job cost exceeds $2,500",
-            "Electrical plans for commercial work",
-            "Load calculations",
-            "Digital submission via ePermits@hollywoodfl.org",
-        ],
+    "sunrise": {
+        "name": "Sunrise",
+        "department": "Building Division",
+        "address": "10770 W. Oakland Park Boulevard, Sunrise, FL 33351",
+        "phone": "954-572-2354",
+        "email": "askbuilding@sunrisefl.gov",
+        "portal": "sunrisefl.gov/openforbusiness",
+        "submission": "Signed Checklist REQUIRED - applications rejected without it",
+        "plan_sets": 2,
+        "noc_threshold": 2500,
+        "noc_threshold_hvac": 7500,
+        "hvhz": True,
+        "professional_day": "Wednesdays 8 AM - Noon (walk-in)",
+        "contractor_reg_expires": "September 30th annually",
+        "zoning_first_required": True,
+        "work_without_permit_penalty": "DOUBLE fee",
     },
-    "plumbing": {
-        "name": "Plumbing Permit - Hollywood",
-        "items": [
-            "Completed permit application signed by Property Owner/Agent and Contractor",
-            "Proof of contractor license and insurance",
-            "Certificates of insurance showing City of Hollywood as certificate holder",
-            "Contractor's Record Management Form signed and notarized",
-            "NOC required before first inspection if job cost exceeds $2,500",
-            "Plumbing plans showing work location",
-            "Water heater specifications",
-            "Digital submission via ePermits@hollywoodfl.org",
-        ],
+    "west_palm_beach": {
+        "name": "West Palm Beach",
+        "department": "Development Services",
+        "address": "401 Clematis Street, West Palm Beach, FL 33401",
+        "phone": "561-805-6700",
+        "email": "ds@wpb.org",
+        "portal": "EPL Civic Access Portal",
+        "submission": "Insurance must list City of West Palm Beach as certificate holder",
+        "county": "Palm Beach",
+        "noc_threshold": 5000,
+        "noc_threshold_hvac": 15000,
+        "hvhz": False,
+        "work_without_permit_penalty": "4x permit fee (Stop Work)",
+        "mobility_fee": "New fee adopted May 2025 for Downtown projects",
     },
-    "mechanical": {
-        "name": "Mechanical/HVAC Permit - Hollywood",
-        "items": [
-            "Completed permit application signed by Property Owner/Agent and Contractor",
-            "Proof of contractor license and insurance",
-            "Certificates of insurance showing City of Hollywood as certificate holder",
-            "Contractor's Record Management Form signed and notarized",
-            "NOC required before first inspection if job cost exceeds $7,500 for A/C repair/replace",
-            "HVAC equipment specifications",
-            "Load calculations (Manual J)",
-            "Energy calculations when required",
-            "Digital submission via ePermits@hollywoodfl.org",
-        ],
+    "boynton_beach": {
+        "name": "Boynton Beach",
+        "department": "Building Division",
+        "address": "100 E. Ocean Avenue, Boynton Beach, FL 33435",
+        "phone": "561-742-6000",
+        "email": "BuildingM@bbfl.us",
+        "portal": "SagesGov (new) / Click2Gov (legacy)",
+        "submission": "All documents must be UNPROTECTED - system rejects protected files",
+        "county": "Palm Beach",
+        "noc_threshold": 5000,
+        "noc_threshold_hvac": 15000,
+        "hvhz": False,
+        "streamlined_permits": True,
+        "work_without_permit_penalty": "4x permit fee",
     },
-    "roofing": {
-        "name": "Roofing Permit - Hollywood",
-        "items": [
-            "Completed permit application signed by Property Owner/Agent and Contractor",
-            "Proof of contractor license and insurance",
-            "Certificates of insurance showing City of Hollywood as certificate holder",
-            "Contractor's Record Management Form signed and notarized",
-            "NOC required before first inspection if job cost exceeds $2,500",
-            "Roof calculations (HVC) - 2 completed HVHZ uniform roofing permit applications",
-            "All required attachments for HVHZ roofing application",
-            "Roof NOAs reviewed and approved by design professional",
-            "Truss package signed/sealed by truss engineer, reviewed by designer of record",
-            "Digital submission via ePermits@hollywoodfl.org",
-        ],
+    "delray_beach": {
+        "name": "Delray Beach",
+        "department": "Building Division",
+        "address": "100 NW 1st Avenue, Delray Beach, FL 33444",
+        "phone": "561-243-7200",
+        "portal": "eServices Portal",
+        "submission": "All permits now digital through eServices",
+        "county": "Palm Beach",
+        "noc_threshold": 5000,
+        "noc_threshold_hvac": 15000,
+        "hvhz": False,
+        "digital_only": True,
+        "paper_fee": 25,
+        "express_permits": "A/C, Water Heater, Re-roof (3 days)",
+        "historic_district": True,
+        "work_without_permit_penalty": "3x permit fee",
     },
 }
 
+# =============================================================================
+# KNOWN GOTCHAS BY CITY
+# =============================================================================
 
-# ============================================================================
-# CORAL SPRINGS - Complete Requirements
-# ============================================================================
-
-CORAL_SPRINGS_PERMITS = {
-    "building": {
-        "name": "Building Permit - Coral Springs",
-        "items": [
-            "Permit application with values, square footage, and quantities - signed by Contractor (notarized)",
-            "Owner signature required if construction over $2,500 (notarized)",
-            "Copy of contractor's license and insurance required",
-            "Additional documentation required if estimated cost $2,500 or more",
-            "Owner/Agent letter with Owner or Authoritative Company Agent notarized signatures",
-            "Notice of Commencement (NOC) required if job value over $5,000 - needed before 1st inspection",
-            "Three (3) sets of Building/Site Plans recommended (1 City Copy, 2 Field Copies) - minimum 2 sets required",
-            "Plans must have each sheet sealed and dated with designer signature (for jobs over $15,000 or any structural work)",
-            "Plans for slab, masonry, or truss repairs must be signed/sealed by Florida licensed Architect/Engineer (regardless of cost)",
-            "Current signed/sealed survey required (not required for interior alterations except patio enclosures)",
-            "Energy calculations signed/sealed by engineer (not required for interiors only)",
-            "Structural calculations signed/sealed by engineer (not required for interiors only)",
-            "Special inspection forms signed/sealed by engineer and signed by Owner (not required for interiors only)",
-            "Original Development Review Committee (DRC) plans - stamped/original signed approved (4 sets) - if applicable",
-            "DRC must be completed prior to Zoning approval (if applicable)",
-            "Broward County Urban Planning Division (UPD/DER) Approval required",
-            "Notice of Acceptance (NOA) stamped by architect for windows, doors, louvers, shutters - City supplemental form and contract needed",
-            "Roof calculations (HVC) complete package with roof NOAs and roof plan - City submittal form and contract copy required (not required for interiors)",
-            "Roof truss shop drawings signed/sealed by engineer with all calculations - submittal required before first application (not required for interiors)",
-            "Fire sprinkler/alarm drawings with hydraulic calculations and cut sheets of all devices and panels",
-            "Product Approvals reviewed and approved by designer of record prior to submission",
-            "Revisions require Revision Submittal form and Architect's Narrative",
-            "$100 deposit per single-family residential unit, $200 for all other building permits",
-            "Permit expires if work not started within 180 days; expires after 90 days of suspension/abandonment",
-            "Processing time: 15 business days for additions/alterations (if everything correct)",
-        ],
-    },
-    "electrical": {
-        "name": "Electrical Permit - Coral Springs",
-        "items": [
-            "Trade application with values, square footage, and quantities",
-            "Signed by Owner and trade Contractor (Sub Trade permits don't require Owner signature)",
-            "Copy of license and insurance required",
-            "NOC required if job value over $5,000",
-            "Electrical plans for commercial work",
-            "Load calculations",
-        ],
-    },
-    "plumbing": {
-        "name": "Plumbing Permit - Coral Springs",
-        "items": [
-            "Trade application with values, square footage, and quantities",
-            "Signed by Owner and trade Contractor (Sub Trade permits don't require Owner signature)",
-            "Copy of license and insurance required",
-            "NOC required if job value over $5,000",
-            "Plumbing plans showing work location",
-            "Water heater specifications",
-        ],
-    },
-    "mechanical": {
-        "name": "Mechanical/HVAC Permit - Coral Springs",
-        "items": [
-            "Trade application with values, square footage, and quantities",
-            "Signed by Owner and trade Contractor (Sub Trade permits don't require Owner signature)",
-            "Copy of license and insurance required",
-            "NOC required if job value over $5,000",
-            "HVAC equipment specifications",
-            "Load calculations (Manual J)",
-            "Energy calculations when required",
-        ],
-    },
-    "roofing": {
-        "name": "Roofing Permit - Coral Springs",
-        "items": [
-            "Trade application with values, square footage, and quantities",
-            "Signed by Owner and trade Contractor",
-            "Copy of license and insurance required",
-            "NOC required if job value over $5,000",
-            "Roof calculations (HVC) complete package with City submittal form and contract copy",
-            "Roof NOAs included",
-            "Roof truss shop drawings signed/sealed by engineer with calculations",
-            "Product Approvals reviewed by designer of record",
-        ],
-    },
+KNOWN_GOTCHAS = {
+    "fort_lauderdale": [
+        "Insurance certificate holder MUST read exactly: 'City of Fort Lauderdale, 700 NW 19th Avenue, Fort Lauderdale, FL 33311'",
+        "Paper applications NO LONGER ACCEPTED - digital only via LauderBuild",
+        "50% of permit fee required at application submission",
+        "Broward County EPD approval must be obtained BEFORE city submittal",
+        "Product approvals must be CIRCLED (not highlighted) on NOA documents",
+        "Hurricane mitigation affidavit required for re-roofs on homes assessed at $300,000+",
+        "Seawall repairs >50% of length trigger full code compliance for elevation",
+        "Permits expire after 180 days without inspection",
+        "Energy calculations required for: change of occupancy, change in space conditioning, renovations ≥30% of assessed value",
+        "Minimum seawall elevation: 3.9 feet NAVD88",
+        "Dock extension limit: 30% of waterway width",
+        "Reflector tape required on piles extending beyond limits",
+    ],
+    "pompano_beach": [
+        "Applications MUST be in BLACK INK - will be rejected otherwise",
+        "Fire Review Application required for ALL permits (Pompano-specific requirement)",
+        "Broward County EPD must be approved BEFORE city submittal",
+        "Both owner AND contractor signatures required, notarized",
+        "Different NOC thresholds: General >$2,500, HVAC >$5,000, Roofing >$7,500, Seawalls >$5,000",
+        "New/relocated electrical service must be UNDERGROUND per City Ordinance 152.07",
+        "Emergency A/C repairs: Must notify Chief Mechanical Inspector BEFORE starting work",
+        "Work without permit = DOUBLE the permit fee",
+        "Dock extension limit: 10% of waterway width OR 8 feet (whichever is less)",
+        "Boat lift extension: 20% of waterway width OR 20 feet (whichever is less)",
+        "Engineering permits for marine: 4% of construction cost (minimum $100)",
+    ],
+    "lauderdale_by_the_sea": [
+        "Notice of Commencement must be RECORDED before submittal - #1 rejection reason",
+        "EPD approval required for: new construction, additions, alterations to non-residential, demolitions, generators",
+        "Insurance must list exactly: 'Town of Lauderdale by the Sea' as certificate holder",
+        "Plans must be PDF format, landscape oriented, electronically signed/sealed",
+        "Trade applications must be in BLACK INK - will be rejected",
+        "Contract must show itemized price breakdown for all trades",
+        "Pool permits: 5% of construction cost (highest rate)",
+        "Renovation permits: 3% of construction cost (higher than new construction at 2%)",
+        "Work without permit = DOUBLE the permit fee",
+        "Demolition permits expire in 60 days (shorter than other permits)",
+        "50%+ renovation triggers EPD approval and may require flood zone compliance upgrades",
+    ],
+    "lighthouse_point": [
+        "FAXED applications will be REJECTED (distorts information)",
+        "Survey must be less than 1 year old OR submit Zoning Affidavit",
+        "Marine work requires Longshoreman Insurance - state workers' comp is NOT sufficient",
+        "Applications must be signed by BOTH owner AND contractor",
+        "Many applications require notarization",
+        "Values, SF, and quantities MUST be included on all applications",
+        "ALL electrical work must be done by licensed contractor - NO owner/builder",
+        "ALL roofing work must be done by licensed contractor - NO owner/builder",
+        "ALL piling work must be done by licensed contractor - NO owner/builder",
+        "Permits must be picked up IN PERSON",
+        "Be home for inspections (except final zoning, final exterior, final fire)",
+        "Buildings over 25 years AND over 3,500 SF require 40-year safety inspection",
+        "Work without permit = 200% of standard fee",
+        "Waterfront properties require 2 signed/sealed engineer letters regarding seawall condition",
+    ],
+    "weston": [
+        "FILE NAMING = AUTOMATIC DENIAL - Weston has STRICT file naming conventions for electronic submissions",
+        "Download 'Weston Electronic File Naming Conventions' document BEFORE submitting",
+        "Digital signatures must follow City's specific Digital Sign and Seal Requirements",
+        "ORIGINAL SIGNATURES ONLY - copies of signatures NOT acceptable",
+        "Permit Acknowledgement Affidavit requires original notarized signature (residential)",
+        "Survey must be less than 1 YEAR old (FL Professional Surveyor with raised seal)",
+        "Broward County EPD approval required BEFORE Building Department submittal",
+        "Original DRC approved plans must be submitted (stamped/signed)",
+        "SEPARATE CHECKS REQUIRED for each trade permit",
+        "CASH IS NOT ACCEPTED",
+        "Work without permit = DOUBLE the permit fee",
+        "All HVHZ products require Miami-Dade NOA or FL Product Approval",
+        "NOAs must be stamped by architect for windows, doors, louvers, shutters",
+    ],
+    "davie": [
+        "NOC MUST BE POSTED AT JOB SITE for first inspection - or inspection NOT approved + re-inspection fee",
+        "Survey must be less than 2 YEARS old (longer than most cities)",
+        "Survey must show ALL easements and encumbrances - do NOT reduce size",
+        "Applications must be filled out IN INK - all fields must be completed",
+        "BCPA Property Search printout from www.bcpa.net is ALWAYS required",
+        "NEW Broward County form required as of 12/22/2025",
+        "Walk-through permits: Wednesdays 8AM-10:30AM ONLY (2 apps max per customer)",
+        "Walk-through: Single discipline only, paper packages with clips (no staples)",
+        "Cannot cancel inspections after 8:30 AM - late cancellation = additional fees",
+        "After 3rd failed re-inspection: QUALIFIER MUST BE PRESENT (fee increases to $150)",
+        "Owner-builder permits: owner must bring application IN PERSON",
+        "Work without permit = DOUBLE the permit fee",
+        "ALL DOCKS MUST HAVE HIP STYLE ROOF (Davie-specific requirement)",
+        "Private Provider discounts available: 20-40%",
+        "Roofing inspections: Have OSHA-approved ladder set up and secured to roof",
+    ],
+    "coral_springs": [
+        "Electronic submittals reviewed in 7 days vs 15 days for hard copy - choose wisely",
+        "Once you choose format, ALL subsequent submittals must remain in same format",
+        "NEW Broward County form required as of December 1, 2025",
+        "Phone scheduling NO LONGER AVAILABLE as of February 2025 - use eTrakit only",
+        "Submit 3 sets of plans (city recommends though 2 required)",
+        "Truss drawings must be received BEFORE foundation inspection",
+        "Bearing capacity certification must be approved BEFORE foundation inspection",
+        "Window restrictors required on ALL second-story bedroom windows",
+        "Roof color must be on approved list - get Zoning approval BEFORE permit",
+        "DRC approval must be completed BEFORE Zoning approval",
+        "Public Art Ordinance: Pay into trust fund OR place art on site (escrow required)",
+        "Fire Dept re-inspection fee ($235.72) much higher than Building ($85.11)",
+        "Plans must be sealed and dated - EACH sheet sealed for jobs >$15,000",
+        "Product approvals must be reviewed by designer of record BEFORE submission",
+        "Shop drawings must be reviewed by designer BEFORE submission to city",
+    ],
+    "coconut_creek": [
+        "Building Department is CLOSED on Fridays",
+        "Applications must be in BLACK INK",
+        "PDF Portfolio uploads NOT compatible - must be regular unlocked PDF files",
+        "NOC must be recorded at County BEFORE submitting to Building Dept",
+        "Both owner AND contractor signatures required on application",
+        "Contractor must be registered with city before pulling permits",
+        "Values, SF, and quantities MUST be included on application",
+        "Premium Service Fee: $107/hour for enhanced plan review",
+        "Email ebuilding@coconutcreek.gov for Mechanical Contractor Verification Letter",
+    ],
+    "boca_raton": [
+        "DO NOT USE C2GOV for new applications - use Boca eHub (bocaehub.com) ONLY",
+        "Work without permit = TRIPLE the standard fee",
+        "Work before Development Order = TRIPLE the standard fee",
+        "Owner/Builder: Must be single-family, you must be owner, property cannot be owned by business, must currently live there (not renting)",
+        "Commercial insurance requirements: $1M each occurrence, $2M aggregate minimum",
+        "Community Appearance Board (CAB) approval required for new construction and signs",
+        "HOA Affidavit required for properties in HOA communities",
+        "Marine construction: Outside agency approvals (DEP, County, ACOE) required BEFORE city",
+        "NOAs must be stamped by architect verifying wind zone requirements",
+        "Dock limits: <100ft waterway = 6ft max, ≥100ft = 8ft max projection",
+        "Dock setback from adjacent property: minimum 10 feet",
+        "TCO fees escalate significantly: 1st extension $3-8K, 2nd $5-15K, 3rd $10-25K",
+    ],
+    "lake_worth_beach": [
+        "Walk-In Hours: 1st & 3rd Wednesdays 8AM-12PM only (no appointment needed)",
+        "Inspection requests must be made by 4:00 PM the business day before",
+        "Work without permit = Permit fee PLUS 3x fee (without surcharges)",
+        "Historic district properties require Certificate of Appropriateness BEFORE permit",
+        "Full demolition in historic district: $500 fee (primary), $250 (accessory)",
+        "Third plan review = $50 fee, Fourth+ = 4x Plan Filing Fee",
+        "Contractor must be registered with city before pulling permits",
+        "NOC must be recorded with Clerk of Court AND posted on job site",
+        "Plan Filing Fee (50% of permit) is non-refundable",
+        "Permits under $1,000 for minor repairs may be exempt - check list",
+    ],
+    "margate": [
+        "Applications must be in BLACK INK",
+        "Applications must be signed by BOTH Owner AND Contractor",
+        "Signatures must be NOTARIZED",
+        "Fill in address on second page of application (mandatory field)",
+        "Building inspectors work Monday-Thursday ONLY - closed Fridays",
+        "Energy calculations: Margate requires THREE SETS",
+        "Proof of ownership required (beyond standard Broward requirements)",
+        "HOA approval required FIRST - city permit does NOT guarantee HOA approval",
+        "NOC must be RECORDED before submission AND POSTED on job site",
+        "NOC threshold for AC: $7,500 (higher than standard $2,500)",
+        "AC stands for re-roofs: New energy code requires larger units - contact city FIRST",
+        "Roofing inspections: Photos NOT accepted - must be in-person inspection",
+        "Work without permit = $200 or DOUBLE permit fee (whichever greater)",
+        "Continuing work after Stop Work Order = $500 penalty",
+        "Marine: Multi-agency approval (DPEP, Army Corps, DNR) required BEFORE city",
+    ],
+    "tamarac": [
+        "100% PAPERLESS department since March 2014 - all electronic via ePermits",
+        "Contractor must be REGISTERED with city (no fee to register)",
+        "IVR System requires PIN - call 954-597-3420 for inspections/status",
+        "Paper plans (up to 3 large pages) converted for additional fee",
+        "Plans with 3+ pages MUST be submitted online or flash drive/CD",
+        "NOC must be recorded BEFORE Building Dept submission",
+        "As of November 14, 2025: New Broward County form required",
+        "Notary Jurat form NO LONGER needed with new form version",
+        "AC Stands for re-roofs: CONTACT BUILDING DEPT BEFORE submitting - especially condos",
+        "Roofing inspections: Photos NOT accepted (FBC 1512.4.2) - must be in-person",
+        "Smoke detector may be required with package unit installation ($122 extra)",
+        "Work without permit: $285 or DOUBLE fee (contractors), $190 or DOUBLE (homeowners)",
+        "For replacement permits (windows, doors, re-roof) NOAs don't need architect review",
+        "5-10 business days typical review for minor projects, up to 30 days for larger",
+    ],
+    "deerfield_beach": [
+        "HOA Affidavit is REQUIRED for ALL residential permits - #1 rejection reason",
+        "Applications must be in BLACK INK",
+        "ASBESTOS STATEMENT IS MANDATORY for all re-roofs - no exceptions",
+        "Outside agency approvals (EPD, Elevators) must be obtained BEFORE building dept submittal",
+        "Both owner AND trade contractor must sign application",
+        "Values, SF & quantities must be included on application",
+        "Incomplete packets WILL NOT be processed",
+        "NOC must be recorded at County Recording Office BEFORE permit submission",
+        "Condo owners CANNOT do work themselves - must hire licensed contractor (F.S. 489.127 - FELONY)",
+        "Turtle glass requirements apply in sea turtle nesting areas",
+        "Inspection requests must be submitted by 3 PM for next business day",
+        "Keep approved plans on site during all inspections",
+        "Work without permit = DOUBLE the permit fee",
+    ],
+    "pembroke_pines": [
+        "All applications must be NOTARIZED - missing notarization = rejection",
+        "Qualifying contractor must sign application (F.S. 713.135)",
+        "NOC threshold: $5,000 general, $15,000 for A/C (much higher than other cities!)",
+        "Cash is NOT accepted - checks/money orders payable to 'The City of Pembroke Pines'",
+        "Online uploads must be BATCHED by trade - one file per discipline",
+        "Two (2) sets of plans required for ALL in-person permit types",
+        "ALL roofs require NEW flashing - stucco stop and surface mount ONLY",
+        "Roof-to-wall connection affidavit required for buildings $300,000+ value",
+        "Maximum residential roofing permit fee is $500 regardless of cost",
+        "Landscape Affidavit required for ALL exterior work",
+        "Revisions now require permit application with additional cost (effective 3/7/2024)",
+        "After-the-Fact permits NO LONGER ALLOWED as Owner/Builder (May 1, 2024)",
+        "25-Year Building Safety Inspection now required (formerly 40 years)",
+        "Permit card must be accessible OUTSIDE property during inspections",
+        "After 2nd review rejection for same violation: 20% of permit fee penalty",
+        "Work without permit = DOUBLE the permit fee",
+    ],
+    "hollywood": [
+        "Applications must be signed AND notarized",
+        "Building Department CLOSED on Fridays",
+        "HOA Affidavit MANDATORY for all residential permits",
+        "NOC threshold: $2,500 general, $7,500 for A/C repair/replacement",
+        "NOC required before FIRST INSPECTION can be scheduled (not just before permit)",
+        "Job value verified against R.S. Means Building Construction Cost Data",
+        "Insurance certificate must list 'City of Hollywood' as certificate holder",
+        "30-day plan review period (does NOT include Planning, Zoning, Engineering, Fire)",
+        "Permit applications become NULL after 60 days if no action taken",
+        "Owner-Builder cannot sell house for 1 YEAR after final inspection",
+        "Chain link fencing NOT permitted in RAC, TOC (front yard), or Historic District",
+        "PVC fencing NOT permitted in Historic District front yard",
+        "Tree removal permit from Engineering Division required for ALL properties",
+        "Landscape sub-permit required for new construction",
+        "Express Permitting available for A/C changeouts and electrical service changes",
+        "Use QLess for consultation appointments to avoid wait times",
+        "Work without permit = DOUBLE the permit fee",
+    ],
+    "miramar": [
+        "Building Department CLOSED ON FRIDAYS",
+        "Applications must be in BLACK INK",
+        "Do NOT highlight any information on plans - will be REJECTED",
+        "Construction Debris Removal Affidavit MANDATORY for ALL permits",
+        "HOA Affidavit required even if property is NOT in an HOA",
+        "Debris must be removed by Waste Pro of Florida ONLY (City Ordinance)",
+        "NOC must be recorded PRIOR to Building Dept submittal (not just before inspection)",
+        "NOC threshold: $5,000 general, $15,000 for A/C (much higher than other cities!)",
+        "FOUR (4) sets of plans required for engineered plans",
+        "Only NEW Broward County Uniform Permit Application accepted - old versions rejected",
+        "Affidavit of Identical Documents required for all digitally signed plans",
+        "All documents must be in TRUE PDF format",
+        "Schedule of Values required for permit pricing with subcontractors",
+        "ERC Letter + Impact Fee Receipt required for new construction",
+        "EPD approval required BEFORE Building Dept submittal",
+        "Owner/Agent letter must have BOTH Owner and Agent notarized signatures",
+        "Inspections must be scheduled before 3:00 PM for next business day",
+        "Quick Service Permitting available (max 5 permits per contractor)",
+        "After 3rd plan review: $500 flat fee per discipline",
+        "Work without permit = DOUBLE the permit fee",
+    ],
+    "plantation": [
+        "Application must be signed and notarized by QUALIFIER",
+        "Walk-Thru permits: Mon, Wed, Fri 8-10 AM only (3 permit limit per person)",
+        "No work on Sundays or holidays (City Ordinance Chapter 16, Sec 16-2)",
+        "Saturday work allowed 7 AM - 8 PM, pile-driving 8 AM - 5:30 PM only",
+        "NOC threshold: $2,500 general, $7,500 for A/C replacements",
+        "Insurance COI must list 'City of Plantation' as Certificate Holder",
+        "A/C changeouts can go DIRECTLY to Building Division - skip Zoning",
+        "Re-roofing can go DIRECTLY to Building Division - skip Zoning",
+        "Demolition permits MUST include Building AND Electrical permits together",
+        "Plenum ceilings require specs on Structural, Electrical, Mechanical AND Plumbing plans",
+        "Pre-fab buildings MUST have State approved drawings (Miami-Dade or Florida State)",
+        "Preliminary Review SUSPENDED as of 05/16/2024 - don't try to submit",
+        "COA/HOA/POA approval NOT required for building permit (effective 05/08/2023)",
+        "Product Approvals must be stamped 'approved' by Architect of record",
+        "Plans must be mechanically reproduced - hand-drawn plans rejected (FBC 107.3.5.1)",
+        "Temporary Power requires notarized signatures from owner, GC, AND electrical contractor",
+        "Burglar alarm (SFR) requires registration permit from Plantation Police Dept",
+        "Marine work requires US Longshoreman's and Harbor Workers insurance",
+        "Fast Track available with $1,000 cost recovery account deposit",
+        "Work without permit = 100% penalty fee added",
+    ],
+    "sunrise": [
+        "Signed Checklist is REQUIRED - most common rejection reason when missing!",
+        "Zoning review required FIRST for new construction, additions, alterations, exterior changes",
+        "Interior renovations can go DIRECTLY to Building Division - skip Zoning",
+        "Re-roofing can go DIRECTLY to Building Division - skip Zoning",
+        "A/C changeouts can go DIRECTLY to Building Division - skip Zoning",
+        "Broward County ePermits approval needed FIRST for demolition, additions, alterations, new construction",
+        "Contractor registration expires September 30th ANNUALLY - mark your calendar!",
+        "Professional Day: Wednesdays 8 AM - Noon for walk-in questions with Plans Examiners",
+        "NOC threshold: $2,500 general, $7,500 for A/C repair/replacement",
+        "Energy calculations must be submitted in 2 SETS",
+        "Special Inspection forms must be signed by BOTH inspector AND Owner",
+        "Truss drawings need Engineer seal AND Architect/Engineer of record acceptance",
+        "Schedule inspections by 3 PM one day in advance",
+        "Call Chief Inspectors between 8:00-8:30 AM for specific inspection times",
+        "Simple permits (fence, re-roof): ~2 days if correct",
+        "Single-family permits: 2-3 weeks if correct",
+        "Work without permit = DOUBLE fee charged",
+    ],
+    "west_palm_beach": [
+        "Insurance certificates MUST list: 'City of West Palm Beach, 401 Clematis Street, West Palm Beach, FL 33401'",
+        "NOC must be recorded at Palm Beach County BEFORE first inspection",
+        "Include permit number when emailing recorded NOC to ds@wpb.org",
+        "NOC threshold: $5,000 general, $15,000 for HVAC",
+        "Flood zone verification required before application",
+        "Elevation certificates required for certain flood zones",
+        "Historic district properties require additional Planning Division review",
+        "All materials must have Florida Product Approval",
+        "Find your inspector at 7:30 AM via Civic Access Portal → Today's Inspections",
+        "Long wait times 11:30 AM - 2:30 PM - avoid these hours",
+        "Mobility Fee adopted May 2025 for Downtown projects",
+        "Expired permits: Email expiredpermits@wpb.org early if selling property",
+        "Work without permit = 4x permit fee (Stop Work penalty)",
+    ],
+    "boynton_beach": [
+        "All documents must be UNPROTECTED - system rejects password-protected files",
+        "Permit #21-2804 or lower: Use Legacy system; New permits: Use SagesGov",
+        "NOC threshold: $5,000 general, $15,000 for HVAC repair/replacement",
+        "Email recorded NOC to: BuildingM@bbfl.us",
+        "Inspection requests after 3:00 PM NOT scheduled next day",
+        "Need permit application number AND 7-digit PIN for inspections",
+        "Wait for ALL reviews before submitting corrections - same-issue rejections trigger escalating fees",
+        "Resubmittal fees: 1st free, 2nd $75 or 10%, 3rd+ = 4x original fee!",
+        "Streamlined permits available: A/C, Water Heater ($55)",
+        "Streamlined Program: $250/year for expedited processing",
+        "Energy Edge Rebate Program available for energy-efficient improvements",
+        "Building Recertification program for older buildings - $400 app fee",
+        "Work without permit = 4x permit fee",
+    ],
+    "delray_beach": [
+        "All permits now DIGITAL ONLY through eServices Portal",
+        "Paper submissions incur $25 scanning fee",
+        "All documents must be unprotected",
+        "Express Permits (3 days): A/C Change-out, Water Heater, Re-roof",
+        "Emergency A/C and water heater can be permitted within 24 hours of work completion",
+        "NOC threshold: $5,000 general, $15,000 for HVAC",
+        "Many properties unknowingly in Historic Districts - CHECK FIRST",
+        "Historic Preservation Acknowledgement form required for historic properties",
+        "HP review can add significant time to approval",
+        "180 days without inspection = permit expired",
+        "Contractors must register BEFORE permit submittal",
+        "Owner-builders must appear IN PERSON",
+        "After-the-fact permit = 3x normal permit cost",
+        "Check flood zone - required for any CO/CC issuance",
+        "Right-of-Way: Check Table MBL-1 before designing new construction",
+        "Green Building: New construction 15,000+ SF requires certification",
+    ],
 }
-
-
-# ============================================================================
-# PEMBROKE PINES - Complete Requirements
-# ============================================================================
-
-PEMBROKE_PINES_PERMITS = {
-    "building": {
-        "name": "Building Permit - Pembroke Pines",
-        "items": [
-            "All permit applications signed by qualifying contractor (Florida Statute 713.135) and notarized",
-            "All information must be typed or neatly printed - incomplete packets will not be processed",
-            "Contractor must be registered with city - email State FL Certification/Registration or Broward County Certificate of Competency",
-            "Certificates of liability insurance and worker's compensation or exemption required",
-            "Recorded NOC required prior to Building Department submittal (2 certified copies from County Recording office)",
-            "NOC not required if work value under $2,500",
-            "Two (2) sets of plans required",
-            "Florida registered Architect/Engineer must sign and seal drawings (additions require same docs as new construction)",
-            "Current signed/sealed survey required (not required for interiors only)",
-            "Energy calculations signed/sealed by engineer (not required for interiors only)",
-            "Structural calculations signed/sealed by engineer (not required for interiors only)",
-            "Special inspection forms signed/sealed by engineer and signed by Owner (not required for interiors only)",
-            "Original Development Review Committee plans - stamped/original signed approved (not required for interiors only)",
-            "Notice of Acceptance (NOA) reviewed and approved by architect for windows, doors, louvers, shutters, etc.",
-            "Roof calculations (HVC) complete package with roof NOAs and roof plan (not required for interiors only)",
-            "Roof truss shop drawings signed/sealed by engineer with all calculations (not required for interiors only)",
-            "Fire sprinkler/alarm drawings with hydraulic calculations and cut sheets of all devices and panels",
-            "Building Division Revision Cover Sheet required for all changes - fee charged for plan review",
-            "Online submission: All documents uploaded, construction plans batched by trade (Structural/Mechanical/Electrical/Plumbing each in one file)",
-            "Permit fee: 6.1497% of construction cost (or per Sec. 6-16 City Code)",
-            "Processing time: Minimum 2 weeks (15 working days for written answer, excludes Planning/Zoning/Engineering/Fire review)",
-            "Follows 2023 Florida Building Code with Broward County Administrative Provisions",
-            "Located in High Velocity Hurricane Zone (HVHZ) - Exposure Category C (unless Category D applies)",
-            "Building Department CLOSED on Fridays",
-        ],
-    },
-    "electrical": {
-        "name": "Electrical Permit - Pembroke Pines",
-        "items": [
-            "Trade application in BLACK INK with values, square footage, and quantities",
-            "Signed by Owner and trade Contractor",
-            "Copy of license and insurance required",
-            "Contractor registered with city",
-            "NOC required if work value over $2,500",
-            "Electrical plans for commercial work",
-            "Load calculations",
-            "Online submission with all electrical sheets in one file",
-        ],
-    },
-    "plumbing": {
-        "name": "Plumbing Permit - Pembroke Pines",
-        "items": [
-            "Trade application in BLACK INK with values, square footage, and quantities",
-            "Signed by Owner and trade Contractor",
-            "Copy of license and insurance required",
-            "Contractor registered with city",
-            "NOC required if work value over $2,500",
-            "Plumbing plans showing work location",
-            "Water heater specifications",
-            "Online submission with all plumbing sheets in one file",
-        ],
-    },
-    "mechanical": {
-        "name": "Mechanical/HVAC Permit - Pembroke Pines",
-        "items": [
-            "Trade application in BLACK INK with values, square footage, and quantities",
-            "Signed by Owner and trade Contractor",
-            "Copy of license and insurance required",
-            "Contractor registered with city",
-            "NOC required if work value over $2,500",
-            "HVAC equipment specifications",
-            "Load calculations (Manual J)",
-            "Energy calculations when required",
-            "Online submission with all mechanical sheets in one file",
-        ],
-    },
-    "roofing": {
-        "name": "Roofing Permit - Pembroke Pines",
-        "items": [
-            "Trade application in BLACK INK with values, square footage, and quantities",
-            "Signed by Owner and trade Contractor",
-            "Copy of license and insurance required",
-            "Contractor registered with city",
-            "NOC required if work value over $2,500",
-            "Roof calculations (HVC) complete package",
-            "Roof NOAs included",
-            "Roof truss shop drawings signed/sealed by engineer with calculations",
-            "HVHZ compliance required",
-            "Online submission with all roofing sheets in one file",
-        ],
-    },
-}
-
-
-# ============================================================================
-# LAUDERDALE-BY-THE-SEA - Complete Requirements
-# ============================================================================
-
-LAUDERDALE_BY_THE_SEA_PERMITS = {
-    "building": {
-        "name": "Building Permit - Lauderdale-by-the-Sea",
-        "items": [
-            "Building permit services provided by CAP Government, Inc. - Office hours M-F 8am-4:30pm",
-            "Use town form available online with construction time limit form signed by owner and contractor",
-            "Owner/Agent letter with Owner and Agent notarized signatures",
-            "Plans and documents in PDF format, landscape oriented",
-            "All plans electronically signed and sealed by registered architect or engineer",
-            "Contractor and Sub-contractor registration required - credentials on file with Building Division",
-            "Submit Contractor Registration Form with: State Registration, Broward County Certificate of Competency (if applicable)",
-            "Liability and Worker's Comp Insurance listing Town of Lauderdale-by-the-Sea as certificate holder",
-            "Worker's Comp Exemption (if applicable) and County Business Tax Receipt",
-            "Broward County EPD submittal/approval BEFORE Building Dept submittal - apply online for Security Code & Application Number",
-            "Submit Asbestos form for interior only or renovation/addition work",
-            "Broward County Elevator submittal/approval before Building Dept submittal (plans only, 1 week review)",
-            "Recorded NOC required prior to Building Dept submittal (2 certified copies from County Recording office)",
-            "NOC not required if work value under $2,500",
-            "Two (2) sets of plans required",
-            "Current signed/sealed survey required (not required for interiors only)",
-            "Elevation certificate showing base flood elevation and flood zone",
-            "Energy calculations signed/sealed by engineer (not required for interiors only)",
-            "Structural calculations signed/sealed by engineer (not required for interiors only)",
-            "Special inspection forms signed/sealed by engineer and signed by Owner (not required for interiors only)",
-            "Original Development Review Committee plans - stamped/original signed approved (not required for interiors only)",
-            "Notice of Acceptance (NOA) stamped by architect for windows, doors, louvers, shutters, etc.",
-            "Roof calculations (HVC) complete package with roof NOAs and roof plan (not required for interiors only)",
-            "Roof truss shop drawings signed/sealed by engineer with all calculations (not required for interiors only)",
-            "Fire sprinkler/alarm drawings with hydraulic calculations and cut sheets of all devices and panels",
-            "Revisions require Architect's Narrative",
-        ],
-    },
-    "electrical": {
-        "name": "Electrical Permit - Lauderdale-by-the-Sea",
-        "items": [
-            "Trade application in BLACK INK with values, square footage, and quantities",
-            "Signed by Owner and trade Contractor",
-            "Copy of license and insurance required",
-            "Contractor registered with Building Division",
-            "NOC required if work value over $2,500",
-            "Insurance listing Town of Lauderdale-by-the-Sea as certificate holder",
-        ],
-    },
-    "plumbing": {
-        "name": "Plumbing Permit - Lauderdale-by-the-Sea",
-        "items": [
-            "Trade application in BLACK INK with values, square footage, and quantities",
-            "Signed by Owner and trade Contractor",
-            "Copy of license and insurance required",
-            "Contractor registered with Building Division",
-            "NOC required if work value over $2,500",
-            "Insurance listing Town of Lauderdale-by-the-Sea as certificate holder",
-        ],
-    },
-    "mechanical": {
-        "name": "Mechanical/HVAC Permit - Lauderdale-by-the-Sea",
-        "items": [
-            "Trade application in BLACK INK with values, square footage, and quantities",
-            "Signed by Owner and trade Contractor",
-            "Copy of license and insurance required",
-            "Contractor registered with Building Division",
-            "NOC required if work value over $2,500",
-            "Insurance listing Town of Lauderdale-by-the-Sea as certificate holder",
-        ],
-    },
-    "roofing": {
-        "name": "Roofing Permit - Lauderdale-by-the-Sea",
-        "items": [
-            "Use specific Roofing Permit Packet available from town",
-            "Trade application in BLACK INK with values, square footage, and quantities",
-            "Signed by Owner and trade Contractor",
-            "Copy of license and insurance required",
-            "Contractor registered with Building Division",
-            "NOC required if work value over $2,500",
-            "Roof calculations (HVC) complete package with roof NOAs",
-            "Roof truss shop drawings signed/sealed by engineer",
-            "Insurance listing Town of Lauderdale-by-the-Sea as certificate holder",
-        ],
-    },
-    "dock": {
-        "name": "Dock/Marine Structure Permit - Lauderdale-by-the-Sea",
-        "items": [
-            "Building permit services provided by CAP Government, Inc.",
-            "Completed Broward County Uniform Permit Application",
-            "Licensed Marine Contractor or General Contractor required",
-            "Contractor registered with Town Building Division - credentials on file",
-            "Liability and Worker's Comp Insurance listing Town of Lauderdale-by-the-Sea as certificate holder",
-            "Construction plans signed, sealed, and dated by Florida licensed engineer",
-            "Current signed/sealed survey showing property lines and waterway",
-            "Site plan showing proposed dock location and dimensions",
-            "Cross-section diagram of dock construction",
-            "Recorded NOC required if job value over $2,500 (2 certified copies from County Recording office)",
-            "Broward County EPD submittal/approval BEFORE Building Dept submittal",
-            "Apply online for EPD Security Code & Application Number",
-            "Broward County Environmental Resource General License",
-            "Florida DEP Environmental Resource Permit or exemption",
-            "U.S. Army Corps of Engineers (ACOE) permit if required",
-            "Plans and documents in PDF format, landscape oriented",
-            "Submit via Town online portal or CAP Government",
-            "Contact: building@lbts-fl.gov or (954) 640-4215",
-        ],
-    },
-    "seawall": {
-        "name": "Seawall Permit - Lauderdale-by-the-Sea",
-        "items": [
-            "Building permit services provided by CAP Government, Inc.",
-            "Completed Broward County Uniform Permit Application",
-            "Licensed Marine Contractor or General Contractor required",
-            "Contractor registered with Town Building Division",
-            "Liability and Worker's Comp Insurance listing Town as certificate holder",
-            "Construction plans signed, sealed, and dated by Florida licensed engineer",
-            "Structural calculations for seawall design",
-            "Current signed/sealed survey showing existing seawall",
-            "Elevation certificate showing base flood elevation and flood zone",
-            "Seawall cap must meet Broward County minimum elevation requirements",
-            "Recorded NOC required if job value over $2,500",
-            "Broward County EPD submittal/approval BEFORE Building Dept submittal",
-            "Broward County Environmental Resource General License",
-            "Florida DEP Environmental Resource Permit or exemption",
-            "U.S. Army Corps of Engineers (ACOE) permit if required",
-            "Special inspection forms signed/sealed by engineer",
-            "Plans in PDF format, landscape oriented",
-            "Submit via Town online portal or CAP Government",
-        ],
-    },
-    "boat_lift": {
-        "name": "Boat Lift Permit - Lauderdale-by-the-Sea",
-        "items": [
-            "Completed permit application via CAP Government",
-            "Licensed Marine Contractor required",
-            "Contractor registered with Town Building Division",
-            "Product specifications and installation instructions",
-            "Florida Product Approval (FPA) or Notice of Acceptance (NOA)",
-            "Site plan showing proposed location",
-            "Insurance listing Town of Lauderdale-by-the-Sea as certificate holder",
-            "NOC required if job value over $2,500",
-            "Electrical permit required if electrical connection needed",
-            "Submit via Town online portal",
-        ],
-    },
-}
-
-
-# ============================================================================
-# BOCA RATON - Complete Requirements (Palm Beach County)
-# ============================================================================
-
-BOCA_RATON_PERMITS = {
-    "building": {
-        "name": "Building Permit - Boca Raton",
-        "items": [
-            "Permit application completed and signed by owner and contractor",
-            "Application notarized if job value over $5,000 (over $15,000 for A/C changeouts)",
-            "Contractor must be registered with City of Boca Raton - submit Contractor Registration Form",
-            "State Certification/Registration or Palm Beach County Certificate of Competency required",
-            "Certificates of liability insurance (min $1M per occurrence, $2M aggregate) and worker's compensation or exemption",
-            "Notice of Commencement (NOC) - certified copy required if job value over $5,000 (over $15,000 for A/C)",
-            "Apply online via Boca eHub (bocaehub.com) - permit application uploaded to Boca ePlans (ProjectDox)",
-            "Initial deposit: 1% of contract value (minimum $100 for first $500)",
-            "Permit fee: 1.6% of total job cost",
-            "Plans signed and sealed by Florida registered Architect/Engineer",
-            "Each plan sheet must be a separate PDF file (not combined into one multi-page PDF)",
-            "Current signed/sealed survey required (not required for interior alterations)",
-            "Site plan showing positioning and layout of proposed construction",
-            "Landscape plan (if applicable)",
-            "Energy calculations signed/sealed by engineer (not required for interiors only)",
-            "Structural calculations signed/sealed by engineer when work is structural",
-            "Windload Design Form completed",
-            "Window/Door Schedule for impact-rated products",
-            "Product Approvals or Notice of Acceptance (NOA) for all impact-rated products - must be HVHZ compliant",
-            "HOA Affidavit (if applicable)",
-            "Owner Affidavit for owner-builder permits (property must be single-family, owner-occupied, not business-owned)",
-            "Threshold Compliance Letter for threshold buildings",
-            "Special Inspector Notice to Building Official (if threshold inspection required)",
-            "Fire sprinkler/alarm drawings with hydraulic calculations and cut sheets (if applicable)",
-            "Follows Florida Building Code 8th Edition (2023)",
-            "Located in High Velocity Hurricane Zone (HVHZ) - Wind Zone 4",
-            "Processing: 1-2 business days to set up permit, then plan review begins",
-            "Accessory structures (pools, docks, decks, screen enclosures, fences, generators) require separate permit applications",
-        ],
-    },
-    "electrical": {
-        "name": "Electrical Permit - Boca Raton",
-        "items": [
-            "Completed electrical permit application signed by owner and contractor",
-            "Application notarized if job value over $5,000",
-            "Licensed electrical contractor registered with City of Boca Raton",
-            "Contractor Registration Form with State Certification and insurance on file",
-            "NOC required if job value over $5,000",
-            "Electrical plans for commercial work",
-            "Load calculations for service changes",
-            "Single-line diagram for service upgrades",
-            "Initial deposit: 1% of contract value (minimum $100)",
-            "Submit via Boca eHub and upload documents to Boca ePlans",
-        ],
-    },
-    "plumbing": {
-        "name": "Plumbing Permit - Boca Raton",
-        "items": [
-            "Completed plumbing permit application signed by owner and contractor",
-            "Application notarized if job value over $5,000",
-            "Licensed plumbing contractor registered with City of Boca Raton",
-            "Contractor Registration Form with State Certification and insurance on file",
-            "NOC required if job value over $5,000",
-            "Plumbing plans showing work location",
-            "Water heater specifications",
-            "Water Sewer Form (if applicable)",
-            "Walk-in Tubs and Water Heater Sizing form (if applicable)",
-            "Water-Hammer Arrestor Installation form (if applicable)",
-            "Initial deposit: 1% of contract value (minimum $100)",
-            "Submit via Boca eHub and upload documents to Boca ePlans",
-        ],
-    },
-    "mechanical": {
-        "name": "Mechanical/HVAC Permit - Boca Raton",
-        "items": [
-            "Completed mechanical permit application signed by owner and contractor",
-            "Application notarized if job value over $15,000 for A/C changeouts",
-            "Licensed HVAC contractor registered with City of Boca Raton",
-            "Contractor Registration Form with State Certification and insurance on file",
-            "NOC required if job value over $15,000 for A/C changeout permits",
-            "HVAC equipment specifications and cut sheets",
-            "Load calculations (Manual J)",
-            "Energy calculations when required",
-            "Initial deposit: 1% of contract value (minimum $100)",
-            "Submit via Boca eHub and upload documents to Boca ePlans",
-        ],
-    },
-    "roofing": {
-        "name": "Roofing Permit - Boca Raton",
-        "items": [
-            "Submittal Form - Roof Application",
-            "Completed permit application signed by owner and contractor",
-            "Application notarized if job value over $5,000",
-            "Licensed roofing contractor (General, Residential, or Building Contractor) registered with City",
-            "Contractor Registration Form with State Certification and insurance on file",
-            "Contract copy required",
-            "NOC required if job value over $5,000",
-            "Supplemental Roofing Package",
-            "Re-roof Mitigation Package",
-            "Product Approvals/NOAs for all roofing materials - must be HVHZ compliant",
-            "Single Family Re-Roofing Affidavit (for single-family homes)",
-            "Roof Supplemental Acknowledgment Memo",
-            "Roof plan showing layout and dimensions",
-            "Roof truss shop drawings signed/sealed by engineer (if applicable)",
-            "Wind velocity compliance per Memorandum dated January 1, 2018",
-            "NOAs must be complete and legible - available on job site for inspections",
-            "Authorized Agent Form (if applicable)",
-            "Owner Builder Affidavit and Estimate of Costs (for owner-builder permits)",
-            "Initial deposit: 1% of contract value (minimum $100)",
-            "HVHZ compliance required - all products must meet hurricane zone standards",
-            "Submit via Boca eHub and upload documents to Boca ePlans",
-            "Inspections scheduled online, by phone (561-393-7914), or text 'Schedule' to 833-821-0601",
-        ],
-    },
-    "dock": {
-        "name": "Dock/Marine Structure Permit - Boca Raton",
-        "items": [
-            "Completed permit application signed by owner and contractor",
-            "Application notarized if job value over $5,000",
-            "Licensed Marine Contractor or General Contractor registered with City of Boca Raton",
-            "Contractor Registration Form with State Certification and insurance on file",
-            "Certificates of liability insurance (min $1M per occurrence, $2M aggregate)",
-            "Current signed/sealed survey (boundary survey) showing property lines into waterway",
-            "Survey must be dated within last 6 months for some projects",
-            "Construction plans signed, sealed, and dated by Florida licensed engineer",
-            "Site plan showing proposed dock location relative to property lines",
-            "Cross-section diagram of dock showing pilings, framing, decking, dimensions",
-            "Product submittals and specifications for all materials",
-            "Florida Product Approval (FPA) for dock materials",
-            "Notice of Commencement (NOC) required if job value over $5,000",
-            "Initial deposit: 1% of contract value (minimum $100)",
-            "Permit fee: 1.6% of total job cost",
-            "Florida DEP Environmental Resource Permit or exemption verification",
-            "U.S. Army Corps of Engineers (ACOE) permit if required (federal waters/wetlands)",
-            "Palm Beach County Environmental Resources Management approval (if outside city limits)",
-            "Coastal Construction Control Line authorization if seaward of CCCL",
-            "HOA approval if in community with HOA",
-            "Dock permit is SEPARATE from main building permit",
-            "Apply via Boca eHub and upload to Boca ePlans (ProjectDox)",
-            "Each plan sheet must be separate PDF file",
-        ],
-    },
-    "seawall": {
-        "name": "Seawall Permit - Boca Raton",
-        "items": [
-            "Completed permit application signed by owner and contractor",
-            "Application notarized if job value over $5,000",
-            "Licensed Marine Contractor or General Contractor registered with City",
-            "Contractor Registration Form with State Certification and insurance on file",
-            "Certificates of liability insurance (min $1M per occurrence, $2M aggregate)",
-            "Current signed/sealed survey showing existing seawall location",
-            "Construction plans signed, sealed, and dated by Florida licensed engineer",
-            "Structural calculations for seawall design",
-            "Site plan showing seawall location and setbacks",
-            "Elevation requirements per City flood damage control standards",
-            "Notice of Commencement (NOC) required if job value over $5,000",
-            "Initial deposit: 1% of contract value (minimum $100)",
-            "Permit fee: 1.6% of total job cost",
-            "Florida DEP Environmental Resource Permit or exemption",
-            "U.S. Army Corps of Engineers (ACOE) permit if required",
-            "Palm Beach County approval if in county jurisdiction",
-            "Coordination with City Engineering for canal-front lots",
-            "HOA approval and shared wall agreements if applicable",
-            "Apply via Boca eHub and upload to Boca ePlans",
-        ],
-    },
-    "boat_lift": {
-        "name": "Boat Lift Permit - Boca Raton",
-        "items": [
-            "Completed permit application signed by owner and contractor",
-            "Application notarized if job value over $5,000",
-            "Licensed Marine Contractor registered with City of Boca Raton",
-            "Contractor Registration Form on file",
-            "Product submittals and installation instructions for boat lift",
-            "Florida Product Approval (FPA) for boat lift - certified by Florida Building Commission",
-            "Site plan showing proposed boat lift location",
-            "Structural specifications if required",
-            "Notice of Commencement (NOC) if job value over $5,000",
-            "Initial deposit: 1% of contract value (minimum $100)",
-            "Electrical permit required if electrical connection needed",
-            "Boat lift permit is SEPARATE application from dock permit",
-            "Apply via Boca eHub and upload to Boca ePlans",
-        ],
-    },
-}
-
-
-# ============================================================================
-# PLACEHOLDER DATA - We'll fill these in as we get requirements
-# ============================================================================
-
-DEFAULT_PERMITS = {
-    "building": {
-        "name": "Building Permit",
-        "items": [
-            "Completed permit application",
-            "Plans sealed by Florida licensed professional",
-            "Notice of Commencement (NOC)",
-            "Licensed contractor registration",
-            "Proof of insurance",
-        ],
-    },
-}
-
-# Apply default permits to cities we haven't detailed yet
-MIRAMAR_PERMITS = DEFAULT_PERMITS
-DAVIE_PERMITS = DEFAULT_PERMITS
-PLANTATION_PERMITS = DEFAULT_PERMITS
-SUNRISE_PERMITS = DEFAULT_PERMITS
-DEERFIELD_BEACH_PERMITS = DEFAULT_PERMITS
-COCONUT_CREEK_PERMITS = DEFAULT_PERMITS
-TAMARAC_PERMITS = DEFAULT_PERMITS
-LAUDERHILL_PERMITS = DEFAULT_PERMITS
-MARGATE_PERMITS = DEFAULT_PERMITS
-WESTON_PERMITS = DEFAULT_PERMITS
-OAKLAND_PARK_PERMITS = DEFAULT_PERMITS
-
-
-# ============================================================================
-# MASTER CITY DATABASE - Maps city to its requirements
-# ============================================================================
-
-CITY_PERMITS = {
-    "fort_lauderdale": FORT_LAUDERDALE_PERMITS,
-    "pompano_beach": POMPANO_BEACH_PERMITS,
-    "hollywood": HOLLYWOOD_PERMITS,
-    "coral_springs": CORAL_SPRINGS_PERMITS,
-    "pembroke_pines": PEMBROKE_PINES_PERMITS,
-    "lauderdale_by_the_sea": LAUDERDALE_BY_THE_SEA_PERMITS,
-    "miramar": MIRAMAR_PERMITS,
-    "davie": DAVIE_PERMITS,
-    "plantation": PLANTATION_PERMITS,
-    "sunrise": SUNRISE_PERMITS,
-    "boca_raton": BOCA_RATON_PERMITS,
-    "deerfield_beach": DEERFIELD_BEACH_PERMITS,
-    "coconut_creek": COCONUT_CREEK_PERMITS,
-    "tamarac": TAMARAC_PERMITS,
-    "lauderhill": LAUDERHILL_PERMITS,
-    "margate": MARGATE_PERMITS,
-    "weston": WESTON_PERMITS,
-    "oakland_park": OAKLAND_PARK_PERMITS,
-}
-
-
-# ============================================================================
-# HELPER FUNCTIONS
-# ============================================================================
-
-
-def get_city_list():
-    """Returns list of all available cities"""
-    return [BROWARD_CITIES[key] for key in BROWARD_CITIES.keys()]
-
-
-def get_city_key(city_name):
-    """Converts city display name back to key"""
-    for key, name in BROWARD_CITIES.items():
-        if name == city_name:
-            return key
-    return "fort_lauderdale"  # Default
-
-
-def get_permit_types(city_key):
-    """Returns available permit types for a city"""
-    if city_key in CITY_PERMITS:
-        return CITY_PERMITS[city_key]
-    return FORT_LAUDERDALE_PERMITS  # Default
 
 
 def get_permit_requirements(city_key, permit_type):
-    """
-    Get requirements for a specific permit type in a specific city
+    """Get detailed permit requirements for a city and permit type."""
 
-    Args:
-        city_key: City identifier (e.g., "fort_lauderdale")
-        permit_type: Type of permit (e.g., "building", "electrical")
+    city_name = CITY_INFO.get(city_key, {}).get(
+        "name", city_key.replace("_", " ").title()
+    )
 
-    Returns:
-        Dictionary with permit name and required items
-    """
-    city_permits = get_permit_types(city_key)
+    hvhz_requirements = [
+        "All construction must comply with Florida Building Code HVHZ requirements",
+        "Miami-Dade NOA or Florida Product Approval required for all exterior products",
+        "Windows, doors, shutters must have impact rating or separate shutter permit",
+        "Roofing materials must be HVHZ-approved with proper attachment details",
+    ]
 
-    if permit_type in city_permits:
-        return city_permits[permit_type]
-
-    # Return default if not found
-    return {
-        "name": "Building Permit",
-        "items": ["Permit requirements not yet available for this city"],
+    requirements = {
+        "name": f"{permit_type.replace('_', ' ').title()} Permit - {city_name}",
+        "city": city_name,
+        "city_key": city_key,
+        "city_info": CITY_INFO.get(city_key, {}),
+        "hvhz_requirements": hvhz_requirements,
+        "gotchas": KNOWN_GOTCHAS.get(city_key, []),
+        "items": [],
+        "inspections": [],
+        "tips": [],
     }
 
+    # ROOFING
+    if permit_type == "roofing":
+        requirements["items"] = [
+            "Broward County Uniform Permit Application (Building)",
+            "HVHZ Uniform Roofing Application with all sections completed",
+            "Miami-Dade NOA or Florida Product Approval for ALL roofing materials",
+            "Statement of Responsibilities Regarding Asbestos (required for ALL re-roofs)",
+            "Rooftop Equipment Affidavit",
+            "Wind load calculations/verification",
+            "Contractor license (licensed roofing contractor)",
+            "Contractor insurance certificate",
+            "Notice of Commencement",
+        ]
+        requirements["inspections"] = [
+            "Tin tag",
+            "Mop/tile/shingle in-progress",
+            "Final structural",
+        ]
 
-# ============================================================================
-# LEGACY SUPPORT - Keep old function for backward compatibility
-# ============================================================================
+        if city_key == "fort_lauderdale":
+            requirements["items"].extend(
+                [
+                    "For homes ≥$300,000: Property Appraiser valuation copy",
+                    "For homes ≥$300,000: Hurricane Mitigation Affidavit (notarized)",
+                    "Water Barrier/Sheathing Renailing Affidavit",
+                ]
+            )
+            requirements["tips"] = [
+                "Circle (don't highlight) NOA info",
+                "NOC threshold: $5,000",
+            ]
+        elif city_key == "pompano_beach":
+            requirements["items"].extend(
+                [
+                    "Fire Review Application (multi-family/commercial)",
+                    "Broward County Asbestos Certificate",
+                    "Fenestration Wind Load & Roof Uplift Chart",
+                    "HOA approval letter (if applicable)",
+                ]
+            )
+            requirements["tips"] = ["BLACK INK required", "NOC threshold: $7,500"]
+        elif city_key == "lauderdale_by_the_sea":
+            requirements["items"].extend(
+                ["Roofing Permit Packet", "Roof calculations with NOAs"]
+            )
+            requirements["tips"] = ["Fee: 1.5% of cost", "NOC if ≥$2,500"]
+        elif city_key == "lighthouse_point":
+            requirements["items"].extend(
+                ["Roof Permit Requirements docs", "Truss Review (if applicable)"]
+            )
+            requirements["tips"] = [
+                "NO owner/builder for roofing",
+                "Licensed contractor required",
+            ]
 
-# This keeps your old code working
-PERMIT_TYPES = FORT_LAUDERDALE_PERMITS
+    # MECHANICAL/HVAC
+    elif permit_type == "mechanical":
+        requirements["items"] = [
+            "Broward County Uniform Permit Application (Mechanical)",
+            "AHRI Certificate of Product Ratings",
+            "Equipment specifications/cut sheets",
+            "Tie-down details with product approval",
+            "Load calculations (Manual J for residential)",
+            "Contractor license and insurance",
+            "Notice of Commencement",
+        ]
+        requirements["inspections"] = ["Rough-in (if new ductwork)", "Final mechanical"]
+
+        if city_key == "pompano_beach":
+            requirements["items"].extend(
+                [
+                    "Broward County Uniform Data Form for A/C Replacements",
+                    "Fire Review Application",
+                ]
+            )
+            requirements["tips"] = [
+                "BLACK INK",
+                "NOC threshold: $5,000",
+                "Emergency: notify inspector BEFORE work",
+            ]
+        elif city_key == "lauderdale_by_the_sea":
+            requirements["items"].append("AC Changeout Form")
+            requirements["tips"] = ["Fee: $85 min or 2%", "NOC if ≥$7,500"]
+        elif city_key == "lighthouse_point":
+            requirements["items"].append("AC Replacement Data Sheet")
+            requirements["tips"] = ["$75 flat fee for A/C replacement"]
+
+    # ELECTRICAL
+    elif permit_type == "electrical":
+        requirements["items"] = [
+            "Broward County Uniform Permit Application (Electrical)",
+            "Electrical plans showing scope",
+            "Riser diagram (service changes)",
+            "Load calculations (upgrades)",
+            "Panel schedules",
+            "Contractor license and insurance",
+            "Notice of Commencement",
+        ]
+        requirements["inspections"] = [
+            "Underground/rough",
+            "Service rough",
+            "Final electrical",
+        ]
+
+        if city_key == "pompano_beach":
+            requirements["items"].append("AIC calculation and service equipment rating")
+            requirements["tips"] = ["Service must be UNDERGROUND", "BLACK INK"]
+        elif city_key == "lighthouse_point":
+            requirements["tips"] = ["NO owner/builder - licensed contractor REQUIRED"]
+
+    # PLUMBING
+    elif permit_type == "plumbing":
+        requirements["items"] = [
+            "Broward County Uniform Permit Application (Plumbing)",
+            "Plumbing plans with isometrics (new construction)",
+            "Water heater specs (for replacement)",
+            "Gas piping plan (for gas work)",
+            "Contractor license and insurance",
+            "Notice of Commencement",
+        ]
+        requirements["inspections"] = ["Rough plumbing", "Top out", "Final plumbing"]
+
+        if city_key == "pompano_beach":
+            requirements["items"].append("Water Heater Replacement Data Form")
+        elif city_key == "lighthouse_point":
+            requirements["tips"] = ["$75 flat fee for water heater"]
+
+    # BUILDING (New Construction)
+    elif permit_type == "building":
+        requirements["items"] = [
+            "Broward County Uniform Permit Application (Building)",
+            "Broward County Uniform Permit Application (Electrical)",
+            "Broward County Uniform Permit Application (Mechanical)",
+            "Broward County Uniform Permit Application (Plumbing)",
+            "Floodplain Application",
+            "Signed/sealed survey with elevations",
+            "Site plans with pervious/impervious percentages",
+            "Construction plans signed/sealed by design professional",
+            "Structural calculations signed/sealed",
+            "Truss shop drawings signed/sealed",
+            "Energy calculations (Manual J)",
+            "Product approvals (NOAs) for windows, doors, shutters, roofing",
+            "Geotechnical/soil report",
+            "Special Inspector Form",
+            "Broward County EPD approval (BEFORE city submittal)",
+            "Notice of Commencement",
+            "Contractor license and insurance",
+        ]
+        requirements["inspections"] = [
+            "Footing",
+            "Formboard survey",
+            "Soil treatment",
+            "Slab/reinforcing",
+            "Tie beams",
+            "Columns/shear walls",
+            "Framing",
+            "Roof framing/sheathing",
+            "Insulation",
+            "Drywall",
+            "Windows/doors",
+            "Elevation certificate",
+            "Final survey",
+            "Final structural",
+        ]
+
+        if city_key == "fort_lauderdale":
+            requirements["items"].append("DRC approved plans (if required)")
+            requirements["tips"] = ["2 sets of plans", "50% deposit required"]
+        elif city_key == "pompano_beach":
+            requirements["items"].extend(
+                [
+                    "Engineering Permit Application",
+                    "Zoning Compliance Application",
+                    "Tree Permit Application",
+                    "Fire Review Application",
+                    "Utility Connection Application",
+                    "Transportation Concurrency Certificate",
+                ]
+            )
+            requirements["tips"] = [
+                "1 set of plans",
+                "BLACK INK",
+                "Fire Review required",
+            ]
+        elif city_key == "lauderdale_by_the_sea":
+            requirements["items"].extend(
+                [
+                    "New Construction Permit Application",
+                    "Recorded NOC (2 certified copies) - BEFORE submittal",
+                    "Owner/Agent letter notarized",
+                    "Contract with price breakdown",
+                ]
+            )
+            requirements["tips"] = [
+                "NOC must be RECORDED first - #1 rejection",
+                "Fee: 2%",
+            ]
+        elif city_key == "lighthouse_point":
+            requirements["items"].extend(
+                [
+                    "DPEP Procedure Form with stamp",
+                    "3 sets drainage plans",
+                    "2 sets soil density tests",
+                    "Seawall engineer letters (waterfront)",
+                ]
+            )
+            requirements["tips"] = [
+                "Survey <1 year or Zoning Affidavit",
+                "$1,000 app fee",
+            ]
+
+    # WINDOWS/DOORS
+    elif permit_type in ["windows", "fenestration"]:
+        requirements["name"] = f"Windows, Doors & Shutters - {city_name}"
+        requirements["items"] = [
+            "Broward County Uniform Permit Application (Building)",
+            "Miami-Dade NOA or Florida Product Approval for ALL products",
+            "Wind load chart/calculations",
+            "Product specifications/cut sheets",
+            "Installation details per NOA",
+            "Window/door schedule",
+            "Contractor license and insurance",
+            "Notice of Commencement",
+        ]
+        requirements["inspections"] = ["Attachment", "Final structural"]
+
+        if city_key == "pompano_beach":
+            requirements["items"].extend(
+                [
+                    "Fire Review Application (except single-family)",
+                    "Fenestration Wind Load Chart",
+                    "HOA approval (if applicable)",
+                ]
+            )
+
+    # POOLS
+    elif permit_type == "pool":
+        requirements["name"] = f"Swimming Pool - {city_name}"
+        requirements["items"] = [
+            "Broward County Uniform Permit Application (Building)",
+            "Broward County Uniform Permit Application (Electrical)",
+            "Broward County Uniform Permit Application (Plumbing)",
+            "Residential Swimming Pool Safety Act form",
+            "Pool Barrier Affidavit",
+            "Site plan with pool location and setbacks",
+            "Pool plans with barrier compliance",
+            "Electrical plans per NEC 680",
+            "Geotechnical report (if required)",
+            "Zoning compliance",
+            "Contractor license",
+            "Notice of Commencement",
+        ]
+        requirements["inspections"] = [
+            "Soil compaction",
+            "Pool steel",
+            "Pool barrier",
+            "Pool bonding",
+            "Plumbing",
+            "Final",
+        ]
+        requirements["tips"] = [
+            "Min 4-foot barrier required",
+            "Self-closing, self-latching gates",
+            "Door alarms if direct house access",
+        ]
+
+        if city_key == "lauderdale_by_the_sea":
+            requirements["items"].extend(
+                ["Swimming Pool & Spa Permit Package", "Site pervious calculation"]
+            )
+            requirements["tips"].append("Fee: 5% of cost (highest rate)")
+
+    # MARINE (Docks, Seawalls, Boat Lifts)
+    elif permit_type in ["dock", "seawall", "boat_lift", "marine"]:
+        requirements["name"] = f"Marine Construction - {city_name}"
+        requirements["items"] = [
+            "Broward County Uniform Permit Application (Building)",
+            "Engineering Permit Application",
+            "Broward County Environmental Resource General License (BEFORE city submittal)",
+            "Signed/sealed survey with elevations",
+            "Signed/sealed construction plans",
+            "Special Inspector Form (pile installation)",
+            "FL DEP approval or exemption (if applicable)",
+            "Army Corps approval (if applicable)",
+            "Contractor license and insurance",
+            "Notice of Commencement",
+        ]
+        requirements["inspections"] = [
+            "Pile installation",
+            "Pile log",
+            "Tie beam steel",
+            "Framing",
+            "Engineer reports",
+            "Final structural",
+            "Updated survey before final",
+        ]
+        requirements["tips"] = [
+            "County EPD approval MUST be obtained FIRST",
+            "Sequence: County EPD → FL DEP → Army Corps → Local permit",
+        ]
+
+        if city_key == "fort_lauderdale":
+            requirements["tips"].extend(
+                [
+                    "Min seawall elevation: 3.9 ft NAVD88",
+                    "Dock limit: 30% of waterway",
+                    "Reflector tape required on piles",
+                    ">50% seawall repair = full code compliance",
+                ]
+            )
+        elif city_key == "pompano_beach":
+            requirements["tips"].extend(
+                [
+                    "Dock limit: 10% of waterway OR 8 ft (less)",
+                    "Boat lift: 20% of waterway OR 20 ft (less)",
+                    "Engineering fee: 4% of cost",
+                ]
+            )
+        elif city_key == "lighthouse_point":
+            requirements["items"].append("Longshoreman Insurance (FEDERAL requirement)")
+            requirements["tips"].extend(
+                [
+                    "CRITICAL: Longshoreman Insurance required",
+                    "State workers' comp is NOT sufficient",
+                ]
+            )
+
+    # GENERATORS
+    elif permit_type == "generator":
+        requirements["items"] = [
+            "Building Permit Application",
+            "Electrical Permit Application",
+            "Plumbing Permit Application (gas piping)",
+            "Zoning Compliance Application",
+            "Site plan (10' min from openings)",
+            "Foundation details",
+            "Electrical riser diagram",
+            "Load calculations",
+            "Gas piping plan",
+            "Equipment specifications",
+            "Contractor license and insurance",
+            "Notice of Commencement",
+        ]
+        requirements["inspections"] = [
+            "Foundation",
+            "Electrical rough",
+            "Gas rough",
+            "Finals",
+        ]
+
+        if city_key == "lauderdale_by_the_sea":
+            requirements["tips"] = ["EPD approval required"]
+
+    # SOLAR
+    elif permit_type == "solar":
+        requirements["items"] = [
+            "Building Permit Application (mounting)",
+            "Electrical Permit Application (PV)",
+            "Roof plan with panel locations",
+            "Attachment details signed/sealed",
+            "Electrical diagram (array, inverter, grounding)",
+            "Product specifications",
+            "FSEC approval OR engineer-sealed drawings",
+            "Wire sizing calculations",
+            "Contractor license and insurance",
+        ]
+        requirements["inspections"] = [
+            "Attachment",
+            "Rail bond",
+            "Service rough",
+            "Final structural",
+            "Final electrical",
+        ]
+
+        if city_key == "pompano_beach":
+            requirements["items"].extend(
+                ["Fire Review Application", "Zoning Compliance Application"]
+            )
+
+    # DEMOLITION
+    elif permit_type == "demolition":
+        requirements["items"] = [
+            "Building Permit Application",
+            "Electrical Permit Application (disconnect)",
+            "Plumbing Permit Application (capping)",
+            "Mechanical Permit Application (removal)",
+            "Statement of Responsibilities Regarding Asbestos (REQUIRED)",
+            "Signed/sealed survey with sq. ft.",
+            "FPL disconnect letter",
+            "TECO gas clearance",
+            "Tree protection plan",
+            "Contractor license and insurance",
+        ]
+        requirements["inspections"] = ["Final structural"]
+        requirements["tips"] = ["Permits expire in 60 DAYS"]
+
+        if city_key == "fort_lauderdale":
+            requirements["items"].extend(
+                ["Hold Harmless Agreement", "Maintenance of Traffic permit"]
+            )
+        elif city_key == "pompano_beach":
+            requirements["items"].extend(
+                ["Fire Review (commercial)", "Erosion control plan"]
+            )
+
+    # FENCES
+    elif permit_type == "fence":
+        requirements["items"] = [
+            "Building Permit Application",
+            "Zoning Compliance Application",
+            "Site plan with location, height, type",
+            "NOA or engineer details (if not standard)",
+            "Pool barrier compliance (if pool nearby)",
+            "Contractor license and insurance",
+        ]
+        requirements["inspections"] = ["Final structural", "Zoning final"]
+
+    # DEFAULT
+    else:
+        requirements["items"] = [
+            "Broward County Uniform Permit Application",
+            "Plans signed/sealed by design professional",
+            "Product approvals (NOAs)",
+            "Contractor license and insurance",
+            "Notice of Commencement",
+        ]
+        requirements["tips"] = [
+            f"Contact {city_name} Building Department for specific requirements"
+        ]
+
+    return requirements
+
+
+def get_city_key(city_name):
+    """Convert city name to city key."""
+    mapping = {
+        "Fort Lauderdale": "fort_lauderdale",
+        "Pompano Beach": "pompano_beach",
+        "Hollywood": "hollywood",
+        "Coral Springs": "coral_springs",
+        "Coconut Creek": "coconut_creek",
+        "Boca Raton": "boca_raton",
+        "Lake Worth Beach": "lake_worth_beach",
+        "Lauderdale-by-the-Sea": "lauderdale_by_the_sea",
+        "Deerfield Beach": "deerfield_beach",
+        "Pembroke Pines": "pembroke_pines",
+        "Lighthouse Point": "lighthouse_point",
+        "Weston": "weston",
+        "Lake Worth": "lake_worth_beach",
+        "Davie": "davie",
+        "Plantation": "plantation",
+        "Sunrise": "sunrise",
+        "Miramar": "miramar",
+        "Margate": "margate",
+        "Tamarac": "tamarac",
+        "Delray Beach": "delray_beach",
+        "Boynton Beach": "boynton_beach",
+        "West Palm Beach": "west_palm_beach",
+    }
+    return mapping.get(city_name, city_name.lower().replace(" ", "_").replace("-", "_"))
+
+
+def get_permit_types(city_name=None):
+    """Get available permit types."""
+    return [
+        {"value": "building", "label": "Building"},
+        {"value": "roofing", "label": "Roofing"},
+        {"value": "mechanical", "label": "Mechanical/HVAC"},
+        {"value": "electrical", "label": "Electrical"},
+        {"value": "plumbing", "label": "Plumbing"},
+        {"value": "windows", "label": "Windows/Doors/Shutters"},
+        {"value": "pool", "label": "Swimming Pool"},
+        {"value": "fence", "label": "Fence"},
+        {"value": "generator", "label": "Generator"},
+        {"value": "solar", "label": "Solar System"},
+        {"value": "demolition", "label": "Demolition"},
+        {"value": "dock", "label": "Dock"},
+        {"value": "seawall", "label": "Seawall"},
+        {"value": "boat_lift", "label": "Boat Lift"},
+    ]
