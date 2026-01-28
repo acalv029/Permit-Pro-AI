@@ -132,6 +132,40 @@ def get_db():
         db.close()
 
 
+def detect_permit_type_from_text(text: str) -> str:
+    """Auto-detect permit type from document text using keyword matching."""
+    text_lower = text.lower()
+    
+    # Define keywords for each permit type (most specific first)
+    permit_keywords = {
+        "roofing": ["roof", "re-roof", "reroof", "shingle", "tile roof", "roofing", "underlayment", "flashing"],
+        "mechanical": ["hvac", "air condition", "a/c", "ac unit", "heat pump", "ductwork", "furnace", "condenser", "air handler"],
+        "electrical": ["electrical", "panel", "circuit", "wiring", "outlet", "breaker", "service change", "meter", "amperage"],
+        "plumbing": ["plumbing", "water heater", "pipe", "drain", "sewer", "fixture", "backflow", "irrigation"],
+        "pool": ["pool", "spa", "hot tub", "swimming", "pool barrier", "pool pump"],
+        "fence": ["fence", "fencing", "gate", "chain link", "privacy fence", "pool barrier"],
+        "windows": ["window", "door", "shutter", "impact window", "slider", "french door", "garage door"],
+        "solar": ["solar", "photovoltaic", "pv system", "solar panel"],
+        "generator": ["generator", "standby power", "transfer switch"],
+        "demolition": ["demolition", "demo permit", "tear down", "remove structure"],
+        "dock": ["dock", "pier", "marina", "boat dock", "floating dock"],
+        "seawall": ["seawall", "bulkhead", "sea wall", "shoreline"],
+        "boat_lift": ["boat lift", "davit", "boat hoist"],
+    }
+    
+    # Count matches for each type
+    scores = {}
+    for permit_type, keywords in permit_keywords.items():
+        score = sum(1 for kw in keywords if kw in text_lower)
+        if score > 0:
+            scores[permit_type] = score
+    
+    # Return the type with highest score, or "building" as default
+    if scores:
+        return max(scores, key=scores.get)
+    return "building"
+
+
 # ============================================================================
 # DATABASE MODELS
 # ============================================================================
@@ -1535,11 +1569,21 @@ async def analyze_permit_folder(
                 all_text.append(f"\n=== {pf['name']} ===\n[Error reading]")
 
         city_key = get_city_key(city)
+        
+        # Handle auto-detect permit type
+        if permit_type == "auto" or not permit_type:
+            # AI will detect the permit type from the documents
+            detected_type = detect_permit_type_from_text("\n".join(all_text))
+            permit_type = detected_type
+        
         requirements = get_permit_requirements(city_key, permit_type)
         if not requirements:
-            raise HTTPException(
-                status_code=404, detail=f"No requirements for {city} - {permit_type}"
-            )
+            # Fallback to building if detection fails
+            requirements = get_permit_requirements(city_key, "building")
+            if not requirements:
+                raise HTTPException(
+                    status_code=404, detail=f"No requirements for {city} - {permit_type}"
+                )
 
         analysis = analyze_folder_with_claude(
             "\n".join(all_text), requirements, api_key, len(processed_files)
@@ -2658,5 +2702,3 @@ async def startup():
 
 if __name__ == "__main__":
     import uvicorn
-
-    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
