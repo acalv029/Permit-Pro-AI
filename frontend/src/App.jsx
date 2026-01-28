@@ -972,16 +972,54 @@ export default function App() {
                 </div>
               )}
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-gray-400 mb-2">UPLOAD FILES</label>
-                <div className={`border-2 border-dashed rounded-2xl p-8 text-center ${isDragging ? 'border-cyan-400 bg-cyan-500/10' : 'border-gray-700 bg-black/30'}`} onDragOver={e => { e.preventDefault(); setIsDragging(true) }} onDragLeave={() => setIsDragging(false)} onDrop={e => { e.preventDefault(); setIsDragging(false); handleFiles({ target: { files: e.dataTransfer.files } }) }}>
-                  <input type="file" multiple webkitdirectory="" directory="" onChange={handleFiles} className="hidden" id="fileInput" />
-                  <label htmlFor="fileInput" className="cursor-pointer">
-                    <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 rounded-2xl flex items-center justify-center border border-cyan-500/30"><svg className="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg></div>
-                    <p className="font-bold text-white mb-1">Drop your permit folder here</p>
-                    <p className="text-sm text-gray-500">PDF, PNG, JPG • Max 50 files</p>
-                  </label>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Upload Documents</label>
+                <div 
+                  className={`border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-200 ${isDragging ? 'border-cyan-400 bg-cyan-500/10 scale-[1.02]' : 'border-gray-700 bg-black/30 hover:border-gray-600'}`} 
+                  onDragOver={e => { e.preventDefault(); setIsDragging(true) }} 
+                  onDragLeave={() => setIsDragging(false)} 
+                  onDrop={e => { e.preventDefault(); setIsDragging(false); handleFiles({ target: { files: e.dataTransfer.files } }) }}
+                >
+                  {/* Hidden inputs */}
+                  <input type="file" multiple onChange={handleFiles} className="hidden" id="fileInput" accept=".pdf,.png,.jpg,.jpeg" />
+                  <input type="file" multiple webkitdirectory="" directory="" onChange={handleFiles} className="hidden" id="folderInput" />
+                  
+                  <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 rounded-2xl flex items-center justify-center border border-cyan-500/30">
+                    <svg className="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                    </svg>
+                  </div>
+                  
+                  <p className="font-bold text-white mb-2">Drag & drop files here</p>
+                  <p className="text-sm text-gray-500 mb-4">PDF, PNG, JPG • Max 50 files</p>
+                  
+                  <div className="flex items-center justify-center gap-3">
+                    <label htmlFor="fileInput" className="cursor-pointer px-4 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/30 rounded-lg text-cyan-400 text-sm font-semibold transition-all">
+                      <span className="flex items-center gap-2">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        Select Files
+                      </span>
+                    </label>
+                    <span className="text-gray-600">or</span>
+                    <label htmlFor="folderInput" className="cursor-pointer px-4 py-2 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 rounded-lg text-emerald-400 text-sm font-semibold transition-all">
+                      <span className="flex items-center gap-2">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+                        Select Folder
+                      </span>
+                    </label>
+                  </div>
                 </div>
-                {validFiles.length > 0 && <div className="mt-4 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl"><div className="flex justify-between"><span className="text-emerald-400 font-semibold">{validFiles.length} files ({formatSize(totalSize)})</span><button onClick={clearFiles} className="text-red-400 text-sm">Clear</button></div></div>}
+                
+                {validFiles.length > 0 && (
+                  <div className="mt-4 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
+                    <div className="flex justify-between items-center">
+                      <span className="text-emerald-400 font-semibold flex items-center gap-2">
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
+                        {validFiles.length} files ready ({formatSize(totalSize)})
+                      </span>
+                      <button onClick={clearFiles} className="text-red-400 hover:text-red-300 text-sm font-medium transition-colors">Clear all</button>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="mb-6"><label className="flex items-start gap-3 cursor-pointer"><input type="checkbox" checked={agreedToTerms} onChange={e => setAgreedToTerms(e.target.checked)} className="mt-1 w-5 h-5 rounded border-gray-600 bg-black/50 text-cyan-500" /><span className="text-sm text-gray-400">I agree to the <button type="button" onClick={() => setPage('terms')} className="text-cyan-400 underline">Terms of Service</button></span></label></div>
               <button onClick={analyze} disabled={!canAnalyze} className={`w-full py-4 rounded-xl font-bold text-lg ${canAnalyze ? 'bg-gradient-to-r from-cyan-500 to-emerald-500 text-black' : 'bg-gray-800 text-gray-500 cursor-not-allowed'}`}>{canAnalyze ? `Analyze ${validFiles.length} Files` : 'Select city, permit type & files'}</button>

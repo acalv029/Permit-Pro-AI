@@ -2570,7 +2570,15 @@ GENERAL SOUTH FLORIDA REQUIREMENTS:
     if tips:
         tips_text = "\n\nPERMIT OFFICE TIPS:\n" + "\n".join([f"💡 {t}" for t in tips])
 
-    prompt = f"""You are an expert South Florida permit analyst with 20+ years of experience reviewing permit applications for Broward and Palm Beach counties. You have deep, specific knowledge of {city_name}'s building department requirements, processes, and common rejection reasons.
+    prompt = f"""You are an expert South Florida permit analyst with 20+ years of experience reviewing permit applications for Broward, Palm Beach, and Miami-Dade counties. You have deep, specific knowledge of {city_name}'s building department requirements, processes, and common rejection reasons.
+
+You are also highly skilled at reading construction documents, blueprints, and permit applications. You can identify:
+- Title blocks with project info, architect/engineer stamps, dates
+- Sheet numbers and drawing types (A-Architectural, S-Structural, M-Mechanical, E-Electrical, P-Plumbing)
+- Professional seals, signatures, license numbers
+- Product approval numbers (NOAs, Florida Product Approvals)
+- Specifications, schedules, and details
+- Code references and compliance notes
 
 TASK: Analyze this permit package ({file_count} files) for a {permit_name} application in {city_name}.
 
@@ -2588,35 +2596,48 @@ ANALYSIS INSTRUCTIONS:
 
 1. **Document Identification**: Carefully identify EACH document in the package:
    - Document titles, headers, stamps, signatures
-   - Professional seals (architect, engineer, contractor)
-   - Dates and revision numbers
-   - Drawing sheet numbers and titles
-   - Look for NOAs (Notice of Acceptance) for products
+   - Professional seals (architect, engineer, contractor) - look for "FL License #", "P.E.", "R.A."
+   - Dates and revision numbers - check if current (within 1 year)
+   - Drawing sheet numbers and titles (e.g., "A-1 FLOOR PLAN", "S-1 FOUNDATION")
+   - Look for NOAs (Notice of Acceptance) - format is usually "NOA No. XX-XXXX.XX"
+   - Product approval numbers for roofing, windows, doors, HVAC equipment
+   - Contract amounts, job values, scope of work descriptions
 
-2. **City-Specific Compliance**: Check for {city_name}-specific requirements:
+2. **Blueprint/Plan Analysis**: When analyzing construction drawings:
+   - Check title block for: project address, owner name, contractor info, architect/engineer seal
+   - Verify sheets are signed AND sealed (both required in Florida)
+   - Look for scale notations, north arrow, dimensions
+   - Check for code compliance notes (FBC, HVHZ references)
+   - Identify if structural calculations are included (for load-bearing work)
+   - Look for energy compliance forms (Form 600A, Manual J calculations)
+   - Check site plans for: property lines, setbacks, flood zone, existing structures
+
+3. **City-Specific Compliance**: Check for {city_name}-specific requirements:
    - Correct forms used for this city
-   - Proper insurance certificate holder name (if visible)
-   - Required signatures and notarizations
-   - Pre-submittal approvals (EPD, etc.)
+   - Proper insurance certificate holder name (must match city exactly)
+   - Required signatures and notarizations (some cities require notarized applications)
+   - Pre-submittal approvals (EPD, DERM, WASD - especially Miami-Dade)
+   - Correct NOC threshold compliance ($2,500 or $5,000 depending on city)
+   - HVHZ product compliance (Miami-Dade NOA required in Broward and Miami-Dade)
 
-3. **Completeness Check**: For EACH required document:
-   - Is it present? Look for explicit evidence
+4. **Completeness Check**: For EACH required document:
+   - Is it present? Look for explicit evidence in the text
    - Is it properly signed/sealed where required?
-   - Is it dated within acceptable range (typically within 1 year)?
-   - Does it match the project scope?
+   - Is it dated within acceptable range?
+   - Does it match the project scope and address?
 
-4. **Technical Review**: Check for common issues:
-   - Missing signatures or seals on drawings
-   - Incomplete NOC (Notice of Commencement)
-   - Energy calculations (Manual J for residential HVAC)
-   - Product approvals (NOAs) for roofing, windows, doors
-   - Survey not signed/sealed or outdated
-   - Site plan missing setbacks, property lines, or flood zone info
-   - Load calculations for electrical/HVAC
-   - Missing contractor license info
-   - HVHZ compliance for impact products
+5. **Technical Review**: Check for common issues:
+   - Missing or expired professional seals on drawings
+   - Incomplete NOC (Notice of Commencement) - must show permit #, legal description
+   - Energy calculations (Manual J for residential HVAC, envelope calcs)
+   - Product approvals (NOAs) - verify they cover correct wind zone and application
+   - Survey not signed/sealed, or older than 1 year (some cities allow 2 years)
+   - Site plan missing setbacks, property lines, flood zone info
+   - Load calculations for electrical service changes
+   - Missing contractor license/insurance info
+   - HVHZ compliance - all impact products need Miami-Dade NOA
 
-5. **Scoring Guidelines**:
+6. **Scoring Guidelines**:
    - 90-100: All documents present, properly executed, ready to submit
    - 70-89: Minor issues, likely approved with small corrections
    - 50-69: Significant gaps, will need resubmission
@@ -2625,10 +2646,11 @@ ANALYSIS INSTRUCTIONS:
 Return your analysis as JSON:
 {{
     "summary": "2-3 sentence executive summary of package readiness for {city_name}",
+    "detected_permit_type": "The permit type detected from documents (roofing, electrical, mechanical, plumbing, building, pool, fence, etc.)",
     "overall_status": "READY|NEEDS_ATTENTION|INCOMPLETE",
     "compliance_score": <number 0-100>,
     "documents_found": [
-        {{"name": "document name", "status": "complete|incomplete|needs_signature", "notes": "specific details"}}
+        {{"name": "document name", "status": "complete|incomplete|needs_signature", "notes": "specific details like sheet numbers, seal status, dates"}}
     ],
     "missing_documents": [
         {{"name": "document name", "importance": "critical|important|recommended", "notes": "why needed for {city_name}"}}
@@ -2650,7 +2672,9 @@ IMPORTANT:
 - Be thorough but practical - focus on what will actually cause permit delays in {city_name}
 - If you can't find evidence of a document, mark it as missing
 - {city_name} permit office is strict about signatures, seals, and proper forms
-- Flag any city-specific requirements that aren't met"""
+- Read the document content carefully - look for specific text, numbers, dates, names
+- Flag any city-specific requirements that aren't met
+- When in doubt about a document's presence, look for keywords, headers, or form numbers"""
 
     try:
         msg = client.messages.create(
@@ -2702,3 +2726,5 @@ async def startup():
 
 if __name__ == "__main__":
     import uvicorn
+
+    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
