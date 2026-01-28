@@ -3,7 +3,7 @@
 # Data sourced from official city building department documentation
 
 """
-COMPLETE permit requirements for Fort Lauderdale, Pompano Beach,
+COMPLETE permit requirements for Fort Lauderdale, Pompano Beach, 
 Lauderdale-by-the-Sea, and Lighthouse Point.
 """
 
@@ -355,6 +355,90 @@ CITY_INFO = {
         "historic_district": True,
         "work_without_permit_penalty": "3x permit fee",
     },
+    # Miami-Dade County
+    "miami": {
+        "name": "Miami",
+        "department": "Building Department",
+        "address": "444 SW 2nd Ave, 4th Floor, Miami, FL 33130",
+        "phone": "305-416-1100",
+        "email": "building@miamigov.com",
+        "portal": "iBuild / ePlan (ProjectDox)",
+        "submission": "FULLY DIGITAL - All plans must be digitally signed and sealed",
+        "county": "Miami-Dade",
+        "noc_threshold": 2500,
+        "noc_threshold_hvac": 7500,
+        "hvhz": True,
+        "digital_only": True,
+        "derm_required": True,
+        "homeowner_assistance": True,
+        "concierge_program": True,
+    },
+    "hialeah": {
+        "name": "Hialeah",
+        "department": "Building Department",
+        "address": "501 Palm Avenue, 2nd Floor, Hialeah, FL 33010",
+        "phone": "305-883-5825",
+        "portal": "Tyler CSS",
+        "submission": "Applications must be NOTARIZED",
+        "county": "Miami-Dade",
+        "noc_threshold": 2500,
+        "noc_threshold_hvac": 7500,
+        "hvhz": True,
+        "notarization_required": True,
+        "derm_required": True,
+        "owner_builder_strict": True,
+    },
+    "miami_gardens": {
+        "name": "Miami Gardens",
+        "department": "Building Services",
+        "address": "18605 NW 27th Avenue, Miami Gardens, FL 33056",
+        "phone": "305-622-8000 x2648",
+        "email": "buildingpermitquestions@miamigardens-fl.gov",
+        "portal": "Tyler CSS",
+        "submission": "Two (2) sets of plans required, signed and sealed",
+        "county": "Miami-Dade",
+        "noc_threshold": 2500,
+        "noc_threshold_hvac": 7500,
+        "hvhz": True,
+        "closed_fridays": True,
+        "derm_required": True,
+        "plan_sets": 2,
+    },
+    "kendall": {
+        "name": "Kendall (Unincorporated Miami-Dade)",
+        "department": "Miami-Dade County Permitting and Inspection Center",
+        "address": "11805 SW 26th Street, Miami, FL 33175",
+        "phone": "786-315-2100",
+        "email": "permitrecords@miamidade.gov",
+        "portal": "EPS Portal",
+        "portal_url": "miamidade.gov/Apps/RER/EPSPortal",
+        "submission": "Yellow Form - signed and notarized",
+        "county": "Miami-Dade",
+        "noc_threshold": 2500,
+        "noc_threshold_hvac": 7500,
+        "hvhz": True,
+        "derm_required": True,
+        "folio_prefix": "30",
+        "e_permitting_hours": "2 AM - 5 PM, 7 days/week for trade permits",
+        "work_without_permit_penalty": "100% penalty (double fee)",
+    },
+    "homestead": {
+        "name": "Homestead",
+        "department": "Development Services Department",
+        "address": "100 Civic Court, Homestead, FL 33030",
+        "phone": "305-224-4590",
+        "email": "permits@homesteadfl.gov",
+        "portal": "EPL-B.U.I.L.D (launched October 2025)",
+        "submission": "Strict file naming convention REQUIRED",
+        "county": "Miami-Dade",
+        "noc_threshold": 2500,
+        "noc_threshold_hvac": 7500,
+        "hvhz": True,
+        "derm_required": True,
+        "file_naming_required": True,
+        "review_time_days": 14,
+        "work_without_permit_penalty": "Double fee",
+    },
 }
 
 # =============================================================================
@@ -700,23 +784,113 @@ KNOWN_GOTCHAS = {
         "Right-of-Way: Check Table MBL-1 before designing new construction",
         "Green Building: New construction 15,000+ SF requires certification",
     ],
+    # Miami-Dade County
+    "miami": [
+        "FULLY DIGITAL system - All plans must be digitally signed and sealed",
+        "DERM approval required BEFORE city permit for commercial projects",
+        "Contractor registration takes 2-3 business days",
+        "Permit expediters must also register per City Ordinance 14279",
+        "NOC threshold: $2,500 general, $7,500 for HVAC",
+        "NOC must be recorded at Miami-Dade County Recorder's Office",
+        "Miami-Dade Product Approval (NOA) required - NOT just Florida Product Approval",
+        "All of Miami-Dade is HVHZ - minimum 175 mph wind load design",
+        "Historic properties require Certificate of Appropriateness (COA)",
+        "Hours: Mon-Fri 7:30 AM - 4:30 PM (closes to public at 3:30 PM)",
+        "Permits valid for 180 days from issuance",
+        "Track inspector route in real-time via City website",
+        "Homeowner Assistance Program available - call (305) 710-0605",
+        "Concierge Program for large commercial: concierge@miamigov.com",
+    ],
+    "hialeah": [
+        "Applications must be NOTARIZED - strictly enforced!",
+        "Owner affidavits must also be NOTARIZED",
+        "For condos: Association Authorization Letter with president's signature NOTARIZED",
+        "Owner-builder: Must reside at property with valid FL driver's license matching address",
+        "Warranty deed and homestead exemption may be required for owner-builder",
+        "Tenant improvements limited to 500 sq ft OR under $5,000 for non-structural only",
+        "DERM approval required BEFORE city permit for commercial",
+        "NOC threshold: $2,500 general (or $5,000), $7,500 for HVAC",
+        "Miami-Dade Product Approval (NOA) required for all HVHZ products",
+        "Hours: Mon-Fri 7:30 AM - 11:15 AM, 12:30 PM - 3:15 PM (lunch closure!)",
+        "Check routed inspections: apps.hialeahfl.gov/building/DailyRoutedInspections.aspx",
+        "Buildings 25+ years require milestone inspections (recertification)",
+        "Amnesty Program available - contact Building Department",
+    ],
+    "miami_gardens": [
+        "CLOSED ON FRIDAYS - Mon-Thu 7:00 AM - 6:00 PM only",
+        "Two (2) sets of plans required, signed and sealed",
+        "DERM approval required BEFORE city permit - very common rejection!",
+        "DBPR approval required for restaurants",
+        "Miami-Dade County Health Dept approval for: ALFs, day cares, hospitals, schools",
+        "Miami-Dade Product Approval (NOA) required for all exterior products",
+        "NOC threshold: $2,500 general, $7,500 for HVAC",
+        "NOC must be present at job site for first inspection",
+        "Inspection requests before 3:00 PM = next business day",
+        "Inspection requests after 3:00 PM = two business days out",
+        "To cancel inspection: Email before 9:00 AM",
+        "Residential permits: Average 14 working days",
+        "Commercial permits: Average 28 working days",
+        "Review by 3-7 disciplines: Structural, Electrical, Mechanical, Plumbing, Zoning, Building, DERM, Fire, Public Works",
+        "Buildings 25-30 years require milestone inspections",
+        "Parking lot guardrail and illumination recertification required",
+    ],
+    "kendall": [
+        "Kendall is UNINCORPORATED Miami-Dade - permits through County PIC office",
+        "Property folio numbers start with '30' for unincorporated MDC",
+        "Application must be signed AND notarized (Yellow Form)",
+        "DERM approval required BEFORE building permit for most projects",
+        "Miami-Dade NOA required - NOT just Florida Product Approval!",
+        "Work without permit = 100% penalty (DOUBLE the permit fee) - strictly enforced",
+        "E-permitting available 7 days/week from 2 AM to 5 PM for trade permits",
+        "NOC threshold: $2,500 general, $7,500 for HVAC",
+        "NOC must be recorded at Miami-Dade County Recorder's Office before first inspection",
+        "SEER ratings must meet current energy code minimums (SEER2 15 for split systems)",
+        "Load calculations required if changing equipment size - can't just 'match existing'",
+        "Pool bonding strictly enforced - ALL metal within 5 feet must be bonded",
+        "AFCI required in bedrooms, living rooms, hallways; GFCI in bathrooms, kitchens, garages",
+        "Peel-and-stick underlayment required in HVHZ for shingle roofs",
+        "Max 2 roof layers - often must tear off existing",
+        "15% refund available for permits not requiring rework (request within 180 days)",
+        "Private Provider option: 65% fee reduction for their portion",
+        "Check for existing violations on property before applying - may block new permits",
+        "Marine construction requires Class I Environmental Permit from DERM",
+    ],
+    "homestead": [
+        "NEW SYSTEM as of October 2025: EPL-B.U.I.L.D portal",
+        "Legacy projects (before Oct 2025) use Community Plus system - don't mix!",
+        "STRICT FILE NAMING CONVENTION: BD-YY-XXXXX-PT-R-DISCIPLINE",
+        "Files will be AUTO-REJECTED if naming convention not followed",
+        "No special characters allowed in filenames: # % & { } / \\ ? < > * $ ! ' : @ \" + ` | = ~ ( )",
+        "Leave upper-right corner blank for City seal: 2\"x2\" (letter) or 3\"x3\" (larger)",
+        "Application must be signed AND notarized",
+        "Remote Online Notary (RON) accepted",
+        "DERM, WASD, Impact Fee approvals required through MIAMI-DADE COUNTY portal",
+        "Must obtain M# number from Miami-Dade before City permit finalized",
+        "County fees paid SEPARATELY from City fees",
+        "Initial review: approximately 14 business days",
+        "Group plans by discipline - separate PDF per discipline",
+        "All pages of one NOA must be grouped together in single PDF",
+        "Owner-Builder: Must prove knowledge (test administered), one permit per 24 months",
+        "Owner-Builder must appear IN PERSON for document review",
+        "No permit if existing violation on property",
+        "Construction hours: 7:00 AM - 7:00 PM only",
+        "Construction debris must be removed by licensed hauler",
+    ],
 }
 
 
 def get_permit_requirements(city_key, permit_type):
     """Get detailed permit requirements for a city and permit type."""
-
-    city_name = CITY_INFO.get(city_key, {}).get(
-        "name", city_key.replace("_", " ").title()
-    )
-
+    
+    city_name = CITY_INFO.get(city_key, {}).get("name", city_key.replace("_", " ").title())
+    
     hvhz_requirements = [
         "All construction must comply with Florida Building Code HVHZ requirements",
         "Miami-Dade NOA or Florida Product Approval required for all exterior products",
         "Windows, doors, shutters must have impact rating or separate shutter permit",
         "Roofing materials must be HVHZ-approved with proper attachment details",
     ]
-
+    
     requirements = {
         "name": f"{permit_type.replace('_', ' ').title()} Permit - {city_name}",
         "city": city_name,
@@ -728,7 +902,7 @@ def get_permit_requirements(city_key, permit_type):
         "inspections": [],
         "tips": [],
     }
-
+    
     # ROOFING
     if permit_type == "roofing":
         requirements["items"] = [
@@ -742,47 +916,29 @@ def get_permit_requirements(city_key, permit_type):
             "Contractor insurance certificate",
             "Notice of Commencement",
         ]
-        requirements["inspections"] = [
-            "Tin tag",
-            "Mop/tile/shingle in-progress",
-            "Final structural",
-        ]
-
+        requirements["inspections"] = ["Tin tag", "Mop/tile/shingle in-progress", "Final structural"]
+        
         if city_key == "fort_lauderdale":
-            requirements["items"].extend(
-                [
-                    "For homes ≥$300,000: Property Appraiser valuation copy",
-                    "For homes ≥$300,000: Hurricane Mitigation Affidavit (notarized)",
-                    "Water Barrier/Sheathing Renailing Affidavit",
-                ]
-            )
-            requirements["tips"] = [
-                "Circle (don't highlight) NOA info",
-                "NOC threshold: $5,000",
-            ]
+            requirements["items"].extend([
+                "For homes ≥$300,000: Property Appraiser valuation copy",
+                "For homes ≥$300,000: Hurricane Mitigation Affidavit (notarized)",
+                "Water Barrier/Sheathing Renailing Affidavit",
+            ])
+            requirements["tips"] = ["Circle (don't highlight) NOA info", "NOC threshold: $5,000"]
         elif city_key == "pompano_beach":
-            requirements["items"].extend(
-                [
-                    "Fire Review Application (multi-family/commercial)",
-                    "Broward County Asbestos Certificate",
-                    "Fenestration Wind Load & Roof Uplift Chart",
-                    "HOA approval letter (if applicable)",
-                ]
-            )
+            requirements["items"].extend([
+                "Fire Review Application (multi-family/commercial)",
+                "Broward County Asbestos Certificate",
+                "Fenestration Wind Load & Roof Uplift Chart",
+                "HOA approval letter (if applicable)",
+            ])
             requirements["tips"] = ["BLACK INK required", "NOC threshold: $7,500"]
         elif city_key == "lauderdale_by_the_sea":
-            requirements["items"].extend(
-                ["Roofing Permit Packet", "Roof calculations with NOAs"]
-            )
+            requirements["items"].extend(["Roofing Permit Packet", "Roof calculations with NOAs"])
             requirements["tips"] = ["Fee: 1.5% of cost", "NOC if ≥$2,500"]
         elif city_key == "lighthouse_point":
-            requirements["items"].extend(
-                ["Roof Permit Requirements docs", "Truss Review (if applicable)"]
-            )
-            requirements["tips"] = [
-                "NO owner/builder for roofing",
-                "Licensed contractor required",
-            ]
+            requirements["items"].extend(["Roof Permit Requirements docs", "Truss Review (if applicable)"])
+            requirements["tips"] = ["NO owner/builder for roofing", "Licensed contractor required"]
 
     # MECHANICAL/HVAC
     elif permit_type == "mechanical":
@@ -796,19 +952,13 @@ def get_permit_requirements(city_key, permit_type):
             "Notice of Commencement",
         ]
         requirements["inspections"] = ["Rough-in (if new ductwork)", "Final mechanical"]
-
+        
         if city_key == "pompano_beach":
-            requirements["items"].extend(
-                [
-                    "Broward County Uniform Data Form for A/C Replacements",
-                    "Fire Review Application",
-                ]
-            )
-            requirements["tips"] = [
-                "BLACK INK",
-                "NOC threshold: $5,000",
-                "Emergency: notify inspector BEFORE work",
-            ]
+            requirements["items"].extend([
+                "Broward County Uniform Data Form for A/C Replacements",
+                "Fire Review Application",
+            ])
+            requirements["tips"] = ["BLACK INK", "NOC threshold: $5,000", "Emergency: notify inspector BEFORE work"]
         elif city_key == "lauderdale_by_the_sea":
             requirements["items"].append("AC Changeout Form")
             requirements["tips"] = ["Fee: $85 min or 2%", "NOC if ≥$7,500"]
@@ -827,12 +977,8 @@ def get_permit_requirements(city_key, permit_type):
             "Contractor license and insurance",
             "Notice of Commencement",
         ]
-        requirements["inspections"] = [
-            "Underground/rough",
-            "Service rough",
-            "Final electrical",
-        ]
-
+        requirements["inspections"] = ["Underground/rough", "Service rough", "Final electrical"]
+        
         if city_key == "pompano_beach":
             requirements["items"].append("AIC calculation and service equipment rating")
             requirements["tips"] = ["Service must be UNDERGROUND", "BLACK INK"]
@@ -850,7 +996,7 @@ def get_permit_requirements(city_key, permit_type):
             "Notice of Commencement",
         ]
         requirements["inspections"] = ["Rough plumbing", "Top out", "Final plumbing"]
-
+        
         if city_key == "pompano_beach":
             requirements["items"].append("Water Heater Replacement Data Form")
         elif city_key == "lighthouse_point":
@@ -878,67 +1024,41 @@ def get_permit_requirements(city_key, permit_type):
             "Contractor license and insurance",
         ]
         requirements["inspections"] = [
-            "Footing",
-            "Formboard survey",
-            "Soil treatment",
-            "Slab/reinforcing",
-            "Tie beams",
-            "Columns/shear walls",
-            "Framing",
-            "Roof framing/sheathing",
-            "Insulation",
-            "Drywall",
-            "Windows/doors",
-            "Elevation certificate",
-            "Final survey",
-            "Final structural",
+            "Footing", "Formboard survey", "Soil treatment", "Slab/reinforcing",
+            "Tie beams", "Columns/shear walls", "Framing", "Roof framing/sheathing",
+            "Insulation", "Drywall", "Windows/doors", "Elevation certificate",
+            "Final survey", "Final structural",
         ]
-
+        
         if city_key == "fort_lauderdale":
             requirements["items"].append("DRC approved plans (if required)")
             requirements["tips"] = ["2 sets of plans", "50% deposit required"]
         elif city_key == "pompano_beach":
-            requirements["items"].extend(
-                [
-                    "Engineering Permit Application",
-                    "Zoning Compliance Application",
-                    "Tree Permit Application",
-                    "Fire Review Application",
-                    "Utility Connection Application",
-                    "Transportation Concurrency Certificate",
-                ]
-            )
-            requirements["tips"] = [
-                "1 set of plans",
-                "BLACK INK",
-                "Fire Review required",
-            ]
+            requirements["items"].extend([
+                "Engineering Permit Application",
+                "Zoning Compliance Application",
+                "Tree Permit Application",
+                "Fire Review Application",
+                "Utility Connection Application",
+                "Transportation Concurrency Certificate",
+            ])
+            requirements["tips"] = ["1 set of plans", "BLACK INK", "Fire Review required"]
         elif city_key == "lauderdale_by_the_sea":
-            requirements["items"].extend(
-                [
-                    "New Construction Permit Application",
-                    "Recorded NOC (2 certified copies) - BEFORE submittal",
-                    "Owner/Agent letter notarized",
-                    "Contract with price breakdown",
-                ]
-            )
-            requirements["tips"] = [
-                "NOC must be RECORDED first - #1 rejection",
-                "Fee: 2%",
-            ]
+            requirements["items"].extend([
+                "New Construction Permit Application",
+                "Recorded NOC (2 certified copies) - BEFORE submittal",
+                "Owner/Agent letter notarized",
+                "Contract with price breakdown",
+            ])
+            requirements["tips"] = ["NOC must be RECORDED first - #1 rejection", "Fee: 2%"]
         elif city_key == "lighthouse_point":
-            requirements["items"].extend(
-                [
-                    "DPEP Procedure Form with stamp",
-                    "3 sets drainage plans",
-                    "2 sets soil density tests",
-                    "Seawall engineer letters (waterfront)",
-                ]
-            )
-            requirements["tips"] = [
-                "Survey <1 year or Zoning Affidavit",
-                "$1,000 app fee",
-            ]
+            requirements["items"].extend([
+                "DPEP Procedure Form with stamp",
+                "3 sets drainage plans",
+                "2 sets soil density tests",
+                "Seawall engineer letters (waterfront)",
+            ])
+            requirements["tips"] = ["Survey <1 year or Zoning Affidavit", "$1,000 app fee"]
 
     # WINDOWS/DOORS
     elif permit_type in ["windows", "fenestration"]:
@@ -954,15 +1074,13 @@ def get_permit_requirements(city_key, permit_type):
             "Notice of Commencement",
         ]
         requirements["inspections"] = ["Attachment", "Final structural"]
-
+        
         if city_key == "pompano_beach":
-            requirements["items"].extend(
-                [
-                    "Fire Review Application (except single-family)",
-                    "Fenestration Wind Load Chart",
-                    "HOA approval (if applicable)",
-                ]
-            )
+            requirements["items"].extend([
+                "Fire Review Application (except single-family)",
+                "Fenestration Wind Load Chart",
+                "HOA approval (if applicable)",
+            ])
 
     # POOLS
     elif permit_type == "pool":
@@ -982,23 +1100,17 @@ def get_permit_requirements(city_key, permit_type):
             "Notice of Commencement",
         ]
         requirements["inspections"] = [
-            "Soil compaction",
-            "Pool steel",
-            "Pool barrier",
-            "Pool bonding",
-            "Plumbing",
-            "Final",
+            "Soil compaction", "Pool steel", "Pool barrier",
+            "Pool bonding", "Plumbing", "Final",
         ]
         requirements["tips"] = [
             "Min 4-foot barrier required",
             "Self-closing, self-latching gates",
             "Door alarms if direct house access",
         ]
-
+        
         if city_key == "lauderdale_by_the_sea":
-            requirements["items"].extend(
-                ["Swimming Pool & Spa Permit Package", "Site pervious calculation"]
-            )
+            requirements["items"].extend(["Swimming Pool & Spa Permit Package", "Site pervious calculation"])
             requirements["tips"].append("Fee: 5% of cost (highest rate)")
 
     # MARINE (Docks, Seawalls, Boat Lifts)
@@ -1017,44 +1129,34 @@ def get_permit_requirements(city_key, permit_type):
             "Notice of Commencement",
         ]
         requirements["inspections"] = [
-            "Pile installation",
-            "Pile log",
-            "Tie beam steel",
-            "Framing",
-            "Engineer reports",
-            "Final structural",
+            "Pile installation", "Pile log", "Tie beam steel",
+            "Framing", "Engineer reports", "Final structural",
             "Updated survey before final",
         ]
         requirements["tips"] = [
             "County EPD approval MUST be obtained FIRST",
             "Sequence: County EPD → FL DEP → Army Corps → Local permit",
         ]
-
+        
         if city_key == "fort_lauderdale":
-            requirements["tips"].extend(
-                [
-                    "Min seawall elevation: 3.9 ft NAVD88",
-                    "Dock limit: 30% of waterway",
-                    "Reflector tape required on piles",
-                    ">50% seawall repair = full code compliance",
-                ]
-            )
+            requirements["tips"].extend([
+                "Min seawall elevation: 3.9 ft NAVD88",
+                "Dock limit: 30% of waterway",
+                "Reflector tape required on piles",
+                ">50% seawall repair = full code compliance",
+            ])
         elif city_key == "pompano_beach":
-            requirements["tips"].extend(
-                [
-                    "Dock limit: 10% of waterway OR 8 ft (less)",
-                    "Boat lift: 20% of waterway OR 20 ft (less)",
-                    "Engineering fee: 4% of cost",
-                ]
-            )
+            requirements["tips"].extend([
+                "Dock limit: 10% of waterway OR 8 ft (less)",
+                "Boat lift: 20% of waterway OR 20 ft (less)",
+                "Engineering fee: 4% of cost",
+            ])
         elif city_key == "lighthouse_point":
             requirements["items"].append("Longshoreman Insurance (FEDERAL requirement)")
-            requirements["tips"].extend(
-                [
-                    "CRITICAL: Longshoreman Insurance required",
-                    "State workers' comp is NOT sufficient",
-                ]
-            )
+            requirements["tips"].extend([
+                "CRITICAL: Longshoreman Insurance required",
+                "State workers' comp is NOT sufficient",
+            ])
 
     # GENERATORS
     elif permit_type == "generator":
@@ -1072,13 +1174,8 @@ def get_permit_requirements(city_key, permit_type):
             "Contractor license and insurance",
             "Notice of Commencement",
         ]
-        requirements["inspections"] = [
-            "Foundation",
-            "Electrical rough",
-            "Gas rough",
-            "Finals",
-        ]
-
+        requirements["inspections"] = ["Foundation", "Electrical rough", "Gas rough", "Finals"]
+        
         if city_key == "lauderdale_by_the_sea":
             requirements["tips"] = ["EPD approval required"]
 
@@ -1095,18 +1192,10 @@ def get_permit_requirements(city_key, permit_type):
             "Wire sizing calculations",
             "Contractor license and insurance",
         ]
-        requirements["inspections"] = [
-            "Attachment",
-            "Rail bond",
-            "Service rough",
-            "Final structural",
-            "Final electrical",
-        ]
-
+        requirements["inspections"] = ["Attachment", "Rail bond", "Service rough", "Final structural", "Final electrical"]
+        
         if city_key == "pompano_beach":
-            requirements["items"].extend(
-                ["Fire Review Application", "Zoning Compliance Application"]
-            )
+            requirements["items"].extend(["Fire Review Application", "Zoning Compliance Application"])
 
     # DEMOLITION
     elif permit_type == "demolition":
@@ -1124,15 +1213,11 @@ def get_permit_requirements(city_key, permit_type):
         ]
         requirements["inspections"] = ["Final structural"]
         requirements["tips"] = ["Permits expire in 60 DAYS"]
-
+        
         if city_key == "fort_lauderdale":
-            requirements["items"].extend(
-                ["Hold Harmless Agreement", "Maintenance of Traffic permit"]
-            )
+            requirements["items"].extend(["Hold Harmless Agreement", "Maintenance of Traffic permit"])
         elif city_key == "pompano_beach":
-            requirements["items"].extend(
-                ["Fire Review (commercial)", "Erosion control plan"]
-            )
+            requirements["items"].extend(["Fire Review (commercial)", "Erosion control plan"])
 
     # FENCES
     elif permit_type == "fence":
@@ -1155,38 +1240,44 @@ def get_permit_requirements(city_key, permit_type):
             "Contractor license and insurance",
             "Notice of Commencement",
         ]
-        requirements["tips"] = [
-            f"Contact {city_name} Building Department for specific requirements"
-        ]
-
+        requirements["tips"] = [f"Contact {city_name} Building Department for specific requirements"]
+    
     return requirements
 
 
 def get_city_key(city_name):
     """Convert city name to city key."""
     mapping = {
+        # Broward County
         "Fort Lauderdale": "fort_lauderdale",
         "Pompano Beach": "pompano_beach",
         "Hollywood": "hollywood",
         "Coral Springs": "coral_springs",
         "Coconut Creek": "coconut_creek",
-        "Boca Raton": "boca_raton",
-        "Lake Worth Beach": "lake_worth_beach",
         "Lauderdale-by-the-Sea": "lauderdale_by_the_sea",
         "Deerfield Beach": "deerfield_beach",
         "Pembroke Pines": "pembroke_pines",
         "Lighthouse Point": "lighthouse_point",
         "Weston": "weston",
-        "Lake Worth": "lake_worth_beach",
         "Davie": "davie",
         "Plantation": "plantation",
         "Sunrise": "sunrise",
         "Miramar": "miramar",
         "Margate": "margate",
         "Tamarac": "tamarac",
+        # Palm Beach County
+        "Boca Raton": "boca_raton",
+        "Lake Worth Beach": "lake_worth_beach",
+        "Lake Worth": "lake_worth_beach",
         "Delray Beach": "delray_beach",
         "Boynton Beach": "boynton_beach",
         "West Palm Beach": "west_palm_beach",
+        # Miami-Dade County
+        "Miami": "miami",
+        "Hialeah": "hialeah",
+        "Miami Gardens": "miami_gardens",
+        "Kendall": "kendall",
+        "Homestead": "homestead",
     }
     return mapping.get(city_name, city_name.lower().replace(" ", "_").replace("-", "_"))
 

@@ -20,6 +20,7 @@ export default function App() {
   const [showRegister, setShowRegister] = useState(false)
   const [showForgotPassword, setShowForgotPassword] = useState(false)
   const [page, setPage] = useState('home')
+  const [county, setCounty] = useState('')
   const [city, setCity] = useState('')
   const [permitType, setPermitType] = useState('')
   const [files, setFiles] = useState([])
@@ -305,7 +306,7 @@ export default function App() {
             <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800">
               <div className="w-14 h-14 bg-amber-500/20 rounded-xl flex items-center justify-center mb-4"><span className="text-3xl">📍</span></div>
               <h2 className="text-xl font-bold text-white mb-3">South Florida Focus</h2>
-              <p className="text-gray-400">We specialize in Broward and Palm Beach counties — Fort Lauderdale, Pompano Beach, Hollywood, Boca Raton, and more. Local knowledge, local requirements.</p>
+              <p className="text-gray-400">We specialize in Broward, Palm Beach, and Miami-Dade counties. Local knowledge, local requirements, local expertise.</p>
             </div>
           </div>
           <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800 text-center">
@@ -849,10 +850,113 @@ export default function App() {
           <div className="relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/50 via-emerald-500/50 to-purple-500/50 rounded-3xl blur-xl opacity-30"></div>
             <div className="relative bg-gray-900/80 backdrop-blur-xl rounded-3xl p-8 border border-gray-800">
-              <div className="grid md:grid-cols-2 gap-4 mb-6">
-                <div><label className="block text-sm font-semibold text-gray-400 mb-2">CITY</label><select value={city} onChange={e => { setCity(e.target.value); setPermitType('') }} className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:border-cyan-500 focus:outline-none"><option value="">Select city...</option><option>Fort Lauderdale</option><option>Pompano Beach</option><option>Hollywood</option><option>Coral Springs</option><option>Boca Raton</option><option>Lauderdale-by-the-Sea</option><option>Deerfield Beach</option><option>Pembroke Pines</option></select></div>
-                <div><label className="block text-sm font-semibold text-gray-400 mb-2">PERMIT TYPE</label><select value={permitType} onChange={e => setPermitType(e.target.value)} disabled={!city} className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:border-cyan-500 focus:outline-none disabled:opacity-50"><option value="">Select type...</option>{getPermitTypes().map(pt => <option key={pt.value} value={pt.value}>{pt.label}</option>)}</select></div>
+              {/* Professional County/City/Permit Selection */}
+              <div className="grid md:grid-cols-3 gap-4 mb-6">
+                {/* County Select */}
+                <div className="relative group">
+                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">County</label>
+                  <div className="relative">
+                    <select 
+                      value={county} 
+                      onChange={e => { setCounty(e.target.value); setCity(''); setPermitType('') }} 
+                      className="w-full px-4 py-3.5 bg-black/60 border border-gray-700/50 rounded-xl text-white appearance-none cursor-pointer transition-all duration-200 hover:border-gray-600 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 focus:outline-none"
+                    >
+                      <option value="">Select county...</option>
+                      <option value="Broward">Broward County</option>
+                      <option value="Palm Beach">Palm Beach County</option>
+                      <option value="Miami-Dade">Miami-Dade County</option>
+                    </select>
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                      <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/></svg>
+                    </div>
+                  </div>
+                </div>
+
+                {/* City Select */}
+                <div className="relative group">
+                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">City</label>
+                  <div className="relative">
+                    <select 
+                      value={city} 
+                      onChange={e => { setCity(e.target.value); setPermitType('') }} 
+                      disabled={!county}
+                      className={`w-full px-4 py-3.5 bg-black/60 border border-gray-700/50 rounded-xl text-white appearance-none cursor-pointer transition-all duration-200 hover:border-gray-600 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 focus:outline-none ${!county ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      <option value="">{county ? 'Select city...' : 'Select county first'}</option>
+                      {county === 'Broward' && (
+                        <>
+                          <option value="Fort Lauderdale">Fort Lauderdale</option>
+                          <option value="Pompano Beach">Pompano Beach</option>
+                          <option value="Hollywood">Hollywood</option>
+                          <option value="Coral Springs">Coral Springs</option>
+                          <option value="Coconut Creek">Coconut Creek</option>
+                          <option value="Davie">Davie</option>
+                          <option value="Deerfield Beach">Deerfield Beach</option>
+                          <option value="Lauderdale-by-the-Sea">Lauderdale-by-the-Sea</option>
+                          <option value="Lighthouse Point">Lighthouse Point</option>
+                          <option value="Margate">Margate</option>
+                          <option value="Miramar">Miramar</option>
+                          <option value="Pembroke Pines">Pembroke Pines</option>
+                          <option value="Plantation">Plantation</option>
+                          <option value="Sunrise">Sunrise</option>
+                          <option value="Tamarac">Tamarac</option>
+                          <option value="Weston">Weston</option>
+                        </>
+                      )}
+                      {county === 'Palm Beach' && (
+                        <>
+                          <option value="Boca Raton">Boca Raton</option>
+                          <option value="Boynton Beach">Boynton Beach</option>
+                          <option value="Delray Beach">Delray Beach</option>
+                          <option value="Lake Worth Beach">Lake Worth Beach</option>
+                          <option value="West Palm Beach">West Palm Beach</option>
+                        </>
+                      )}
+                      {county === 'Miami-Dade' && (
+                        <>
+                          <option value="Miami">Miami</option>
+                          <option value="Hialeah">Hialeah</option>
+                          <option value="Homestead">Homestead</option>
+                          <option value="Kendall">Kendall (Unincorporated)</option>
+                          <option value="Miami Gardens">Miami Gardens</option>
+                        </>
+                      )}
+                    </select>
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                      <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/></svg>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Permit Type Select */}
+                <div className="relative group">
+                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Permit Type</label>
+                  <div className="relative">
+                    <select 
+                      value={permitType} 
+                      onChange={e => setPermitType(e.target.value)} 
+                      disabled={!city}
+                      className={`w-full px-4 py-3.5 bg-black/60 border border-gray-700/50 rounded-xl text-white appearance-none cursor-pointer transition-all duration-200 hover:border-gray-600 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 focus:outline-none ${!city ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      <option value="">{city ? 'Select permit type...' : 'Select city first'}</option>
+                      {getPermitTypes().map(pt => <option key={pt.value} value={pt.value}>{pt.label}</option>)}
+                    </select>
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                      <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/></svg>
+                    </div>
+                  </div>
+                </div>
               </div>
+
+              {/* City count indicator */}
+              {county && (
+                <div className="mb-4 flex items-center gap-2 text-sm">
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
+                    <svg className="w-3.5 h-3.5 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>
+                    {county === 'Broward' ? '16 cities' : county === 'Palm Beach' ? '5 cities' : '5 cities'} with expert-level AI knowledge
+                  </span>
+                </div>
+              )}
               <div className="mb-6">
                 <label className="block text-sm font-semibold text-gray-400 mb-2">UPLOAD FILES</label>
                 <div className={`border-2 border-dashed rounded-2xl p-8 text-center ${isDragging ? 'border-cyan-400 bg-cyan-500/10' : 'border-gray-700 bg-black/30'}`} onDragOver={e => { e.preventDefault(); setIsDragging(true) }} onDragLeave={() => setIsDragging(false)} onDrop={e => { e.preventDefault(); setIsDragging(false); handleFiles({ target: { files: e.dataTransfer.files } }) }}>
@@ -877,7 +981,15 @@ export default function App() {
         </div>
       </div>
       <Footer />
-      <style>{`select option{background:#111;color:white;}`}</style>
+      <style>{`
+        select option { background: #0a0a0a; color: white; padding: 12px; }
+        select option:disabled { color: #6b7280; font-style: italic; }
+        select option:checked { background: linear-gradient(to right, #06b6d4, #10b981); color: black; }
+        select::-webkit-scrollbar { width: 8px; }
+        select::-webkit-scrollbar-track { background: #1f2937; border-radius: 4px; }
+        select::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+        select::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+      `}</style>
     </div>
   )
 }

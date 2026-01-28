@@ -215,20 +215,18 @@ class APILog(Base):
 Base.metadata.create_all(bind=engine)
 print("✅ Database tables initialized")
 
-
 # Migrate: Add Stripe columns if they don't exist
 def migrate_database():
     from sqlalchemy import text, inspect
-
     inspector = inspect(engine)
-    columns = [col["name"] for col in inspector.get_columns("users")]
-
-    if "stripe_customer_id" not in columns:
+    columns = [col['name'] for col in inspector.get_columns('users')]
+    
+    if 'stripe_customer_id' not in columns:
         print("📦 Adding Stripe columns to users table...")
         for col_sql in [
             "ALTER TABLE users ADD COLUMN IF NOT EXISTS stripe_customer_id VARCHAR(255)",
             "ALTER TABLE users ADD COLUMN IF NOT EXISTS stripe_subscription_id VARCHAR(255)",
-            "ALTER TABLE users ADD COLUMN IF NOT EXISTS subscription_ends_at TIMESTAMP",
+            "ALTER TABLE users ADD COLUMN IF NOT EXISTS subscription_ends_at TIMESTAMP"
         ]:
             try:
                 with engine.begin() as conn:
@@ -238,7 +236,6 @@ def migrate_database():
         print("✅ Stripe columns migration complete")
     else:
         print("✅ Stripe columns already exist")
-
 
 try:
     migrate_database()
@@ -270,14 +267,13 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 class APILoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         import time
-
         start_time = time.time()
-
+        
         response = await call_next(request)
-
+        
         # Calculate response time
         response_time_ms = int((time.time() - start_time) * 1000)
-
+        
         # Skip logging for health checks and static files
         if request.url.path not in ["/health", "/", "/docs", "/openapi.json"]:
             try:
@@ -295,7 +291,7 @@ class APILoggingMiddleware(BaseHTTPMiddleware):
                 db.close()
             except Exception as e:
                 print(f"API logging error: {e}")
-
+        
         return response
 
 
@@ -386,7 +382,7 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
     """Send password reset email via Resend"""
     try:
         reset_link = f"{FRONTEND_URL}/reset-password?token={reset_token}"
-
+        
         params = {
             "from": "Flo Permit <noreply@flopermit.com>",
             "to": [email],
@@ -417,7 +413,7 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
             </div>
             """,
         }
-
+        
         resend.Emails.send(params)
         return True
     except Exception as e:
@@ -429,7 +425,7 @@ def send_welcome_email(email: str, full_name: str = None) -> bool:
     """Send welcome email to new users"""
     try:
         name = full_name or "there"
-
+        
         params = {
             "from": "Flo Permit <noreply@flopermit.com>",
             "to": [email],
@@ -468,7 +464,7 @@ def send_welcome_email(email: str, full_name: str = None) -> bool:
             </div>
             """,
         }
-
+        
         resend.Emails.send(params)
         return True
     except Exception as e:
@@ -500,7 +496,7 @@ def send_contact_email(name: str, email: str, subject: str, message: str) -> boo
             </div>
             """,
         }
-
+        
         resend.Emails.send(params)
         return True
     except Exception as e:
@@ -621,20 +617,19 @@ async def get_current_user(
 
 
 @app.post("/api/auth/forgot-password")
-async def forgot_password(
-    request_data: ForgotPasswordRequest, db: Session = Depends(get_db)
-):
+async def forgot_password(request_data: ForgotPasswordRequest, db: Session = Depends(get_db)):
     """Request a password reset email"""
     try:
         # Always return success to prevent email enumeration
         user = db.query(User).filter(User.email == request_data.email).first()
-
+        
         if user:
             # Invalidate any existing reset tokens for this user
             db.query(PasswordResetToken).filter(
-                PasswordResetToken.user_id == user.id, PasswordResetToken.used == False
+                PasswordResetToken.user_id == user.id,
+                PasswordResetToken.used == False
             ).update({"used": True})
-
+            
             # Generate new token
             token = generate_reset_token()
             reset_token = PasswordResetToken(
@@ -644,14 +639,14 @@ async def forgot_password(
             )
             db.add(reset_token)
             db.commit()
-
+            
             # Send email
             send_password_reset_email(user.email, token)
-
+        
         # Always return success (security: don't reveal if email exists)
         return {
             "success": True,
-            "message": "If an account exists with this email, you will receive a password reset link.",
+            "message": "If an account exists with this email, you will receive a password reset link."
         }
     except Exception as e:
         print(f"❌ Forgot password error: {str(e)}")
@@ -659,59 +654,48 @@ async def forgot_password(
         # Still return success for security
         return {
             "success": True,
-            "message": "If an account exists with this email, you will receive a password reset link.",
+            "message": "If an account exists with this email, you will receive a password reset link."
         }
 
 
 @app.post("/api/auth/reset-password")
-async def reset_password(
-    request_data: ResetPasswordRequest, db: Session = Depends(get_db)
-):
+async def reset_password(request_data: ResetPasswordRequest, db: Session = Depends(get_db)):
     """Reset password using token"""
     try:
         # Find the token
-        reset_token = (
-            db.query(PasswordResetToken)
-            .filter(
-                PasswordResetToken.token == request_data.token,
-                PasswordResetToken.used == False,
-            )
-            .first()
-        )
-
+        reset_token = db.query(PasswordResetToken).filter(
+            PasswordResetToken.token == request_data.token,
+            PasswordResetToken.used == False
+        ).first()
+        
         if not reset_token:
             raise HTTPException(status_code=400, detail="Invalid or expired reset link")
-
+        
         if is_token_expired(reset_token.expires_at):
             reset_token.used = True
             db.commit()
-            raise HTTPException(
-                status_code=400,
-                detail="Reset link has expired. Please request a new one.",
-            )
-
+            raise HTTPException(status_code=400, detail="Reset link has expired. Please request a new one.")
+        
         # Validate new password
         if len(request_data.new_password) < 8:
-            raise HTTPException(
-                status_code=400, detail="Password must be at least 8 characters"
-            )
-
+            raise HTTPException(status_code=400, detail="Password must be at least 8 characters")
+        
         # Update password
         user = db.query(User).filter(User.id == reset_token.user_id).first()
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
-
+        
         user.hashed_password = hash_password(request_data.new_password)
         user.updated_at = datetime.utcnow()
-
+        
         # Mark token as used
         reset_token.used = True
-
+        
         db.commit()
-
+        
         return {
             "success": True,
-            "message": "Password has been reset successfully. You can now log in with your new password.",
+            "message": "Password has been reset successfully. You can now log in with your new password."
         }
     except HTTPException:
         raise
@@ -1029,94 +1013,63 @@ def require_admin(user_id: int, db: Session):
 
 @app.get("/api/admin/stats")
 async def get_admin_stats(
-    authorization: str = Header(None), db: Session = Depends(get_db)
+    authorization: str = Header(None),
+    db: Session = Depends(get_db)
 ):
     """Get admin dashboard statistics"""
     user_id = get_current_user_id(authorization)
     require_admin(user_id, db)
-
+    
     from sqlalchemy import func
-
+    
     # Total users
     total_users = db.query(User).count()
-
+    
     # Users this month
-    first_of_month = datetime.utcnow().replace(
-        day=1, hour=0, minute=0, second=0, microsecond=0
-    )
-    new_users_this_month = (
-        db.query(User).filter(User.created_at >= first_of_month).count()
-    )
-
+    first_of_month = datetime.utcnow().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    new_users_this_month = db.query(User).filter(User.created_at >= first_of_month).count()
+    
     # Total analyses
     total_analyses = db.query(AnalysisHistory).count()
-
+    
     # Analyses this month
-    analyses_this_month = (
-        db.query(AnalysisHistory)
-        .filter(AnalysisHistory.created_at >= first_of_month)
-        .count()
-    )
-
+    analyses_this_month = db.query(AnalysisHistory).filter(AnalysisHistory.created_at >= first_of_month).count()
+    
     # Average compliance score
     avg_score = db.query(func.avg(AnalysisHistory.compliance_score)).scalar() or 0
-
+    
     # API requests today
     today_start = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
-    api_requests_today = (
-        db.query(APILog).filter(APILog.created_at >= today_start).count()
-    )
-
+    api_requests_today = db.query(APILog).filter(APILog.created_at >= today_start).count()
+    
     # API requests this month
-    api_requests_month = (
-        db.query(APILog).filter(APILog.created_at >= first_of_month).count()
-    )
-
+    api_requests_month = db.query(APILog).filter(APILog.created_at >= first_of_month).count()
+    
     # Most popular cities
-    popular_cities = (
-        db.query(AnalysisHistory.city, func.count(AnalysisHistory.id).label("count"))
-        .group_by(AnalysisHistory.city)
-        .order_by(func.count(AnalysisHistory.id).desc())
-        .limit(5)
-        .all()
-    )
-
+    popular_cities = db.query(
+        AnalysisHistory.city,
+        func.count(AnalysisHistory.id).label('count')
+    ).group_by(AnalysisHistory.city).order_by(func.count(AnalysisHistory.id).desc()).limit(5).all()
+    
     # Most popular permit types
-    popular_permits = (
-        db.query(
-            AnalysisHistory.permit_type, func.count(AnalysisHistory.id).label("count")
-        )
-        .group_by(AnalysisHistory.permit_type)
-        .order_by(func.count(AnalysisHistory.id).desc())
-        .limit(5)
-        .all()
-    )
-
+    popular_permits = db.query(
+        AnalysisHistory.permit_type,
+        func.count(AnalysisHistory.id).label('count')
+    ).group_by(AnalysisHistory.permit_type).order_by(func.count(AnalysisHistory.id).desc()).limit(5).all()
+    
     # Recent users
     recent_users = db.query(User).order_by(User.created_at.desc()).limit(10).all()
-
+    
     # Recent analyses
-    recent_analyses = (
-        db.query(AnalysisHistory)
-        .order_by(AnalysisHistory.created_at.desc())
-        .limit(10)
-        .all()
-    )
-
+    recent_analyses = db.query(AnalysisHistory).order_by(AnalysisHistory.created_at.desc()).limit(10).all()
+    
     # API endpoint stats
-    endpoint_stats = (
-        db.query(
-            APILog.endpoint,
-            func.count(APILog.id).label("count"),
-            func.avg(APILog.response_time_ms).label("avg_time"),
-        )
-        .filter(APILog.created_at >= first_of_month)
-        .group_by(APILog.endpoint)
-        .order_by(func.count(APILog.id).desc())
-        .limit(10)
-        .all()
-    )
-
+    endpoint_stats = db.query(
+        APILog.endpoint,
+        func.count(APILog.id).label('count'),
+        func.avg(APILog.response_time_ms).label('avg_time')
+    ).filter(APILog.created_at >= first_of_month).group_by(APILog.endpoint).order_by(func.count(APILog.id).desc()).limit(10).all()
+    
     return {
         "overview": {
             "total_users": total_users,
@@ -1128,9 +1081,7 @@ async def get_admin_stats(
             "api_requests_this_month": api_requests_month,
         },
         "popular_cities": [{"city": c, "count": cnt} for c, cnt in popular_cities],
-        "popular_permits": [
-            {"permit_type": p, "count": cnt} for p, cnt in popular_permits
-        ],
+        "popular_permits": [{"permit_type": p, "count": cnt} for p, cnt in popular_permits],
         "recent_users": [
             {
                 "id": u.id,
@@ -1179,13 +1130,10 @@ async def submit_contact_form(form_data: ContactForm):
             name=form_data.name,
             email=form_data.email,
             subject=form_data.subject,
-            message=form_data.message,
+            message=form_data.message
         )
         if success:
-            return {
-                "success": True,
-                "message": "Message sent! We'll get back to you soon.",
-            }
+            return {"success": True, "message": "Message sent! We'll get back to you soon."}
         else:
             raise HTTPException(status_code=500, detail="Failed to send message")
     except Exception as e:
@@ -1217,12 +1165,7 @@ async def get_pricing():
                 "price": 29,
                 "period": "month",
                 "analyses": 50,
-                "features": [
-                    "50 analyses/month",
-                    "Priority AI analysis",
-                    "Priority support",
-                    "Analysis history",
-                ],
+                "features": ["50 analyses/month", "Priority AI analysis", "Priority support", "Analysis history"],
                 "popular": True,
             },
             {
@@ -1231,13 +1174,7 @@ async def get_pricing():
                 "price": 99,
                 "period": "month",
                 "analyses": -1,
-                "features": [
-                    "Unlimited analyses",
-                    "Priority AI analysis",
-                    "Dedicated support",
-                    "Analysis history",
-                    "Team features (coming soon)",
-                ],
+                "features": ["Unlimited analyses", "Priority AI analysis", "Dedicated support", "Analysis history", "Team features (coming soon)"],
             },
         ]
     }
@@ -1247,63 +1184,60 @@ async def get_pricing():
 async def create_checkout_session(
     tier: str = Form(...),
     authorization: str = Header(None),
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_db)
 ):
     """Create Stripe checkout session for subscription"""
     try:
         # Parse token from authorization header
         if not authorization or not authorization.startswith("Bearer "):
             raise HTTPException(status_code=401, detail="Not authenticated")
-
+        
         token = authorization[7:]  # Remove "Bearer " prefix
         payload = decode_access_token(token)
         user_id = int(payload.get("sub"))
-
+        
         user = db.query(User).filter(User.id == user_id).first()
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
-
+        
         if tier not in STRIPE_PRICES:
             raise HTTPException(status_code=400, detail="Invalid tier")
-
+        
         # Create or get Stripe customer
         if not user.stripe_customer_id:
             customer = stripe.Customer.create(
                 email=user.email,
                 name=user.full_name,
-                metadata={"user_id": str(user.id)},
+                metadata={"user_id": str(user.id)}
             )
             user.stripe_customer_id = customer.id
             db.commit()
-
+        
         # Create checkout session
         session = stripe.checkout.Session.create(
             customer=user.stripe_customer_id,
             payment_method_types=["card"],
-            line_items=[
-                {
-                    "price": STRIPE_PRICES[tier],
-                    "quantity": 1,
-                }
-            ],
+            line_items=[{
+                "price": STRIPE_PRICES[tier],
+                "quantity": 1,
+            }],
             mode="subscription",
             success_url=f"{FRONTEND_URL}?payment=success&tier={tier}",
             cancel_url=f"{FRONTEND_URL}?payment=cancelled",
             metadata={
                 "user_id": str(user.id),
                 "tier": tier,
-            },
+            }
         )
-
+        
         return {"checkout_url": session.url, "session_id": session.id}
-
+    
     except stripe.error.StripeError as e:
         print(f"❌ Stripe error: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Payment error: {str(e)}")
     except Exception as e:
         print(f"❌ Checkout error: {str(e)}")
         import traceback
-
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Checkout error: {str(e)}")
 
@@ -1314,7 +1248,7 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
     payload = await request.body()
     sig_header = request.headers.get("stripe-signature")
     webhook_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
-
+    
     try:
         if webhook_secret:
             event = stripe.Webhook.construct_event(payload, sig_header, webhook_secret)
@@ -1323,23 +1257,23 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
     except Exception as e:
         print(f"❌ Webhook error: {str(e)}")
         raise HTTPException(status_code=400, detail="Webhook error")
-
+    
     event_type = event.get("type", "")
     data = event.get("data", {}).get("object", {})
-
+    
     if event_type == "checkout.session.completed":
         # Payment successful
         customer_id = data.get("customer")
         subscription_id = data.get("subscription")
         tier = data.get("metadata", {}).get("tier", "pro")
-
+        
         user = db.query(User).filter(User.stripe_customer_id == customer_id).first()
         if user:
             user.subscription_tier = tier
             user.stripe_subscription_id = subscription_id
             db.commit()
             print(f"✅ User {user.email} upgraded to {tier}")
-
+    
     elif event_type == "customer.subscription.deleted":
         # Subscription cancelled
         customer_id = data.get("customer")
@@ -1349,7 +1283,7 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
             user.stripe_subscription_id = None
             db.commit()
             print(f"✅ User {user.email} downgraded to free")
-
+    
     elif event_type == "customer.subscription.updated":
         # Subscription updated
         customer_id = data.get("customer")
@@ -1359,28 +1293,29 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
             user.subscription_tier = "free"
             user.stripe_subscription_id = None
             db.commit()
-
+    
     return {"status": "success"}
 
 
 @app.post("/api/stripe/create-portal-session")
 async def create_portal_session(
-    authorization: str = Header(None), db: Session = Depends(get_db)
+    authorization: str = Header(None),
+    db: Session = Depends(get_db)
 ):
     """Create Stripe billing portal session"""
     # Parse token from authorization header
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Not authenticated")
-
+    
     token = authorization[7:]  # Remove "Bearer " prefix
     payload = decode_access_token(token)
     user_id = int(payload.get("sub"))
-
+    
     user = db.query(User).filter(User.id == user_id).first()
-
+    
     if not user or not user.stripe_customer_id:
         raise HTTPException(status_code=400, detail="No billing account found")
-
+    
     try:
         session = stripe.billing_portal.Session.create(
             customer=user.stripe_customer_id,
@@ -1394,46 +1329,39 @@ async def create_portal_session(
 
 @app.get("/api/subscription")
 async def get_subscription(
-    authorization: str = Header(None), db: Session = Depends(get_db)
+    authorization: str = Header(None),
+    db: Session = Depends(get_db)
 ):
     """Get user's subscription status"""
     try:
         # Parse token from authorization header
         if not authorization or not authorization.startswith("Bearer "):
             raise HTTPException(status_code=401, detail="Not authenticated")
-
+        
         token = authorization[7:]  # Remove "Bearer " prefix
         payload = decode_access_token(token)
         user_id = int(payload.get("sub"))
-
+        
         user = db.query(User).filter(User.id == user_id).first()
-
+        
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
-
+        
         # Count analyses this month
-        first_of_month = datetime.utcnow().replace(
-            day=1, hour=0, minute=0, second=0, microsecond=0
-        )
-        analyses_this_month = (
-            db.query(AnalysisHistory)
-            .filter(
-                AnalysisHistory.user_id == user.id,
-                AnalysisHistory.created_at >= first_of_month,
-            )
-            .count()
-        )
-
+        first_of_month = datetime.utcnow().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        analyses_this_month = db.query(AnalysisHistory).filter(
+            AnalysisHistory.user_id == user.id,
+            AnalysisHistory.created_at >= first_of_month
+        ).count()
+        
         tier = user.subscription_tier or "free"
         tier_limit = TIER_LIMITS.get(tier, 3)
-
+        
         return {
             "tier": tier,
             "analyses_this_month": analyses_this_month,
             "analyses_limit": tier_limit,
-            "analyses_remaining": max(0, tier_limit - analyses_this_month)
-            if tier_limit < 999999
-            else -1,
+            "analyses_remaining": max(0, tier_limit - analyses_this_month) if tier_limit < 999999 else -1,
             "has_subscription": bool(user.stripe_subscription_id),
         }
     except HTTPException:
@@ -1441,7 +1369,6 @@ async def get_subscription(
     except Exception as e:
         print(f"❌ Subscription error: {str(e)}")
         import traceback
-
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Subscription error: {str(e)}")
 
@@ -1449,24 +1376,35 @@ async def get_subscription(
 @app.get("/api/cities")
 async def get_cities():
     cities = {
-        "Fort Lauderdale": {"key": "fort_lauderdale", "county": "Broward"},
-        "Pompano Beach": {"key": "pompano_beach", "county": "Broward"},
-        "Hollywood": {"key": "hollywood", "county": "Broward"},
+        # Broward County (HVHZ)
+        "Fort Lauderdale": {"key": "fort_lauderdale", "county": "Broward", "waterfront": True},
+        "Pompano Beach": {"key": "pompano_beach", "county": "Broward", "waterfront": True},
+        "Hollywood": {"key": "hollywood", "county": "Broward", "waterfront": True},
         "Coral Springs": {"key": "coral_springs", "county": "Broward"},
-        "Boca Raton": {"key": "boca_raton", "county": "Palm Beach"},
-        "Lauderdale-by-the-Sea": {"key": "lauderdale_by_the_sea", "county": "Broward"},
-        "Deerfield Beach": {"key": "deerfield_beach", "county": "Broward"},
+        "Coconut Creek": {"key": "coconut_creek", "county": "Broward"},
+        "Lauderdale-by-the-Sea": {"key": "lauderdale_by_the_sea", "county": "Broward", "waterfront": True},
+        "Deerfield Beach": {"key": "deerfield_beach", "county": "Broward", "waterfront": True},
         "Pembroke Pines": {"key": "pembroke_pines", "county": "Broward"},
-        "Lighthouse Point": {"key": "lighthouse_point", "county": "Broward"},
+        "Lighthouse Point": {"key": "lighthouse_point", "county": "Broward", "waterfront": True},
         "Weston": {"key": "weston", "county": "Broward"},
-        "Lake Worth": {"key": "lake_worth", "county": "Palm Beach"},
         "Davie": {"key": "davie", "county": "Broward"},
         "Plantation": {"key": "plantation", "county": "Broward"},
         "Sunrise": {"key": "sunrise", "county": "Broward"},
         "Miramar": {"key": "miramar", "county": "Broward"},
-        "Delray Beach": {"key": "delray_beach", "county": "Palm Beach"},
-        "Boynton Beach": {"key": "boynton_beach", "county": "Palm Beach"},
-        "West Palm Beach": {"key": "west_palm_beach", "county": "Palm Beach"},
+        "Margate": {"key": "margate", "county": "Broward"},
+        "Tamarac": {"key": "tamarac", "county": "Broward"},
+        # Palm Beach County
+        "Boca Raton": {"key": "boca_raton", "county": "Palm Beach", "waterfront": True},
+        "Lake Worth Beach": {"key": "lake_worth_beach", "county": "Palm Beach", "waterfront": True},
+        "Delray Beach": {"key": "delray_beach", "county": "Palm Beach", "waterfront": True},
+        "Boynton Beach": {"key": "boynton_beach", "county": "Palm Beach", "waterfront": True},
+        "West Palm Beach": {"key": "west_palm_beach", "county": "Palm Beach", "waterfront": True},
+        # Miami-Dade County (HVHZ)
+        "Miami": {"key": "miami", "county": "Miami-Dade", "waterfront": True},
+        "Hialeah": {"key": "hialeah", "county": "Miami-Dade"},
+        "Miami Gardens": {"key": "miami_gardens", "county": "Miami-Dade"},
+        "Kendall": {"key": "kendall", "county": "Miami-Dade"},
+        "Homestead": {"key": "homestead", "county": "Miami-Dade"},
     }
     return {"cities": cities}
 
@@ -1533,23 +1471,17 @@ async def analyze_permit_folder(
 
     # Check usage limits for authenticated users
     if user:
-        first_of_month = datetime.utcnow().replace(
-            day=1, hour=0, minute=0, second=0, microsecond=0
-        )
-        analyses_this_month = (
-            db.query(AnalysisHistory)
-            .filter(
-                AnalysisHistory.user_id == user.id,
-                AnalysisHistory.created_at >= first_of_month,
-            )
-            .count()
-        )
-
+        first_of_month = datetime.utcnow().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        analyses_this_month = db.query(AnalysisHistory).filter(
+            AnalysisHistory.user_id == user.id,
+            AnalysisHistory.created_at >= first_of_month
+        ).count()
+        
         tier_limit = TIER_LIMITS.get(user.subscription_tier, 3)
         if analyses_this_month >= tier_limit:
             raise HTTPException(
-                status_code=403,
-                detail=f"Monthly limit reached ({tier_limit} analyses). Please upgrade your plan.",
+                status_code=403, 
+                detail=f"Monthly limit reached ({tier_limit} analyses). Please upgrade your plan."
             )
 
     if len(files) > MAX_FILES_PER_UPLOAD:
@@ -1668,7 +1600,7 @@ def analyze_folder_with_claude(
 
     if len(text) > 200000:
         text = text[:200000] + "\n[truncated]"
-
+    
     # Build city-specific context
     city_context = ""
     if city_key == "fort_lauderdale":
@@ -2345,21 +2277,250 @@ DELRAY BEACH PENALTIES:
 - Stop work notice issued by Code Enforcement
 - May require third-party engineering if work concealed
 """
+    elif city_key == "miami":
+        city_context = """
+CITY OF MIAMI SPECIFIC REQUIREMENTS (MIAMI-DADE COUNTY - HVHZ):
+- Portal: iBuild / ePlan (ProjectDox)
+- FULLY DIGITAL system - All plans must be digitally signed and sealed
+- All of Miami-Dade is HVHZ - minimum 175 mph wind load design
+- Miami-Dade Product Approval (NOA) required - NOT just Florida Product Approval!
+
+MIAMI DERM REQUIREMENT - CRITICAL:
+- DERM approval required BEFORE city permit for:
+  * New buildings and additions
+  * Commercial interior renovation/remodeling
+  * Commercial re-roofs
+  * Commercial pools
+  * Land clearing and demolition
+  * Tank upgrades, installations, and removals
+- Submit to County FIRST, then to City
+
+MIAMI NOC REQUIREMENTS:
+- NOC threshold: $2,500 general, $7,500 for HVAC
+- Record at: Miami-Dade County Recorder's Office, 22 NW 1st Street
+- Phone: (305) 275-1155
+
+MIAMI CONTRACTOR REQUIREMENTS:
+- Registration takes 2-3 business days, no cost
+- Permit expediters must also register per City Ordinance 14279
+- Valid State of Florida OR Miami-Dade County license required
+
+MIAMI HOURS & TIPS:
+- Hours: Mon-Fri 7:30 AM - 4:30 PM (closes to public at 3:30 PM)
+- Track inspector route in real-time via City website
+- Permits valid for 180 days from issuance
+
+MIAMI SPECIAL PROGRAMS:
+- Homeowner Assistance Program: (305) 710-0605 / hoabuilding@miamigov.com
+- Concierge Program for large commercial: concierge@miamigov.com
+- Joint Plan Review for Affordable Housing (no cost)
+
+MIAMI HISTORIC PROPERTIES:
+- Check if property is historically designated BEFORE applying
+- Certificate of Appropriateness (COA) may be required
+- Contact Historic Preservation Office if unsure
+"""
+    elif city_key == "hialeah":
+        city_context = """
+CITY OF HIALEAH SPECIFIC REQUIREMENTS (MIAMI-DADE COUNTY - HVHZ):
+- Portal: Tyler CSS (Citizens Self Service)
+- All of Miami-Dade is HVHZ - minimum 175 mph wind load
+- Miami-Dade Product Approval (NOA) required for all exterior products
+
+HIALEAH NOTARIZATION - STRICTLY ENFORCED:
+- Permit application MUST be notarized
+- Owner affidavits MUST be notarized
+- For condos: Association Authorization Letter with president's signature NOTARIZED
+- Missing notarization = automatic rejection
+
+HIALEAH OWNER-BUILDER - STRICT REQUIREMENTS:
+- Must reside at the property
+- Valid FL driver's license with property address required
+- Warranty deed and homestead exemption may be required
+- Tenant improvements limited to: 500 sq ft or less AND under $5,000 for non-structural only
+
+HIALEAH DERM REQUIREMENT:
+- DERM approval required BEFORE city permit for commercial projects
+- Submit to Miami-Dade County FIRST
+
+HIALEAH NOC REQUIREMENTS:
+- NOC threshold: $2,500 general (or $5,000), $7,500 for HVAC
+- Record at Miami-Dade County Recorder's Office
+
+HIALEAH HOURS - NOTE LUNCH CLOSURE:
+- Mon-Fri 7:30 AM - 11:15 AM
+- CLOSED for lunch
+- Mon-Fri 12:30 PM - 3:15 PM
+
+HIALEAH INSPECTIONS:
+- Check routed inspections: apps.hialeahfl.gov/building/DailyRoutedInspections.aspx
+- Once permit issued, contractor/owner-builder responsible for requesting all inspections
+
+HIALEAH SPECIAL PROGRAMS:
+- Buildings 25+ years require milestone inspections (recertification)
+- Amnesty Program available - contact Building Department for eligibility
+"""
+    elif city_key == "miami_gardens":
+        city_context = """
+MIAMI GARDENS SPECIFIC REQUIREMENTS (MIAMI-DADE COUNTY - HVHZ):
+- Portal: Tyler CSS (Citizens Self Service)
+- All of Miami-Dade is HVHZ - minimum 175 mph wind load
+- Miami-Dade Product Approval (NOA) required for all exterior products
+
+⚠️ MIAMI GARDENS IS CLOSED ON FRIDAYS!
+- Hours: Mon-Thu 7:00 AM - 6:00 PM ONLY
+- NO services on Fridays
+
+MIAMI GARDENS PLAN REQUIREMENTS:
+- Two (2) sets of plans required
+- Must be drawn to scale
+- Must be signed and sealed by FL PE or architect (if applicable)
+
+MIAMI GARDENS DERM - VERY COMMON REJECTION:
+- DERM approval required BEFORE city permit for:
+  * New buildings
+  * Nonresidential additions
+  * Commercial interior alterations
+  * Commercial re-roofs
+  * Commercial pools
+  * Land clearing
+  * Demolition
+
+MIAMI GARDENS ADDITIONAL APPROVALS:
+- DBPR approval required for restaurants
+- Miami-Dade County Health Dept approval for: ALFs, day cares, hospitals, schools
+
+MIAMI GARDENS NOC REQUIREMENTS:
+- NOC threshold: $2,500 general, $7,500 for HVAC
+- NOC must be present at job site for FIRST INSPECTION
+
+MIAMI GARDENS INSPECTIONS:
+- Requests before 3:00 PM = scheduled for next business day
+- Requests after 3:00 PM = scheduled for TWO business days out
+- To cancel: Email buildingpermitquestions@miamigardens-fl.gov before 9:00 AM
+
+MIAMI GARDENS PROCESSING TIMES:
+- Residential permits: Average 14 working days
+- Commercial permits: Average 28 working days
+- Review by 3-7 disciplines: Structural, Electrical, Mechanical, Plumbing, Zoning, Building, DERM, Fire, Public Works
+- Permits expire after 180 days without inspection
+
+MIAMI GARDENS RECERTIFICATION:
+- Buildings 25-30 years require milestone inspections
+- Parking lot guardrail recertification required
+- Parking lot illumination recertification required
+"""
+    elif city_key == "kendall":
+        city_context = """
+KENDALL (UNINCORPORATED MIAMI-DADE COUNTY) - HVHZ:
+- Portal: EPS Portal (miamidade.gov/Apps/RER/EPSPortal)
+- Permits through Miami-Dade County Permitting and Inspection Center (PIC)
+- Property folio numbers start with "30" for unincorporated MDC
+- Application must be signed AND notarized (Yellow Form)
+
+KENDALL/MDC CRITICAL REQUIREMENTS:
+- Miami-Dade NOA required - NOT just Florida Product Approval!
+- DERM approval required BEFORE building permit for most projects
+- Work without permit = 100% penalty (DOUBLE fee) - strictly enforced!
+
+KENDALL E-PERMITTING:
+- Available 7 days/week from 2 AM to 5 PM for trade permits
+- Most permits can be submitted online through EPS Portal
+
+KENDALL NOC:
+- NOC threshold: $2,500 general, $7,500 for HVAC
+- Record at: Miami-Dade County Recorder's Office, 22 NW 1st Street
+- Phone: (305) 275-1155
+
+KENDALL HVAC REQUIREMENTS:
+- SEER ratings must meet current minimums (SEER2 15 for split systems)
+- Load calculations REQUIRED if changing equipment size - can't just "match existing"
+- Condensate drain must be visible and accessible
+
+KENDALL ELECTRICAL REQUIREMENTS:
+- Pool bonding strictly enforced - ALL metal within 5 feet must be bonded
+- AFCI required in bedrooms, living rooms, hallways
+- GFCI required in bathrooms, kitchens, garages, outdoors, within 6ft of sinks
+- Smoke detectors: interconnected, hardwired with battery backup
+
+KENDALL ROOFING - HVHZ:
+- Peel-and-stick underlayment REQUIRED for shingle roofs
+- Max 2 roof layers - often must tear off existing
+- NOA must cover SPECIFIC system, not just individual products
+- Verify NOA covers your wind zone and building height
+
+KENDALL COST SAVINGS:
+- 15% refund available for permits not requiring rework (request within 180 days)
+- Private Provider option: 65% fee reduction for their portion
+- Green Building Expedited Review for LEED/FGBC projects $50k+
+
+KENDALL MARINE CONSTRUCTION:
+- Requires BOTH Building Permit AND Class I Environmental Permit from DERM
+- Seawall cap must be minimum 6 inches above adjacent grade
+- Unencapsulated polystyrene (Styrofoam) is PROHIBITED
+- Multiple agency approvals can take 6-12 months total
+"""
+    elif city_key == "homestead":
+        city_context = """
+CITY OF HOMESTEAD SPECIFIC REQUIREMENTS (MIAMI-DADE COUNTY - HVHZ):
+- Portal: EPL-B.U.I.L.D (NEW - launched October 2025)
+- Legacy projects (before Oct 2025) use Community Plus - DON'T MIX SYSTEMS!
+- Application must be signed AND notarized
+- Remote Online Notary (RON) accepted
+
+⚠️ HOMESTEAD FILE NAMING - CRITICAL:
+- Files MUST follow format: BD-YY-XXXXX-PT-R-DISCIPLINE
+- Example: BD-25-12345-PT-R-ARCHITECTURAL
+- Files AUTO-REJECTED if naming convention not followed!
+- NO special characters: # % & { } / \\ ? < > * $ ! ' : @ " + ` | = ~ ( )
+
+HOMESTEAD PLAN REQUIREMENTS:
+- Leave upper-right corner blank for City seal
+- 2"x2" for letter size, 3"x3" for larger plans
+- Group plans by discipline - separate PDF per discipline
+- All pages of one NOA must be grouped together in single PDF
+- Calculations grouped with corresponding discipline
+
+HOMESTEAD COUNTY APPROVALS - REQUIRED:
+- DERM, WASD, Impact Fee approvals through MIAMI-DADE COUNTY portal
+- Must obtain M# number from Miami-Dade before City permit finalized
+- County fees paid SEPARATELY from City fees
+
+HOMESTEAD REVIEW TIME:
+- Initial review: approximately 14 business days
+- Re-submittals may occur multiple times
+- Upfront fees required before review begins
+
+HOMESTEAD OWNER-BUILDER - STRICT:
+- Must prove knowledge and ability (TEST ADMINISTERED)
+- Must be owner's personal residence, not for sale
+- Limited to ONE permit per 24-month period for new construction
+- Owner must appear IN PERSON for document review
+- No permit if existing violation on property
+
+HOMESTEAD CONSTRUCTION RULES:
+- Construction hours: 7:00 AM - 7:00 PM ONLY
+- Construction debris must be removed by licensed hauler
+- Streets and neighboring properties must be kept clean
+- Equipment/materials stored on property, not public right-of-way
+
+HOMESTEAD NOC:
+- Must be recorded at 22 N.W. 1st Street, 1st floor
+- Phone: (305) 275-1155 ext 6
+- Recorded NOC must be posted at job site
+"""
     else:
         city_context = f"""
 GENERAL SOUTH FLORIDA REQUIREMENTS:
 - Florida Building Code 8th Edition (2023) in effect
 - Florida Product Approval required for exterior products
-- Check if in HVHZ zone - Broward County is HVHZ, Palm Beach generally is not
+- Check if in HVHZ zone - Broward and Miami-Dade are HVHZ, Palm Beach generally is not
 - Environmental approvals may be required before local permit
 """
 
     gotchas_text = ""
     if gotchas:
-        gotchas_text = (
-            "\n\nKNOWN GOTCHAS FOR THIS CITY (common rejection reasons):\n"
-            + "\n".join([f"⚠️ {g}" for g in gotchas[:10]])
-        )
+        gotchas_text = "\n\nKNOWN GOTCHAS FOR THIS CITY (common rejection reasons):\n" + "\n".join([f"⚠️ {g}" for g in gotchas[:10]])
 
     tips_text = ""
     if tips:
@@ -2465,35 +2626,15 @@ IMPORTANT:
                     parsed = json.loads(m.strip() if m.strip().startswith("{") else m)
                     if "summary" in parsed or "compliance_score" in parsed:
                         # Ensure backwards compatibility - flatten documents_found if needed
-                        if parsed.get("documents_found") and isinstance(
-                            parsed["documents_found"][0], dict
-                        ):
-                            parsed["documents_found_detailed"] = parsed[
-                                "documents_found"
-                            ]
-                            parsed["documents_found"] = [
-                                d.get("name", str(d)) for d in parsed["documents_found"]
-                            ]
-                        if parsed.get("missing_documents") and isinstance(
-                            parsed["missing_documents"][0], dict
-                        ):
-                            parsed["missing_documents_detailed"] = parsed[
-                                "missing_documents"
-                            ]
-                            parsed["missing_documents"] = [
-                                d.get("name", str(d))
-                                for d in parsed["missing_documents"]
-                            ]
-                        if parsed.get("critical_issues") and isinstance(
-                            parsed["critical_issues"][0], dict
-                        ):
-                            parsed["critical_issues_detailed"] = parsed[
-                                "critical_issues"
-                            ]
-                            parsed["critical_issues"] = [
-                                d.get("issue", str(d))
-                                for d in parsed["critical_issues"]
-                            ]
+                        if parsed.get("documents_found") and isinstance(parsed["documents_found"][0], dict):
+                            parsed["documents_found_detailed"] = parsed["documents_found"]
+                            parsed["documents_found"] = [d.get("name", str(d)) for d in parsed["documents_found"]]
+                        if parsed.get("missing_documents") and isinstance(parsed["missing_documents"][0], dict):
+                            parsed["missing_documents_detailed"] = parsed["missing_documents"]
+                            parsed["missing_documents"] = [d.get("name", str(d)) for d in parsed["missing_documents"]]
+                        if parsed.get("critical_issues") and isinstance(parsed["critical_issues"][0], dict):
+                            parsed["critical_issues_detailed"] = parsed["critical_issues"]
+                            parsed["critical_issues"] = [d.get("issue", str(d)) for d in parsed["critical_issues"]]
                         return parsed
                 except:
                     continue
