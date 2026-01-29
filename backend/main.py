@@ -41,7 +41,7 @@ import json
 import traceback
 import resend
 import stripe
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional, List
 from dotenv import load_dotenv
 
