@@ -145,9 +145,20 @@ export default function App() {
   const logout = () => { setAuthToken(null); setCurrentUser(null); setProfile(null); localStorage.removeItem('authToken'); localStorage.removeItem('currentUser'); setPage('home') }
 
   const handleFiles = (e) => {
-    const fileList = Array.from(e.target.files); setFiles(fileList)
-    const valid = fileList.filter(f => { const ext = f.name.split('.').pop().toLowerCase(); return ['pdf', 'png', 'jpg', 'jpeg'].includes(ext) && f.size <= 25 * 1024 * 1024 }).slice(0, 50)
-    setValidFiles(valid)
+    const newFiles = Array.from(e.target.files)
+    // Filter valid files from new uploads
+    const newValid = newFiles.filter(f => { 
+      const ext = f.name.split('.').pop().toLowerCase()
+      return ['pdf', 'png', 'jpg', 'jpeg'].includes(ext) && f.size <= 25 * 1024 * 1024 
+    })
+    // Combine with existing files, avoiding duplicates by name
+    const existingNames = new Set(validFiles.map(f => f.name))
+    const uniqueNew = newValid.filter(f => !existingNames.has(f.name))
+    const combined = [...validFiles, ...uniqueNew].slice(0, 50) // Max 50 files
+    setFiles(combined)
+    setValidFiles(combined)
+    // Reset file input so same file can be added again if cleared
+    e.target.value = ''
   }
 
   const clearFiles = () => { setFiles([]); setValidFiles([]) }
@@ -243,23 +254,29 @@ export default function App() {
 
   const canAnalyze = city && permitType && validFiles.length > 0 && totalSize <= 200 * 1024 * 1024 && agreedToTerms
   const getPermitTypes = () => {
-    // Keep for backwards compatibility but AI will auto-detect
     return [
       { value: 'auto', label: 'Auto-Detect (Recommended)' },
-      { value: 'building', label: 'Building/Renovation' },
-      { value: 'roofing', label: 'Roofing' },
-      { value: 'mechanical', label: 'Mechanical/HVAC' },
-      { value: 'electrical', label: 'Electrical' },
-      { value: 'plumbing', label: 'Plumbing' },
-      { value: 'windows', label: 'Windows/Doors/Shutters' },
-      { value: 'pool', label: 'Pool/Spa' },
-      { value: 'fence', label: 'Fence' },
-      { value: 'generator', label: 'Generator' },
-      { value: 'solar', label: 'Solar' },
+      { value: '', label: '── RESIDENTIAL ──', disabled: true },
+      { value: 'building', label: 'Residential (Additions, Renovations, Garage Conversions)' },
+      { value: 'roofing', label: 'Roofing (Re-roof, Repairs, New Roof)' },
+      { value: 'windows', label: 'Windows, Doors & Shutters' },
+      { value: 'fence', label: 'Fence & Gates' },
+      { value: 'pool', label: 'Pool & Spa' },
+      { value: 'screen_enclosure', label: 'Screen Enclosure & Patio' },
+      { value: 'shed', label: 'Shed & Accessory Structures' },
+      { value: 'driveway', label: 'Driveway & Concrete Slab' },
+      { value: '', label: '── TRADE / MEP ──', disabled: true },
+      { value: 'mechanical', label: 'HVAC / Mechanical (A/C, Heat Pump, Ductwork)' },
+      { value: 'electrical', label: 'Electrical (Panel, Service Change, Wiring)' },
+      { value: 'plumbing', label: 'Plumbing (Water Heater, Pipes, Fixtures)' },
+      { value: 'generator', label: 'Generator (Standby, Transfer Switch)' },
+      { value: 'solar', label: 'Solar (PV Panels, Battery)' },
+      { value: '', label: '── MARINE / WATERFRONT ──', disabled: true },
+      { value: 'marine', label: 'Marine Construction (Dock, Seawall, Boat Lift, Davit)' },
+      { value: '', label: '── OTHER ──', disabled: true },
+      { value: 'commercial', label: 'Commercial (Tenant Buildout, Renovations)' },
       { value: 'demolition', label: 'Demolition' },
-      { value: 'dock', label: 'Dock' },
-      { value: 'seawall', label: 'Seawall' },
-      { value: 'boat_lift', label: 'Boat Lift' },
+      { value: 'sign', label: 'Signs' },
     ]
   }
 
@@ -527,10 +544,9 @@ export default function App() {
       {/* Single Purchase Modal */}
       {showSinglePurchase && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-gray-900 rounded-2xl p-8 max-w-md w-full border border-gray-800 relative">
+          <div className="bg-gray-900 rounded-2xl p-8 max-w-md w-full border border-gray-800 relative max-h-[90vh] overflow-y-auto">
             <button onClick={() => setShowSinglePurchase(false)} className="absolute top-4 right-4 text-gray-500 hover:text-white">✕</button>
             <div className="text-center mb-6">
-              <span className="text-4xl mb-4 block">🏠</span>
               <h2 className="text-2xl font-bold text-white mb-2">Homeowner Single Analysis</h2>
               <p className="text-gray-400">One-time purchase for <span className="text-amber-400 font-bold">$15.99</span></p>
             </div>
@@ -556,8 +572,8 @@ export default function App() {
                 >
                   <option value="">Select county...</option>
                   <option value="Broward">Broward County</option>
-                  <option value="Palm Beach">Palm Beach County</option>
                   <option value="Miami-Dade">Miami-Dade County</option>
+                  <option value="Palm Beach">Palm Beach County</option>
                 </select>
               </div>
               
@@ -572,19 +588,19 @@ export default function App() {
                   <option value="">{county ? 'Select city...' : 'Select county first'}</option>
                   {county === 'Broward' && (
                     <>
-                      <option value="Fort Lauderdale">Fort Lauderdale</option>
-                      <option value="Pompano Beach">Pompano Beach</option>
-                      <option value="Hollywood">Hollywood</option>
-                      <option value="Coral Springs">Coral Springs</option>
                       <option value="Coconut Creek">Coconut Creek</option>
+                      <option value="Coral Springs">Coral Springs</option>
                       <option value="Davie">Davie</option>
                       <option value="Deerfield Beach">Deerfield Beach</option>
+                      <option value="Fort Lauderdale">Fort Lauderdale</option>
+                      <option value="Hollywood">Hollywood</option>
                       <option value="Lauderdale-by-the-Sea">Lauderdale-by-the-Sea</option>
                       <option value="Lighthouse Point">Lighthouse Point</option>
                       <option value="Margate">Margate</option>
                       <option value="Miramar">Miramar</option>
                       <option value="Pembroke Pines">Pembroke Pines</option>
                       <option value="Plantation">Plantation</option>
+                      <option value="Pompano Beach">Pompano Beach</option>
                       <option value="Sunrise">Sunrise</option>
                       <option value="Tamarac">Tamarac</option>
                       <option value="Weston">Weston</option>
@@ -601,10 +617,10 @@ export default function App() {
                   )}
                   {county === 'Miami-Dade' && (
                     <>
-                      <option value="Miami">Miami</option>
                       <option value="Hialeah">Hialeah</option>
                       <option value="Homestead">Homestead</option>
                       <option value="Kendall">Kendall (Unincorporated)</option>
+                      <option value="Miami">Miami</option>
                       <option value="Miami Gardens">Miami Gardens</option>
                     </>
                   )}
@@ -619,14 +635,11 @@ export default function App() {
                   disabled={!city}
                   className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:border-amber-500 focus:outline-none disabled:opacity-50"
                 >
-                  <option value="auto">Auto-Detect (Recommended)</option>
-                  <option value="roofing">Roofing</option>
-                  <option value="mechanical">HVAC/Mechanical</option>
-                  <option value="electrical">Electrical</option>
-                  <option value="plumbing">Plumbing</option>
-                  <option value="windows">Windows/Doors</option>
-                  <option value="pool">Pool/Spa</option>
-                  <option value="fence">Fence</option>
+                  {getPermitTypes().map((pt, i) => (
+                    <option key={pt.value || `cat-${i}`} value={pt.value} disabled={pt.disabled}>
+                      {pt.label}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -1232,8 +1245,8 @@ export default function App() {
                     >
                       <option value="">Select county...</option>
                       <option value="Broward">Broward County</option>
-                      <option value="Palm Beach">Palm Beach County</option>
                       <option value="Miami-Dade">Miami-Dade County</option>
+                      <option value="Palm Beach">Palm Beach County</option>
                     </select>
                     <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                       <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/></svg>
@@ -1254,19 +1267,19 @@ export default function App() {
                       <option value="">{county ? 'Select city...' : 'Select county first'}</option>
                       {county === 'Broward' && (
                         <>
-                          <option value="Fort Lauderdale">Fort Lauderdale</option>
-                          <option value="Pompano Beach">Pompano Beach</option>
-                          <option value="Hollywood">Hollywood</option>
-                          <option value="Coral Springs">Coral Springs</option>
                           <option value="Coconut Creek">Coconut Creek</option>
+                          <option value="Coral Springs">Coral Springs</option>
                           <option value="Davie">Davie</option>
                           <option value="Deerfield Beach">Deerfield Beach</option>
+                          <option value="Fort Lauderdale">Fort Lauderdale</option>
+                          <option value="Hollywood">Hollywood</option>
                           <option value="Lauderdale-by-the-Sea">Lauderdale-by-the-Sea</option>
                           <option value="Lighthouse Point">Lighthouse Point</option>
                           <option value="Margate">Margate</option>
                           <option value="Miramar">Miramar</option>
                           <option value="Pembroke Pines">Pembroke Pines</option>
                           <option value="Plantation">Plantation</option>
+                          <option value="Pompano Beach">Pompano Beach</option>
                           <option value="Sunrise">Sunrise</option>
                           <option value="Tamarac">Tamarac</option>
                           <option value="Weston">Weston</option>
@@ -1283,10 +1296,10 @@ export default function App() {
                       )}
                       {county === 'Miami-Dade' && (
                         <>
-                          <option value="Miami">Miami</option>
                           <option value="Hialeah">Hialeah</option>
                           <option value="Homestead">Homestead</option>
                           <option value="Kendall">Kendall (Unincorporated)</option>
+                          <option value="Miami">Miami</option>
                           <option value="Miami Gardens">Miami Gardens</option>
                         </>
                       )}
@@ -1308,7 +1321,11 @@ export default function App() {
                       className={`w-full px-4 py-3.5 bg-black/60 border border-gray-700/50 rounded-xl text-white appearance-none cursor-pointer transition-all duration-200 hover:border-gray-600 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 focus:outline-none ${!city ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                       <option value="">{city ? 'Select permit type...' : 'Select city first'}</option>
-                      {getPermitTypes().map(pt => <option key={pt.value} value={pt.value}>{pt.label}</option>)}
+                      {getPermitTypes().map((pt, i) => (
+                        <option key={pt.value || `cat-${i}`} value={pt.value} disabled={pt.disabled}>
+                          {pt.label}
+                        </option>
+                      ))}
                     </select>
                     <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                       <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/></svg>
