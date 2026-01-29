@@ -100,12 +100,15 @@ stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 STRIPE_PRICES = {
     "pro": "price_1StYmAF8sW0Jp8OD2qc8v7d4",
     "business": "price_1StYmUF8sW0Jp8ODrL2fEoQB",
+    "single": "price_SINGLE_ANALYSIS",  # TODO: Create this price in Stripe dashboard - $15.99 one-time
 }
 TIER_LIMITS = {
     "free": 3,
     "pro": 50,
     "business": 999999,  # unlimited
+    "single": 1,  # one-time purchase
 }
+SINGLE_ANALYSIS_PRICE = 1599  # $15.99 in cents
 
 # ============================================================================
 # DATABASE SETUP
@@ -244,6 +247,25 @@ class APILog(Base):
     user_agent = Column(String(500))
     response_time_ms = Column(Integer)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class SinglePurchase(Base):
+    """One-time homeowner permit analysis purchases"""
+    __tablename__ = "single_purchases"
+
+    id = Column(Integer, primary_key=True, index=True)
+    purchase_uuid = Column(String(36), unique=True, index=True, nullable=False)
+    email = Column(String(255), nullable=False, index=True)
+    city = Column(String(100), nullable=False)
+    permit_type = Column(String(100), nullable=False)
+    stripe_payment_intent = Column(String(255), nullable=True)
+    stripe_session_id = Column(String(255), nullable=True)
+    payment_status = Column(String(50), default="pending")  # pending, paid, refunded
+    analysis_id = Column(String(36), nullable=True)  # Links to completed analysis
+    analysis_used = Column(Boolean, default=False)
+    amount_cents = Column(Integer, default=1599)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    expires_at = Column(DateTime, nullable=True)  # 30 days to use after purchase
 
 
 Base.metadata.create_all(bind=engine)
@@ -1194,6 +1216,15 @@ async def get_pricing():
                 "features": ["3 analyses/month", "Basic AI analysis", "Email support"],
             },
             {
+                "id": "single",
+                "name": "Single Analysis",
+                "price": 15.99,
+                "period": "one-time",
+                "analyses": 1,
+                "features": ["1 permit analysis", "Full checklist included", "30 days to use", "No subscription required"],
+                "homeowner": True,
+            },
+            {
                 "id": "pro",
                 "name": "Pro",
                 "price": 29,
@@ -1276,6 +1307,208 @@ async def create_checkout_session(
         raise HTTPException(status_code=500, detail=f"Checkout error: {str(e)}")
 
 
+@app.post("/api/stripe/create-single-checkout")
+async def create_single_checkout(
+    email: str = Form(...),
+    city: str = Form(...),
+    permit_type: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    """Create Stripe checkout session for single homeowner analysis - no account needed"""
+    try:
+        purchase_uuid = str(uuid.uuid4())
+        
+        # Create Stripe checkout session for one-time payment
+        session = stripe.checkout.Session.create(
+            payment_method_types=["card"],
+            customer_email=email,
+            line_items=[{
+                "price_data": {
+                    "currency": "usd",
+                    "product_data": {
+                        "name": f"Permit Analysis - {city}",
+                        "description": f"One-time {permit_type} permit analysis for {city}. Includes full checklist and 30 days to use.",
+                    },
+                    "unit_amount": SINGLE_ANALYSIS_PRICE,  # $15.99 in cents
+                },
+                "quantity": 1,
+            }],
+            mode="payment",
+            success_url=f"{FRONTEND_URL}?purchase=success&purchase_id={purchase_uuid}",
+            cancel_url=f"{FRONTEND_URL}?purchase=cancelled",
+            metadata={
+                "purchase_uuid": purchase_uuid,
+                "city": city,
+                "permit_type": permit_type,
+                "type": "single_analysis",
+            }
+        )
+        
+        # Create pending purchase record
+        purchase = SinglePurchase(
+            purchase_uuid=purchase_uuid,
+            email=email,
+            city=city,
+            permit_type=permit_type,
+            stripe_session_id=session.id,
+            payment_status="pending",
+            expires_at=datetime.utcnow() + timedelta(days=30),
+        )
+        db.add(purchase)
+        db.commit()
+        
+        return {
+            "checkout_url": session.url, 
+            "session_id": session.id,
+            "purchase_id": purchase_uuid
+        }
+    
+    except stripe.error.StripeError as e:
+        print(f"❌ Stripe error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Payment error: {str(e)}")
+    except Exception as e:
+        print(f"❌ Single checkout error: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Checkout error: {str(e)}")
+
+
+@app.get("/api/single-purchase/{purchase_uuid}")
+async def get_single_purchase(purchase_uuid: str, db: Session = Depends(get_db)):
+    """Get single purchase status and details"""
+    purchase = db.query(SinglePurchase).filter(
+        SinglePurchase.purchase_uuid == purchase_uuid
+    ).first()
+    
+    if not purchase:
+        raise HTTPException(status_code=404, detail="Purchase not found")
+    
+    # Get permit requirements for checklist
+    city_key = get_city_key(purchase.city)
+    requirements = get_permit_requirements(city_key, purchase.permit_type)
+    
+    return {
+        "purchase_uuid": purchase.purchase_uuid,
+        "email": purchase.email,
+        "city": purchase.city,
+        "permit_type": purchase.permit_type,
+        "payment_status": purchase.payment_status,
+        "analysis_used": purchase.analysis_used,
+        "analysis_id": purchase.analysis_id,
+        "expires_at": purchase.expires_at.isoformat() if purchase.expires_at else None,
+        "checklist": requirements.get("documents", []) if requirements else [],
+        "gotchas": requirements.get("gotchas", [])[:5] if requirements else [],
+    }
+
+
+@app.post("/api/analyze-single/{purchase_uuid}")
+@limiter.limit("5/minute")
+async def analyze_single_purchase(
+    request: Request,
+    purchase_uuid: str,
+    files: List[UploadFile] = File(...),
+    db: Session = Depends(get_db),
+):
+    """Analyze permit for a single purchase - marks purchase as used after success"""
+    purchase = db.query(SinglePurchase).filter(
+        SinglePurchase.purchase_uuid == purchase_uuid
+    ).first()
+    
+    if not purchase:
+        raise HTTPException(status_code=404, detail="Purchase not found")
+    
+    if purchase.payment_status != "paid":
+        raise HTTPException(status_code=402, detail="Payment not completed")
+    
+    if purchase.analysis_used:
+        raise HTTPException(status_code=400, detail="Analysis already used. Single purchases allow only one analysis.")
+    
+    if purchase.expires_at and purchase.expires_at < datetime.utcnow():
+        raise HTTPException(status_code=400, detail="Purchase expired. Single purchases are valid for 30 days.")
+    
+    # Process the analysis (similar to regular analyze endpoint)
+    if len(files) > MAX_FILES_PER_UPLOAD:
+        raise HTTPException(status_code=400, detail=f"Max {MAX_FILES_PER_UPLOAD} files")
+    if not files:
+        raise HTTPException(status_code=400, detail="No files provided")
+
+    api_key = get_api_key()
+    if not api_key:
+        raise HTTPException(status_code=500, detail="API key not configured")
+
+    analysis_id = str(uuid.uuid4())
+    temp_dir = tempfile.mkdtemp()
+
+    try:
+        processed_files = []
+        total_size = 0
+        all_text = []
+
+        for f in files:
+            is_valid, ext = validate_file_type(f.filename)
+            if not is_valid:
+                continue
+
+            safe_name = sanitize_filename(f.filename)
+            path = os.path.join(temp_dir, f"{len(processed_files)}_{safe_name}")
+
+            with open(path, "wb") as buf:
+                shutil.copyfileobj(f.file, buf)
+
+            size = os.path.getsize(path)
+            if size > MAX_FILE_SIZE_MB * 1024 * 1024:
+                os.remove(path)
+                continue
+
+            total_size += size
+            processed_files.append(
+                {"name": f.filename, "path": path, "size": format_file_size(size)}
+            )
+
+        if not processed_files:
+            raise HTTPException(status_code=400, detail="No valid files")
+
+        for pf in processed_files:
+            try:
+                text = get_document_text(pf["path"], is_blueprint=False)
+                all_text.append(
+                    f"\n=== {pf['name']} ===\n{text if text else '[No text]'}"
+                )
+            except:
+                all_text.append(f"\n=== {pf['name']} ===\n[Error reading]")
+
+        city_key = get_city_key(purchase.city)
+        requirements = get_permit_requirements(city_key, purchase.permit_type)
+        if not requirements:
+            requirements = get_permit_requirements(city_key, "building")
+
+        analysis = analyze_folder_with_claude(
+            "\n".join(all_text), requirements, api_key, len(processed_files)
+        )
+
+        file_tree = [{"name": p["name"], "size": p["size"]} for p in processed_files]
+
+        # Mark purchase as used
+        purchase.analysis_used = True
+        purchase.analysis_id = analysis_id
+        db.commit()
+
+        return {
+            "analysis_id": analysis_id,
+            "city": purchase.city,
+            "permit_type": requirements.get("name", purchase.permit_type),
+            "files_analyzed": len(processed_files),
+            "total_size": format_file_size(total_size),
+            "file_tree": file_tree,
+            "analysis": analysis,
+            "checklist": requirements.get("documents", []),
+            "single_purchase": True,
+        }
+
+    finally:
+        shutil.rmtree(temp_dir, ignore_errors=True)
+
+
 @app.post("/api/stripe/webhook")
 async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
     """Handle Stripe webhooks"""
@@ -1296,17 +1529,31 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
     data = event.get("data", {}).get("object", {})
     
     if event_type == "checkout.session.completed":
-        # Payment successful
-        customer_id = data.get("customer")
-        subscription_id = data.get("subscription")
-        tier = data.get("metadata", {}).get("tier", "pro")
-        
-        user = db.query(User).filter(User.stripe_customer_id == customer_id).first()
-        if user:
-            user.subscription_tier = tier
-            user.stripe_subscription_id = subscription_id
-            db.commit()
-            print(f"✅ User {user.email} upgraded to {tier}")
+        # Check if this is a single purchase
+        metadata = data.get("metadata", {})
+        if metadata.get("type") == "single_analysis":
+            # Single purchase payment completed
+            purchase_uuid = metadata.get("purchase_uuid")
+            purchase = db.query(SinglePurchase).filter(
+                SinglePurchase.purchase_uuid == purchase_uuid
+            ).first()
+            if purchase:
+                purchase.payment_status = "paid"
+                purchase.stripe_payment_intent = data.get("payment_intent")
+                db.commit()
+                print(f"✅ Single purchase {purchase_uuid} paid for {purchase.city}")
+        else:
+            # Subscription payment successful
+            customer_id = data.get("customer")
+            subscription_id = data.get("subscription")
+            tier = metadata.get("tier", "pro")
+            
+            user = db.query(User).filter(User.stripe_customer_id == customer_id).first()
+            if user:
+                user.subscription_tier = tier
+                user.stripe_subscription_id = subscription_id
+                db.commit()
+                print(f"✅ User {user.email} upgraded to {tier}")
     
     elif event_type == "customer.subscription.deleted":
         # Subscription cancelled

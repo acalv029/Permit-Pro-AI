@@ -43,6 +43,9 @@ export default function App() {
   const [adminLoading, setAdminLoading] = useState(false)
   const [subscription, setSubscription] = useState(null)
   const [checkoutLoading, setCheckoutLoading] = useState(false)
+  const [singlePurchase, setSinglePurchase] = useState(null)
+  const [singlePurchaseEmail, setSinglePurchaseEmail] = useState('')
+  const [showSinglePurchase, setShowSinglePurchase] = useState(false)
 
   const ADMIN_EMAILS = ['toshygluestick@gmail.com']
   const isAdmin = currentUser && ADMIN_EMAILS.includes(currentUser.email)
@@ -53,9 +56,27 @@ export default function App() {
     const params = new URLSearchParams(window.location.search)
     const token = params.get('token')
     const payment = params.get('payment')
+    const purchase = params.get('purchase')
+    const purchaseId = params.get('purchase_id')
+    
     if (token) { setResetToken(token); setPage('reset-password'); window.history.replaceState({}, document.title, window.location.pathname) }
     if (payment === 'success') { setSuccessMessage('Payment successful! Your subscription is now active.'); setPage('profile'); window.history.replaceState({}, document.title, window.location.pathname) }
     if (payment === 'cancelled') { window.history.replaceState({}, document.title, window.location.pathname) }
+    
+    // Handle single purchase success
+    if (purchase === 'success' && purchaseId) {
+      setSuccessMessage('Payment successful! You can now analyze your permit.')
+      loadSinglePurchase(purchaseId)
+      setPage('single-analysis')
+      window.history.replaceState({}, document.title, window.location.pathname)
+    }
+    if (purchase === 'cancelled') { window.history.replaceState({}, document.title, window.location.pathname) }
+    
+    // Check for pending purchase in localStorage
+    const pendingPurchase = localStorage.getItem('pending_purchase')
+    if (pendingPurchase && !purchaseId) {
+      loadSinglePurchase(pendingPurchase)
+    }
   }, [])
 
   useEffect(() => {
@@ -174,6 +195,48 @@ export default function App() {
       if (res.ok) { const data = await res.json(); window.location.href = data.portal_url }
       else { alert('Could not open billing portal') }
     } catch (err) { alert('Error opening billing portal') }
+  }
+
+  const handleSinglePurchaseCheckout = async () => {
+    if (!singlePurchaseEmail || !city || !permitType) {
+      alert('Please enter your email and select city and permit type')
+      return
+    }
+    setCheckoutLoading(true)
+    try {
+      const formData = new FormData()
+      formData.append('email', singlePurchaseEmail)
+      formData.append('city', city)
+      formData.append('permit_type', permitType)
+      const res = await fetch(`${API_BASE_URL}/api/stripe/create-single-checkout`, { method: 'POST', body: formData })
+      if (res.ok) { 
+        const data = await res.json()
+        localStorage.setItem('pending_purchase', data.purchase_id)
+        window.location.href = data.checkout_url 
+      }
+      else { const data = await res.json(); alert(data.detail || 'Checkout failed') }
+    } catch (err) { alert('Checkout error') }
+    finally { setCheckoutLoading(false) }
+  }
+
+  const loadSinglePurchase = async (purchaseId) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/single-purchase/${purchaseId}`)
+      if (res.ok) {
+        const data = await res.json()
+        setSinglePurchase(data)
+        setCity(data.city)
+        setPermitType(data.permit_type)
+        // Set county based on city
+        if (['Fort Lauderdale', 'Pompano Beach', 'Hollywood', 'Coral Springs', 'Coconut Creek', 'Davie', 'Deerfield Beach', 'Lauderdale-by-the-Sea', 'Lighthouse Point', 'Margate', 'Miramar', 'Pembroke Pines', 'Plantation', 'Sunrise', 'Tamarac', 'Weston'].includes(data.city)) {
+          setCounty('Broward')
+        } else if (['Boca Raton', 'Boynton Beach', 'Delray Beach', 'Lake Worth Beach', 'West Palm Beach'].includes(data.city)) {
+          setCounty('Palm Beach')
+        } else {
+          setCounty('Miami-Dade')
+        }
+      }
+    } catch (err) { console.error('Error loading purchase:', err) }
   }
 
   useEffect(() => { if (page === 'history' && authToken) loadHistory(); if (page === 'profile' && authToken) { loadProfile(); loadSubscription() }; if (page === 'admin' && authToken && isAdmin) loadAdminStats(); if (page === 'pricing' && authToken) loadSubscription() }, [page])
@@ -380,11 +443,28 @@ export default function App() {
       <div className="fixed inset-0 z-0"><div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div></div>
       <NavBar showBack />
       <div className="relative z-10 pt-24 px-6 pb-12 flex-grow">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-4">Simple, Transparent Pricing</h1>
             <p className="text-gray-400 text-lg">Choose the plan that fits your needs</p>
           </div>
+          
+          {/* Homeowner Single Purchase Banner */}
+          <div className="mb-8 p-6 bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/30 rounded-2xl">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-2xl">🏠</span>
+                  <h3 className="text-xl font-bold text-amber-400">Homeowner? Just need one analysis?</h3>
+                </div>
+                <p className="text-gray-400">Get a single permit analysis for <span className="text-white font-bold">$15.99</span> — no subscription required. Includes full checklist!</p>
+              </div>
+              <button onClick={() => setShowSinglePurchase(true)} className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-bold rounded-xl whitespace-nowrap hover:scale-105 transition-transform">
+                Get Single Analysis →
+              </button>
+            </div>
+          </div>
+
           <div className="grid md:grid-cols-3 gap-6">
             {/* Free */}
             <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800">
@@ -443,6 +523,132 @@ export default function App() {
           )}
         </div>
       </div>
+      
+      {/* Single Purchase Modal */}
+      {showSinglePurchase && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="bg-gray-900 rounded-2xl p-8 max-w-md w-full border border-gray-800 relative">
+            <button onClick={() => setShowSinglePurchase(false)} className="absolute top-4 right-4 text-gray-500 hover:text-white">✕</button>
+            <div className="text-center mb-6">
+              <span className="text-4xl mb-4 block">🏠</span>
+              <h2 className="text-2xl font-bold text-white mb-2">Homeowner Single Analysis</h2>
+              <p className="text-gray-400">One-time purchase for <span className="text-amber-400 font-bold">$15.99</span></p>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-400 mb-2">Your Email</label>
+                <input 
+                  type="email" 
+                  value={singlePurchaseEmail} 
+                  onChange={e => setSinglePurchaseEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:border-amber-500 focus:outline-none"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-semibold text-gray-400 mb-2">County</label>
+                <select 
+                  value={county} 
+                  onChange={e => { setCounty(e.target.value); setCity(''); setPermitType('') }}
+                  className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:border-amber-500 focus:outline-none"
+                >
+                  <option value="">Select county...</option>
+                  <option value="Broward">Broward County</option>
+                  <option value="Palm Beach">Palm Beach County</option>
+                  <option value="Miami-Dade">Miami-Dade County</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-semibold text-gray-400 mb-2">City</label>
+                <select 
+                  value={city} 
+                  onChange={e => { setCity(e.target.value); setPermitType('auto') }}
+                  disabled={!county}
+                  className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:border-amber-500 focus:outline-none disabled:opacity-50"
+                >
+                  <option value="">{county ? 'Select city...' : 'Select county first'}</option>
+                  {county === 'Broward' && (
+                    <>
+                      <option value="Fort Lauderdale">Fort Lauderdale</option>
+                      <option value="Pompano Beach">Pompano Beach</option>
+                      <option value="Hollywood">Hollywood</option>
+                      <option value="Coral Springs">Coral Springs</option>
+                      <option value="Coconut Creek">Coconut Creek</option>
+                      <option value="Davie">Davie</option>
+                      <option value="Deerfield Beach">Deerfield Beach</option>
+                      <option value="Lauderdale-by-the-Sea">Lauderdale-by-the-Sea</option>
+                      <option value="Lighthouse Point">Lighthouse Point</option>
+                      <option value="Margate">Margate</option>
+                      <option value="Miramar">Miramar</option>
+                      <option value="Pembroke Pines">Pembroke Pines</option>
+                      <option value="Plantation">Plantation</option>
+                      <option value="Sunrise">Sunrise</option>
+                      <option value="Tamarac">Tamarac</option>
+                      <option value="Weston">Weston</option>
+                    </>
+                  )}
+                  {county === 'Palm Beach' && (
+                    <>
+                      <option value="Boca Raton">Boca Raton</option>
+                      <option value="Boynton Beach">Boynton Beach</option>
+                      <option value="Delray Beach">Delray Beach</option>
+                      <option value="Lake Worth Beach">Lake Worth Beach</option>
+                      <option value="West Palm Beach">West Palm Beach</option>
+                    </>
+                  )}
+                  {county === 'Miami-Dade' && (
+                    <>
+                      <option value="Miami">Miami</option>
+                      <option value="Hialeah">Hialeah</option>
+                      <option value="Homestead">Homestead</option>
+                      <option value="Kendall">Kendall (Unincorporated)</option>
+                      <option value="Miami Gardens">Miami Gardens</option>
+                    </>
+                  )}
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-semibold text-gray-400 mb-2">Permit Type</label>
+                <select 
+                  value={permitType} 
+                  onChange={e => setPermitType(e.target.value)}
+                  disabled={!city}
+                  className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:border-amber-500 focus:outline-none disabled:opacity-50"
+                >
+                  <option value="auto">Auto-Detect (Recommended)</option>
+                  <option value="roofing">Roofing</option>
+                  <option value="mechanical">HVAC/Mechanical</option>
+                  <option value="electrical">Electrical</option>
+                  <option value="plumbing">Plumbing</option>
+                  <option value="windows">Windows/Doors</option>
+                  <option value="pool">Pool/Spa</option>
+                  <option value="fence">Fence</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">
+              <p className="text-sm text-amber-400">✓ Full AI-powered permit analysis</p>
+              <p className="text-sm text-amber-400">✓ Complete checklist for your permit type</p>
+              <p className="text-sm text-amber-400">✓ 30 days to complete your analysis</p>
+              <p className="text-sm text-amber-400">✓ No account or subscription required</p>
+            </div>
+            
+            <button 
+              onClick={handleSinglePurchaseCheckout}
+              disabled={checkoutLoading || !singlePurchaseEmail || !city}
+              className="w-full mt-6 py-4 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-bold rounded-xl disabled:opacity-50 hover:scale-[1.02] transition-transform"
+            >
+              {checkoutLoading ? 'Processing...' : 'Pay $15.99 →'}
+            </button>
+          </div>
+        </div>
+      )}
+      
       <Footer />
     </div>
   )
@@ -458,6 +664,155 @@ export default function App() {
           <h1 className="text-2xl font-bold text-white mb-4">Page Not Found</h1>
           <p className="text-gray-400 mb-8">Oops! The page you're looking for doesn't exist or has been moved.</p>
           <button onClick={() => setPage('home')} className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Go Home</button>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  )
+
+  // === SINGLE ANALYSIS PAGE (Homeowner Purchase) ===
+  if (page === 'single-analysis' && singlePurchase) return (
+    <div className="min-h-screen bg-black text-white flex flex-col">
+      <div className="fixed inset-0 z-0"><div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div></div>
+      <NavBar />
+      <div className="relative z-10 pt-24 px-6 pb-12 flex-grow">
+        <div className="max-w-4xl mx-auto">
+          {successMessage && (
+            <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 flex items-center gap-2">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
+              {successMessage}
+            </div>
+          )}
+          
+          <div className="text-center mb-8">
+            <span className="text-5xl mb-4 block">🏠</span>
+            <h1 className="text-3xl font-black text-white mb-2">Your Permit Analysis</h1>
+            <p className="text-gray-400">{singlePurchase.city} • {singlePurchase.permit_type}</p>
+          </div>
+          
+          {singlePurchase.analysis_used ? (
+            <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800 text-center">
+              <div className="text-6xl mb-4">✅</div>
+              <h2 className="text-2xl font-bold text-white mb-4">Analysis Complete!</h2>
+              <p className="text-gray-400 mb-6">Your single analysis has been used. Thank you for using Flo Permit!</p>
+              <button onClick={() => setPage('home')} className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Back to Home</button>
+            </div>
+          ) : (
+            <>
+              {/* Checklist Section */}
+              <div className="bg-gray-900/80 rounded-2xl p-8 border border-amber-500/30 mb-8">
+                <h2 className="text-xl font-bold text-amber-400 mb-4 flex items-center gap-2">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                  Required Documents Checklist
+                </h2>
+                <p className="text-gray-400 text-sm mb-4">Gather these documents before uploading. Items you have will be darkened after analysis.</p>
+                <div className="space-y-2">
+                  {singlePurchase.checklist?.map((doc, i) => (
+                    <div key={i} className="flex items-center gap-3 p-3 bg-black/30 rounded-lg border border-gray-800">
+                      <div className="w-5 h-5 border-2 border-amber-500/50 rounded flex-shrink-0"></div>
+                      <span className="text-gray-300">{doc}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Gotchas/Tips */}
+              {singlePurchase.gotchas?.length > 0 && (
+                <div className="bg-red-500/10 rounded-2xl p-6 border border-red-500/30 mb-8">
+                  <h3 className="text-lg font-bold text-red-400 mb-3 flex items-center gap-2">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd"/></svg>
+                    Watch Out For ({singlePurchase.city})
+                  </h3>
+                  <ul className="space-y-2">
+                    {singlePurchase.gotchas.map((g, i) => (
+                      <li key={i} className="text-red-300 text-sm flex items-start gap-2">
+                        <span className="text-red-500">⚠️</span>
+                        {g}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              
+              {/* File Upload for Single Purchase */}
+              <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800">
+                <h2 className="text-xl font-bold text-white mb-4">Upload Your Permit Documents</h2>
+                <div 
+                  className={`border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-200 ${isDragging ? 'border-amber-400 bg-amber-500/10' : 'border-gray-700 bg-black/30'}`}
+                  onDragOver={e => { e.preventDefault(); setIsDragging(true) }}
+                  onDragLeave={() => setIsDragging(false)}
+                  onDrop={e => { e.preventDefault(); setIsDragging(false); handleFiles({ target: { files: e.dataTransfer.files } }) }}
+                >
+                  <input type="file" multiple onChange={handleFiles} className="hidden" id="singleFileInput" accept=".pdf,.png,.jpg,.jpeg" />
+                  <input type="file" multiple webkitdirectory="" directory="" onChange={handleFiles} className="hidden" id="singleFolderInput" />
+                  
+                  <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-2xl flex items-center justify-center border border-amber-500/30">
+                    <svg className="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                    </svg>
+                  </div>
+                  
+                  <p className="font-bold text-white mb-2">Drag & drop files here</p>
+                  <p className="text-sm text-gray-500 mb-4">PDF, PNG, JPG • Max 50 files</p>
+                  
+                  <div className="flex items-center justify-center gap-3">
+                    <label htmlFor="singleFileInput" className="cursor-pointer px-4 py-2 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/30 rounded-lg text-amber-400 text-sm font-semibold transition-all">
+                      Select Files
+                    </label>
+                    <span className="text-gray-600">or</span>
+                    <label htmlFor="singleFolderInput" className="cursor-pointer px-4 py-2 bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/30 rounded-lg text-orange-400 text-sm font-semibold transition-all">
+                      Select Folder
+                    </label>
+                  </div>
+                </div>
+                
+                {validFiles.length > 0 && (
+                  <div className="mt-4 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
+                    <div className="flex justify-between items-center">
+                      <span className="text-emerald-400 font-semibold">{validFiles.length} files ready ({formatSize(totalSize)})</span>
+                      <button onClick={clearFiles} className="text-red-400 hover:text-red-300 text-sm">Clear</button>
+                    </div>
+                  </div>
+                )}
+                
+                <button 
+                  onClick={async () => {
+                    if (validFiles.length === 0) return alert('Please upload files first')
+                    setLoading(true)
+                    setLoadingStatus('Analyzing your permit package...')
+                    try {
+                      const formData = new FormData()
+                      validFiles.forEach(f => formData.append('files', f))
+                      const res = await fetch(`${API_BASE_URL}/api/analyze-single/${singlePurchase.purchase_uuid}`, { method: 'POST', body: formData })
+                      if (res.ok) {
+                        const data = await res.json()
+                        setResults({ ...data, checklist: singlePurchase.checklist })
+                        localStorage.removeItem('pending_purchase')
+                        setPage('results')
+                      } else {
+                        const err = await res.json()
+                        alert(err.detail || 'Analysis failed')
+                      }
+                    } catch (err) { alert('Error analyzing files') }
+                    finally { setLoading(false); setLoadingStatus('') }
+                  }}
+                  disabled={loading || validFiles.length === 0}
+                  className="w-full mt-6 py-4 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-bold rounded-xl disabled:opacity-50"
+                >
+                  {loading ? loadingStatus : `Analyze ${validFiles.length} Files`}
+                </button>
+                
+                <p className="text-center text-gray-500 text-sm mt-4">⚡ This is your one-time analysis. Make sure all documents are included!</p>
+              </div>
+              
+              {/* Expiration Notice */}
+              {singlePurchase.expires_at && (
+                <p className="text-center text-gray-500 text-sm mt-4">
+                  Purchase expires: {new Date(singlePurchase.expires_at).toLocaleDateString()}
+                </p>
+              )}
+            </>
+          )}
         </div>
       </div>
       <Footer />
