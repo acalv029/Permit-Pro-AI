@@ -25,6 +25,7 @@ export default function App() {
   const [permitType, setPermitType] = useState('')
   const [files, setFiles] = useState([])
   const [validFiles, setValidFiles] = useState([])
+  const [additionalFiles, setAdditionalFiles] = useState([])
   const [loading, setLoading] = useState(false)
   const [loadingStatus, setLoadingStatus] = useState('')
   const [results, setResults] = useState(null)
@@ -174,7 +175,29 @@ export default function App() {
       const headers = {}; if (authToken) headers['Authorization'] = `Bearer ${authToken}`
       const res = await fetch(`${API_BASE_URL}/api/analyze-permit-folder`, { method: 'POST', headers, body: formData })
       if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.detail || 'Analysis failed') }
-      const data = await res.json(); setResults(data); setPage('results')
+      const data = await res.json(); setResults(data); setPage('results'); setAdditionalFiles([])
+    } catch (err) { alert('Error: ' + err.message) } finally { setLoading(false) }
+  }
+
+  const reanalyzeWithAdditionalFiles = async () => {
+    if (additionalFiles.length === 0 || !results) return
+    setLoading(true); setLoadingStatus('Adding new files...')
+    try {
+      const formData = new FormData()
+      formData.append('city', results.city)
+      formData.append('permit_type', results.permit_type || 'auto')
+      // Add original files if we have them, plus new files
+      validFiles.forEach((f) => formData.append('files', f))
+      additionalFiles.forEach((f) => formData.append('files', f))
+      setLoadingStatus('Re-analyzing with AI...')
+      const headers = {}; if (authToken) headers['Authorization'] = `Bearer ${authToken}`
+      const res = await fetch(`${API_BASE_URL}/api/analyze-permit-folder`, { method: 'POST', headers, body: formData })
+      if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.detail || 'Analysis failed') }
+      const data = await res.json()
+      // Merge the additional files into validFiles for future re-analyses
+      setValidFiles(prev => [...prev, ...additionalFiles])
+      setResults(data)
+      setAdditionalFiles([])
     } catch (err) { alert('Error: ' + err.message) } finally { setLoading(false) }
   }
 
@@ -1111,6 +1134,79 @@ export default function App() {
                     </ul>
                   </div>
                 )}
+                
+                {/* Add More Files Section */}
+                {missingDocs.length > 0 && (
+                  <div className="mt-6 p-6 bg-gradient-to-r from-cyan-500/10 to-emerald-500/10 border border-cyan-500/30 rounded-xl">
+                    <h3 className="font-bold text-white mb-3 flex items-center gap-2">
+                      <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                      Add Missing Documents
+                    </h3>
+                    <p className="text-gray-400 text-sm mb-4">Upload the missing documents and we'll update your analysis automatically.</p>
+                    
+                    {/* Additional Files List */}
+                    {additionalFiles.length > 0 && (
+                      <div className="mb-4 p-3 bg-black/30 rounded-lg">
+                        <p className="text-sm text-gray-400 mb-2">Files to add ({additionalFiles.length}):</p>
+                        <div className="flex flex-wrap gap-2">
+                          {additionalFiles.map((f, i) => (
+                            <span key={i} className="px-2 py-1 bg-cyan-500/20 text-cyan-300 text-xs rounded-full flex items-center gap-1">
+                              {f.name}
+                              <button onClick={() => setAdditionalFiles(prev => prev.filter((_, idx) => idx !== i))} className="hover:text-red-400">×</button>
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
+                    <div className="flex gap-3">
+                      <label className="flex-1 cursor-pointer">
+                        <input
+                          type="file"
+                          multiple
+                          className="hidden"
+                          accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.tif,.tiff"
+                          onChange={(e) => {
+                            const newFiles = Array.from(e.target.files || [])
+                            setAdditionalFiles(prev => [...prev, ...newFiles])
+                            e.target.value = ''
+                          }}
+                        />
+                        <div className="px-4 py-2 bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded-lg text-center text-sm text-gray-300 transition-colors">
+                          + Add Files
+                        </div>
+                      </label>
+                      <label className="flex-1 cursor-pointer">
+                        <input
+                          type="file"
+                          webkitdirectory=""
+                          directory=""
+                          multiple
+                          className="hidden"
+                          onChange={(e) => {
+                            const newFiles = Array.from(e.target.files || []).filter(f => 
+                              /\.(pdf|doc|docx|jpg|jpeg|png|tif|tiff)$/i.test(f.name)
+                            )
+                            setAdditionalFiles(prev => [...prev, ...newFiles])
+                            e.target.value = ''
+                          }}
+                        />
+                        <div className="px-4 py-2 bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded-lg text-center text-sm text-gray-300 transition-colors">
+                          + Add Folder
+                        </div>
+                      </label>
+                      {additionalFiles.length > 0 && (
+                        <button
+                          onClick={reanalyzeWithAdditionalFiles}
+                          disabled={loading}
+                          className="flex-1 px-4 py-2 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-lg hover:scale-105 transition-transform disabled:opacity-50"
+                        >
+                          {loading ? 'Analyzing...' : `Update Analysis (${additionalFiles.length} new)`}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
               
               {/* Disclaimer */}
@@ -1122,7 +1218,7 @@ export default function App() {
               
               {/* Action Button */}
               <div className="p-6 bg-black/50 border-t border-gray-800 text-center">
-                <button onClick={() => { setPage('home'); setResults(null); clearFiles() }} className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl hover:scale-105 transition-transform">
+                <button onClick={() => { setPage('home'); setResults(null); clearFiles(); setAdditionalFiles([]) }} className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl hover:scale-105 transition-transform">
                   New Analysis
                 </button>
               </div>
@@ -1295,7 +1391,16 @@ export default function App() {
                 <input name="company" type="text" placeholder="Company (optional)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
                 <input name="email" type="email" required placeholder="Email" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
                 <input name="password" type="password" required minLength="8" placeholder="Password (min 8)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
-                {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
+                {error && (
+                  <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl mb-4">
+                    <p className="text-red-400 text-sm font-medium">{error}</p>
+                    {error.toLowerCase().includes('already registered') && (
+                      <button type="button" onClick={() => { setShowRegister(false); setShowLogin(true); setError('') }} className="text-cyan-400 hover:text-cyan-300 text-sm mt-2 underline">
+                        Click here to log in instead
+                      </button>
+                    )}
+                  </div>
+                )}
                 <button type="submit" className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Create Account</button>
               </form>
               <p className="text-center mt-4 text-sm text-gray-500">Have an account? <button onClick={() => { setShowRegister(false); setShowLogin(true); setError('') }} className="text-cyan-400 hover:text-cyan-300">Log in</button></p>
