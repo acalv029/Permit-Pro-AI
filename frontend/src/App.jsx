@@ -299,7 +299,7 @@ export default function App() {
         </div>
         <div className="flex items-center gap-4">
           {showBack && <button onClick={() => setPage('home')} className="text-gray-400 hover:text-white">← Back</button>}
-          {!showBack && currentUser && (<>{isAdmin && <button onClick={() => setPage('admin')} className="text-sm font-semibold text-purple-400 hover:text-purple-300">Admin</button>}<button onClick={() => setPage('profile')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Profile</button><button onClick={() => setPage('history')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">History</button><button onClick={logout} className="text-sm text-red-400 hover:text-red-300">Logout</button></>)}
+          {!showBack && currentUser && (<>{isAdmin && <button onClick={() => setPage('admin')} className="text-sm font-semibold text-purple-400 hover:text-purple-300">Admin</button>}<button onClick={() => setPage('how-it-works')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">How It Works</button><button onClick={() => setPage('profile')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Profile</button><button onClick={() => setPage('history')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">History</button><button onClick={logout} className="text-sm text-red-400 hover:text-red-300">Logout</button></>)}
           {!showBack && !currentUser && (<><button onClick={() => setShowLogin(true)} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Log In</button><button onClick={() => setShowRegister(true)} className="relative group"><div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-xl blur opacity-60 group-hover:opacity-100"></div><div className="relative px-5 py-2.5 bg-black text-white text-sm font-bold rounded-xl">Sign Up</div></button></>)}
         </div>
       </div>
@@ -311,13 +311,189 @@ export default function App() {
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div><div className="flex items-center gap-2 mb-4"><div className="w-8 h-8 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-lg flex items-center justify-center p-1"><img src="/permit_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" /></div><span className="font-bold text-white">Flo Permit</span></div><p className="text-gray-500 text-sm">AI-powered permit analysis for South Florida contractors and homeowners.</p></div>
-          <div><h4 className="font-semibold text-white mb-4">Product</h4><ul className="space-y-2"><li><button onClick={() => setPage('home')} className="text-gray-500 hover:text-cyan-400 text-sm">Analyze Permits</button></li><li><button onClick={() => setPage('pricing')} className="text-gray-500 hover:text-cyan-400 text-sm">Pricing</button></li><li><button onClick={() => setPage('about')} className="text-gray-500 hover:text-cyan-400 text-sm">About Us</button></li><li><button onClick={() => setPage('faq')} className="text-gray-500 hover:text-cyan-400 text-sm">FAQ</button></li></ul></div>
+          <div><h4 className="font-semibold text-white mb-4">Product</h4><ul className="space-y-2"><li><button onClick={() => setPage('home')} className="text-gray-500 hover:text-cyan-400 text-sm">Analyze Permits</button></li><li><button onClick={() => setPage('how-it-works')} className="text-gray-500 hover:text-cyan-400 text-sm">How It Works</button></li><li><button onClick={() => setPage('pricing')} className="text-gray-500 hover:text-cyan-400 text-sm">Pricing</button></li><li><button onClick={() => setPage('about')} className="text-gray-500 hover:text-cyan-400 text-sm">About Us</button></li><li><button onClick={() => setPage('faq')} className="text-gray-500 hover:text-cyan-400 text-sm">FAQ</button></li></ul></div>
           <div><h4 className="font-semibold text-white mb-4">Legal</h4><ul className="space-y-2"><li><button onClick={() => setPage('terms')} className="text-gray-500 hover:text-cyan-400 text-sm">Terms of Service</button></li><li><button onClick={() => setPage('privacy')} className="text-gray-500 hover:text-cyan-400 text-sm">Privacy Policy</button></li></ul></div>
           <div><h4 className="font-semibold text-white mb-4">Support</h4><ul className="space-y-2"><li><button onClick={() => setPage('contact')} className="text-gray-500 hover:text-cyan-400 text-sm">Contact Us</button></li><li><button onClick={() => setPage('faq')} className="text-gray-500 hover:text-cyan-400 text-sm">FAQ</button></li><li><a href="mailto:support@flopermit.com" className="text-gray-500 hover:text-cyan-400 text-sm">support@flopermit.com</a></li></ul></div>
         </div>
         <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row items-center justify-between gap-4"><p className="text-gray-500 text-sm">© 2025 Flo Permit. All rights reserved.</p><p className="text-gray-600 text-xs">Serving Broward & Palm Beach Counties</p></div>
       </div>
     </footer>
+  )
+
+  if (page === 'how-it-works') return (
+    <div className="min-h-screen bg-black text-white flex flex-col">
+      <div className="fixed inset-0 z-0"><div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div></div>
+      <NavBar showBack />
+      <div className="relative z-10 pt-24 px-6 pb-12 flex-grow">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-4">How It Works</h1>
+            <p className="text-gray-400">Understanding your permit analysis results</p>
+          </div>
+          
+          <div className="space-y-8">
+            {/* Step 1: Upload */}
+            <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span className="text-2xl font-black text-cyan-400">1</span>
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-white mb-2">Upload Your Documents</h2>
+                  <p className="text-gray-400 mb-4">Drag and drop your permit package files or folders. We accept PDFs, images, and common document formats. Our AI will analyze everything together as a complete package.</p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="px-3 py-1 bg-gray-800 rounded-full text-xs text-gray-400">.pdf</span>
+                    <span className="px-3 py-1 bg-gray-800 rounded-full text-xs text-gray-400">.jpg/.png</span>
+                    <span className="px-3 py-1 bg-gray-800 rounded-full text-xs text-gray-400">.doc/.docx</span>
+                    <span className="px-3 py-1 bg-gray-800 rounded-full text-xs text-gray-400">.tif/.tiff</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 2: AI Analysis */}
+            <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span className="text-2xl font-black text-emerald-400">2</span>
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-white mb-2">AI Analyzes Your Package</h2>
+                  <p className="text-gray-400">Our AI reads every document, identifies what you have, and compares it against what your city requires. It automatically detects the permit type (roofing, HVAC, plumbing, etc.) from your documents.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Compliance Score */}
+            <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-white mb-2">Compliance Score</h2>
+                  <p className="text-gray-400 mb-4">Your compliance score shows how ready your package is for submission:</p>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
+                      <div className="text-2xl font-black text-emerald-400 mb-1">90-100%</div>
+                      <div className="text-sm text-emerald-300">Ready to Submit</div>
+                      <p className="text-xs text-gray-500 mt-2">All required documents present and properly executed</p>
+                    </div>
+                    <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl">
+                      <div className="text-2xl font-black text-amber-400 mb-1">50-89%</div>
+                      <div className="text-sm text-amber-300">Needs Attention</div>
+                      <p className="text-xs text-gray-500 mt-2">Some documents missing or issues to fix</p>
+                    </div>
+                    <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
+                      <div className="text-2xl font-black text-red-400 mb-1">Below 50%</div>
+                      <div className="text-sm text-red-300">Incomplete</div>
+                      <p className="text-xs text-gray-500 mt-2">Major documents missing, not ready for submission</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Document Checklist */}
+            <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                </div>
+                <div className="flex-1">
+                  <h2 className="text-xl font-bold text-white mb-2">Document Checklist</h2>
+                  <p className="text-gray-400 mb-4">See exactly what you have and what you're missing:</p>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                      <div className="w-5 h-5 border-2 border-red-400 rounded flex-shrink-0 flex items-center justify-center">
+                        <svg className="w-3 h-3 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12"/></svg>
+                      </div>
+                      <span className="text-white font-medium">Missing Document Example</span>
+                      <span className="ml-auto text-xs text-red-400 font-semibold">NEEDED</span>
+                    </div>
+                    <div className="flex items-center gap-3 p-3 bg-gray-800/30 rounded-lg opacity-60">
+                      <div className="w-5 h-5 bg-emerald-500/20 border border-emerald-500/50 rounded flex-shrink-0 flex items-center justify-center">
+                        <svg className="w-3 h-3 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg>
+                      </div>
+                      <span className="text-gray-400">Found Document Example</span>
+                      <span className="ml-auto text-xs text-emerald-500">✓ Found</span>
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-500 mt-4">Missing documents appear at the top in white so you can quickly see what's needed. Found documents are faded at the bottom.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Critical Issues */}
+            <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd"/></svg>
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-white mb-2">Critical Issues</h2>
+                  <p className="text-gray-400 mb-4">Problems that will likely cause your permit to be rejected:</p>
+                  <ul className="space-y-2 text-gray-400">
+                    <li className="flex items-start gap-2"><span className="text-red-400">•</span>Missing signatures or seals on drawings</li>
+                    <li className="flex items-start gap-2"><span className="text-red-400">•</span>Expired documents (surveys over 1 year old)</li>
+                    <li className="flex items-start gap-2"><span className="text-red-400">•</span>Missing product approvals (NOAs) for exterior products</li>
+                    <li className="flex items-start gap-2"><span className="text-red-400">•</span>Required pre-approvals not obtained (EPD, DERM, etc.)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* City-Specific Warnings */}
+            <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-white mb-2">City-Specific Warnings</h2>
+                  <p className="text-gray-400 mb-4">Every city has their own quirks and common rejection reasons. We know them all:</p>
+                  <ul className="space-y-2 text-gray-400">
+                    <li className="flex items-start gap-2"><span className="text-amber-400">•</span><strong className="text-white">Fort Lauderdale:</strong> NOC threshold is $5,000, circle (don't highlight) NOA info</li>
+                    <li className="flex items-start gap-2"><span className="text-amber-400">•</span><strong className="text-white">Pompano Beach:</strong> BLACK INK only, all applications require Fire Review</li>
+                    <li className="flex items-start gap-2"><span className="text-amber-400">•</span><strong className="text-white">Miami-Dade:</strong> DERM approval required BEFORE building permit</li>
+                    <li className="flex items-start gap-2"><span className="text-amber-400">•</span><strong className="text-white">Lighthouse Point:</strong> NO owner/builder for roofing or electrical</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Add More Files */}
+            <div className="bg-gray-900/80 rounded-2xl p-8 border border-cyan-500/30">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-white mb-2">Add Missing Documents & Re-Analyze</h2>
+                  <p className="text-gray-400 mb-4">Don't start over! When you see missing documents in your results:</p>
+                  <ol className="space-y-2 text-gray-400 list-decimal list-inside">
+                    <li>Click <strong className="text-cyan-400">"+ Add Files"</strong> or <strong className="text-cyan-400">"+ Add Folder"</strong> at the bottom of your results</li>
+                    <li>Select the missing documents from your computer</li>
+                    <li>Click <strong className="text-cyan-400">"Update Analysis"</strong></li>
+                    <li>Your checklist updates automatically - watch items move from "NEEDED" to "Found"!</li>
+                  </ol>
+                  <p className="text-sm text-emerald-400 mt-4">💡 This saves you time and helps you build a complete package step by step.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div className="text-center pt-8">
+              <button onClick={() => setPage('home')} className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl hover:scale-105 transition-transform text-lg">
+                Try It Now - Analyze Your Permits
+              </button>
+              <p className="text-gray-500 text-sm mt-4">3 free analyses, no credit card required</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </div>
   )
 
   if (page === 'contact') return (
@@ -1412,15 +1588,58 @@ export default function App() {
       {loading && (
         <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center">
           <div className="text-center">
-            <div className="relative w-20 h-20 mx-auto mb-6">
-              <div className="absolute inset-0 border-4 border-cyan-500/20 rounded-full"></div>
-              <div className="absolute inset-0 border-4 border-transparent border-t-cyan-500 border-r-cyan-500 rounded-full animate-spin"></div>
+            {/* Cool document scanning animation */}
+            <div className="relative w-32 h-40 mx-auto mb-8">
+              {/* Document stack */}
+              <div className="absolute inset-0 bg-gray-800 rounded-lg transform rotate-3 translate-x-2 translate-y-2"></div>
+              <div className="absolute inset-0 bg-gray-700 rounded-lg transform -rotate-2 translate-x-1 translate-y-1"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-600 to-gray-700 rounded-lg border border-gray-500 overflow-hidden">
+                {/* Document lines */}
+                <div className="p-3 space-y-2">
+                  <div className="h-2 bg-gray-500 rounded w-3/4"></div>
+                  <div className="h-2 bg-gray-500 rounded w-full"></div>
+                  <div className="h-2 bg-gray-500 rounded w-5/6"></div>
+                  <div className="h-2 bg-gray-500 rounded w-2/3"></div>
+                  <div className="h-2 bg-gray-500 rounded w-full"></div>
+                  <div className="h-2 bg-gray-500 rounded w-4/5"></div>
+                  <div className="h-2 bg-gray-500 rounded w-1/2"></div>
+                </div>
+                {/* Scanning line */}
+                <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-scan"></div>
+                {/* Glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/20 to-transparent animate-pulse"></div>
+              </div>
+              {/* Floating checkmarks appearing */}
+              <div className="absolute -right-4 top-2 w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center animate-bounce" style={{animationDelay: '0.5s'}}>
+                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <div className="absolute -right-2 top-14 w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center animate-bounce" style={{animationDelay: '1s'}}>
+                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <div className="absolute -left-3 top-8 w-5 h-5 bg-cyan-500 rounded-full flex items-center justify-center animate-bounce" style={{animationDelay: '1.5s'}}>
+                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg>
+              </div>
             </div>
             <h3 className="text-2xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-2">{loadingStatus}</h3>
-            <p className="text-gray-500 text-sm">This may take a moment...</p>
+            <p className="text-gray-500 text-sm">Scanning your documents...</p>
+            <div className="mt-4 flex justify-center gap-1">
+              <div className="w-2 h-2 bg-cyan-500 rounded-full animate-bounce" style={{animationDelay: '0s'}}></div>
+              <div className="w-2 h-2 bg-cyan-500 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+              <div className="w-2 h-2 bg-cyan-500 rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></div>
+            </div>
           </div>
         </div>
       )}
+      
+      <style>{`
+        @keyframes scan {
+          0%, 100% { top: 0; opacity: 1; }
+          50% { top: 100%; opacity: 0.5; }
+        }
+        .animate-scan {
+          animation: scan 2s ease-in-out infinite;
+        }
+      `}</style>
 
       <div className="relative z-10 pt-24 px-6 pb-12 flex-grow">
         <div className="max-w-4xl mx-auto">
