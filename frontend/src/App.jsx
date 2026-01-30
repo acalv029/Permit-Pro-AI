@@ -1410,25 +1410,56 @@ export default function App() {
   // LANDING PAGE (NOT LOGGED IN)
   // ============================================================================
   if (!currentUser) return (
-    <div className="min-h-screen bg-black text-white overflow-hidden flex flex-col">
+    <div className="min-h-screen bg-black text-white overflow-hidden flex flex-col relative">
+      {/* Animated background with floating particles */}
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
-        <div className="absolute inset-0 opacity-20" style={{backgroundImage: 'linear-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(6, 182, 212, 0.1) 1px, transparent 1px)', backgroundSize: '50px 50px'}}></div>
+        
+        {/* Floating cyan particles */}
+        <div className="absolute w-2 h-2 bg-cyan-400 rounded-full animate-float-1 opacity-60" style={{top: '10%', left: '10%'}}></div>
+        <div className="absolute w-3 h-3 bg-cyan-500 rounded-full animate-float-2 opacity-40" style={{top: '20%', left: '80%'}}></div>
+        <div className="absolute w-2 h-2 bg-emerald-400 rounded-full animate-float-3 opacity-50" style={{top: '60%', left: '15%'}}></div>
+        <div className="absolute w-4 h-4 bg-cyan-300 rounded-full animate-float-1 opacity-30" style={{top: '70%', left: '70%'}}></div>
+        <div className="absolute w-2 h-2 bg-emerald-500 rounded-full animate-float-2 opacity-60" style={{top: '40%', left: '5%'}}></div>
+        <div className="absolute w-3 h-3 bg-cyan-400 rounded-full animate-float-3 opacity-40" style={{top: '85%', left: '40%'}}></div>
+        <div className="absolute w-2 h-2 bg-cyan-500 rounded-full animate-float-1 opacity-50" style={{top: '15%', left: '50%'}}></div>
+        <div className="absolute w-3 h-3 bg-emerald-400 rounded-full animate-float-2 opacity-30" style={{top: '50%', left: '90%'}}></div>
+        <div className="absolute w-2 h-2 bg-cyan-300 rounded-full animate-float-3 opacity-60" style={{top: '30%', left: '25%'}}></div>
+        <div className="absolute w-4 h-4 bg-cyan-500 rounded-full animate-float-1 opacity-20" style={{top: '80%', left: '85%'}}></div>
+        <div className="absolute w-2 h-2 bg-emerald-500 rounded-full animate-float-2 opacity-50" style={{top: '5%', left: '65%'}}></div>
+        <div className="absolute w-3 h-3 bg-cyan-400 rounded-full animate-float-3 opacity-40" style={{top: '45%', left: '45%'}}></div>
+        
+        {/* Larger glowing orbs */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+        <div className="absolute top-1/2 right-1/3 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
+        
+        {/* Grid overlay */}
+        <div className="absolute inset-0 opacity-10" style={{backgroundImage: 'linear-gradient(rgba(6, 182, 212, 0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(6, 182, 212, 0.15) 1px, transparent 1px)', backgroundSize: '60px 60px'}}></div>
       </div>
 
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-cyan-500/20">
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-xl border-b border-cyan-500/20">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-xl flex items-center justify-center p-1.5">
               <img src="/permit_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" />
             </div>
-            <div><h1 className="text-xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Flo Permit</h1><p className="text-xs text-cyan-500 font-semibold">SOUTH FLORIDA</p></div>
+            <div>
+              <h1 className="text-xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Flo Permit</h1>
+              <p className="text-xs text-cyan-500 font-semibold">SOUTH FLORIDA</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="hidden sm:flex items-center gap-2 text-xs text-gray-400">
+              <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+              3 Counties • 26 Cities
+            </span>
           </div>
         </div>
       </nav>
 
+      {/* Main Content */}
       <div className="relative z-10 flex-grow flex items-center justify-center px-6 py-24">
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           
@@ -1439,10 +1470,18 @@ export default function App() {
               <span className="bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">South Florida</span><br/>
               <span className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Permit Checker</span>
             </h1>
-            <p className="text-lg text-gray-400 mb-8">Upload your permit package and get instant AI-powered analysis. Know what's missing before you submit.</p>
+            <p className="text-lg text-gray-400 mb-6">Upload your permit package and get instant AI-powered analysis. Know what's missing before you submit.</p>
+            
+            {/* Stats badges */}
+            <div className="flex flex-wrap justify-center md:justify-start gap-3 mb-8">
+              <span className="px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-sm">3 Counties</span>
+              <span className="px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-sm">26 Cities</span>
+              <span className="px-3 py-1.5 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-400 text-sm">More Coming Soon</span>
+            </div>
+            
             <div className="grid grid-cols-3 gap-4">
               {[{icon:'⚡',title:'Instant'},{icon:'🎯',title:'Accurate'},{icon:'📋',title:'Complete'}].map((f,i) => (
-                <div key={i} className="text-center p-3 bg-gray-900/50 rounded-xl border border-gray-800">
+                <div key={i} className="text-center p-3 bg-gray-900/50 rounded-xl border border-gray-800 backdrop-blur-sm">
                   <div className="text-2xl mb-1">{f.icon}</div>
                   <p className="text-sm text-gray-400">{f.title}</p>
                 </div>
@@ -1452,7 +1491,7 @@ export default function App() {
 
           {/* Right side - Auth Form */}
           <div className="relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/50 via-emerald-500/50 to-purple-500/50 rounded-3xl blur-xl opacity-30"></div>
+            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/50 via-emerald-500/50 to-purple-500/50 rounded-3xl blur-xl opacity-40 animate-pulse"></div>
             <div className="relative bg-gray-900/90 backdrop-blur-xl rounded-2xl p-8 border border-gray-800">
               
               {showForgotPassword ? (
@@ -1470,7 +1509,7 @@ export default function App() {
                       <form onSubmit={handleForgotPassword}>
                         <input name="email" type="email" required placeholder="Email" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
                         {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
-                        <button type="submit" className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Send Reset Link</button>
+                        <button type="submit" className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl hover:scale-[1.02] transition-transform">Send Reset Link</button>
                       </form>
                       <p className="text-center mt-4 text-sm text-gray-500"><button onClick={() => { setShowForgotPassword(false); setError('') }} className="text-cyan-400 hover:text-cyan-300">← Back to login</button></p>
                     </>
@@ -1484,10 +1523,19 @@ export default function App() {
                     <input name="company" type="text" placeholder="Company (optional)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
                     <input name="email" type="email" required placeholder="Email" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
                     <input name="password" type="password" required minLength="8" placeholder="Password (min 8 characters)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
-                    {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
-                    <button type="submit" className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Create Account</button>
+                    {error && (
+                      <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl mb-4">
+                        <p className="text-red-400 text-sm font-medium">{error}</p>
+                        {error.toLowerCase().includes('already registered') && (
+                          <button type="button" onClick={() => { setShowRegister(false); setError('') }} className="text-cyan-400 hover:text-cyan-300 text-sm mt-2 underline">Click here to log in instead</button>
+                        )}
+                      </div>
+                    )}
+                    <button type="submit" className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl hover:scale-[1.02] transition-transform">Create Account</button>
                   </form>
                   <p className="text-center mt-4 text-sm text-gray-500">Already have an account? <button onClick={() => { setShowRegister(false); setError('') }} className="text-cyan-400 hover:text-cyan-300">Log in</button></p>
+                  <div className="relative my-6"><div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-700"></div></div><div className="relative flex justify-center text-sm"><span className="px-4 bg-gray-900 text-gray-500">or</span></div></div>
+                  <button onClick={() => setShowSinglePurchase(true)} className="w-full py-3 border border-cyan-500/30 text-cyan-400 font-semibold rounded-xl hover:bg-cyan-500/10 transition-colors text-sm">One-Time Analysis • $15.99</button>
                 </>
               ) : (
                 <>
@@ -1496,18 +1544,82 @@ export default function App() {
                     <input name="email" type="email" required placeholder="Email" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
                     <input name="password" type="password" required placeholder="Password" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
                     {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
-                    <button type="submit" className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Log In</button>
+                    <button type="submit" className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl hover:scale-[1.02] transition-transform">Log In</button>
                   </form>
                   <div className="mt-4 text-center"><button onClick={() => { setShowForgotPassword(true); setError('') }} className="text-cyan-400 hover:text-cyan-300 text-sm">Forgot password?</button></div>
                   <div className="relative my-6"><div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-700"></div></div><div className="relative flex justify-center text-sm"><span className="px-4 bg-gray-900 text-gray-500">or</span></div></div>
-                  <button onClick={() => { setShowRegister(true); setError('') }} className="w-full py-3 border border-gray-700 text-white font-bold rounded-xl hover:bg-gray-800">Create New Account</button>
+                  <button onClick={() => { setShowRegister(true); setError('') }} className="w-full py-3 border border-gray-700 text-white font-bold rounded-xl hover:bg-gray-800 transition-colors mb-3">Create New Account</button>
+                  <button onClick={() => setShowSinglePurchase(true)} className="w-full py-3 border border-cyan-500/30 text-cyan-400 font-semibold rounded-xl hover:bg-cyan-500/10 transition-colors text-sm">One-Time Analysis • $15.99 <span className="text-gray-500">(valid 30 days)</span></button>
                 </>
               )}
             </div>
           </div>
         </div>
       </div>
+      
+      {/* Single Purchase Modal */}
+      {showSinglePurchase && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="relative">
+            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-3xl blur-lg opacity-50"></div>
+            <div className="relative bg-gray-900 rounded-2xl p-8 max-w-md w-full border border-cyan-500/20">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">One-Time Analysis</h2>
+                <button onClick={() => setShowSinglePurchase(false)} className="text-2xl text-gray-500 hover:text-white">&times;</button>
+              </div>
+              <div className="text-center mb-6">
+                <div className="text-4xl font-black text-white mb-2">$15.99</div>
+                <p className="text-gray-400 text-sm">Perfect for homeowners - no subscription needed</p>
+                <p className="text-cyan-400 text-xs mt-2">Valid for 30 days after purchase</p>
+              </div>
+              <ul className="space-y-2 mb-6">
+                <li className="flex items-center gap-2 text-gray-300"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/></svg>Full AI-powered permit analysis</li>
+                <li className="flex items-center gap-2 text-gray-300"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/></svg>City-specific requirements checklist</li>
+                <li className="flex items-center gap-2 text-gray-300"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/></svg>Add more files & re-analyze</li>
+                <li className="flex items-center gap-2 text-gray-300"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/></svg>No account required</li>
+              </ul>
+              <input 
+                type="email" 
+                placeholder="Your email address" 
+                value={singlePurchaseEmail}
+                onChange={(e) => setSinglePurchaseEmail(e.target.value)}
+                className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none"
+              />
+              <button 
+                onClick={handleSinglePurchaseCheckout}
+                disabled={!singlePurchaseEmail || checkoutLoading}
+                className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl disabled:opacity-50 hover:scale-[1.02] transition-transform"
+              >
+                {checkoutLoading ? 'Processing...' : 'Continue to Payment'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
       <Footer />
+      
+      {/* CSS for floating animations */}
+      <style>{`
+        @keyframes float-1 {
+          0%, 100% { transform: translateY(0) translateX(0); opacity: 0.6; }
+          25% { transform: translateY(-20px) translateX(10px); opacity: 0.3; }
+          50% { transform: translateY(-10px) translateX(-5px); opacity: 0.6; }
+          75% { transform: translateY(-30px) translateX(15px); opacity: 0.4; }
+        }
+        @keyframes float-2 {
+          0%, 100% { transform: translateY(0) translateX(0); opacity: 0.4; }
+          33% { transform: translateY(-15px) translateX(-10px); opacity: 0.6; }
+          66% { transform: translateY(-25px) translateX(5px); opacity: 0.3; }
+        }
+        @keyframes float-3 {
+          0%, 100% { transform: translateY(0) translateX(0); opacity: 0.5; }
+          50% { transform: translateY(-20px) translateX(-15px); opacity: 0.3; }
+        }
+        .animate-float-1 { animation: float-1 8s ease-in-out infinite; }
+        .animate-float-2 { animation: float-2 10s ease-in-out infinite; }
+        .animate-float-3 { animation: float-3 12s ease-in-out infinite; }
+      `}</style>
     </div>
   )
 
@@ -1646,7 +1758,12 @@ export default function App() {
           <div className="text-center mb-12">
             <span className="px-4 py-1.5 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-sm font-semibold">AI-POWERED PERMIT ANALYSIS</span>
             <h1 className="text-5xl md:text-7xl font-black mt-4 mb-6"><span className="bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">South Florida</span><br/><span className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Permit Checker</span></h1>
-            <p className="text-xl text-gray-400">Upload your permit package and get instant AI-powered analysis</p>
+            <p className="text-xl text-gray-400 mb-4">Upload your permit package and get instant AI-powered analysis</p>
+            <div className="flex items-center justify-center gap-4 text-sm">
+              <span className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400">3 Counties</span>
+              <span className="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400">26 Cities</span>
+              <span className="px-3 py-1 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-400">More Coming Soon</span>
+            </div>
           </div>
           <div className="relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/50 via-emerald-500/50 to-purple-500/50 rounded-3xl blur-xl opacity-30"></div>
@@ -1753,15 +1870,6 @@ export default function App() {
                 </div>
               </div>
 
-              {/* City count indicator */}
-              {county && (
-                <div className="mb-4 flex items-center gap-2 text-sm">
-                  <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
-                    <svg className="w-3.5 h-3.5 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>
-                    {county === 'Broward' ? '16 cities' : county === 'Palm Beach' ? '5 cities' : '5 cities'} with expert-level AI knowledge
-                  </span>
-                </div>
-              )}
               <div className="mb-6">
                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Upload Documents</label>
                 <div 
