@@ -686,7 +686,7 @@ export default function App() {
               <h3 className="text-xl font-bold text-white mb-2">Pro</h3>
               <div className="mb-6"><span className="text-4xl font-black text-white">$29</span><span className="text-gray-500">/month</span></div>
               <ul className="space-y-3 mb-8 flex-grow">
-                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>50 analyses/month</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>30 analyses/month</li>
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Priority AI analysis</li>
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Email support</li>
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Analysis history</li>
@@ -1032,6 +1032,36 @@ export default function App() {
                 <div className="bg-gray-900/80 rounded-xl p-4 border border-gray-800"><p className="text-gray-500 text-sm">Avg Score</p><p className="text-3xl font-black text-white">{adminStats.overview.average_compliance_score}%</p></div>
                 <div className="bg-gray-900/80 rounded-xl p-4 border border-gray-800"><p className="text-gray-500 text-sm">API Requests</p><p className="text-3xl font-black text-white">{adminStats.overview.api_requests_today}</p><p className="text-purple-400 text-sm">{adminStats.overview.api_requests_this_month} this month</p></div>
               </div>
+              
+              {/* AI Costs Section */}
+              {adminStats.ai_costs && (
+                <div className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-xl p-6 border border-purple-500/30">
+                  <h3 className="font-bold text-white mb-4 flex items-center gap-2">
+                    <span className="text-xl">🤖</span> AI Usage & Costs
+                  </h3>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <p className="text-gray-400 text-sm mb-2">Today</p>
+                      <div className="space-y-2">
+                        <div className="flex justify-between"><span className="text-gray-300">Analyses</span><span className="text-white font-bold">{adminStats.ai_costs.today.analyses}</span></div>
+                        <div className="flex justify-between"><span className="text-gray-300">Input Tokens</span><span className="text-cyan-400">{adminStats.ai_costs.today.input_tokens?.toLocaleString()}</span></div>
+                        <div className="flex justify-between"><span className="text-gray-300">Output Tokens</span><span className="text-emerald-400">{adminStats.ai_costs.today.output_tokens?.toLocaleString()}</span></div>
+                        <div className="flex justify-between border-t border-purple-500/30 pt-2 mt-2"><span className="text-white font-semibold">Cost</span><span className="text-2xl font-black text-purple-400">${adminStats.ai_costs.today.cost_dollars}</span></div>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-gray-400 text-sm mb-2">This Month</p>
+                      <div className="space-y-2">
+                        <div className="flex justify-between"><span className="text-gray-300">Analyses</span><span className="text-white font-bold">{adminStats.ai_costs.this_month.analyses}</span></div>
+                        <div className="flex justify-between"><span className="text-gray-300">Input Tokens</span><span className="text-cyan-400">{adminStats.ai_costs.this_month.input_tokens?.toLocaleString()}</span></div>
+                        <div className="flex justify-between"><span className="text-gray-300">Output Tokens</span><span className="text-emerald-400">{adminStats.ai_costs.this_month.output_tokens?.toLocaleString()}</span></div>
+                        <div className="flex justify-between border-t border-purple-500/30 pt-2 mt-2"><span className="text-white font-semibold">Cost</span><span className="text-2xl font-black text-pink-400">${adminStats.ai_costs.this_month.cost_dollars}</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-gray-900/80 rounded-xl p-6 border border-gray-800">
                   <h3 className="font-bold text-white mb-4">Popular Cities</h3>
