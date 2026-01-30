@@ -649,17 +649,16 @@ export default function App() {
             <p className="text-gray-400 text-lg">Choose the plan that fits your needs</p>
           </div>
           
-          {/* Homeowner Single Purchase Banner */}
-          <div className="mb-8 p-6 bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/30 rounded-2xl">
+          {/* Single Purchase Banner */}
+          <div className="mb-8 p-6 bg-gradient-to-r from-cyan-500/10 to-emerald-500/10 border border-cyan-500/30 rounded-2xl">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-2xl">🏠</span>
-                  <h3 className="text-xl font-bold text-amber-400">Homeowner? Just need one analysis?</h3>
+                  <h3 className="text-xl font-bold text-cyan-400">Just need one analysis?</h3>
                 </div>
-                <p className="text-gray-400">Get a single permit analysis for <span className="text-white font-bold">$15.99</span> — no subscription required. Includes full checklist!</p>
+                <p className="text-gray-400">Get a single permit analysis for <span className="text-white font-bold">$15.99</span> — no subscription required. Valid for 30 days.</p>
               </div>
-              <button onClick={() => setShowSinglePurchase(true)} className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-bold rounded-xl whitespace-nowrap hover:scale-105 transition-transform">
+              <button onClick={() => setShowSinglePurchase(true)} className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl whitespace-nowrap hover:scale-105 transition-transform">
                 Get Single Analysis →
               </button>
             </div>
@@ -667,10 +666,10 @@ export default function App() {
 
           <div className="grid md:grid-cols-3 gap-6">
             {/* Free */}
-            <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800">
+            <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800 flex flex-col">
               <h3 className="text-xl font-bold text-white mb-2">Free</h3>
               <div className="mb-6"><span className="text-4xl font-black text-white">$0</span><span className="text-gray-500">/month</span></div>
-              <ul className="space-y-3 mb-8">
+              <ul className="space-y-3 mb-8 flex-grow">
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>3 analyses/month</li>
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Basic AI analysis</li>
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Email support</li>
@@ -682,14 +681,14 @@ export default function App() {
               )}
             </div>
             {/* Pro */}
-            <div className="bg-gray-900/80 rounded-2xl p-8 border-2 border-cyan-500 relative">
+            <div className="bg-gray-900/80 rounded-2xl p-8 border-2 border-cyan-500 relative flex flex-col">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-full text-black text-xs font-bold">POPULAR</div>
               <h3 className="text-xl font-bold text-white mb-2">Pro</h3>
               <div className="mb-6"><span className="text-4xl font-black text-white">$29</span><span className="text-gray-500">/month</span></div>
-              <ul className="space-y-3 mb-8">
+              <ul className="space-y-3 mb-8 flex-grow">
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>50 analyses/month</li>
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Priority AI analysis</li>
-                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Priority support</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Email support</li>
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Analysis history</li>
               </ul>
               {subscription?.tier === 'pro' ? (
@@ -699,13 +698,13 @@ export default function App() {
               )}
             </div>
             {/* Business */}
-            <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800">
+            <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800 flex flex-col">
               <h3 className="text-xl font-bold text-white mb-2">Business</h3>
               <div className="mb-6"><span className="text-4xl font-black text-white">$99</span><span className="text-gray-500">/month</span></div>
-              <ul className="space-y-3 mb-8">
+              <ul className="space-y-3 mb-8 flex-grow">
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Unlimited analyses</li>
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Priority AI analysis</li>
-                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Dedicated support</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Email support</li>
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Analysis history</li>
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Team features (soon)</li>
               </ul>
@@ -730,8 +729,8 @@ export default function App() {
           <div className="bg-gray-900 rounded-2xl p-8 max-w-md w-full border border-gray-800 relative max-h-[90vh] overflow-y-auto">
             <button onClick={() => setShowSinglePurchase(false)} className="absolute top-4 right-4 text-gray-500 hover:text-white">✕</button>
             <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-white mb-2">Homeowner Single Analysis</h2>
-              <p className="text-gray-400">One-time purchase for <span className="text-amber-400 font-bold">$15.99</span></p>
+              <h2 className="text-2xl font-bold text-white mb-2">Single Analysis</h2>
+              <p className="text-gray-400">One-time purchase for <span className="text-cyan-400 font-bold">$15.99</span></p>
             </div>
             
             <div className="space-y-4">
@@ -742,7 +741,7 @@ export default function App() {
                   value={singlePurchaseEmail} 
                   onChange={e => setSinglePurchaseEmail(e.target.value)}
                   placeholder="your@email.com"
-                  className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:border-amber-500 focus:outline-none"
+                  className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:border-cyan-500 focus:outline-none"
                 />
               </div>
               
@@ -751,7 +750,7 @@ export default function App() {
                 <select 
                   value={county} 
                   onChange={e => { setCounty(e.target.value); setCity(''); setPermitType('') }}
-                  className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:border-amber-500 focus:outline-none"
+                  className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:border-cyan-500 focus:outline-none"
                 >
                   <option value="">Select county...</option>
                   <option value="Broward">Broward County</option>
@@ -766,7 +765,7 @@ export default function App() {
                   value={city} 
                   onChange={e => { setCity(e.target.value); setPermitType('auto') }}
                   disabled={!county}
-                  className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:border-amber-500 focus:outline-none disabled:opacity-50"
+                  className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:border-cyan-500 focus:outline-none disabled:opacity-50"
                 >
                   <option value="">{county ? 'Select city...' : 'Select county first'}</option>
                   {county === 'Broward' && (
@@ -816,7 +815,7 @@ export default function App() {
                   value={permitType} 
                   onChange={e => setPermitType(e.target.value)}
                   disabled={!city}
-                  className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:border-amber-500 focus:outline-none disabled:opacity-50"
+                  className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:border-cyan-500 focus:outline-none disabled:opacity-50"
                 >
                   {getPermitTypes().map((pt, i) => (
                     <option key={pt.value || `cat-${i}`} value={pt.value} disabled={pt.disabled}>
@@ -827,17 +826,17 @@ export default function App() {
               </div>
             </div>
             
-            <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">
-              <p className="text-sm text-amber-400">✓ Full AI-powered permit analysis</p>
-              <p className="text-sm text-amber-400">✓ Complete checklist for your permit type</p>
-              <p className="text-sm text-amber-400">✓ 30 days to complete your analysis</p>
-              <p className="text-sm text-amber-400">✓ No account or subscription required</p>
+            <div className="mt-6 p-4 bg-cyan-500/10 border border-cyan-500/20 rounded-xl">
+              <p className="text-sm text-cyan-400">✓ Full AI-powered permit analysis</p>
+              <p className="text-sm text-cyan-400">✓ Complete checklist for your permit type</p>
+              <p className="text-sm text-cyan-400">✓ 30 days to complete your analysis</p>
+              <p className="text-sm text-cyan-400">✓ No account or subscription required</p>
             </div>
             
             <button 
               onClick={handleSinglePurchaseCheckout}
               disabled={checkoutLoading || !singlePurchaseEmail || !city}
-              className="w-full mt-6 py-4 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-bold rounded-xl disabled:opacity-50 hover:scale-[1.02] transition-transform"
+              className="w-full mt-6 py-4 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl disabled:opacity-50 hover:scale-[1.02] transition-transform"
             >
               {checkoutLoading ? 'Processing...' : 'Pay $15.99 →'}
             </button>
@@ -1450,12 +1449,6 @@ export default function App() {
               <p className="text-xs text-cyan-500 font-semibold">SOUTH FLORIDA</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="hidden sm:flex items-center gap-2 text-xs text-gray-400">
-              <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-              3 Counties • 26 Cities
-            </span>
-          </div>
         </div>
       </nav>
 
@@ -1465,19 +1458,15 @@ export default function App() {
           
           {/* Left side - Hero */}
           <div className="text-center md:text-left">
-            <span className="px-4 py-1.5 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-sm font-semibold">AI-POWERED PERMIT ANALYSIS</span>
-            <h1 className="text-4xl md:text-5xl font-black mt-4 mb-6">
-              <span className="bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">South Florida</span><br/>
-              <span className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Permit Checker</span>
-            </h1>
-            <p className="text-lg text-gray-400 mb-6">Upload your permit package and get instant AI-powered analysis. Know what's missing before you submit.</p>
-            
-            {/* Stats badges */}
-            <div className="flex flex-wrap justify-center md:justify-start gap-3 mb-8">
-              <span className="px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-sm">3 Counties</span>
-              <span className="px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-sm">26 Cities</span>
-              <span className="px-3 py-1.5 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-400 text-sm">More Coming Soon</span>
+            <div className="flex items-center justify-center md:justify-start gap-4 mb-6">
+              <div className="w-16 h-16 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-2xl flex items-center justify-center p-2">
+                <img src="/permit_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" />
+              </div>
+              <h1 className="text-3xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Flo Permit</h1>
             </div>
+            
+            <p className="text-xl text-gray-300 mb-4">Upload your permit package and get instant AI-powered analysis. Know what's missing before you submit.</p>
+            <p className="text-gray-500 mb-8">Serving 26 cities across South Florida</p>
             
             <div className="grid grid-cols-3 gap-4">
               {[{icon:'⚡',title:'Instant'},{icon:'🎯',title:'Accurate'},{icon:'📋',title:'Complete'}].map((f,i) => (
@@ -1569,7 +1558,7 @@ export default function App() {
               </div>
               <div className="text-center mb-6">
                 <div className="text-4xl font-black text-white mb-2">$15.99</div>
-                <p className="text-gray-400 text-sm">Perfect for homeowners - no subscription needed</p>
+                <p className="text-gray-400 text-sm">No subscription needed</p>
                 <p className="text-cyan-400 text-xs mt-2">Valid for 30 days after purchase</p>
               </div>
               <ul className="space-y-2 mb-6">
