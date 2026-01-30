@@ -3,7 +3,7 @@
 # Data sourced from official city building department documentation
 
 """
-COMPLETE permit requirements for Fort Lauderdale, Pompano Beach, 
+COMPLETE permit requirements for Fort Lauderdale, Pompano Beach,
 Lauderdale-by-the-Sea, and Lighthouse Point.
 """
 
@@ -861,7 +861,7 @@ KNOWN_GOTCHAS = {
         "STRICT FILE NAMING CONVENTION: BD-YY-XXXXX-PT-R-DISCIPLINE",
         "Files will be AUTO-REJECTED if naming convention not followed",
         "No special characters allowed in filenames: # % & { } / \\ ? < > * $ ! ' : @ \" + ` | = ~ ( )",
-        "Leave upper-right corner blank for City seal: 2\"x2\" (letter) or 3\"x3\" (larger)",
+        'Leave upper-right corner blank for City seal: 2"x2" (letter) or 3"x3" (larger)',
         "Application must be signed AND notarized",
         "Remote Online Notary (RON) accepted",
         "DERM, WASD, Impact Fee approvals required through MIAMI-DADE COUNTY portal",
@@ -880,17 +880,21 @@ KNOWN_GOTCHAS = {
 
 
 def get_permit_requirements(city_key, permit_type):
-    """Get detailed permit requirements for a city and permit type."""
-    
-    city_name = CITY_INFO.get(city_key, {}).get("name", city_key.replace("_", " ").title())
-    
+    """Get detailed permit requirements for a city and permit type.
+
+    The AI will determine the SPECIFIC subtype from the documents.
+    We provide comprehensive checklists for the main categories.
+    """
+
+    city_name = CITY_INFO.get(city_key, {}).get(
+        "name", city_key.replace("_", " ").title()
+    )
+
     hvhz_requirements = [
         "All construction must comply with Florida Building Code HVHZ requirements",
         "Miami-Dade NOA or Florida Product Approval required for all exterior products",
-        "Windows, doors, shutters must have impact rating or separate shutter permit",
-        "Roofing materials must be HVHZ-approved with proper attachment details",
     ]
-    
+
     requirements = {
         "name": f"{permit_type.replace('_', ' ').title()} Permit - {city_name}",
         "city": city_name,
@@ -898,350 +902,213 @@ def get_permit_requirements(city_key, permit_type):
         "city_info": CITY_INFO.get(city_key, {}),
         "hvhz_requirements": hvhz_requirements,
         "gotchas": KNOWN_GOTCHAS.get(city_key, []),
+        "documents": [],
         "items": [],
         "inspections": [],
         "tips": [],
     }
-    
-    # ROOFING
-    if permit_type == "roofing":
-        requirements["items"] = [
-            "Broward County Uniform Permit Application (Building)",
-            "HVHZ Uniform Roofing Application with all sections completed",
-            "Miami-Dade NOA or Florida Product Approval for ALL roofing materials",
-            "Statement of Responsibilities Regarding Asbestos (required for ALL re-roofs)",
-            "Rooftop Equipment Affidavit",
-            "Wind load calculations/verification",
-            "Contractor license (licensed roofing contractor)",
-            "Contractor insurance certificate",
-            "Notice of Commencement",
-        ]
-        requirements["inspections"] = ["Tin tag", "Mop/tile/shingle in-progress", "Final structural"]
-        
-        if city_key == "fort_lauderdale":
-            requirements["items"].extend([
-                "For homes ≥$300,000: Property Appraiser valuation copy",
-                "For homes ≥$300,000: Hurricane Mitigation Affidavit (notarized)",
-                "Water Barrier/Sheathing Renailing Affidavit",
-            ])
-            requirements["tips"] = ["Circle (don't highlight) NOA info", "NOC threshold: $5,000"]
-        elif city_key == "pompano_beach":
-            requirements["items"].extend([
-                "Fire Review Application (multi-family/commercial)",
-                "Broward County Asbestos Certificate",
-                "Fenestration Wind Load & Roof Uplift Chart",
-                "HOA approval letter (if applicable)",
-            ])
-            requirements["tips"] = ["BLACK INK required", "NOC threshold: $7,500"]
-        elif city_key == "lauderdale_by_the_sea":
-            requirements["items"].extend(["Roofing Permit Packet", "Roof calculations with NOAs"])
-            requirements["tips"] = ["Fee: 1.5% of cost", "NOC if ≥$2,500"]
-        elif city_key == "lighthouse_point":
-            requirements["items"].extend(["Roof Permit Requirements docs", "Truss Review (if applicable)"])
-            requirements["tips"] = ["NO owner/builder for roofing", "Licensed contractor required"]
 
-    # MECHANICAL/HVAC
-    elif permit_type == "mechanical":
-        requirements["items"] = [
-            "Broward County Uniform Permit Application (Mechanical)",
-            "AHRI Certificate of Product Ratings",
-            "Equipment specifications/cut sheets",
-            "Tie-down details with product approval",
-            "Load calculations (Manual J for residential)",
-            "Contractor license and insurance",
-            "Notice of Commencement",
-        ]
-        requirements["inspections"] = ["Rough-in (if new ductwork)", "Final mechanical"]
-        
-        if city_key == "pompano_beach":
-            requirements["items"].extend([
-                "Broward County Uniform Data Form for A/C Replacements",
-                "Fire Review Application",
-            ])
-            requirements["tips"] = ["BLACK INK", "NOC threshold: $5,000", "Emergency: notify inspector BEFORE work"]
-        elif city_key == "lauderdale_by_the_sea":
-            requirements["items"].append("AC Changeout Form")
-            requirements["tips"] = ["Fee: $85 min or 2%", "NOC if ≥$7,500"]
-        elif city_key == "lighthouse_point":
-            requirements["items"].append("AC Replacement Data Sheet")
-            requirements["tips"] = ["$75 flat fee for A/C replacement"]
-
-    # ELECTRICAL
-    elif permit_type == "electrical":
-        requirements["items"] = [
-            "Broward County Uniform Permit Application (Electrical)",
-            "Electrical plans showing scope",
-            "Riser diagram (service changes)",
-            "Load calculations (upgrades)",
-            "Panel schedules",
-            "Contractor license and insurance",
-            "Notice of Commencement",
-        ]
-        requirements["inspections"] = ["Underground/rough", "Service rough", "Final electrical"]
-        
-        if city_key == "pompano_beach":
-            requirements["items"].append("AIC calculation and service equipment rating")
-            requirements["tips"] = ["Service must be UNDERGROUND", "BLACK INK"]
-        elif city_key == "lighthouse_point":
-            requirements["tips"] = ["NO owner/builder - licensed contractor REQUIRED"]
-
-    # PLUMBING
-    elif permit_type == "plumbing":
-        requirements["items"] = [
-            "Broward County Uniform Permit Application (Plumbing)",
-            "Plumbing plans with isometrics (new construction)",
-            "Water heater specs (for replacement)",
-            "Gas piping plan (for gas work)",
-            "Contractor license and insurance",
-            "Notice of Commencement",
-        ]
-        requirements["inspections"] = ["Rough plumbing", "Top out", "Final plumbing"]
-        
-        if city_key == "pompano_beach":
-            requirements["items"].append("Water Heater Replacement Data Form")
-        elif city_key == "lighthouse_point":
-            requirements["tips"] = ["$75 flat fee for water heater"]
-
-    # BUILDING (New Construction)
-    elif permit_type == "building":
-        requirements["items"] = [
-            "Broward County Uniform Permit Application (Building)",
-            "Broward County Uniform Permit Application (Electrical)",
-            "Broward County Uniform Permit Application (Mechanical)",
-            "Broward County Uniform Permit Application (Plumbing)",
-            "Floodplain Application",
-            "Signed/sealed survey with elevations",
-            "Site plans with pervious/impervious percentages",
+    # ==================== STRUCTURAL / BUILDING ====================
+    if permit_type in [
+        "structural",
+        "building",
+        "roofing",
+        "windows",
+        "fence",
+        "pool",
+        "demolition",
+        "addition",
+        "alteration",
+        "new_construction",
+    ]:
+        requirements["name"] = f"Structural / Building Permit - {city_name}"
+        requirements["documents"] = [
+            "Building Permit Application",
+            "Signed/sealed survey (dated within 1 year)",
+            "Site plan with setbacks and dimensions",
             "Construction plans signed/sealed by design professional",
-            "Structural calculations signed/sealed",
-            "Truss shop drawings signed/sealed",
-            "Energy calculations (Manual J)",
-            "Product approvals (NOAs) for windows, doors, shutters, roofing",
-            "Geotechnical/soil report",
-            "Special Inspector Form",
-            "Broward County EPD approval (BEFORE city submittal)",
-            "Notice of Commencement",
-            "Contractor license and insurance",
-        ]
-        requirements["inspections"] = [
-            "Footing", "Formboard survey", "Soil treatment", "Slab/reinforcing",
-            "Tie beams", "Columns/shear walls", "Framing", "Roof framing/sheathing",
-            "Insulation", "Drywall", "Windows/doors", "Elevation certificate",
-            "Final survey", "Final structural",
-        ]
-        
-        if city_key == "fort_lauderdale":
-            requirements["items"].append("DRC approved plans (if required)")
-            requirements["tips"] = ["2 sets of plans", "50% deposit required"]
-        elif city_key == "pompano_beach":
-            requirements["items"].extend([
-                "Engineering Permit Application",
-                "Zoning Compliance Application",
-                "Tree Permit Application",
-                "Fire Review Application",
-                "Utility Connection Application",
-                "Transportation Concurrency Certificate",
-            ])
-            requirements["tips"] = ["1 set of plans", "BLACK INK", "Fire Review required"]
-        elif city_key == "lauderdale_by_the_sea":
-            requirements["items"].extend([
-                "New Construction Permit Application",
-                "Recorded NOC (2 certified copies) - BEFORE submittal",
-                "Owner/Agent letter notarized",
-                "Contract with price breakdown",
-            ])
-            requirements["tips"] = ["NOC must be RECORDED first - #1 rejection", "Fee: 2%"]
-        elif city_key == "lighthouse_point":
-            requirements["items"].extend([
-                "DPEP Procedure Form with stamp",
-                "3 sets drainage plans",
-                "2 sets soil density tests",
-                "Seawall engineer letters (waterfront)",
-            ])
-            requirements["tips"] = ["Survey <1 year or Zoning Affidavit", "$1,000 app fee"]
-
-    # WINDOWS/DOORS
-    elif permit_type in ["windows", "fenestration"]:
-        requirements["name"] = f"Windows, Doors & Shutters - {city_name}"
-        requirements["items"] = [
-            "Broward County Uniform Permit Application (Building)",
-            "Miami-Dade NOA or Florida Product Approval for ALL products",
-            "Wind load chart/calculations",
-            "Product specifications/cut sheets",
-            "Installation details per NOA",
-            "Window/door schedule",
-            "Contractor license and insurance",
-            "Notice of Commencement",
-        ]
-        requirements["inspections"] = ["Attachment", "Final structural"]
-        
-        if city_key == "pompano_beach":
-            requirements["items"].extend([
-                "Fire Review Application (except single-family)",
-                "Fenestration Wind Load Chart",
-                "HOA approval (if applicable)",
-            ])
-
-    # POOLS
-    elif permit_type == "pool":
-        requirements["name"] = f"Swimming Pool - {city_name}"
-        requirements["items"] = [
-            "Broward County Uniform Permit Application (Building)",
-            "Broward County Uniform Permit Application (Electrical)",
-            "Broward County Uniform Permit Application (Plumbing)",
-            "Residential Swimming Pool Safety Act form",
-            "Pool Barrier Affidavit",
-            "Site plan with pool location and setbacks",
-            "Pool plans with barrier compliance",
-            "Electrical plans per NEC 680",
-            "Geotechnical report (if required)",
-            "Zoning compliance",
+            "Structural calculations (if applicable)",
+            "Product approvals (NOAs) for exterior products",
+            "Energy calculations (if applicable)",
+            "Zoning compliance verification",
+            "Notice of Commencement (if over threshold)",
             "Contractor license",
-            "Notice of Commencement",
+            "Contractor insurance certificate",
+            "Owner authorization (if contractor pulling permit)",
         ]
+        requirements["items"] = requirements["documents"]
         requirements["inspections"] = [
-            "Soil compaction", "Pool steel", "Pool barrier",
-            "Pool bonding", "Plumbing", "Final",
+            "Foundation/footing",
+            "Slab/reinforcing",
+            "Framing",
+            "Sheathing/tie-down",
+            "Insulation",
+            "Final structural",
         ]
         requirements["tips"] = [
-            "Min 4-foot barrier required",
-            "Self-closing, self-latching gates",
-            "Door alarms if direct house access",
+            "AI will identify specific structural permit type (roof, windows, pool, fence, etc.)",
+            "NOAs required for all exterior products in HVHZ",
+            "Plans must be signed AND sealed",
         ]
-        
-        if city_key == "lauderdale_by_the_sea":
-            requirements["items"].extend(["Swimming Pool & Spa Permit Package", "Site pervious calculation"])
-            requirements["tips"].append("Fee: 5% of cost (highest rate)")
 
-    # MARINE (Docks, Seawalls, Boat Lifts)
-    elif permit_type in ["dock", "seawall", "boat_lift", "marine"]:
-        requirements["name"] = f"Marine Construction - {city_name}"
-        requirements["items"] = [
-            "Broward County Uniform Permit Application (Building)",
-            "Engineering Permit Application",
-            "Broward County Environmental Resource General License (BEFORE city submittal)",
-            "Signed/sealed survey with elevations",
-            "Signed/sealed construction plans",
-            "Special Inspector Form (pile installation)",
-            "FL DEP approval or exemption (if applicable)",
-            "Army Corps approval (if applicable)",
-            "Contractor license and insurance",
-            "Notice of Commencement",
+    # ==================== ELECTRICAL ====================
+    elif permit_type in [
+        "electrical",
+        "generator",
+        "solar",
+        "electrical_residential",
+        "electrical_commercial",
+        "low_voltage",
+    ]:
+        requirements["name"] = f"Electrical Permit - {city_name}"
+        requirements["documents"] = [
+            "Electrical Permit Application",
+            "Scope of work description",
+            "Electrical plans/diagrams (if not simple changeout)",
+            "Panel schedule",
+            "Load calculations (for service changes/upgrades)",
+            "Riser diagram (for service work)",
+            "Equipment specifications",
+            "Product approvals (NOAs) for generators/solar",
+            "Notice of Commencement (if over threshold)",
+            "Contractor license",
+            "Contractor insurance certificate",
         ]
+        requirements["items"] = requirements["documents"]
         requirements["inspections"] = [
-            "Pile installation", "Pile log", "Tie beam steel",
-            "Framing", "Engineer reports", "Final structural",
+            "Underground/rough",
+            "Service rough",
+            "Final electrical",
+        ]
+        requirements["tips"] = [
+            "AI will identify specific electrical type (service change, generator, solar, alarm, etc.)",
+            "Load calculations required for upgrades",
+            "Some cities require underground service",
+        ]
+
+    # ==================== MECHANICAL / HVAC ====================
+    elif permit_type in [
+        "mechanical",
+        "hvac",
+        "hvac_changeout",
+        "hvac_new",
+        "hvac_residential",
+        "hvac_commercial",
+    ]:
+        requirements["name"] = f"Mechanical / HVAC Permit - {city_name}"
+        requirements["documents"] = [
+            "Mechanical Permit Application",
+            "AHRI Certificate of Product Ratings",
+            "Equipment specifications/cut sheets",
+            "Existing vs new equipment comparison (for changeouts)",
+            "Load calculations - Manual J (for new/upsizing)",
+            "Duct layout (if new ductwork)",
+            "Tie-down details with product approval",
+            "Notice of Commencement (if over threshold)",
+            "Contractor license",
+            "Contractor insurance certificate",
+        ]
+        requirements["items"] = requirements["documents"]
+        requirements["inspections"] = [
+            "Rough-in (if new ductwork)",
+            "Final mechanical",
+        ]
+        requirements["tips"] = [
+            "AI will identify specific HVAC type (changeout, new install, commercial, etc.)",
+            "AHRI Certificate required for equipment matching",
+            "Same-size changeouts typically simpler process",
+            "Emergency A/C - some cities allow work before permit with notification",
+        ]
+
+    # ==================== PLUMBING ====================
+    elif permit_type in [
+        "plumbing",
+        "water_heater",
+        "gas",
+        "irrigation",
+        "backflow",
+        "sewer",
+        "plumbing_residential",
+        "plumbing_commercial",
+    ]:
+        requirements["name"] = f"Plumbing Permit - {city_name}"
+        requirements["documents"] = [
+            "Plumbing Permit Application",
+            "Scope of work description",
+            "Equipment specifications (water heater, fixtures, etc.)",
+            "Plumbing plans/isometrics (for new construction)",
+            "Gas piping plan (if gas work)",
+            "Backflow device specifications (if applicable)",
+            "Notice of Commencement (if over threshold)",
+            "Contractor license",
+            "Contractor insurance certificate",
+        ]
+        requirements["items"] = requirements["documents"]
+        requirements["inspections"] = [
+            "Underground (if applicable)",
+            "Rough plumbing",
+            "Top out",
+            "Final plumbing",
+        ]
+        requirements["tips"] = [
+            "AI will identify specific plumbing type (water heater, gas, sewer, irrigation, etc.)",
+            "Water heater changeouts typically simpler process",
+            "Gas work requires separate gas inspection",
+            "Backflow devices require annual testing",
+        ]
+
+    # ==================== MARINE / WATERFRONT ====================
+    elif permit_type in ["marine", "dock", "seawall", "boat_lift"]:
+        requirements["name"] = f"Marine / Waterfront Permit - {city_name}"
+        requirements["documents"] = [
+            "Building Permit Application",
+            "Engineering Permit Application",
+            "Broward County EPD approval (REQUIRED BEFORE city submittal)",
+            "Signed/sealed survey with mean high water line",
+            "Signed/sealed construction plans",
+            "Structural calculations",
+            "Pile specifications (if applicable)",
+            "Special Inspector Form",
+            "FL DEP approval (if applicable)",
+            "Army Corps approval (if applicable)",
+            "Notice of Commencement",
+            "Contractor license and insurance",
+        ]
+        requirements["items"] = requirements["documents"]
+        requirements["inspections"] = [
+            "Pile installation",
+            "Pile log review",
+            "Structural framing",
+            "Final structural",
             "Updated survey before final",
         ]
         requirements["tips"] = [
+            "AI will identify specific marine type (dock, seawall, boat lift, etc.)",
             "County EPD approval MUST be obtained FIRST",
             "Sequence: County EPD → FL DEP → Army Corps → Local permit",
+            "Waterway protrusion limits vary by city",
         ]
-        
-        if city_key == "fort_lauderdale":
-            requirements["tips"].extend([
-                "Min seawall elevation: 3.9 ft NAVD88",
-                "Dock limit: 30% of waterway",
-                "Reflector tape required on piles",
-                ">50% seawall repair = full code compliance",
-            ])
-        elif city_key == "pompano_beach":
-            requirements["tips"].extend([
-                "Dock limit: 10% of waterway OR 8 ft (less)",
-                "Boat lift: 20% of waterway OR 20 ft (less)",
-                "Engineering fee: 4% of cost",
-            ])
-        elif city_key == "lighthouse_point":
-            requirements["items"].append("Longshoreman Insurance (FEDERAL requirement)")
-            requirements["tips"].extend([
-                "CRITICAL: Longshoreman Insurance required",
-                "State workers' comp is NOT sufficient",
-            ])
 
-    # GENERATORS
-    elif permit_type == "generator":
-        requirements["items"] = [
-            "Building Permit Application",
-            "Electrical Permit Application",
-            "Plumbing Permit Application (gas piping)",
-            "Zoning Compliance Application",
-            "Site plan (10' min from openings)",
-            "Foundation details",
-            "Electrical riser diagram",
-            "Load calculations",
-            "Gas piping plan",
-            "Equipment specifications",
-            "Contractor license and insurance",
-            "Notice of Commencement",
-        ]
-        requirements["inspections"] = ["Foundation", "Electrical rough", "Gas rough", "Finals"]
-        
-        if city_key == "lauderdale_by_the_sea":
-            requirements["tips"] = ["EPD approval required"]
-
-    # SOLAR
-    elif permit_type == "solar":
-        requirements["items"] = [
-            "Building Permit Application (mounting)",
-            "Electrical Permit Application (PV)",
-            "Roof plan with panel locations",
-            "Attachment details signed/sealed",
-            "Electrical diagram (array, inverter, grounding)",
-            "Product specifications",
-            "FSEC approval OR engineer-sealed drawings",
-            "Wire sizing calculations",
-            "Contractor license and insurance",
-        ]
-        requirements["inspections"] = ["Attachment", "Rail bond", "Service rough", "Final structural", "Final electrical"]
-        
-        if city_key == "pompano_beach":
-            requirements["items"].extend(["Fire Review Application", "Zoning Compliance Application"])
-
-    # DEMOLITION
-    elif permit_type == "demolition":
-        requirements["items"] = [
-            "Building Permit Application",
-            "Electrical Permit Application (disconnect)",
-            "Plumbing Permit Application (capping)",
-            "Mechanical Permit Application (removal)",
-            "Statement of Responsibilities Regarding Asbestos (REQUIRED)",
-            "Signed/sealed survey with sq. ft.",
-            "FPL disconnect letter",
-            "TECO gas clearance",
-            "Tree protection plan",
-            "Contractor license and insurance",
-        ]
-        requirements["inspections"] = ["Final structural"]
-        requirements["tips"] = ["Permits expire in 60 DAYS"]
-        
-        if city_key == "fort_lauderdale":
-            requirements["items"].extend(["Hold Harmless Agreement", "Maintenance of Traffic permit"])
-        elif city_key == "pompano_beach":
-            requirements["items"].extend(["Fire Review (commercial)", "Erosion control plan"])
-
-    # FENCES
-    elif permit_type == "fence":
-        requirements["items"] = [
-            "Building Permit Application",
-            "Zoning Compliance Application",
-            "Site plan with location, height, type",
-            "NOA or engineer details (if not standard)",
-            "Pool barrier compliance (if pool nearby)",
-            "Contractor license and insurance",
-        ]
-        requirements["inspections"] = ["Final structural", "Zoning final"]
-
-    # DEFAULT
+    # ==================== DEFAULT ====================
     else:
-        requirements["items"] = [
-            "Broward County Uniform Permit Application",
-            "Plans signed/sealed by design professional",
-            "Product approvals (NOAs)",
-            "Contractor license and insurance",
-            "Notice of Commencement",
+        requirements["name"] = (
+            f"{permit_type.replace('_', ' ').title()} Permit - {city_name}"
+        )
+        requirements["documents"] = [
+            "Permit Application",
+            "Scope of work description",
+            "Plans/drawings as required",
+            "Product approvals (NOAs) if applicable",
+            "Contractor license",
+            "Contractor insurance certificate",
+            "Notice of Commencement (if over threshold)",
         ]
-        requirements["tips"] = [f"Contact {city_name} Building Department for specific requirements"]
-    
+        requirements["items"] = requirements["documents"]
+        requirements["tips"] = [
+            f"Contact {city_name} Building Department for specific requirements",
+            "AI will analyze documents to determine specific permit needs",
+        ]
+
     return requirements
 
 
@@ -1285,18 +1152,10 @@ def get_city_key(city_name):
 def get_permit_types(city_name=None):
     """Get available permit types."""
     return [
-        {"value": "building", "label": "Building"},
-        {"value": "roofing", "label": "Roofing"},
-        {"value": "mechanical", "label": "Mechanical/HVAC"},
+        {"value": "auto", "label": "Auto-Detect (Recommended)"},
+        {"value": "structural", "label": "Structural / Building"},
         {"value": "electrical", "label": "Electrical"},
+        {"value": "mechanical", "label": "Mechanical / HVAC"},
         {"value": "plumbing", "label": "Plumbing"},
-        {"value": "windows", "label": "Windows/Doors/Shutters"},
-        {"value": "pool", "label": "Swimming Pool"},
-        {"value": "fence", "label": "Fence"},
-        {"value": "generator", "label": "Generator"},
-        {"value": "solar", "label": "Solar System"},
-        {"value": "demolition", "label": "Demolition"},
-        {"value": "dock", "label": "Dock"},
-        {"value": "seawall", "label": "Seawall"},
-        {"value": "boat_lift", "label": "Boat Lift"},
+        {"value": "marine", "label": "Marine (Dock, Seawall, Boat Lift)"},
     ]

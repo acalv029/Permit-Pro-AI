@@ -27,7 +27,6 @@ export default function App() {
   const [validFiles, setValidFiles] = useState([])
   const [loading, setLoading] = useState(false)
   const [loadingStatus, setLoadingStatus] = useState('')
-  const [progress, setProgress] = useState(0)
   const [results, setResults] = useState(null)
   const [history, setHistory] = useState([])
   const [historyLoading, setHistoryLoading] = useState(false)
@@ -167,16 +166,15 @@ export default function App() {
 
   const analyze = async () => {
     if (!city || !permitType || validFiles.length === 0 || !agreedToTerms) return
-    setLoading(true); setProgress(0); setLoadingStatus('Preparing files...')
+    setLoading(true); setLoadingStatus('Uploading files...')
     try {
       const formData = new FormData(); formData.append('city', city); formData.append('permit_type', permitType)
       validFiles.forEach((f) => formData.append('files', f))
-      setLoadingStatus('Uploading...'); setProgress(50)
+      setLoadingStatus('Analyzing with AI...')
       const headers = {}; if (authToken) headers['Authorization'] = `Bearer ${authToken}`
       const res = await fetch(`${API_BASE_URL}/api/analyze-permit-folder`, { method: 'POST', headers, body: formData })
-      setProgress(80); setLoadingStatus('Analyzing with AI...')
       if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.detail || 'Analysis failed') }
-      const data = await res.json(); setProgress(100); setResults(data); setPage('results')
+      const data = await res.json(); setResults(data); setPage('results')
     } catch (err) { alert('Error: ' + err.message) } finally { setLoading(false) }
   }
 
@@ -256,27 +254,13 @@ export default function App() {
   const getPermitTypes = () => {
     return [
       { value: 'auto', label: 'Auto-Detect (Recommended)' },
-      { value: '', label: '── RESIDENTIAL ──', disabled: true },
-      { value: 'building', label: 'Residential (Additions, Renovations, Garage Conversions)' },
-      { value: 'roofing', label: 'Roofing (Re-roof, Repairs, New Roof)' },
-      { value: 'windows', label: 'Windows, Doors & Shutters' },
-      { value: 'fence', label: 'Fence & Gates' },
-      { value: 'pool', label: 'Pool & Spa' },
-      { value: 'screen_enclosure', label: 'Screen Enclosure & Patio' },
-      { value: 'shed', label: 'Shed & Accessory Structures' },
-      { value: 'driveway', label: 'Driveway & Concrete Slab' },
-      { value: '', label: '── TRADE / MEP ──', disabled: true },
-      { value: 'mechanical', label: 'HVAC / Mechanical (A/C, Heat Pump, Ductwork)' },
-      { value: 'electrical', label: 'Electrical (Panel, Service Change, Wiring)' },
-      { value: 'plumbing', label: 'Plumbing (Water Heater, Pipes, Fixtures)' },
-      { value: 'generator', label: 'Generator (Standby, Transfer Switch)' },
-      { value: 'solar', label: 'Solar (PV Panels, Battery)' },
-      { value: '', label: '── MARINE / WATERFRONT ──', disabled: true },
-      { value: 'marine', label: 'Marine Construction (Dock, Seawall, Boat Lift, Davit)' },
-      { value: '', label: '── OTHER ──', disabled: true },
-      { value: 'commercial', label: 'Commercial (Tenant Buildout, Renovations)' },
-      { value: 'demolition', label: 'Demolition' },
-      { value: 'sign', label: 'Signs' },
+      { value: '', label: '────────────────', disabled: true },
+      { value: 'structural', label: 'Structural / Building' },
+      { value: 'electrical', label: 'Electrical' },
+      { value: 'mechanical', label: 'Mechanical / HVAC' },
+      { value: 'plumbing', label: 'Plumbing' },
+      { value: '', label: '────────────────', disabled: true },
+      { value: 'marine', label: 'Marine (Dock, Seawall, Boat Lift)' },
     ]
   }
 
@@ -1018,29 +1002,137 @@ export default function App() {
     </div>
   )
 
-  if (page === 'results' && results) return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
-      <div className="fixed inset-0 z-0"><div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div></div>
-      <NavBar />
-      <div className="relative z-10 pt-24 px-6 pb-12 flex-grow">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-gray-900/90 rounded-3xl overflow-hidden border border-gray-800">
-            <div className="p-8 border-b border-gray-800 bg-gradient-to-r from-cyan-500/10 to-emerald-500/10 flex justify-between items-center"><div><h2 className="text-2xl font-black text-white">Analysis Complete</h2><p className="text-gray-400">{results.city} • {results.permit_type}</p></div><div className="text-center"><div className={`text-5xl font-black ${(results.analysis?.compliance_score || 0) >= 70 ? 'text-emerald-400' : (results.analysis?.compliance_score || 0) >= 40 ? 'text-amber-400' : 'text-red-400'}`}>{results.analysis?.compliance_score || 0}%</div><div className="text-sm text-gray-500">Compliance</div></div></div>
-            <div className="p-8 space-y-6">
-              {results.analysis?.summary && <div><h3 className="font-bold text-white mb-2">Summary</h3><p className="text-gray-400">{results.analysis.summary}</p></div>}
-              {results.analysis?.documents_found?.length > 0 && <div><h3 className="font-bold text-emerald-400 mb-2">✓ Documents Found</h3><ul className="space-y-1">{results.analysis.documents_found.map((d,idx) => <li key={idx} className="text-emerald-300">✓ {d}</li>)}</ul></div>}
-              {results.analysis?.critical_issues?.length > 0 && <div><h3 className="font-bold text-red-400 mb-2">✗ Critical Issues</h3><ul className="space-y-1">{results.analysis.critical_issues.map((i,idx) => <li key={idx} className="text-red-300">• {i}</li>)}</ul></div>}
-              {results.analysis?.missing_documents?.length > 0 && <div><h3 className="font-bold text-amber-400 mb-2">⚠ Missing Documents</h3><ul className="space-y-1">{results.analysis.missing_documents.map((d,idx) => <li key={idx} className="text-amber-300">• {d}</li>)}</ul></div>}
-              {results.analysis?.recommendations?.length > 0 && <div><h3 className="font-bold text-cyan-400 mb-2">💡 Recommendations</h3><ul className="space-y-1">{results.analysis.recommendations.map((r,idx) => <li key={idx} className="text-gray-400">• {r}</li>)}</ul></div>}
+  if (page === 'results' && results) {
+    // Organize checklist: missing at top (white), found at bottom (darkened)
+    const missingDocs = results.analysis?.missing_documents || []
+    const foundDocs = results.analysis?.documents_found || []
+    
+    return (
+      <div className="min-h-screen bg-black text-white flex flex-col">
+        <div className="fixed inset-0 z-0"><div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div></div>
+        <NavBar />
+        <div className="relative z-10 pt-24 px-6 pb-12 flex-grow">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-gray-900/90 rounded-3xl overflow-hidden border border-gray-800">
+              {/* Header with score */}
+              <div className="p-8 border-b border-gray-800 bg-gradient-to-r from-cyan-500/10 to-emerald-500/10">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h2 className="text-2xl font-black text-white">Analysis Complete</h2>
+                    <p className="text-gray-400">{results.city} • {results.analysis?.detected_permit_description || results.permit_type}</p>
+                  </div>
+                  <div className="text-center">
+                    <div className={`text-5xl font-black ${(results.analysis?.compliance_score || 0) >= 70 ? 'text-emerald-400' : (results.analysis?.compliance_score || 0) >= 40 ? 'text-amber-400' : 'text-red-400'}`}>
+                      {results.analysis?.compliance_score || 0}%
+                    </div>
+                    <div className="text-sm text-gray-500">Compliance</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="p-8 space-y-6">
+                {/* Summary */}
+                {results.analysis?.summary && (
+                  <div className="p-4 bg-gray-800/50 rounded-xl">
+                    <p className="text-gray-300">{results.analysis.summary}</p>
+                  </div>
+                )}
+                
+                {/* Document Checklist - Organized */}
+                <div>
+                  <h3 className="font-bold text-white mb-4 flex items-center gap-2">
+                    <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                    Document Checklist
+                  </h3>
+                  
+                  <div className="space-y-2">
+                    {/* Missing Documents - At Top - White/Bright */}
+                    {missingDocs.map((doc, idx) => (
+                      <div key={`missing-${idx}`} className="flex items-center gap-3 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                        <div className="w-5 h-5 border-2 border-red-400 rounded flex-shrink-0 flex items-center justify-center">
+                          <svg className="w-3 h-3 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </div>
+                        <span className="text-white font-medium">{doc}</span>
+                        <span className="ml-auto text-xs text-red-400 font-semibold">NEEDED</span>
+                      </div>
+                    ))}
+                    
+                    {/* Found Documents - At Bottom - Darkened */}
+                    {foundDocs.map((doc, idx) => (
+                      <div key={`found-${idx}`} className="flex items-center gap-3 p-3 bg-gray-800/30 rounded-lg opacity-60">
+                        <div className="w-5 h-5 bg-emerald-500/20 border border-emerald-500/50 rounded flex-shrink-0 flex items-center justify-center">
+                          <svg className="w-3 h-3 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg>
+                        </div>
+                        <span className="text-gray-400">{doc}</span>
+                        <span className="ml-auto text-xs text-emerald-500">✓ Found</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Critical Issues */}
+                {results.analysis?.critical_issues?.length > 0 && (
+                  <div>
+                    <h3 className="font-bold text-red-400 mb-3 flex items-center gap-2">
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd"/></svg>
+                      Critical Issues
+                    </h3>
+                    <ul className="space-y-2">
+                      {results.analysis.critical_issues.map((issue, idx) => (
+                        <li key={idx} className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-300">{issue}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                
+                {/* Recommendations */}
+                {results.analysis?.recommendations?.length > 0 && (
+                  <div>
+                    <h3 className="font-bold text-cyan-400 mb-3 flex items-center gap-2">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                      Recommendations
+                    </h3>
+                    <ul className="space-y-2">
+                      {results.analysis.recommendations.map((rec, idx) => (
+                        <li key={idx} className="p-3 bg-cyan-500/10 border border-cyan-500/20 rounded-lg text-gray-300">{rec}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                
+                {/* City Specific Warnings */}
+                {results.analysis?.city_specific_warnings?.length > 0 && (
+                  <div>
+                    <h3 className="font-bold text-amber-400 mb-3">{results.city} Specific Warnings</h3>
+                    <ul className="space-y-2">
+                      {results.analysis.city_specific_warnings.map((warn, idx) => (
+                        <li key={idx} className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg text-amber-300">{warn}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+              
+              {/* Disclaimer */}
+              <div className="px-8 pb-4">
+                <div className="p-3 bg-gray-800/50 border border-gray-700 rounded-lg">
+                  <p className="text-gray-500 text-xs"><strong>Disclaimer:</strong> This analysis is informational only. Always verify requirements with your local permitting office.</p>
+                </div>
+              </div>
+              
+              {/* Action Button */}
+              <div className="p-6 bg-black/50 border-t border-gray-800 text-center">
+                <button onClick={() => { setPage('home'); setResults(null); clearFiles() }} className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl hover:scale-105 transition-transform">
+                  New Analysis
+                </button>
+              </div>
             </div>
-            <div className="px-8 pb-4"><div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg"><p className="text-amber-300 text-xs"><strong>Disclaimer:</strong> Informational only. Verify with your local permitting office.</p></div></div>
-            <div className="p-6 bg-black/50 border-t border-gray-800 text-center"><button onClick={() => { setPage('home'); setResults(null); clearFiles() }} className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">New Analysis</button></div>
           </div>
         </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
-  )
+    )
+  }
 
   // ============================================================================
   // LANDING PAGE (NOT LOGGED IN)
@@ -1215,9 +1307,12 @@ export default function App() {
       {loading && (
         <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center">
           <div className="text-center">
-            <div className="relative w-24 h-24 mx-auto mb-6"><div className="absolute inset-0 border-4 border-cyan-500/20 rounded-full"></div><div className="absolute inset-0 border-4 border-transparent border-t-cyan-500 rounded-full animate-spin"></div></div>
+            <div className="relative w-20 h-20 mx-auto mb-6">
+              <div className="absolute inset-0 border-4 border-cyan-500/20 rounded-full"></div>
+              <div className="absolute inset-0 border-4 border-transparent border-t-cyan-500 border-r-cyan-500 rounded-full animate-spin"></div>
+            </div>
             <h3 className="text-2xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-2">{loadingStatus}</h3>
-            <div className="w-64 h-2 bg-gray-800 rounded-full mx-auto mt-4"><div className="h-full bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-full" style={{width:`${progress}%`}}></div></div>
+            <p className="text-gray-500 text-sm">This may take a moment...</p>
           </div>
         </div>
       )}
