@@ -1252,12 +1252,32 @@ async def get_admin_stats(
     authorization: str = Header(None), db: Session = Depends(get_db)
 ):
     """Get admin dashboard statistics"""
+    print("🔍 Admin stats endpoint called")
     import traceback
     from sqlalchemy import func
 
-    # Auth check
-    user_id = get_current_user_id(authorization)
+    # Auth check - extract token from "Bearer <token>" header
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(
+            status_code=401, detail="Missing or invalid authorization header"
+        )
+
+    token = authorization.replace("Bearer ", "")
+    print(f"🔍 Token: {token[:20]}...")
+
+    try:
+        payload = decode_access_token(token)
+        user_id = payload.get("sub")
+        if not user_id:
+            raise HTTPException(status_code=401, detail="Invalid token")
+        user_id = int(user_id)
+    except Exception as e:
+        print(f"❌ Token decode error: {e}")
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+    print(f"🔍 User ID: {user_id}")
     require_admin(user_id, db)
+    print("🔍 Admin check passed")
 
     try:
         # Total users
