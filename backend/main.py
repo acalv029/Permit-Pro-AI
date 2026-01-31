@@ -98,43 +98,48 @@ FRONTEND_URL = os.getenv("FRONTEND_URL", "https://flopermit.vercel.app")
 
 RECAPTCHA_SECRET_KEY = os.getenv("RECAPTCHA_SECRET_KEY")
 
+
 async def verify_recaptcha(token: str, action: str = None) -> bool:
     """Verify reCAPTCHA v3 token"""
     if not RECAPTCHA_SECRET_KEY:
         print("⚠️ RECAPTCHA_SECRET_KEY not set - skipping verification")
         return True  # Skip if not configured
-    
+
     if not token:
         print("⚠️ No reCAPTCHA token provided")
         return True  # Allow if frontend didn't send token (graceful degradation)
-    
+
     try:
         import httpx
+
         async with httpx.AsyncClient() as client:
             response = await client.post(
                 "https://www.google.com/recaptcha/api/siteverify",
                 data={
                     "secret": RECAPTCHA_SECRET_KEY,
                     "response": token,
-                }
+                },
             )
             result = response.json()
-            
+
             success = result.get("success", False)
             score = result.get("score", 0)
-            
-            print(f"🤖 reCAPTCHA: success={success}, score={score}, action={result.get('action')}")
-            
+
+            print(
+                f"🤖 reCAPTCHA: success={success}, score={score}, action={result.get('action')}"
+            )
+
             # Score threshold: 0.5 is Google's recommended default
             # 1.0 = definitely human, 0.0 = definitely bot
             if success and score >= 0.3:  # Being lenient at 0.3
                 return True
-            
+
             print(f"⚠️ reCAPTCHA failed: score too low ({score})")
             return False
     except Exception as e:
         print(f"❌ reCAPTCHA verification error: {e}")
         return True  # Allow on error (don't block legitimate users)
+
 
 # ============================================================================
 # STRIPE CONFIGURATION
@@ -182,22 +187,90 @@ def get_db():
 def detect_permit_type_from_text(text: str) -> str:
     """Auto-detect permit CATEGORY from document text. AI will determine specific subtype."""
     text_lower = text.lower()
-    
+
     # Simple category detection - AI will figure out the specific type
     categories = {
-        "structural": ["roof", "window", "door", "fence", "pool", "addition", "renovation", "construction", "demolition", "sign", "screen", "awning", "concrete", "driveway", "shed", "garage", "shutter", "building permit"],
-        "electrical": ["electrical", "panel", "circuit", "wiring", "generator", "solar", "pv", "photovoltaic", "alarm", "low voltage", "service change", "meter"],
-        "mechanical": ["hvac", "air condition", "a/c", "ac ", "heat pump", "ductwork", "furnace", "condenser", "air handler", "mechanical", "tonnage", "seer", "ahri"],
-        "plumbing": ["plumbing", "water heater", "pipe", "drain", "sewer", "fixture", "backflow", "irrigation", "gas line", "tankless", "water meter"],
-        "marine": ["dock", "pier", "seawall", "bulkhead", "boat lift", "davit", "marine", "pile", "shoreline"],
+        "structural": [
+            "roof",
+            "window",
+            "door",
+            "fence",
+            "pool",
+            "addition",
+            "renovation",
+            "construction",
+            "demolition",
+            "sign",
+            "screen",
+            "awning",
+            "concrete",
+            "driveway",
+            "shed",
+            "garage",
+            "shutter",
+            "building permit",
+        ],
+        "electrical": [
+            "electrical",
+            "panel",
+            "circuit",
+            "wiring",
+            "generator",
+            "solar",
+            "pv",
+            "photovoltaic",
+            "alarm",
+            "low voltage",
+            "service change",
+            "meter",
+        ],
+        "mechanical": [
+            "hvac",
+            "air condition",
+            "a/c",
+            "ac ",
+            "heat pump",
+            "ductwork",
+            "furnace",
+            "condenser",
+            "air handler",
+            "mechanical",
+            "tonnage",
+            "seer",
+            "ahri",
+        ],
+        "plumbing": [
+            "plumbing",
+            "water heater",
+            "pipe",
+            "drain",
+            "sewer",
+            "fixture",
+            "backflow",
+            "irrigation",
+            "gas line",
+            "tankless",
+            "water meter",
+        ],
+        "marine": [
+            "dock",
+            "pier",
+            "seawall",
+            "bulkhead",
+            "boat lift",
+            "davit",
+            "marine",
+            "pile",
+            "shoreline",
+        ],
     }
-    
+
     scores = {}
     for category, keywords in categories.items():
         score = sum(1 for kw in keywords if kw in text_lower)
         if score > 0:
             scores[category] = score
-    
+
     if scores:
         return max(scores, key=scores.get)
     return "structural"  # Default to structural
@@ -285,6 +358,7 @@ class APILog(Base):
 
 class SinglePurchase(Base):
     """One-time homeowner permit analysis purchases"""
+
     __tablename__ = "single_purchases"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -304,6 +378,7 @@ class SinglePurchase(Base):
 
 class AIUsageLog(Base):
     """Track AI API usage and costs per analysis"""
+
     __tablename__ = "ai_usage_logs"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -322,18 +397,20 @@ class AIUsageLog(Base):
 Base.metadata.create_all(bind=engine)
 print("✅ Database tables initialized")
 
+
 # Migrate: Add Stripe columns if they don't exist
 def migrate_database():
     from sqlalchemy import text, inspect
+
     inspector = inspect(engine)
-    columns = [col['name'] for col in inspector.get_columns('users')]
-    
-    if 'stripe_customer_id' not in columns:
+    columns = [col["name"] for col in inspector.get_columns("users")]
+
+    if "stripe_customer_id" not in columns:
         print("📦 Adding Stripe columns to users table...")
         for col_sql in [
             "ALTER TABLE users ADD COLUMN IF NOT EXISTS stripe_customer_id VARCHAR(255)",
             "ALTER TABLE users ADD COLUMN IF NOT EXISTS stripe_subscription_id VARCHAR(255)",
-            "ALTER TABLE users ADD COLUMN IF NOT EXISTS subscription_ends_at TIMESTAMP"
+            "ALTER TABLE users ADD COLUMN IF NOT EXISTS subscription_ends_at TIMESTAMP",
         ]:
             try:
                 with engine.begin() as conn:
@@ -343,11 +420,12 @@ def migrate_database():
         print("✅ Stripe columns migration complete")
     else:
         print("✅ Stripe columns already exist")
-    
+
     # Ensure ai_usage_logs table exists
     try:
         with engine.begin() as conn:
-            conn.execute(text("""
+            conn.execute(
+                text("""
                 CREATE TABLE IF NOT EXISTS ai_usage_logs (
                     id SERIAL PRIMARY KEY,
                     user_id INTEGER REFERENCES users(id),
@@ -361,10 +439,12 @@ def migrate_database():
                     permit_type VARCHAR(100),
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
-            """))
+            """)
+            )
         print("✅ AI usage logs table ready")
     except Exception as e:
         print(f"⚠️ AI usage table note: {e}")
+
 
 try:
     migrate_database()
@@ -396,13 +476,14 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 class APILoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         import time
+
         start_time = time.time()
-        
+
         response = await call_next(request)
-        
+
         # Calculate response time
         response_time_ms = int((time.time() - start_time) * 1000)
-        
+
         # Skip logging for health checks and static files
         if request.url.path not in ["/health", "/", "/docs", "/openapi.json"]:
             try:
@@ -420,7 +501,7 @@ class APILoggingMiddleware(BaseHTTPMiddleware):
                 db.close()
             except Exception as e:
                 print(f"API logging error: {e}")
-        
+
         return response
 
 
@@ -511,7 +592,7 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
     """Send password reset email via Resend"""
     try:
         reset_link = f"{FRONTEND_URL}/reset-password?token={reset_token}"
-        
+
         params = {
             "from": "Flo Permit <noreply@flopermit.com>",
             "to": [email],
@@ -542,7 +623,7 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
             </div>
             """,
         }
-        
+
         resend.Emails.send(params)
         return True
     except Exception as e:
@@ -554,7 +635,7 @@ def send_welcome_email(email: str, full_name: str = None) -> bool:
     """Send welcome email to new users"""
     try:
         name = full_name or "there"
-        
+
         params = {
             "from": "Flo Permit <noreply@flopermit.com>",
             "to": [email],
@@ -593,7 +674,7 @@ def send_welcome_email(email: str, full_name: str = None) -> bool:
             </div>
             """,
         }
-        
+
         resend.Emails.send(params)
         return True
     except Exception as e:
@@ -625,7 +706,7 @@ def send_contact_email(name: str, email: str, subject: str, message: str) -> boo
             </div>
             """,
         }
-        
+
         resend.Emails.send(params)
         return True
     except Exception as e:
@@ -644,8 +725,11 @@ async def register(user_data: UserRegister, db: Session = Depends(get_db)):
     try:
         # Verify reCAPTCHA
         if not await verify_recaptcha(user_data.recaptcha_token, "register"):
-            raise HTTPException(status_code=400, detail="reCAPTCHA verification failed. Please try again.")
-        
+            raise HTTPException(
+                status_code=400,
+                detail="reCAPTCHA verification failed. Please try again.",
+            )
+
         existing_user = db.query(User).filter(User.email == user_data.email).first()
         if existing_user:
             raise HTTPException(status_code=400, detail="Email already registered")
@@ -697,8 +781,11 @@ async def login(user_data: UserLogin, db: Session = Depends(get_db)):
     try:
         # Verify reCAPTCHA
         if not await verify_recaptcha(user_data.recaptcha_token, "login"):
-            raise HTTPException(status_code=400, detail="reCAPTCHA verification failed. Please try again.")
-        
+            raise HTTPException(
+                status_code=400,
+                detail="reCAPTCHA verification failed. Please try again.",
+            )
+
         user = db.query(User).filter(User.email == user_data.email).first()
         if not user:
             raise HTTPException(status_code=401, detail="Invalid email or password")
@@ -754,19 +841,20 @@ async def get_current_user(
 
 
 @app.post("/api/auth/forgot-password")
-async def forgot_password(request_data: ForgotPasswordRequest, db: Session = Depends(get_db)):
+async def forgot_password(
+    request_data: ForgotPasswordRequest, db: Session = Depends(get_db)
+):
     """Request a password reset email"""
     try:
         # Always return success to prevent email enumeration
         user = db.query(User).filter(User.email == request_data.email).first()
-        
+
         if user:
             # Invalidate any existing reset tokens for this user
             db.query(PasswordResetToken).filter(
-                PasswordResetToken.user_id == user.id,
-                PasswordResetToken.used == False
+                PasswordResetToken.user_id == user.id, PasswordResetToken.used == False
             ).update({"used": True})
-            
+
             # Generate new token
             token = generate_reset_token()
             reset_token = PasswordResetToken(
@@ -776,14 +864,14 @@ async def forgot_password(request_data: ForgotPasswordRequest, db: Session = Dep
             )
             db.add(reset_token)
             db.commit()
-            
+
             # Send email
             send_password_reset_email(user.email, token)
-        
+
         # Always return success (security: don't reveal if email exists)
         return {
             "success": True,
-            "message": "If an account exists with this email, you will receive a password reset link."
+            "message": "If an account exists with this email, you will receive a password reset link.",
         }
     except Exception as e:
         print(f"❌ Forgot password error: {str(e)}")
@@ -791,48 +879,59 @@ async def forgot_password(request_data: ForgotPasswordRequest, db: Session = Dep
         # Still return success for security
         return {
             "success": True,
-            "message": "If an account exists with this email, you will receive a password reset link."
+            "message": "If an account exists with this email, you will receive a password reset link.",
         }
 
 
 @app.post("/api/auth/reset-password")
-async def reset_password(request_data: ResetPasswordRequest, db: Session = Depends(get_db)):
+async def reset_password(
+    request_data: ResetPasswordRequest, db: Session = Depends(get_db)
+):
     """Reset password using token"""
     try:
         # Find the token
-        reset_token = db.query(PasswordResetToken).filter(
-            PasswordResetToken.token == request_data.token,
-            PasswordResetToken.used == False
-        ).first()
-        
+        reset_token = (
+            db.query(PasswordResetToken)
+            .filter(
+                PasswordResetToken.token == request_data.token,
+                PasswordResetToken.used == False,
+            )
+            .first()
+        )
+
         if not reset_token:
             raise HTTPException(status_code=400, detail="Invalid or expired reset link")
-        
+
         if is_token_expired(reset_token.expires_at):
             reset_token.used = True
             db.commit()
-            raise HTTPException(status_code=400, detail="Reset link has expired. Please request a new one.")
-        
+            raise HTTPException(
+                status_code=400,
+                detail="Reset link has expired. Please request a new one.",
+            )
+
         # Validate new password
         if len(request_data.new_password) < 8:
-            raise HTTPException(status_code=400, detail="Password must be at least 8 characters")
-        
+            raise HTTPException(
+                status_code=400, detail="Password must be at least 8 characters"
+            )
+
         # Update password
         user = db.query(User).filter(User.id == reset_token.user_id).first()
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
-        
+
         user.hashed_password = hash_password(request_data.new_password)
         user.updated_at = datetime.utcnow()
-        
+
         # Mark token as used
         reset_token.used = True
-        
+
         db.commit()
-        
+
         return {
             "success": True,
-            "message": "Password has been reset successfully. You can now log in with your new password."
+            "message": "Password has been reset successfully. You can now log in with your new password.",
         }
     except HTTPException:
         raise
@@ -1150,143 +1249,190 @@ def require_admin(user_id: int, db: Session):
 
 @app.get("/api/admin/stats")
 async def get_admin_stats(
-    authorization: str = Header(None),
-    db: Session = Depends(get_db)
+    authorization: str = Header(None), db: Session = Depends(get_db)
 ):
     """Get admin dashboard statistics"""
+    user_id = get_current_user_id(authorization)
+    require_admin(user_id, db)
+
     try:
-        user_id = get_current_user_id(authorization)
-        require_admin(user_id, db)
-        
         from sqlalchemy import func
-        
+
         # Total users
         total_users = db.query(User).count()
-        
+
         # Users this month
-        first_of_month = datetime.utcnow().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-        new_users_this_month = db.query(User).filter(User.created_at >= first_of_month).count()
-        
+        first_of_month = datetime.utcnow().replace(
+            day=1, hour=0, minute=0, second=0, microsecond=0
+        )
+        new_users_this_month = (
+            db.query(User).filter(User.created_at >= first_of_month).count()
+        )
+
         # Total analyses
         total_analyses = db.query(AnalysisHistory).count()
-        
+
         # Analyses this month
-        analyses_this_month = db.query(AnalysisHistory).filter(AnalysisHistory.created_at >= first_of_month).count()
-        
+        analyses_this_month = (
+            db.query(AnalysisHistory)
+            .filter(AnalysisHistory.created_at >= first_of_month)
+            .count()
+        )
+
         # Average compliance score
         avg_score = db.query(func.avg(AnalysisHistory.compliance_score)).scalar() or 0
-        
+
         # API requests today
-        today_start = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
-        api_requests_today = db.query(APILog).filter(APILog.created_at >= today_start).count()
-    
-    # API requests this month
-    api_requests_month = db.query(APILog).filter(APILog.created_at >= first_of_month).count()
-    
-    # Most popular cities
-    popular_cities = db.query(
-        AnalysisHistory.city,
-        func.count(AnalysisHistory.id).label('count')
-    ).group_by(AnalysisHistory.city).order_by(func.count(AnalysisHistory.id).desc()).limit(5).all()
-    
-    # Most popular permit types
-    popular_permits = db.query(
-        AnalysisHistory.permit_type,
-        func.count(AnalysisHistory.id).label('count')
-    ).group_by(AnalysisHistory.permit_type).order_by(func.count(AnalysisHistory.id).desc()).limit(5).all()
-    
-    # Recent users
-    recent_users = db.query(User).order_by(User.created_at.desc()).limit(10).all()
-    
-    # Recent analyses
-    recent_analyses = db.query(AnalysisHistory).order_by(AnalysisHistory.created_at.desc()).limit(10).all()
-    
-    # API endpoint stats
-    endpoint_stats = db.query(
-        APILog.endpoint,
-        func.count(APILog.id).label('count'),
-        func.avg(APILog.response_time_ms).label('avg_time')
-    ).filter(APILog.created_at >= first_of_month).group_by(APILog.endpoint).order_by(func.count(APILog.id).desc()).limit(10).all()
-    
-    # AI Usage Stats (may not exist yet if table hasn't been created)
-    try:
-        ai_usage_today = db.query(
-            func.sum(AIUsageLog.input_tokens),
-            func.sum(AIUsageLog.output_tokens),
-            func.sum(AIUsageLog.cost_cents),
-            func.count(AIUsageLog.id)
-        ).filter(AIUsageLog.created_at >= today_start).first()
-        
-        ai_usage_month = db.query(
-            func.sum(AIUsageLog.input_tokens),
-            func.sum(AIUsageLog.output_tokens),
-            func.sum(AIUsageLog.cost_cents),
-            func.count(AIUsageLog.id)
-        ).filter(AIUsageLog.created_at >= first_of_month).first()
-    except Exception as e:
-        print(f"AI usage table not available: {e}")
-        ai_usage_today = (0, 0, 0, 0)
-        ai_usage_month = (0, 0, 0, 0)
-    
-    return {
-        "overview": {
-            "total_users": total_users,
-            "new_users_this_month": new_users_this_month,
-            "total_analyses": total_analyses,
-            "analyses_this_month": analyses_this_month,
-            "average_compliance_score": round(avg_score, 1),
-            "api_requests_today": api_requests_today,
-            "api_requests_this_month": api_requests_month,
-        },
-        "ai_costs": {
-            "today": {
-                "analyses": ai_usage_today[3] or 0,
-                "input_tokens": ai_usage_today[0] or 0,
-                "output_tokens": ai_usage_today[1] or 0,
-                "cost_cents": ai_usage_today[2] or 0,
-                "cost_dollars": round((ai_usage_today[2] or 0) / 100, 2),
+        today_start = datetime.utcnow().replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
+        api_requests_today = (
+            db.query(APILog).filter(APILog.created_at >= today_start).count()
+        )
+
+        # API requests this month
+        api_requests_month = (
+            db.query(APILog).filter(APILog.created_at >= first_of_month).count()
+        )
+
+        # Most popular cities
+        popular_cities = (
+            db.query(
+                AnalysisHistory.city, func.count(AnalysisHistory.id).label("count")
+            )
+            .group_by(AnalysisHistory.city)
+            .order_by(func.count(AnalysisHistory.id).desc())
+            .limit(5)
+            .all()
+        )
+
+        # Most popular permit types
+        popular_permits = (
+            db.query(
+                AnalysisHistory.permit_type,
+                func.count(AnalysisHistory.id).label("count"),
+            )
+            .group_by(AnalysisHistory.permit_type)
+            .order_by(func.count(AnalysisHistory.id).desc())
+            .limit(5)
+            .all()
+        )
+
+        # Recent users
+        recent_users = db.query(User).order_by(User.created_at.desc()).limit(10).all()
+
+        # Recent analyses
+        recent_analyses = (
+            db.query(AnalysisHistory)
+            .order_by(AnalysisHistory.created_at.desc())
+            .limit(10)
+            .all()
+        )
+
+        # API endpoint stats
+        endpoint_stats = (
+            db.query(
+                APILog.endpoint,
+                func.count(APILog.id).label("count"),
+                func.avg(APILog.response_time_ms).label("avg_time"),
+            )
+            .filter(APILog.created_at >= first_of_month)
+            .group_by(APILog.endpoint)
+            .order_by(func.count(APILog.id).desc())
+            .limit(10)
+            .all()
+        )
+
+        # AI Usage Stats (may not exist yet if table hasn't been created)
+        try:
+            ai_usage_today = (
+                db.query(
+                    func.sum(AIUsageLog.input_tokens),
+                    func.sum(AIUsageLog.output_tokens),
+                    func.sum(AIUsageLog.cost_cents),
+                    func.count(AIUsageLog.id),
+                )
+                .filter(AIUsageLog.created_at >= today_start)
+                .first()
+            )
+
+            ai_usage_month = (
+                db.query(
+                    func.sum(AIUsageLog.input_tokens),
+                    func.sum(AIUsageLog.output_tokens),
+                    func.sum(AIUsageLog.cost_cents),
+                    func.count(AIUsageLog.id),
+                )
+                .filter(AIUsageLog.created_at >= first_of_month)
+                .first()
+            )
+        except Exception as e:
+            print(f"AI usage table not available: {e}")
+            ai_usage_today = (0, 0, 0, 0)
+            ai_usage_month = (0, 0, 0, 0)
+
+        return {
+            "overview": {
+                "total_users": total_users,
+                "new_users_this_month": new_users_this_month,
+                "total_analyses": total_analyses,
+                "analyses_this_month": analyses_this_month,
+                "average_compliance_score": round(avg_score, 1),
+                "api_requests_today": api_requests_today,
+                "api_requests_this_month": api_requests_month,
             },
-            "this_month": {
-                "analyses": ai_usage_month[3] or 0,
-                "input_tokens": ai_usage_month[0] or 0,
-                "output_tokens": ai_usage_month[1] or 0,
-                "cost_cents": ai_usage_month[2] or 0,
-                "cost_dollars": round((ai_usage_month[2] or 0) / 100, 2),
+            "ai_costs": {
+                "today": {
+                    "analyses": ai_usage_today[3] or 0,
+                    "input_tokens": ai_usage_today[0] or 0,
+                    "output_tokens": ai_usage_today[1] or 0,
+                    "cost_cents": ai_usage_today[2] or 0,
+                    "cost_dollars": round((ai_usage_today[2] or 0) / 100, 2),
+                },
+                "this_month": {
+                    "analyses": ai_usage_month[3] or 0,
+                    "input_tokens": ai_usage_month[0] or 0,
+                    "output_tokens": ai_usage_month[1] or 0,
+                    "cost_cents": ai_usage_month[2] or 0,
+                    "cost_dollars": round((ai_usage_month[2] or 0) / 100, 2),
+                },
             },
-        },
-        "popular_cities": [{"city": c, "count": cnt} for c, cnt in popular_cities],
-        "popular_permits": [{"permit_type": p, "count": cnt} for p, cnt in popular_permits],
-        "recent_users": [
-            {
-                "id": u.id,
-                "email": u.email,
-                "full_name": u.full_name,
-                "company_name": u.company_name,
-                "created_at": u.created_at.isoformat(),
-            }
-            for u in recent_users
-        ],
-        "recent_analyses": [
-            {
-                "id": a.id,
-                "city": a.city,
-                "permit_type": a.permit_type,
-                "compliance_score": a.compliance_score,
-                "files_analyzed": a.files_analyzed,
-                "created_at": a.created_at.isoformat(),
-            }
-            for a in recent_analyses
-        ],
-        "endpoint_stats": [
-            {"endpoint": e, "count": cnt, "avg_response_ms": round(avg or 0, 1)}
-            for e, cnt, avg in endpoint_stats
-        ],
-    }
+            "popular_cities": [{"city": c, "count": cnt} for c, cnt in popular_cities],
+            "popular_permits": [
+                {"permit_type": p, "count": cnt} for p, cnt in popular_permits
+            ],
+            "recent_users": [
+                {
+                    "id": u.id,
+                    "email": u.email,
+                    "full_name": u.full_name,
+                    "company_name": u.company_name,
+                    "created_at": u.created_at.isoformat(),
+                }
+                for u in recent_users
+            ],
+            "recent_analyses": [
+                {
+                    "id": a.id,
+                    "city": a.city,
+                    "permit_type": a.permit_type,
+                    "compliance_score": a.compliance_score,
+                    "files_analyzed": a.files_analyzed,
+                    "created_at": a.created_at.isoformat(),
+                }
+                for a in recent_analyses
+            ],
+            "endpoint_stats": [
+                {"endpoint": e, "count": cnt, "avg_response_ms": round(avg or 0, 1)}
+                for e, cnt, avg in endpoint_stats
+            ],
+        }
     except HTTPException:
         raise
     except Exception as e:
         print(f"❌ Admin stats error: {str(e)}")
         import traceback
+
         print(traceback.format_exc())
         raise HTTPException(status_code=500, detail=f"Failed to load stats: {str(e)}")
 
@@ -1311,10 +1457,13 @@ async def submit_contact_form(form_data: ContactForm):
             name=form_data.name,
             email=form_data.email,
             subject=form_data.subject,
-            message=form_data.message
+            message=form_data.message,
         )
         if success:
-            return {"success": True, "message": "Message sent! We'll get back to you soon."}
+            return {
+                "success": True,
+                "message": "Message sent! We'll get back to you soon.",
+            }
         else:
             raise HTTPException(status_code=500, detail="Failed to send message")
     except Exception as e:
@@ -1346,7 +1495,12 @@ async def get_pricing():
                 "price": 15.99,
                 "period": "one-time",
                 "analyses": 1,
-                "features": ["1 permit analysis", "Full checklist included", "30 days to use", "No subscription required"],
+                "features": [
+                    "1 permit analysis",
+                    "Full checklist included",
+                    "30 days to use",
+                    "No subscription required",
+                ],
                 "homeowner": True,
             },
             {
@@ -1355,7 +1509,12 @@ async def get_pricing():
                 "price": 29,
                 "period": "month",
                 "analyses": 50,
-                "features": ["50 analyses/month", "Priority AI analysis", "Priority support", "Analysis history"],
+                "features": [
+                    "50 analyses/month",
+                    "Priority AI analysis",
+                    "Priority support",
+                    "Analysis history",
+                ],
                 "popular": True,
             },
             {
@@ -1364,7 +1523,13 @@ async def get_pricing():
                 "price": 99,
                 "period": "month",
                 "analyses": -1,
-                "features": ["Unlimited analyses", "Priority AI analysis", "Dedicated support", "Analysis history", "Team features (coming soon)"],
+                "features": [
+                    "Unlimited analyses",
+                    "Priority AI analysis",
+                    "Dedicated support",
+                    "Analysis history",
+                    "Team features (coming soon)",
+                ],
             },
         ]
     }
@@ -1374,60 +1539,63 @@ async def get_pricing():
 async def create_checkout_session(
     tier: str = Form(...),
     authorization: str = Header(None),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     """Create Stripe checkout session for subscription"""
     try:
         # Parse token from authorization header
         if not authorization or not authorization.startswith("Bearer "):
             raise HTTPException(status_code=401, detail="Not authenticated")
-        
+
         token = authorization[7:]  # Remove "Bearer " prefix
         payload = decode_access_token(token)
         user_id = int(payload.get("sub"))
-        
+
         user = db.query(User).filter(User.id == user_id).first()
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
-        
+
         if tier not in STRIPE_PRICES:
             raise HTTPException(status_code=400, detail="Invalid tier")
-        
+
         # Create or get Stripe customer
         if not user.stripe_customer_id:
             customer = stripe.Customer.create(
                 email=user.email,
                 name=user.full_name,
-                metadata={"user_id": str(user.id)}
+                metadata={"user_id": str(user.id)},
             )
             user.stripe_customer_id = customer.id
             db.commit()
-        
+
         # Create checkout session
         session = stripe.checkout.Session.create(
             customer=user.stripe_customer_id,
             payment_method_types=["card"],
-            line_items=[{
-                "price": STRIPE_PRICES[tier],
-                "quantity": 1,
-            }],
+            line_items=[
+                {
+                    "price": STRIPE_PRICES[tier],
+                    "quantity": 1,
+                }
+            ],
             mode="subscription",
             success_url=f"{FRONTEND_URL}?payment=success&tier={tier}",
             cancel_url=f"{FRONTEND_URL}?payment=cancelled",
             metadata={
                 "user_id": str(user.id),
                 "tier": tier,
-            }
+            },
         )
-        
+
         return {"checkout_url": session.url, "session_id": session.id}
-    
+
     except stripe.error.StripeError as e:
         print(f"❌ Stripe error: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Payment error: {str(e)}")
     except Exception as e:
         print(f"❌ Checkout error: {str(e)}")
         import traceback
+
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Checkout error: {str(e)}")
 
@@ -1437,27 +1605,29 @@ async def create_single_checkout(
     email: str = Form(...),
     city: str = Form(...),
     permit_type: str = Form(...),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     """Create Stripe checkout session for single homeowner analysis - no account needed"""
     try:
         purchase_uuid = str(uuid.uuid4())
-        
+
         # Create Stripe checkout session for one-time payment
         session = stripe.checkout.Session.create(
             payment_method_types=["card"],
             customer_email=email,
-            line_items=[{
-                "price_data": {
-                    "currency": "usd",
-                    "product_data": {
-                        "name": f"Permit Analysis - {city}",
-                        "description": f"One-time {permit_type} permit analysis for {city}. Includes full checklist and 30 days to use.",
+            line_items=[
+                {
+                    "price_data": {
+                        "currency": "usd",
+                        "product_data": {
+                            "name": f"Permit Analysis - {city}",
+                            "description": f"One-time {permit_type} permit analysis for {city}. Includes full checklist and 30 days to use.",
+                        },
+                        "unit_amount": SINGLE_ANALYSIS_PRICE,  # $15.99 in cents
                     },
-                    "unit_amount": SINGLE_ANALYSIS_PRICE,  # $15.99 in cents
-                },
-                "quantity": 1,
-            }],
+                    "quantity": 1,
+                }
+            ],
             mode="payment",
             success_url=f"{FRONTEND_URL}?purchase=success&purchase_id={purchase_uuid}",
             cancel_url=f"{FRONTEND_URL}?purchase=cancelled",
@@ -1466,9 +1636,9 @@ async def create_single_checkout(
                 "city": city,
                 "permit_type": permit_type,
                 "type": "single_analysis",
-            }
+            },
         )
-        
+
         # Create pending purchase record
         purchase = SinglePurchase(
             purchase_uuid=purchase_uuid,
@@ -1481,19 +1651,20 @@ async def create_single_checkout(
         )
         db.add(purchase)
         db.commit()
-        
+
         return {
-            "checkout_url": session.url, 
+            "checkout_url": session.url,
             "session_id": session.id,
-            "purchase_id": purchase_uuid
+            "purchase_id": purchase_uuid,
         }
-    
+
     except stripe.error.StripeError as e:
         print(f"❌ Stripe error: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Payment error: {str(e)}")
     except Exception as e:
         print(f"❌ Single checkout error: {str(e)}")
         import traceback
+
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Checkout error: {str(e)}")
 
@@ -1501,17 +1672,19 @@ async def create_single_checkout(
 @app.get("/api/single-purchase/{purchase_uuid}")
 async def get_single_purchase(purchase_uuid: str, db: Session = Depends(get_db)):
     """Get single purchase status and details"""
-    purchase = db.query(SinglePurchase).filter(
-        SinglePurchase.purchase_uuid == purchase_uuid
-    ).first()
-    
+    purchase = (
+        db.query(SinglePurchase)
+        .filter(SinglePurchase.purchase_uuid == purchase_uuid)
+        .first()
+    )
+
     if not purchase:
         raise HTTPException(status_code=404, detail="Purchase not found")
-    
+
     # Get permit requirements for checklist
     city_key = get_city_key(purchase.city)
     requirements = get_permit_requirements(city_key, purchase.permit_type)
-    
+
     return {
         "purchase_uuid": purchase.purchase_uuid,
         "email": purchase.email,
@@ -1535,22 +1708,30 @@ async def analyze_single_purchase(
     db: Session = Depends(get_db),
 ):
     """Analyze permit for a single purchase - marks purchase as used after success"""
-    purchase = db.query(SinglePurchase).filter(
-        SinglePurchase.purchase_uuid == purchase_uuid
-    ).first()
-    
+    purchase = (
+        db.query(SinglePurchase)
+        .filter(SinglePurchase.purchase_uuid == purchase_uuid)
+        .first()
+    )
+
     if not purchase:
         raise HTTPException(status_code=404, detail="Purchase not found")
-    
+
     if purchase.payment_status != "paid":
         raise HTTPException(status_code=402, detail="Payment not completed")
-    
+
     if purchase.analysis_used:
-        raise HTTPException(status_code=400, detail="Analysis already used. Single purchases allow only one analysis.")
-    
+        raise HTTPException(
+            status_code=400,
+            detail="Analysis already used. Single purchases allow only one analysis.",
+        )
+
     if purchase.expires_at and purchase.expires_at < datetime.utcnow():
-        raise HTTPException(status_code=400, detail="Purchase expired. Single purchases are valid for 30 days.")
-    
+        raise HTTPException(
+            status_code=400,
+            detail="Purchase expired. Single purchases are valid for 30 days.",
+        )
+
     # Process the analysis (similar to regular analyze endpoint)
     if len(files) > MAX_FILES_PER_UPLOAD:
         raise HTTPException(status_code=400, detail=f"Max {MAX_FILES_PER_UPLOAD} files")
@@ -1608,8 +1789,13 @@ async def analyze_single_purchase(
             requirements = get_permit_requirements(city_key, "building")
 
         analysis = analyze_folder_with_claude(
-            "\n".join(all_text), requirements, api_key, len(processed_files),
-            user_id=None, analysis_uuid=analysis_id, db_session=db
+            "\n".join(all_text),
+            requirements,
+            api_key,
+            len(processed_files),
+            user_id=None,
+            analysis_uuid=analysis_id,
+            db_session=db,
         )
 
         file_tree = [{"name": p["name"], "size": p["size"]} for p in processed_files]
@@ -1641,7 +1827,7 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
     payload = await request.body()
     sig_header = request.headers.get("stripe-signature")
     webhook_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
-    
+
     try:
         if webhook_secret:
             event = stripe.Webhook.construct_event(payload, sig_header, webhook_secret)
@@ -1650,19 +1836,21 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
     except Exception as e:
         print(f"❌ Webhook error: {str(e)}")
         raise HTTPException(status_code=400, detail="Webhook error")
-    
+
     event_type = event.get("type", "")
     data = event.get("data", {}).get("object", {})
-    
+
     if event_type == "checkout.session.completed":
         # Check if this is a single purchase
         metadata = data.get("metadata", {})
         if metadata.get("type") == "single_analysis":
             # Single purchase payment completed
             purchase_uuid = metadata.get("purchase_uuid")
-            purchase = db.query(SinglePurchase).filter(
-                SinglePurchase.purchase_uuid == purchase_uuid
-            ).first()
+            purchase = (
+                db.query(SinglePurchase)
+                .filter(SinglePurchase.purchase_uuid == purchase_uuid)
+                .first()
+            )
             if purchase:
                 purchase.payment_status = "paid"
                 purchase.stripe_payment_intent = data.get("payment_intent")
@@ -1673,14 +1861,14 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
             customer_id = data.get("customer")
             subscription_id = data.get("subscription")
             tier = metadata.get("tier", "pro")
-            
+
             user = db.query(User).filter(User.stripe_customer_id == customer_id).first()
             if user:
                 user.subscription_tier = tier
                 user.stripe_subscription_id = subscription_id
                 db.commit()
                 print(f"✅ User {user.email} upgraded to {tier}")
-    
+
     elif event_type == "customer.subscription.deleted":
         # Subscription cancelled
         customer_id = data.get("customer")
@@ -1690,7 +1878,7 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
             user.stripe_subscription_id = None
             db.commit()
             print(f"✅ User {user.email} downgraded to free")
-    
+
     elif event_type == "customer.subscription.updated":
         # Subscription updated
         customer_id = data.get("customer")
@@ -1700,29 +1888,28 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
             user.subscription_tier = "free"
             user.stripe_subscription_id = None
             db.commit()
-    
+
     return {"status": "success"}
 
 
 @app.post("/api/stripe/create-portal-session")
 async def create_portal_session(
-    authorization: str = Header(None),
-    db: Session = Depends(get_db)
+    authorization: str = Header(None), db: Session = Depends(get_db)
 ):
     """Create Stripe billing portal session"""
     # Parse token from authorization header
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Not authenticated")
-    
+
     token = authorization[7:]  # Remove "Bearer " prefix
     payload = decode_access_token(token)
     user_id = int(payload.get("sub"))
-    
+
     user = db.query(User).filter(User.id == user_id).first()
-    
+
     if not user or not user.stripe_customer_id:
         raise HTTPException(status_code=400, detail="No billing account found")
-    
+
     try:
         session = stripe.billing_portal.Session.create(
             customer=user.stripe_customer_id,
@@ -1736,39 +1923,46 @@ async def create_portal_session(
 
 @app.get("/api/subscription")
 async def get_subscription(
-    authorization: str = Header(None),
-    db: Session = Depends(get_db)
+    authorization: str = Header(None), db: Session = Depends(get_db)
 ):
     """Get user's subscription status"""
     try:
         # Parse token from authorization header
         if not authorization or not authorization.startswith("Bearer "):
             raise HTTPException(status_code=401, detail="Not authenticated")
-        
+
         token = authorization[7:]  # Remove "Bearer " prefix
         payload = decode_access_token(token)
         user_id = int(payload.get("sub"))
-        
+
         user = db.query(User).filter(User.id == user_id).first()
-        
+
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
-        
+
         # Count analyses this month
-        first_of_month = datetime.utcnow().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-        analyses_this_month = db.query(AnalysisHistory).filter(
-            AnalysisHistory.user_id == user.id,
-            AnalysisHistory.created_at >= first_of_month
-        ).count()
-        
+        first_of_month = datetime.utcnow().replace(
+            day=1, hour=0, minute=0, second=0, microsecond=0
+        )
+        analyses_this_month = (
+            db.query(AnalysisHistory)
+            .filter(
+                AnalysisHistory.user_id == user.id,
+                AnalysisHistory.created_at >= first_of_month,
+            )
+            .count()
+        )
+
         tier = user.subscription_tier or "free"
         tier_limit = TIER_LIMITS.get(tier, 3)
-        
+
         return {
             "tier": tier,
             "analyses_this_month": analyses_this_month,
             "analyses_limit": tier_limit,
-            "analyses_remaining": max(0, tier_limit - analyses_this_month) if tier_limit < 999999 else -1,
+            "analyses_remaining": max(0, tier_limit - analyses_this_month)
+            if tier_limit < 999999
+            else -1,
             "has_subscription": bool(user.stripe_subscription_id),
         }
     except HTTPException:
@@ -1776,6 +1970,7 @@ async def get_subscription(
     except Exception as e:
         print(f"❌ Subscription error: {str(e)}")
         import traceback
+
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Subscription error: {str(e)}")
 
@@ -1784,15 +1979,35 @@ async def get_subscription(
 async def get_cities():
     cities = {
         # Broward County (HVHZ)
-        "Fort Lauderdale": {"key": "fort_lauderdale", "county": "Broward", "waterfront": True},
-        "Pompano Beach": {"key": "pompano_beach", "county": "Broward", "waterfront": True},
+        "Fort Lauderdale": {
+            "key": "fort_lauderdale",
+            "county": "Broward",
+            "waterfront": True,
+        },
+        "Pompano Beach": {
+            "key": "pompano_beach",
+            "county": "Broward",
+            "waterfront": True,
+        },
         "Hollywood": {"key": "hollywood", "county": "Broward", "waterfront": True},
         "Coral Springs": {"key": "coral_springs", "county": "Broward"},
         "Coconut Creek": {"key": "coconut_creek", "county": "Broward"},
-        "Lauderdale-by-the-Sea": {"key": "lauderdale_by_the_sea", "county": "Broward", "waterfront": True},
-        "Deerfield Beach": {"key": "deerfield_beach", "county": "Broward", "waterfront": True},
+        "Lauderdale-by-the-Sea": {
+            "key": "lauderdale_by_the_sea",
+            "county": "Broward",
+            "waterfront": True,
+        },
+        "Deerfield Beach": {
+            "key": "deerfield_beach",
+            "county": "Broward",
+            "waterfront": True,
+        },
         "Pembroke Pines": {"key": "pembroke_pines", "county": "Broward"},
-        "Lighthouse Point": {"key": "lighthouse_point", "county": "Broward", "waterfront": True},
+        "Lighthouse Point": {
+            "key": "lighthouse_point",
+            "county": "Broward",
+            "waterfront": True,
+        },
         "Weston": {"key": "weston", "county": "Broward"},
         "Davie": {"key": "davie", "county": "Broward"},
         "Plantation": {"key": "plantation", "county": "Broward"},
@@ -1802,10 +2017,26 @@ async def get_cities():
         "Tamarac": {"key": "tamarac", "county": "Broward"},
         # Palm Beach County
         "Boca Raton": {"key": "boca_raton", "county": "Palm Beach", "waterfront": True},
-        "Lake Worth Beach": {"key": "lake_worth_beach", "county": "Palm Beach", "waterfront": True},
-        "Delray Beach": {"key": "delray_beach", "county": "Palm Beach", "waterfront": True},
-        "Boynton Beach": {"key": "boynton_beach", "county": "Palm Beach", "waterfront": True},
-        "West Palm Beach": {"key": "west_palm_beach", "county": "Palm Beach", "waterfront": True},
+        "Lake Worth Beach": {
+            "key": "lake_worth_beach",
+            "county": "Palm Beach",
+            "waterfront": True,
+        },
+        "Delray Beach": {
+            "key": "delray_beach",
+            "county": "Palm Beach",
+            "waterfront": True,
+        },
+        "Boynton Beach": {
+            "key": "boynton_beach",
+            "county": "Palm Beach",
+            "waterfront": True,
+        },
+        "West Palm Beach": {
+            "key": "west_palm_beach",
+            "county": "Palm Beach",
+            "waterfront": True,
+        },
         # Miami-Dade County (HVHZ)
         "Miami": {"key": "miami", "county": "Miami-Dade", "waterfront": True},
         "Hialeah": {"key": "hialeah", "county": "Miami-Dade"},
@@ -1878,17 +2109,23 @@ async def analyze_permit_folder(
 
     # Check usage limits for authenticated users
     if user:
-        first_of_month = datetime.utcnow().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-        analyses_this_month = db.query(AnalysisHistory).filter(
-            AnalysisHistory.user_id == user.id,
-            AnalysisHistory.created_at >= first_of_month
-        ).count()
-        
+        first_of_month = datetime.utcnow().replace(
+            day=1, hour=0, minute=0, second=0, microsecond=0
+        )
+        analyses_this_month = (
+            db.query(AnalysisHistory)
+            .filter(
+                AnalysisHistory.user_id == user.id,
+                AnalysisHistory.created_at >= first_of_month,
+            )
+            .count()
+        )
+
         tier_limit = TIER_LIMITS.get(user.subscription_tier, 3)
         if analyses_this_month >= tier_limit:
             raise HTTPException(
-                status_code=403, 
-                detail=f"Monthly limit reached ({tier_limit} analyses). Please upgrade your plan."
+                status_code=403,
+                detail=f"Monthly limit reached ({tier_limit} analyses). Please upgrade your plan.",
             )
 
     if len(files) > MAX_FILES_PER_UPLOAD:
@@ -1942,25 +2179,31 @@ async def analyze_permit_folder(
                 all_text.append(f"\n=== {pf['name']} ===\n[Error reading]")
 
         city_key = get_city_key(city)
-        
+
         # Handle auto-detect permit type
         if permit_type == "auto" or not permit_type:
             # AI will detect the permit type from the documents
             detected_type = detect_permit_type_from_text("\n".join(all_text))
             permit_type = detected_type
-        
+
         requirements = get_permit_requirements(city_key, permit_type)
         if not requirements:
             # Fallback to building if detection fails
             requirements = get_permit_requirements(city_key, "building")
             if not requirements:
                 raise HTTPException(
-                    status_code=404, detail=f"No requirements for {city} - {permit_type}"
+                    status_code=404,
+                    detail=f"No requirements for {city} - {permit_type}",
                 )
 
         analysis = analyze_folder_with_claude(
-            "\n".join(all_text), requirements, api_key, len(processed_files),
-            user_id=user_id, analysis_uuid=analysis_id, db_session=db
+            "\n".join(all_text),
+            requirements,
+            api_key,
+            len(processed_files),
+            user_id=user_id,
+            analysis_uuid=analysis_id,
+            db_session=db,
         )
 
         file_tree = [{"name": p["name"], "size": p["size"]} for p in processed_files]
@@ -2002,8 +2245,13 @@ async def analyze_permit_folder(
 
 
 def analyze_folder_with_claude(
-    text: str, requirements: dict, api_key: str, file_count: int,
-    user_id: int = None, analysis_uuid: str = None, db_session = None
+    text: str,
+    requirements: dict,
+    api_key: str,
+    file_count: int,
+    user_id: int = None,
+    analysis_uuid: str = None,
+    db_session=None,
 ) -> dict:
     """Analyze with Claude - Enhanced version with city-specific knowledge"""
     import anthropic
@@ -2019,7 +2267,7 @@ def analyze_folder_with_claude(
 
     if len(text) > 200000:
         text = text[:200000] + "\n[truncated]"
-    
+
     # Build city-specific context
     city_context = ""
     if city_key == "fort_lauderdale":
@@ -2939,7 +3187,10 @@ GENERAL SOUTH FLORIDA REQUIREMENTS:
 
     gotchas_text = ""
     if gotchas:
-        gotchas_text = "\n\nKNOWN GOTCHAS FOR THIS CITY (common rejection reasons):\n" + "\n".join([f"⚠️ {g}" for g in gotchas[:10]])
+        gotchas_text = (
+            "\n\nKNOWN GOTCHAS FOR THIS CITY (common rejection reasons):\n"
+            + "\n".join([f"⚠️ {g}" for g in gotchas[:10]])
+        )
 
     tips_text = ""
     if tips:
@@ -3009,16 +3260,18 @@ Be SPECIFIC about the permit type. Read the documents carefully to identify exac
             messages=[{"role": "user", "content": prompt}],
         )
         resp = msg.content[0].text
-        
+
         # Log AI usage and costs
         input_tokens = msg.usage.input_tokens
         output_tokens = msg.usage.output_tokens
         total_tokens = input_tokens + output_tokens
         # Claude Sonnet 4 pricing: $3/1M input, $15/1M output
         cost_cents = int((input_tokens * 0.003 + output_tokens * 0.015) * 100)
-        
-        print(f"📊 AI Usage: {input_tokens:,} in + {output_tokens:,} out = {total_tokens:,} tokens (${cost_cents/100:.2f})")
-        
+
+        print(
+            f"📊 AI Usage: {input_tokens:,} in + {output_tokens:,} out = {total_tokens:,} tokens (${cost_cents / 100:.2f})"
+        )
+
         # Save to database if session provided
         if db_session:
             try:
@@ -3048,15 +3301,35 @@ Be SPECIFIC about the permit type. Read the documents carefully to identify exac
                     parsed = json.loads(m.strip() if m.strip().startswith("{") else m)
                     if "summary" in parsed or "compliance_score" in parsed:
                         # Ensure backwards compatibility - flatten documents_found if needed
-                        if parsed.get("documents_found") and isinstance(parsed["documents_found"][0], dict):
-                            parsed["documents_found_detailed"] = parsed["documents_found"]
-                            parsed["documents_found"] = [d.get("name", str(d)) for d in parsed["documents_found"]]
-                        if parsed.get("missing_documents") and isinstance(parsed["missing_documents"][0], dict):
-                            parsed["missing_documents_detailed"] = parsed["missing_documents"]
-                            parsed["missing_documents"] = [d.get("name", str(d)) for d in parsed["missing_documents"]]
-                        if parsed.get("critical_issues") and isinstance(parsed["critical_issues"][0], dict):
-                            parsed["critical_issues_detailed"] = parsed["critical_issues"]
-                            parsed["critical_issues"] = [d.get("issue", str(d)) for d in parsed["critical_issues"]]
+                        if parsed.get("documents_found") and isinstance(
+                            parsed["documents_found"][0], dict
+                        ):
+                            parsed["documents_found_detailed"] = parsed[
+                                "documents_found"
+                            ]
+                            parsed["documents_found"] = [
+                                d.get("name", str(d)) for d in parsed["documents_found"]
+                            ]
+                        if parsed.get("missing_documents") and isinstance(
+                            parsed["missing_documents"][0], dict
+                        ):
+                            parsed["missing_documents_detailed"] = parsed[
+                                "missing_documents"
+                            ]
+                            parsed["missing_documents"] = [
+                                d.get("name", str(d))
+                                for d in parsed["missing_documents"]
+                            ]
+                        if parsed.get("critical_issues") and isinstance(
+                            parsed["critical_issues"][0], dict
+                        ):
+                            parsed["critical_issues_detailed"] = parsed[
+                                "critical_issues"
+                            ]
+                            parsed["critical_issues"] = [
+                                d.get("issue", str(d))
+                                for d in parsed["critical_issues"]
+                            ]
                         return parsed
                 except:
                     continue
