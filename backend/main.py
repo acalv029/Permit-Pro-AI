@@ -1252,12 +1252,14 @@ async def get_admin_stats(
     authorization: str = Header(None), db: Session = Depends(get_db)
 ):
     """Get admin dashboard statistics"""
+    import traceback
+    from sqlalchemy import func
+
+    # Auth check
     user_id = get_current_user_id(authorization)
     require_admin(user_id, db)
 
     try:
-        from sqlalchemy import func
-
         # Total users
         total_users = db.query(User).count()
 
@@ -1343,33 +1345,25 @@ async def get_admin_stats(
             .all()
         )
 
-        # AI Usage Stats (may not exist yet if table hasn't been created)
+        # AI Usage Stats - default to zeros
+        ai_usage_today = (0, 0, 0, 0)
+        ai_usage_month = (0, 0, 0, 0)
         try:
-            ai_usage_today = (
-                db.query(
-                    func.sum(AIUsageLog.input_tokens),
-                    func.sum(AIUsageLog.output_tokens),
-                    func.sum(AIUsageLog.cost_cents),
-                    func.count(AIUsageLog.id),
-                )
-                .filter(AIUsageLog.created_at >= today_start)
-                .first()
-            )
+            ai_usage_today = db.query(
+                func.sum(AIUsageLog.input_tokens),
+                func.sum(AIUsageLog.output_tokens),
+                func.sum(AIUsageLog.cost_cents),
+                func.count(AIUsageLog.id),
+            ).filter(AIUsageLog.created_at >= today_start).first() or (0, 0, 0, 0)
 
-            ai_usage_month = (
-                db.query(
-                    func.sum(AIUsageLog.input_tokens),
-                    func.sum(AIUsageLog.output_tokens),
-                    func.sum(AIUsageLog.cost_cents),
-                    func.count(AIUsageLog.id),
-                )
-                .filter(AIUsageLog.created_at >= first_of_month)
-                .first()
-            )
-        except Exception as e:
-            print(f"AI usage table not available: {e}")
-            ai_usage_today = (0, 0, 0, 0)
-            ai_usage_month = (0, 0, 0, 0)
+            ai_usage_month = db.query(
+                func.sum(AIUsageLog.input_tokens),
+                func.sum(AIUsageLog.output_tokens),
+                func.sum(AIUsageLog.cost_cents),
+                func.count(AIUsageLog.id),
+            ).filter(AIUsageLog.created_at >= first_of_month).first() or (0, 0, 0, 0)
+        except Exception as ai_err:
+            print(f"AI usage query failed (table may not exist): {ai_err}")
 
         return {
             "overview": {
@@ -1383,18 +1377,22 @@ async def get_admin_stats(
             },
             "ai_costs": {
                 "today": {
-                    "analyses": ai_usage_today[3] or 0,
-                    "input_tokens": ai_usage_today[0] or 0,
-                    "output_tokens": ai_usage_today[1] or 0,
-                    "cost_cents": ai_usage_today[2] or 0,
-                    "cost_dollars": round((ai_usage_today[2] or 0) / 100, 2),
+                    "analyses": ai_usage_today[3] if ai_usage_today[3] else 0,
+                    "input_tokens": ai_usage_today[0] if ai_usage_today[0] else 0,
+                    "output_tokens": ai_usage_today[1] if ai_usage_today[1] else 0,
+                    "cost_cents": ai_usage_today[2] if ai_usage_today[2] else 0,
+                    "cost_dollars": round(
+                        (ai_usage_today[2] if ai_usage_today[2] else 0) / 100, 2
+                    ),
                 },
                 "this_month": {
-                    "analyses": ai_usage_month[3] or 0,
-                    "input_tokens": ai_usage_month[0] or 0,
-                    "output_tokens": ai_usage_month[1] or 0,
-                    "cost_cents": ai_usage_month[2] or 0,
-                    "cost_dollars": round((ai_usage_month[2] or 0) / 100, 2),
+                    "analyses": ai_usage_month[3] if ai_usage_month[3] else 0,
+                    "input_tokens": ai_usage_month[0] if ai_usage_month[0] else 0,
+                    "output_tokens": ai_usage_month[1] if ai_usage_month[1] else 0,
+                    "cost_cents": ai_usage_month[2] if ai_usage_month[2] else 0,
+                    "cost_dollars": round(
+                        (ai_usage_month[2] if ai_usage_month[2] else 0) / 100, 2
+                    ),
                 },
             },
             "popular_cities": [{"city": c, "count": cnt} for c, cnt in popular_cities],
@@ -1427,12 +1425,8 @@ async def get_admin_stats(
                 for e, cnt, avg in endpoint_stats
             ],
         }
-    except HTTPException:
-        raise
     except Exception as e:
         print(f"❌ Admin stats error: {str(e)}")
-        import traceback
-
         print(traceback.format_exc())
         raise HTTPException(status_code=500, detail=f"Failed to load stats: {str(e)}")
 
