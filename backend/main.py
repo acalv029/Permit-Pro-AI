@@ -93,6 +93,55 @@ resend.api_key = os.getenv("RESEND_API_KEY")
 FRONTEND_URL = os.getenv("FRONTEND_URL", "https://flopermit.vercel.app")
 
 # ============================================================================
+# RECAPTCHA CONFIGURATION
+# ============================================================================
+
+RECAPTCHA_SECRET_KEY = os.getenv("RECAPTCHA_SECRET_KEY")
+
+
+async def verify_recaptcha(token: str, action: str = None) -> bool:
+    """Verify reCAPTCHA v3 token"""
+    if not RECAPTCHA_SECRET_KEY:
+        print("⚠️ RECAPTCHA_SECRET_KEY not set - skipping verification")
+        return True  # Skip if not configured
+
+    if not token:
+        print("⚠️ No reCAPTCHA token provided")
+        return True  # Allow if frontend didn't send token (graceful degradation)
+
+    try:
+        import httpx
+
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                "https://www.google.com/recaptcha/api/siteverify",
+                data={
+                    "secret": RECAPTCHA_SECRET_KEY,
+                    "response": token,
+                },
+            )
+            result = response.json()
+
+            success = result.get("success", False)
+            score = result.get("score", 0)
+
+            print(
+                f"🤖 reCAPTCHA: success={success}, score={score}, action={result.get('action')}"
+            )
+
+            # Score threshold: 0.5 is Google's recommended default
+            # 1.0 = definitely human, 0.0 = definitely bot
+            if success and score >= 0.3:  # Being lenient at 0.3
+                return True
+
+            print(f"⚠️ reCAPTCHA failed: score too low ({score})")
+            return False
+    except Exception as e:
+        print(f"❌ reCAPTCHA verification error: {e}")
+        return True  # Allow on error (don't block legitimate users)
+
+
+# ============================================================================
 # STRIPE CONFIGURATION
 # ============================================================================
 
@@ -372,6 +421,30 @@ def migrate_database():
     else:
         print("✅ Stripe columns already exist")
 
+    # Ensure ai_usage_logs table exists
+    try:
+        with engine.begin() as conn:
+            conn.execute(
+                text("""
+                CREATE TABLE IF NOT EXISTS ai_usage_logs (
+                    id SERIAL PRIMARY KEY,
+                    user_id INTEGER REFERENCES users(id),
+                    analysis_uuid VARCHAR(36),
+                    model VARCHAR(100) NOT NULL,
+                    input_tokens INTEGER DEFAULT 0,
+                    output_tokens INTEGER DEFAULT 0,
+                    total_tokens INTEGER DEFAULT 0,
+                    cost_cents INTEGER DEFAULT 0,
+                    city VARCHAR(100),
+                    permit_type VARCHAR(100),
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+            )
+        print("✅ AI usage logs table ready")
+    except Exception as e:
+        print(f"⚠️ AI usage table note: {e}")
+
 
 try:
     migrate_database()
@@ -650,6 +723,13 @@ def send_contact_email(name: str, email: str, subject: str, message: str) -> boo
 async def register(user_data: UserRegister, db: Session = Depends(get_db)):
     """Register a new user"""
     try:
+        # Verify reCAPTCHA
+        if not await verify_recaptcha(user_data.recaptcha_token, "register"):
+            raise HTTPException(
+                status_code=400,
+                detail="reCAPTCHA verification failed. Please try again.",
+            )
+
         existing_user = db.query(User).filter(User.email == user_data.email).first()
         if existing_user:
             raise HTTPException(status_code=400, detail="Email already registered")
@@ -699,6 +779,13 @@ async def register(user_data: UserRegister, db: Session = Depends(get_db)):
 async def login(user_data: UserLogin, db: Session = Depends(get_db)):
     """Login and get access token"""
     try:
+        # Verify reCAPTCHA
+        if not await verify_recaptcha(user_data.recaptcha_token, "login"):
+            raise HTTPException(
+                status_code=400,
+                detail="reCAPTCHA verification failed. Please try again.",
+            )
+
         user = db.query(User).filter(User.email == user_data.email).first()
         if not user:
             raise HTTPException(status_code=401, detail="Invalid email or password")
@@ -1250,28 +1337,33 @@ async def get_admin_stats(
         .all()
     )
 
-    # AI Usage Stats
-    ai_usage_today = (
-        db.query(
-            func.sum(AIUsageLog.input_tokens),
-            func.sum(AIUsageLog.output_tokens),
-            func.sum(AIUsageLog.cost_cents),
-            func.count(AIUsageLog.id),
+    # AI Usage Stats (may not exist yet if table hasn't been created)
+    try:
+        ai_usage_today = (
+            db.query(
+                func.sum(AIUsageLog.input_tokens),
+                func.sum(AIUsageLog.output_tokens),
+                func.sum(AIUsageLog.cost_cents),
+                func.count(AIUsageLog.id),
+            )
+            .filter(AIUsageLog.created_at >= today_start)
+            .first()
         )
-        .filter(AIUsageLog.created_at >= today_start)
-        .first()
-    )
 
-    ai_usage_month = (
-        db.query(
-            func.sum(AIUsageLog.input_tokens),
-            func.sum(AIUsageLog.output_tokens),
-            func.sum(AIUsageLog.cost_cents),
-            func.count(AIUsageLog.id),
+        ai_usage_month = (
+            db.query(
+                func.sum(AIUsageLog.input_tokens),
+                func.sum(AIUsageLog.output_tokens),
+                func.sum(AIUsageLog.cost_cents),
+                func.count(AIUsageLog.id),
+            )
+            .filter(AIUsageLog.created_at >= first_of_month)
+            .first()
         )
-        .filter(AIUsageLog.created_at >= first_of_month)
-        .first()
-    )
+    except Exception as e:
+        print(f"AI usage table not available: {e}")
+        ai_usage_today = (0, 0, 0, 0)
+        ai_usage_month = (0, 0, 0, 0)
 
     return {
         "overview": {

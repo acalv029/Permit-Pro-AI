@@ -32,11 +32,13 @@ class UserRegister(BaseModel):
     password: str
     full_name: Optional[str] = None
     company_name: Optional[str] = None
+    recaptcha_token: Optional[str] = None
 
 
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
+    recaptcha_token: Optional[str] = None
 
 
 class UserResponse(BaseModel):

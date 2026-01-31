@@ -12,6 +12,7 @@ if (SENTRY_DSN) {
 }
 
 const API_BASE_URL = 'https://permit-pro-ai-production.up.railway.app'
+const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI' // Test key as fallback
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState(null)
@@ -51,6 +52,32 @@ export default function App() {
   const isAdmin = currentUser && ADMIN_EMAILS.includes(currentUser.email)
   const [resetPasswordLoading, setResetPasswordLoading] = useState(false)
   const [contactLoading, setContactLoading] = useState(false)
+  const [recaptchaLoaded, setRecaptchaLoaded] = useState(false)
+
+  // Load reCAPTCHA script
+  useEffect(() => {
+    if (window.grecaptcha) {
+      setRecaptchaLoaded(true)
+      return
+    }
+    const script = document.createElement('script')
+    script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`
+    script.async = true
+    script.onload = () => setRecaptchaLoaded(true)
+    document.head.appendChild(script)
+  }, [])
+
+  // Helper to get reCAPTCHA token
+  const getRecaptchaToken = async (action) => {
+    if (!recaptchaLoaded || !window.grecaptcha) return null
+    try {
+      await window.grecaptcha.ready(() => {})
+      return await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action })
+    } catch (err) {
+      console.error('reCAPTCHA error:', err)
+      return null
+    }
+  }
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -88,7 +115,16 @@ export default function App() {
   const handleLogin = async (e) => {
     e.preventDefault(); setError('')
     try {
-      const res = await fetch(`${API_BASE_URL}/api/auth/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: e.target.email.value, password: e.target.password.value }) })
+      const recaptchaToken = await getRecaptchaToken('login')
+      const res = await fetch(`${API_BASE_URL}/api/auth/login`, { 
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' }, 
+        body: JSON.stringify({ 
+          email: e.target.email.value, 
+          password: e.target.password.value,
+          recaptcha_token: recaptchaToken
+        }) 
+      })
       if (!res.ok) { const data = await res.json(); throw new Error(data.detail || 'Login failed') }
       const data = await res.json()
       setAuthToken(data.access_token); setCurrentUser(data.user)
@@ -100,7 +136,18 @@ export default function App() {
   const handleRegister = async (e) => {
     e.preventDefault(); setError('')
     try {
-      const res = await fetch(`${API_BASE_URL}/api/auth/register`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: e.target.email.value, password: e.target.password.value, full_name: e.target.fullName.value || null, company_name: e.target.company.value || null }) })
+      const recaptchaToken = await getRecaptchaToken('register')
+      const res = await fetch(`${API_BASE_URL}/api/auth/register`, { 
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' }, 
+        body: JSON.stringify({ 
+          email: e.target.email.value, 
+          password: e.target.password.value, 
+          full_name: e.target.fullName.value || null, 
+          company_name: e.target.company.value || null,
+          recaptcha_token: recaptchaToken
+        }) 
+      })
       if (!res.ok) { const data = await res.json(); throw new Error(data.detail || 'Registration failed') }
       const data = await res.json()
       setAuthToken(data.access_token); setCurrentUser(data.user)
