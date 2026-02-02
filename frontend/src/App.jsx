@@ -343,7 +343,7 @@ export default function App() {
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3 cursor-pointer" onClick={() => { setPage('home'); setResults(null); setMobileMenuOpen(false) }}>
           <div className="w-11 h-11 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-xl flex items-center justify-center p-1.5">
-            <img src="/permit_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" />
+            <img src="/real_adc_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" />
           </div>
           <div><h1 className="text-xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Flo Permit</h1><p className="text-xs text-cyan-500 font-semibold">SOUTH FLORIDA</p></div>
         </div>
@@ -351,7 +351,7 @@ export default function App() {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-4">
           {showBack && <button onClick={() => setPage('home')} className="text-gray-400 hover:text-white">← Back</button>}
-          {!showBack && currentUser && (<>{isAdmin && <button onClick={() => setPage('admin')} className="text-sm font-semibold text-purple-400 hover:text-purple-300">Admin</button>}<button onClick={() => setPage('how-it-works')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">How It Works</button><button onClick={() => setPage('pricing')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Pricing</button><button onClick={() => setPage('profile')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Profile</button><button onClick={() => setPage('history')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">History</button><button onClick={logout} className="text-sm text-red-400 hover:text-red-300">Logout</button></>)}
+          {!showBack && currentUser && (<>{isAdmin && <button onClick={() => setPage('admin')} className="text-sm font-semibold text-purple-400 hover:text-purple-300">Admin</button>}<button onClick={() => { setPage('home'); setResults(null) }} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Home</button><button onClick={() => setPage('how-it-works')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">How It Works</button><button onClick={() => setPage('pricing')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Pricing</button><button onClick={() => setPage('profile')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Profile</button><button onClick={() => setPage('history')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">History</button><button onClick={logout} className="text-sm text-red-400 hover:text-red-300">Logout</button></>)}
           {!showBack && !currentUser && (<><button onClick={() => setPage('pricing')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Pricing</button><button onClick={() => setPage('faq')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">FAQ</button><button onClick={() => setShowLogin(true)} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Log In</button><button onClick={() => setShowRegister(true)} className="relative group"><div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-xl blur opacity-60 group-hover:opacity-100"></div><div className="relative px-5 py-2.5 bg-black text-white text-sm font-bold rounded-xl">Sign Up</div></button></>)}
         </div>
 
@@ -370,7 +370,7 @@ export default function App() {
           {!showBack && currentUser && (
             <>
               {isAdmin && <button onClick={() => { setPage('admin'); setMobileMenuOpen(false) }} className="block w-full text-left text-purple-400 hover:text-purple-300 py-2 font-semibold">Admin</button>}
-              <button onClick={() => { setPage('home'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">Analyze Permits</button>
+              <button onClick={() => { setPage('home'); setResults(null); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">Home</button>
               <button onClick={() => { setPage('how-it-works'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">How It Works</button>
               <button onClick={() => { setPage('pricing'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">Pricing</button>
               <button onClick={() => { setPage('profile'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">Profile</button>
@@ -432,7 +432,7 @@ export default function App() {
         </div>
 
         <div className="grid md:grid-cols-4 gap-8 mb-8">
-          <div><div className="flex items-center gap-2 mb-4"><div className="w-8 h-8 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-lg flex items-center justify-center p-1"><img src="/permit_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" /></div><span className="font-bold text-white">Flo Permit</span></div><p className="text-gray-500 text-sm">AI-powered permit analysis for South Florida contractors and homeowners.</p></div>
+          <div><div className="flex items-center gap-2 mb-4"><div className="w-8 h-8 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-lg flex items-center justify-center p-1"><img src="/real_adc_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" /></div><span className="font-bold text-white">Flo Permit</span></div><p className="text-gray-500 text-sm">AI-powered permit analysis for South Florida contractors and homeowners.</p></div>
           <div><h4 className="font-semibold text-white mb-4">Product</h4><ul className="space-y-2"><li><button onClick={() => setPage('home')} className="text-gray-500 hover:text-cyan-400 text-sm">Analyze Permits</button></li><li><button onClick={() => setPage('how-it-works')} className="text-gray-500 hover:text-cyan-400 text-sm">How It Works</button></li><li><button onClick={() => setPage('pricing')} className="text-gray-500 hover:text-cyan-400 text-sm">Pricing</button></li><li><button onClick={() => setPage('about')} className="text-gray-500 hover:text-cyan-400 text-sm">About Us</button></li><li><button onClick={() => setPage('faq')} className="text-gray-500 hover:text-cyan-400 text-sm">FAQ</button></li></ul></div>
           <div><h4 className="font-semibold text-white mb-4">Legal</h4><ul className="space-y-2"><li><button onClick={() => setPage('terms')} className="text-gray-500 hover:text-cyan-400 text-sm">Terms & Conditions</button></li><li><button onClick={() => setPage('privacy')} className="text-gray-500 hover:text-cyan-400 text-sm">Privacy Policy</button></li></ul></div>
           <div><h4 className="font-semibold text-white mb-4">Support</h4><ul className="space-y-2"><li><button onClick={() => setPage('contact')} className="text-gray-500 hover:text-cyan-400 text-sm">Contact Us</button></li><li><button onClick={() => setPage('faq')} className="text-gray-500 hover:text-cyan-400 text-sm">FAQ</button></li><li><a href="mailto:support@flopermit.com" className="text-gray-500 hover:text-cyan-400 text-sm">support@flopermit.com</a></li></ul></div>
@@ -1888,7 +1888,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-xl flex items-center justify-center p-1.5">
-              <img src="/permit_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" />
+              <img src="/real_adc_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" />
             </div>
             <div>
               <h1 className="text-xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Flo Permit</h1>
@@ -1932,7 +1932,7 @@ export default function App() {
           <div className="text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-4 mb-6">
               <div className="w-16 h-16 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-2xl flex items-center justify-center p-2">
-                <img src="/permit_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" />
+                <img src="/real_adc_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" />
               </div>
               <h1 className="text-3xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Flo Permit</h1>
             </div>
