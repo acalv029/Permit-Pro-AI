@@ -53,6 +53,9 @@ export default function App() {
   const [resetPasswordLoading, setResetPasswordLoading] = useState(false)
   const [contactLoading, setContactLoading] = useState(false)
   const [recaptchaLoaded, setRecaptchaLoaded] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [newsletterEmail, setNewsletterEmail] = useState('')
+  const [newsletterStatus, setNewsletterStatus] = useState('')
 
   // Load reCAPTCHA script
   useEffect(() => {
@@ -318,7 +321,7 @@ export default function App() {
     } catch (err) { console.error('Error loading purchase:', err) }
   }
 
-  useEffect(() => { if (page === 'history' && authToken) loadHistory(); if (page === 'profile' && authToken) { loadProfile(); loadSubscription() }; if (page === 'admin' && authToken && isAdmin) loadAdminStats(); if (page === 'pricing' && authToken) loadSubscription() }, [page])
+  useEffect(() => { if (page === 'history' && authToken) loadHistory(); if (page === 'profile' && authToken) { loadProfile(); loadSubscription() }; if (page === 'admin' && authToken && isAdmin) loadAdminStats(); if (page === 'pricing' && authToken) loadSubscription(); setMobileMenuOpen(false); window.scrollTo(0, 0) }, [page])
 
   const canAnalyze = city && permitType && validFiles.length > 0 && totalSize <= 200 * 1024 * 1024 && agreedToTerms
   const getPermitTypes = () => {
@@ -338,31 +341,103 @@ export default function App() {
   const NavBar = ({ showBack = false }) => (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-cyan-500/20">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3 cursor-pointer" onClick={() => { setPage('home'); setResults(null) }}>
+        <div className="flex items-center gap-3 cursor-pointer" onClick={() => { setPage('home'); setResults(null); setMobileMenuOpen(false) }}>
           <div className="w-11 h-11 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-xl flex items-center justify-center p-1.5">
             <img src="/permit_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" />
           </div>
           <div><h1 className="text-xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Flo Permit</h1><p className="text-xs text-cyan-500 font-semibold">SOUTH FLORIDA</p></div>
         </div>
-        <div className="flex items-center gap-4">
+        
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center gap-4">
           {showBack && <button onClick={() => setPage('home')} className="text-gray-400 hover:text-white">← Back</button>}
-          {!showBack && currentUser && (<>{isAdmin && <button onClick={() => setPage('admin')} className="text-sm font-semibold text-purple-400 hover:text-purple-300">Admin</button>}<button onClick={() => setPage('how-it-works')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">How It Works</button><button onClick={() => setPage('profile')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Profile</button><button onClick={() => setPage('history')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">History</button><button onClick={logout} className="text-sm text-red-400 hover:text-red-300">Logout</button></>)}
-          {!showBack && !currentUser && (<><button onClick={() => setShowLogin(true)} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Log In</button><button onClick={() => setShowRegister(true)} className="relative group"><div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-xl blur opacity-60 group-hover:opacity-100"></div><div className="relative px-5 py-2.5 bg-black text-white text-sm font-bold rounded-xl">Sign Up</div></button></>)}
+          {!showBack && currentUser && (<>{isAdmin && <button onClick={() => setPage('admin')} className="text-sm font-semibold text-purple-400 hover:text-purple-300">Admin</button>}<button onClick={() => setPage('how-it-works')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">How It Works</button><button onClick={() => setPage('pricing')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Pricing</button><button onClick={() => setPage('profile')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Profile</button><button onClick={() => setPage('history')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">History</button><button onClick={logout} className="text-sm text-red-400 hover:text-red-300">Logout</button></>)}
+          {!showBack && !currentUser && (<><button onClick={() => setPage('pricing')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Pricing</button><button onClick={() => setPage('faq')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">FAQ</button><button onClick={() => setShowLogin(true)} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Log In</button><button onClick={() => setShowRegister(true)} className="relative group"><div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-xl blur opacity-60 group-hover:opacity-100"></div><div className="relative px-5 py-2.5 bg-black text-white text-sm font-bold rounded-xl">Sign Up</div></button></>)}
         </div>
+
+        {/* Mobile Hamburger */}
+        <button className="md:hidden relative w-8 h-8 flex flex-col items-center justify-center gap-1.5" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
+          <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? 'opacity-0' : ''}`}></span>
+          <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
+        </button>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-gray-900/95 backdrop-blur-xl border-t border-gray-800 px-6 py-4 space-y-3">
+          {showBack && <button onClick={() => { setPage('home'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">← Back</button>}
+          {!showBack && currentUser && (
+            <>
+              {isAdmin && <button onClick={() => { setPage('admin'); setMobileMenuOpen(false) }} className="block w-full text-left text-purple-400 hover:text-purple-300 py-2 font-semibold">Admin</button>}
+              <button onClick={() => { setPage('home'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">Analyze Permits</button>
+              <button onClick={() => { setPage('how-it-works'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">How It Works</button>
+              <button onClick={() => { setPage('pricing'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">Pricing</button>
+              <button onClick={() => { setPage('profile'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">Profile</button>
+              <button onClick={() => { setPage('history'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">History</button>
+              <div className="border-t border-gray-800 pt-3 mt-3">
+                <button onClick={() => { logout(); setMobileMenuOpen(false) }} className="block w-full text-left text-red-400 hover:text-red-300 py-2">Logout</button>
+              </div>
+            </>
+          )}
+          {!showBack && !currentUser && (
+            <>
+              <button onClick={() => { setPage('how-it-works'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">How It Works</button>
+              <button onClick={() => { setPage('pricing'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">Pricing</button>
+              <button onClick={() => { setPage('faq'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">FAQ</button>
+              <button onClick={() => { setPage('about'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">About</button>
+              <button onClick={() => { setPage('contact'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">Contact</button>
+              <div className="border-t border-gray-800 pt-3 mt-3 flex gap-3">
+                <button onClick={() => { setShowLogin(true); setMobileMenuOpen(false) }} className="flex-1 py-2.5 border border-gray-700 text-white font-semibold rounded-xl hover:bg-gray-800 text-sm">Log In</button>
+                <button onClick={() => { setShowRegister(true); setMobileMenuOpen(false) }} className="flex-1 py-2.5 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl text-sm">Sign Up</button>
+              </div>
+            </>
+          )}
+        </div>
+      )}
     </nav>
   )
 
   const Footer = () => (
     <footer className="relative z-10 border-t border-gray-800 bg-black/50 mt-auto">
       <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* Newsletter Section */}
+        <div className="mb-8 p-6 bg-gradient-to-r from-cyan-500/5 to-emerald-500/5 border border-gray-800 rounded-2xl">
+          <div className="max-w-xl mx-auto text-center">
+            <h3 className="text-lg font-bold text-white mb-2">Stay Updated</h3>
+            <p className="text-gray-500 text-sm mb-4">Get permit tips, new city announcements, and product updates. No spam, ever.</p>
+            <div className="flex gap-2 max-w-md mx-auto">
+              <input 
+                type="email" 
+                placeholder="Enter your email" 
+                value={newsletterEmail}
+                onChange={(e) => setNewsletterEmail(e.target.value)}
+                className="flex-1 px-4 py-2.5 bg-black/50 border border-gray-700 rounded-xl text-white text-sm placeholder-gray-500 focus:border-cyan-500 focus:outline-none"
+              />
+              <button 
+                onClick={() => {
+                  if (newsletterEmail && newsletterEmail.includes('@')) {
+                    setNewsletterStatus('success')
+                    setNewsletterEmail('')
+                    setTimeout(() => setNewsletterStatus(''), 3000)
+                  }
+                }}
+                className="px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl text-sm hover:scale-105 transition-transform whitespace-nowrap"
+              >
+                Subscribe
+              </button>
+            </div>
+            {newsletterStatus === 'success' && <p className="text-emerald-400 text-sm mt-2">Thanks for subscribing! 🎉</p>}
+          </div>
+        </div>
+
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div><div className="flex items-center gap-2 mb-4"><div className="w-8 h-8 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-lg flex items-center justify-center p-1"><img src="/permit_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" /></div><span className="font-bold text-white">Flo Permit</span></div><p className="text-gray-500 text-sm">AI-powered permit analysis for South Florida contractors and homeowners.</p></div>
           <div><h4 className="font-semibold text-white mb-4">Product</h4><ul className="space-y-2"><li><button onClick={() => setPage('home')} className="text-gray-500 hover:text-cyan-400 text-sm">Analyze Permits</button></li><li><button onClick={() => setPage('how-it-works')} className="text-gray-500 hover:text-cyan-400 text-sm">How It Works</button></li><li><button onClick={() => setPage('pricing')} className="text-gray-500 hover:text-cyan-400 text-sm">Pricing</button></li><li><button onClick={() => setPage('about')} className="text-gray-500 hover:text-cyan-400 text-sm">About Us</button></li><li><button onClick={() => setPage('faq')} className="text-gray-500 hover:text-cyan-400 text-sm">FAQ</button></li></ul></div>
-          <div><h4 className="font-semibold text-white mb-4">Legal</h4><ul className="space-y-2"><li><button onClick={() => setPage('terms')} className="text-gray-500 hover:text-cyan-400 text-sm">Terms of Service</button></li><li><button onClick={() => setPage('privacy')} className="text-gray-500 hover:text-cyan-400 text-sm">Privacy Policy</button></li></ul></div>
+          <div><h4 className="font-semibold text-white mb-4">Legal</h4><ul className="space-y-2"><li><button onClick={() => setPage('terms')} className="text-gray-500 hover:text-cyan-400 text-sm">Terms & Conditions</button></li><li><button onClick={() => setPage('privacy')} className="text-gray-500 hover:text-cyan-400 text-sm">Privacy Policy</button></li></ul></div>
           <div><h4 className="font-semibold text-white mb-4">Support</h4><ul className="space-y-2"><li><button onClick={() => setPage('contact')} className="text-gray-500 hover:text-cyan-400 text-sm">Contact Us</button></li><li><button onClick={() => setPage('faq')} className="text-gray-500 hover:text-cyan-400 text-sm">FAQ</button></li><li><a href="mailto:support@flopermit.com" className="text-gray-500 hover:text-cyan-400 text-sm">support@flopermit.com</a></li></ul></div>
         </div>
-        <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row items-center justify-between gap-4"><p className="text-gray-500 text-sm">© 2025 Flo Permit. All rights reserved.</p><p className="text-gray-600 text-xs">Serving Broward & Palm Beach Counties</p></div>
+        <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row items-center justify-between gap-4"><p className="text-gray-500 text-sm">© 2026 Flo Permit. All rights reserved.</p><p className="text-gray-600 text-xs">Serving Broward, Palm Beach & Miami-Dade Counties</p></div>
       </div>
     </footer>
   )
@@ -1820,7 +1895,33 @@ export default function App() {
               <p className="text-xs text-cyan-500 font-semibold">SOUTH FLORIDA</p>
             </div>
           </div>
+          {/* Desktop */}
+          <div className="hidden md:flex items-center gap-4">
+            <button onClick={() => setPage('pricing')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Pricing</button>
+            <button onClick={() => setPage('faq')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">FAQ</button>
+            <button onClick={() => setShowLogin(true)} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Log In</button>
+            <button onClick={() => setShowRegister(true)} className="relative group"><div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-xl blur opacity-60 group-hover:opacity-100"></div><div className="relative px-5 py-2.5 bg-black text-white text-sm font-bold rounded-xl">Sign Up Free</div></button>
+          </div>
+          {/* Mobile Hamburger */}
+          <button className="md:hidden relative w-8 h-8 flex flex-col items-center justify-center gap-1.5" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
+            <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? 'opacity-0' : ''}`}></span>
+            <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
+          </button>
         </div>
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-gray-900/95 backdrop-blur-xl border-t border-gray-800 px-6 py-4 space-y-3">
+            <button onClick={() => { setPage('how-it-works'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">How It Works</button>
+            <button onClick={() => { setPage('pricing'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">Pricing</button>
+            <button onClick={() => { setPage('faq'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">FAQ</button>
+            <button onClick={() => { setPage('about'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">About</button>
+            <button onClick={() => { setPage('contact'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">Contact</button>
+            <div className="border-t border-gray-800 pt-3 mt-3 flex gap-3">
+              <button onClick={() => { setShowLogin(true); setMobileMenuOpen(false) }} className="flex-1 py-2.5 border border-gray-700 text-white font-semibold rounded-xl hover:bg-gray-800 text-sm">Log In</button>
+              <button onClick={() => { setShowRegister(true); setMobileMenuOpen(false) }} className="flex-1 py-2.5 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl text-sm">Sign Up</button>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* Main Content */}
@@ -2062,11 +2163,13 @@ export default function App() {
           
           <div className="grid md:grid-cols-3 gap-6">
             {[
+              { name: 'Peter Calvo', role: 'City Wide Group', city: 'South Florida', stars: 5, quote: 'Flo Permit has streamlined our entire permit submission process. We use it on every project now — residential, commercial, all of it. Wouldn\'t go back to doing it the old way.' },
               { name: 'Carlos M.', role: 'General Contractor', city: 'Fort Lauderdale', stars: 5, quote: 'Caught two missing documents I would have missed. Saved me a trip back to the permit office and probably a week of delays.' },
+              { name: 'Marc McGowan', role: 'Boat Lift Installers', city: 'Broward County', stars: 5, quote: 'I use Flo Permit for all my boat lift and seawall permitting. It knows exactly what each city needs. Total game changer for marine contractors.' },
               { name: 'Sarah T.', role: 'Homeowner', city: 'Coral Springs', stars: 5, quote: 'As a first-time homeowner doing a renovation, I had no idea what documents I needed. Flo Permit made it so simple.' },
               { name: 'Mike R.', role: 'GC / Owner', city: 'Boca Raton', stars: 5, quote: 'We run 10+ permits a month. This tool helps our office catch things before submission. Huge time saver for the whole team.' }
             ].map((t, i) => (
-              <div key={i} className="p-6 bg-gray-900/60 rounded-2xl border border-gray-800 hover:border-cyan-500/20 transition-colors">
+              <div key={i} className={`p-6 bg-gray-900/60 rounded-2xl border border-gray-800 hover:border-cyan-500/20 transition-colors ${i >= 3 ? 'md:col-span-1' : ''}`}>
                 <div className="flex items-center gap-1 mb-4">
                   {[...Array(t.stars)].map((_, s) => (
                     <span key={s} className="text-amber-400">★</span>
