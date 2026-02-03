@@ -2210,28 +2210,61 @@ export default function App() {
       {/* ============================================================ */}
       {/* SECTION: Testimonials / Social Proof */}
       {/* ============================================================ */}
-      <div className="relative z-10 py-20 px-6 border-t border-gray-800/50">
-        <div className="max-w-5xl mx-auto">
+      <div className="relative z-10 py-20 border-t border-gray-800/50 overflow-hidden">
+        <div className="max-w-5xl mx-auto px-6">
           <h2 className="text-3xl font-black text-center mb-4 bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Trusted by Builders</h2>
           <p className="text-gray-500 text-center mb-12">See why contractors and homeowners love Flo Permit</p>
+        </div>
+        
+        {/* Scrolling testimonials container */}
+        <div className="relative">
+          {/* Fade edges */}
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none"></div>
           
-          <div className="grid md:grid-cols-3 gap-6">
+          {/* Scrolling track */}
+          <div className="flex animate-scroll-left">
+            {/* First set of testimonials */}
             {[
-              { name: 'Peter Calvo', role: 'City Wide Group', city: 'South Florida', stars: 5, quote: 'Flo Permit has streamlined our entire permit submission process. We use it on every project now — residential, commercial, all of it. Wouldn\'t go back to doing it the old way.' },
+              { name: 'Peter Calvo', role: 'City Wide Group', city: 'South Florida', stars: 5, quote: 'Flo Permit has streamlined our entire permit submission process. We use it on every project now — residential, commercial, all of it.' },
               { name: 'Carlos M.', role: 'General Contractor', city: 'Fort Lauderdale', stars: 5, quote: 'Caught two missing documents I would have missed. Saved me a trip back to the permit office and probably a week of delays.' },
-              { name: 'Marc McGowan', role: 'Boat Lift Installers', city: 'Broward County', stars: 5, quote: 'I use Flo Permit for all my boat lift and seawall permitting. It knows exactly what each city needs. Total game changer for marine contractors.' },
+              { name: 'Marc McGowan', role: 'Boat Lift Installers', city: 'Broward County', stars: 5, quote: 'I use Flo Permit for all my boat lift and seawall permitting. It knows exactly what each city needs. Total game changer.' },
               { name: 'Sarah T.', role: 'Homeowner', city: 'Coral Springs', stars: 5, quote: 'As a first-time homeowner doing a renovation, I had no idea what documents I needed. Flo Permit made it so simple.' },
               { name: 'Mike R.', role: 'GC / Owner', city: 'Boca Raton', stars: 5, quote: 'We run 10+ permits a month. This tool helps our office catch things before submission. Huge time saver for the whole team.' }
             ].map((t, i) => (
-              <div key={i} className={`p-6 bg-gray-900/60 rounded-2xl border border-gray-800 hover:border-cyan-500/20 transition-colors ${i >= 3 ? 'md:col-span-1' : ''}`}>
-                <div className="flex items-center gap-1 mb-4">
+              <div key={i} className="flex-shrink-0 w-80 mx-3 p-6 bg-gray-900/60 rounded-2xl border border-gray-800">
+                <div className="flex items-center gap-1 mb-3">
                   {[...Array(t.stars)].map((_, s) => (
-                    <span key={s} className="text-amber-400">★</span>
+                    <span key={s} className="text-amber-400 text-sm">★</span>
                   ))}
                 </div>
-                <p className="text-gray-300 text-sm mb-6 italic">"{t.quote}"</p>
+                <p className="text-gray-300 text-sm mb-4 italic leading-relaxed">"{t.quote}"</p>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-emerald-500 rounded-full flex items-center justify-center text-black font-bold text-sm">{t.name[0]}</div>
+                  <div className="w-9 h-9 bg-gradient-to-br from-cyan-500 to-emerald-500 rounded-full flex items-center justify-center text-black font-bold text-sm">{t.name[0]}</div>
+                  <div>
+                    <p className="text-white font-semibold text-sm">{t.name}</p>
+                    <p className="text-gray-500 text-xs">{t.role} • {t.city}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+            {/* Duplicate set for seamless loop */}
+            {[
+              { name: 'Peter Calvo', role: 'City Wide Group', city: 'South Florida', stars: 5, quote: 'Flo Permit has streamlined our entire permit submission process. We use it on every project now — residential, commercial, all of it.' },
+              { name: 'Carlos M.', role: 'General Contractor', city: 'Fort Lauderdale', stars: 5, quote: 'Caught two missing documents I would have missed. Saved me a trip back to the permit office and probably a week of delays.' },
+              { name: 'Marc McGowan', role: 'Boat Lift Installers', city: 'Broward County', stars: 5, quote: 'I use Flo Permit for all my boat lift and seawall permitting. It knows exactly what each city needs. Total game changer.' },
+              { name: 'Sarah T.', role: 'Homeowner', city: 'Coral Springs', stars: 5, quote: 'As a first-time homeowner doing a renovation, I had no idea what documents I needed. Flo Permit made it so simple.' },
+              { name: 'Mike R.', role: 'GC / Owner', city: 'Boca Raton', stars: 5, quote: 'We run 10+ permits a month. This tool helps our office catch things before submission. Huge time saver for the whole team.' }
+            ].map((t, i) => (
+              <div key={`dup-${i}`} className="flex-shrink-0 w-80 mx-3 p-6 bg-gray-900/60 rounded-2xl border border-gray-800">
+                <div className="flex items-center gap-1 mb-3">
+                  {[...Array(t.stars)].map((_, s) => (
+                    <span key={s} className="text-amber-400 text-sm">★</span>
+                  ))}
+                </div>
+                <p className="text-gray-300 text-sm mb-4 italic leading-relaxed">"{t.quote}"</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 bg-gradient-to-br from-cyan-500 to-emerald-500 rounded-full flex items-center justify-center text-black font-bold text-sm">{t.name[0]}</div>
                   <div>
                     <p className="text-white font-semibold text-sm">{t.name}</p>
                     <p className="text-gray-500 text-xs">{t.role} • {t.city}</p>
@@ -2240,8 +2273,10 @@ export default function App() {
               </div>
             ))}
           </div>
+        </div>
 
-          {/* Stats bar */}
+        {/* Stats bar */}
+        <div className="max-w-5xl mx-auto px-6">
           <div className="mt-12 grid grid-cols-3 gap-4 max-w-2xl mx-auto">
             {[
               { num: '26', label: 'Cities Covered' },
@@ -2710,6 +2745,17 @@ export default function App() {
         select::-webkit-scrollbar-track { background: #1f2937; border-radius: 4px; }
         select::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
         select::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+        
+        @keyframes scroll-left {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-scroll-left {
+          animation: scroll-left 30s linear infinite;
+        }
+        .animate-scroll-left:hover {
+          animation-play-state: paused;
+        }
       `}</style>
     </div>
   )
