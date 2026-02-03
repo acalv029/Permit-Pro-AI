@@ -687,7 +687,7 @@ def send_contact_email(name: str, email: str, subject: str, message: str) -> boo
     try:
         params = {
             "from": "Flo Permit <noreply@flopermit.com>",
-            "to": ["support@flopermit.com"],
+            "to": ["toshygluestick@gmail.com"],
             "reply_to": email,
             "subject": f"[Contact Form] {subject}",
             "html": f"""
