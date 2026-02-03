@@ -57,6 +57,15 @@ export default function App() {
   const [newsletterEmail, setNewsletterEmail] = useState('')
   const [newsletterStatus, setNewsletterStatus] = useState('')
   const [viewingAnalysis, setViewingAnalysis] = useState(null)
+  const [activeTestimonial, setActiveTestimonial] = useState(0)
+
+  // Rotate featured testimonials
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveTestimonial(prev => (prev + 1) % 3)
+    }, 4000)
+    return () => clearInterval(interval)
+  }, [])
 
   // Load reCAPTCHA script
   useEffect(() => {
@@ -2111,6 +2120,46 @@ export default function App() {
           </div>
         </div>
       )}
+
+      {/* ============================================================ */}
+      {/* SECTION: Featured Testimonial Rotator */}
+      {/* ============================================================ */}
+      <div className="relative z-10 py-12 px-6">
+        <div className="max-w-2xl mx-auto">
+          <div className="relative h-28 overflow-hidden">
+            {[
+              { name: 'Peter Calvo', role: 'City Wide Group', quote: 'Flo Permit has streamlined our entire permit submission process. We use it on every project now.' },
+              { name: 'Marc McGowan', role: 'Boat Lift Installers', quote: 'I use Flo Permit for all my boat lift and seawall permitting. Total game changer for marine contractors.' },
+              { name: 'Carlos M.', role: 'General Contractor', quote: 'Caught two missing documents I would have missed. Saved me a trip back to the permit office.' }
+            ].map((t, i) => (
+              <div 
+                key={i} 
+                className={`absolute inset-0 flex items-center justify-center text-center transition-all duration-700 ease-in-out ${activeTestimonial === i ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              >
+                <div>
+                  <p className="text-lg text-gray-300 italic mb-3">"{t.quote}"</p>
+                  <div className="flex items-center justify-center gap-2 flex-wrap">
+                    <div className="w-8 h-8 bg-gradient-to-br from-cyan-500 to-emerald-500 rounded-full flex items-center justify-center text-black font-bold text-xs">{t.name[0]}</div>
+                    <span className="text-white font-semibold text-sm">{t.name}</span>
+                    <span className="text-gray-500">•</span>
+                    <span className="text-cyan-400 text-sm">{t.role}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* Dots indicator */}
+          <div className="flex justify-center gap-2 mt-4">
+            {[0, 1, 2].map(i => (
+              <button 
+                key={i} 
+                onClick={() => setActiveTestimonial(i)}
+                className={`w-2 h-2 rounded-full transition-colors ${activeTestimonial === i ? 'bg-cyan-400' : 'bg-gray-600 hover:bg-gray-500'}`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* ============================================================ */}
       {/* SECTION: How It Works */}
