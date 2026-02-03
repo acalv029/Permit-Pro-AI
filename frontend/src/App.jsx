@@ -56,6 +56,7 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [newsletterEmail, setNewsletterEmail] = useState('')
   const [newsletterStatus, setNewsletterStatus] = useState('')
+  const [viewingAnalysis, setViewingAnalysis] = useState(null)
 
   // Load reCAPTCHA script
   useEffect(() => {
@@ -256,7 +257,7 @@ export default function App() {
   const loadProfile = async () => { if (!authToken) return; setProfileLoading(true); try { const res = await fetch(`${API_BASE_URL}/api/profile`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setProfile(data) } } catch (err) { console.error(err) } finally { setProfileLoading(false) } }
   const loadSubscription = async () => { if (!authToken) return; try { const res = await fetch(`${API_BASE_URL}/api/subscription`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setSubscription(data) } } catch (err) { console.error(err) } }
   const updateProfile = async (data) => { try { const res = await fetch(`${API_BASE_URL}/api/profile`, { method: 'PUT', headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); if (res.ok) { await loadProfile(); setEditingProfile(false) } } catch (err) { alert('Error updating profile') } }
-  const viewAnalysis = async (uuid) => { try { const res = await fetch(`${API_BASE_URL}/api/history/${uuid}`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setResults({ city: data.city, permit_type: data.permit_type, files_analyzed: data.files_analyzed, file_tree: data.file_list, analysis: data.analysis }); setPage('results') } } catch (err) { alert('Error loading analysis') } }
+  const viewAnalysis = async (uuid) => { setViewingAnalysis(uuid); try { const res = await fetch(`${API_BASE_URL}/api/history/${uuid}`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setResults({ city: data.city, permit_type: data.permit_type, files_analyzed: data.files_analyzed, file_tree: data.file_list, analysis: data.analysis }); setPage('results') } } catch (err) { alert('Error loading analysis') } finally { setViewingAnalysis(null) } }
   const deleteAnalysis = async (uuid) => { if (!confirm('Delete this analysis?')) return; try { await fetch(`${API_BASE_URL}/api/history/${uuid}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${authToken}` } }); loadHistory() } catch (err) { alert('Error deleting') } }
   
   const handleCheckout = async (tier) => {
@@ -342,7 +343,7 @@ export default function App() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-cyan-500/20">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3 cursor-pointer" onClick={() => { setPage('home'); setResults(null); setMobileMenuOpen(false) }}>
-          <div className="w-11 h-11 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-xl flex items-center justify-center p-1.5">
+          <div className="w-11 h-11 rounded-xl overflow-hidden">
             <img src="/adc_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" />
           </div>
           <div><h1 className="text-xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Flo Permit</h1><p className="text-xs text-cyan-500 font-semibold">SOUTH FLORIDA</p></div>
@@ -432,7 +433,7 @@ export default function App() {
         </div>
 
         <div className="grid md:grid-cols-4 gap-8 mb-8">
-          <div><div className="flex items-center gap-2 mb-4"><div className="w-8 h-8 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-lg flex items-center justify-center p-1"><img src="/adc_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" /></div><span className="font-bold text-white">Flo Permit</span></div><p className="text-gray-500 text-sm">AI-powered permit analysis for South Florida contractors and homeowners.</p></div>
+          <div><div className="flex items-center gap-2 mb-4"><div className="w-8 h-8 rounded-lg overflow-hidden"><img src="/adc_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" /></div><span className="font-bold text-white">Flo Permit</span></div><p className="text-gray-500 text-sm">AI-powered permit analysis for South Florida contractors and homeowners.</p></div>
           <div><h4 className="font-semibold text-white mb-4">Product</h4><ul className="space-y-2"><li><button onClick={() => setPage('home')} className="text-gray-500 hover:text-cyan-400 text-sm">Analyze Permits</button></li><li><button onClick={() => setPage('how-it-works')} className="text-gray-500 hover:text-cyan-400 text-sm">How It Works</button></li><li><button onClick={() => setPage('pricing')} className="text-gray-500 hover:text-cyan-400 text-sm">Pricing</button></li><li><button onClick={() => setPage('about')} className="text-gray-500 hover:text-cyan-400 text-sm">About Us</button></li><li><button onClick={() => setPage('faq')} className="text-gray-500 hover:text-cyan-400 text-sm">FAQ</button></li></ul></div>
           <div><h4 className="font-semibold text-white mb-4">Legal</h4><ul className="space-y-2"><li><button onClick={() => setPage('terms')} className="text-gray-500 hover:text-cyan-400 text-sm">Terms & Conditions</button></li><li><button onClick={() => setPage('privacy')} className="text-gray-500 hover:text-cyan-400 text-sm">Privacy Policy</button></li></ul></div>
           <div><h4 className="font-semibold text-white mb-4">Support</h4><ul className="space-y-2"><li><button onClick={() => setPage('contact')} className="text-gray-500 hover:text-cyan-400 text-sm">Contact Us</button></li><li><button onClick={() => setPage('faq')} className="text-gray-500 hover:text-cyan-400 text-sm">FAQ</button></li><li><a href="mailto:support@flopermit.com" className="text-gray-500 hover:text-cyan-400 text-sm">support@flopermit.com</a></li></ul></div>
@@ -1104,7 +1105,7 @@ export default function App() {
               {subscription?.tier === 'pro' ? (
                 <button onClick={openBillingPortal} className="w-full py-3 border border-cyan-500 text-cyan-400 font-bold rounded-xl hover:bg-cyan-500/10">Manage Subscription</button>
               ) : (
-                <button onClick={() => handleCheckout('pro')} disabled={checkoutLoading || !currentUser} className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl disabled:opacity-50">{checkoutLoading ? 'Loading...' : currentUser ? 'Upgrade to Pro' : 'Sign up first'}</button>
+                <button onClick={() => handleCheckout('pro')} disabled={checkoutLoading || !currentUser} className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl disabled:opacity-50 flex items-center justify-center gap-2">{checkoutLoading ? <><div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div>Processing...</> : currentUser ? 'Upgrade to Pro' : 'Sign up first'}</button>
               )}
             </div>
             {/* Business */}
@@ -1121,7 +1122,7 @@ export default function App() {
               {subscription?.tier === 'business' ? (
                 <button onClick={openBillingPortal} className="w-full py-3 border border-purple-500 text-purple-400 font-bold rounded-xl hover:bg-purple-500/10">Manage Subscription</button>
               ) : (
-                <button onClick={() => handleCheckout('business')} disabled={checkoutLoading || !currentUser} className="w-full py-3 border border-gray-700 text-white font-bold rounded-xl hover:bg-gray-800 disabled:opacity-50">{checkoutLoading ? 'Loading...' : currentUser ? 'Upgrade to Business' : 'Sign up first'}</button>
+                <button onClick={() => handleCheckout('business')} disabled={checkoutLoading || !currentUser} className="w-full py-3 border border-gray-700 text-white font-bold rounded-xl hover:bg-gray-800 disabled:opacity-50 flex items-center justify-center gap-2">{checkoutLoading ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>Processing...</> : currentUser ? 'Upgrade to Business' : 'Sign up first'}</button>
               )}
             </div>
           </div>
@@ -1264,11 +1265,30 @@ export default function App() {
       <div className="fixed inset-0 z-0"><div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div></div>
       <NavBar />
       <div className="relative z-10 pt-24 px-6 pb-12 flex-grow flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-8xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-4">404</div>
-          <h1 className="text-2xl font-bold text-white mb-4">Page Not Found</h1>
-          <p className="text-gray-400 mb-8">Oops! The page you're looking for doesn't exist or has been moved.</p>
-          <button onClick={() => setPage('home')} className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Go Home</button>
+        <div className="text-center max-w-lg">
+          <div className="text-9xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-2">404</div>
+          <h1 className="text-3xl font-bold text-white mb-3">Permit Denied!</h1>
+          <p className="text-gray-400 mb-8">Just kidding — this page just doesn't exist. Unlike your permit package, which we can actually help with.</p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
+            <button onClick={() => setPage('home')} className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl hover:scale-105 transition-transform">
+              Analyze My Permits →
+            </button>
+            <button onClick={() => setPage('pricing')} className="px-8 py-3 border border-gray-700 text-white font-semibold rounded-xl hover:bg-gray-800 transition-colors">
+              View Pricing
+            </button>
+          </div>
+
+          <div className="border-t border-gray-800 pt-8">
+            <p className="text-gray-500 text-sm mb-4">Looking for something specific?</p>
+            <div className="flex flex-wrap justify-center gap-3">
+              <button onClick={() => setPage('how-it-works')} className="text-cyan-400 hover:text-cyan-300 text-sm">How It Works</button>
+              <span className="text-gray-700">•</span>
+              <button onClick={() => setPage('faq')} className="text-cyan-400 hover:text-cyan-300 text-sm">FAQ</button>
+              <span className="text-gray-700">•</span>
+              <button onClick={() => setPage('contact')} className="text-cyan-400 hover:text-cyan-300 text-sm">Contact Us</button>
+            </div>
+          </div>
         </div>
       </div>
       <Footer />
@@ -1350,6 +1370,7 @@ export default function App() {
                 >
                   <input type="file" multiple onChange={handleFiles} className="hidden" id="singleFileInput" accept=".pdf,.png,.jpg,.jpeg" />
                   <input type="file" multiple webkitdirectory="" directory="" onChange={handleFiles} className="hidden" id="singleFolderInput" />
+                  <input type="file" accept="image/*" capture="environment" onChange={handleFiles} className="hidden" id="singleCameraInput" />
                   
                   <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-2xl flex items-center justify-center border border-amber-500/30">
                     <svg className="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1360,15 +1381,18 @@ export default function App() {
                   <p className="font-bold text-white mb-2">Drag & drop files here</p>
                   <p className="text-sm text-gray-500 mb-4">PDF, PNG, JPG • Max 50 files</p>
                   
-                  <div className="flex items-center justify-center gap-3">
+                  <div className="flex flex-wrap items-center justify-center gap-3">
                     <label htmlFor="singleFileInput" className="cursor-pointer px-4 py-2 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/30 rounded-lg text-amber-400 text-sm font-semibold transition-all">
                       Select Files
                     </label>
-                    <span className="text-gray-600">or</span>
                     <label htmlFor="singleFolderInput" className="cursor-pointer px-4 py-2 bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/30 rounded-lg text-orange-400 text-sm font-semibold transition-all">
                       Select Folder
                     </label>
+                    <label htmlFor="singleCameraInput" className="cursor-pointer px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/30 rounded-lg text-purple-400 text-sm font-semibold transition-all md:hidden">
+                      📸 Take Photo
+                    </label>
                   </div>
+                  <p className="text-xs text-gray-600 mt-4">💡 For best results, use scanned PDFs. Phone photos work but may be harder to read.</p>
                 </div>
                 
                 {validFiles.length > 0 && (
@@ -1434,7 +1458,12 @@ export default function App() {
             <h1 className="text-3xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Admin Dashboard</h1>
             <button onClick={loadAdminStats} className="px-4 py-2 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30">↻ Refresh</button>
           </div>
-          {adminLoading ? <div className="text-center py-12"><div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto"></div></div> : adminStats ? (
+          {adminLoading ? (
+            <div className="text-center py-16 bg-gray-900/50 rounded-2xl border border-gray-800">
+              <div className="w-12 h-12 border-3 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-gray-400">Loading admin stats...</p>
+            </div>
+          ) : adminStats ? (
             <div className="space-y-6">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="bg-gray-900/80 rounded-xl p-4 border border-gray-800"><p className="text-gray-500 text-sm">Total Users</p><p className="text-3xl font-black text-white">{adminStats.overview.total_users}</p><p className="text-emerald-400 text-sm">+{adminStats.overview.new_users_this_month} this month</p></div>
@@ -1581,7 +1610,12 @@ export default function App() {
       <div className="relative z-10 pt-24 px-6 pb-12 flex-grow">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-8">My Profile</h1>
-          {profileLoading ? <div className="text-center py-12"><div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto"></div></div> : profile ? (
+          {profileLoading ? (
+            <div className="text-center py-16 bg-gray-900/50 rounded-2xl border border-gray-800">
+              <div className="w-12 h-12 border-3 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-gray-400">Loading profile...</p>
+            </div>
+          ) : profile ? (
             <div className="grid md:grid-cols-3 gap-6">
               <div className="md:col-span-2 bg-gray-900/80 rounded-2xl p-6 border border-gray-800">
                 <div className="flex justify-between items-start mb-6"><h2 className="text-xl font-bold text-white">Account Information</h2><button onClick={() => setEditingProfile(!editingProfile)} className="text-cyan-400 hover:text-cyan-300 text-sm">{editingProfile ? 'Cancel' : 'Edit'}</button></div>
@@ -1626,10 +1660,30 @@ export default function App() {
       <div className="relative z-10 pt-24 px-6 pb-12 flex-grow">
         <div className="max-w-4xl mx-auto">
           <div className="flex justify-between items-center mb-8"><h1 className="text-3xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Analysis History</h1><button onClick={() => setPage('home')} className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">New Analysis</button></div>
-          {historyLoading ? <div className="text-center py-12"><div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto"></div></div> : history.length === 0 ? <div className="text-center py-12 bg-gray-900/50 rounded-2xl border border-gray-800"><p className="text-gray-500">No analyses yet</p></div> : (
+          {historyLoading ? (
+            <div className="text-center py-16 bg-gray-900/50 rounded-2xl border border-gray-800">
+              <div className="w-12 h-12 border-3 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-gray-400">Loading your analyses...</p>
+            </div>
+          ) : history.length === 0 ? (
+            <div className="text-center py-16 bg-gray-900/50 rounded-2xl border border-gray-800">
+              <div className="w-16 h-16 mx-auto mb-4 bg-gray-800 rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">No analyses yet</h3>
+              <p className="text-gray-500 mb-6">Upload your first permit package to get started</p>
+              <button onClick={() => setPage('home')} className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl hover:scale-105 transition-transform">Start Your First Analysis →</button>
+            </div>
+          ) : (
             <div className="space-y-3">{history.map(h => (
-              <div key={h.analysis_uuid} className="bg-gray-900/50 rounded-xl border border-gray-800 p-4 flex items-center justify-between hover:border-gray-700">
-                <div className="flex-1 cursor-pointer" onClick={() => viewAnalysis(h.analysis_uuid)}><div className="flex items-center gap-3"><span className="font-bold text-white">{h.city}</span><span className="text-gray-500">•</span><span className="text-gray-400">{h.permit_type}</span></div><div className="text-sm text-gray-500 mt-1">{h.files_analyzed} files • {new Date(h.created_at).toLocaleDateString()}</div></div>
+              <div key={h.analysis_uuid} className={`bg-gray-900/50 rounded-xl border border-gray-800 p-4 flex items-center justify-between hover:border-gray-700 transition-all ${viewingAnalysis === h.analysis_uuid ? 'opacity-60' : ''}`}>
+                <div className="flex-1 cursor-pointer" onClick={() => viewAnalysis(h.analysis_uuid)}>
+                  <div className="flex items-center gap-3">
+                    {viewingAnalysis === h.analysis_uuid && <div className="w-4 h-4 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>}
+                    <span className="font-bold text-white">{h.city}</span><span className="text-gray-500">•</span><span className="text-gray-400">{h.permit_type}</span>
+                  </div>
+                  <div className="text-sm text-gray-500 mt-1">{h.files_analyzed} files • {new Date(h.created_at).toLocaleDateString()}</div>
+                </div>
                 <div className="flex items-center gap-4"><span className={`text-2xl font-black ${h.compliance_score >= 70 ? 'text-emerald-400' : h.compliance_score >= 40 ? 'text-amber-400' : 'text-red-400'}`}>{h.compliance_score || '-'}%</span><button onClick={() => deleteAnalysis(h.analysis_uuid)} className="text-gray-500 hover:text-red-400 p-2"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></div>
               </div>
             ))}</div>
@@ -1887,7 +1941,7 @@ export default function App() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-xl border-b border-cyan-500/20">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-xl flex items-center justify-center p-1.5">
+            <div className="w-11 h-11 rounded-xl overflow-hidden">
               <img src="/adc_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" />
             </div>
             <div>
@@ -1931,7 +1985,7 @@ export default function App() {
           {/* Left side - Hero */}
           <div className="text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-4 mb-6">
-              <div className="w-16 h-16 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-2xl flex items-center justify-center p-2">
+              <div className="w-16 h-16 rounded-2xl overflow-hidden">
                 <img src="/adc_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" />
               </div>
               <h1 className="text-3xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Flo Permit</h1>
@@ -2577,6 +2631,7 @@ export default function App() {
                   {/* Hidden inputs */}
                   <input type="file" multiple onChange={handleFiles} className="hidden" id="fileInput" accept=".pdf,.png,.jpg,.jpeg" />
                   <input type="file" multiple webkitdirectory="" directory="" onChange={handleFiles} className="hidden" id="folderInput" />
+                  <input type="file" accept="image/*" capture="environment" onChange={handleFiles} className="hidden" id="cameraInput" />
                   
                   <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 rounded-2xl flex items-center justify-center border border-cyan-500/30">
                     <svg className="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2587,21 +2642,29 @@ export default function App() {
                   <p className="font-bold text-white mb-2">Drag & drop files here</p>
                   <p className="text-sm text-gray-500 mb-4">PDF, PNG, JPG • Max 50 files</p>
                   
-                  <div className="flex items-center justify-center gap-3">
+                  <div className="flex flex-wrap items-center justify-center gap-3">
                     <label htmlFor="fileInput" className="cursor-pointer px-4 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/30 rounded-lg text-cyan-400 text-sm font-semibold transition-all">
                       <span className="flex items-center gap-2">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                         Select Files
                       </span>
                     </label>
-                    <span className="text-gray-600">or</span>
                     <label htmlFor="folderInput" className="cursor-pointer px-4 py-2 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 rounded-lg text-emerald-400 text-sm font-semibold transition-all">
                       <span className="flex items-center gap-2">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
                         Select Folder
                       </span>
                     </label>
+                    <label htmlFor="cameraInput" className="cursor-pointer px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/30 rounded-lg text-purple-400 text-sm font-semibold transition-all md:hidden">
+                      <span className="flex items-center gap-2">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        Take Photo
+                      </span>
+                    </label>
                   </div>
+                  
+                  {/* Quality tip */}
+                  <p className="text-xs text-gray-600 mt-4">💡 For best results, use scanned PDFs. Phone photos work but may be harder to read.</p>
                 </div>
                 
                 {validFiles.length > 0 && (
