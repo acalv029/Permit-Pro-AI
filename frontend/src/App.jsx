@@ -353,9 +353,9 @@ export default function App() {
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3 cursor-pointer" onClick={() => { setPage('home'); setResults(null); setMobileMenuOpen(false) }}>
           <div className="w-11 h-11 rounded-xl overflow-hidden">
-            <img src="/adc_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" />
+            <img src="/adc_logo.png" alt="Flo Permit" className="w-full h-full object-contain" />
           </div>
-          <div><h1 className="text-xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Flo Permit</h1><p className="text-xs text-cyan-500 font-semibold">SOUTH FLORIDA</p></div>
+          <div><h1 className="text-xl font-black"><span className="text-cyan-400">Flo</span> <span className="text-white">Permit</span></h1><p className="text-xs text-cyan-500 font-semibold">SOUTH FLORIDA</p></div>
         </div>
         
         {/* Desktop Nav */}
@@ -442,7 +442,7 @@ export default function App() {
         </div>
 
         <div className="grid md:grid-cols-4 gap-8 mb-8">
-          <div><div className="flex items-center gap-2 mb-4"><div className="w-8 h-8 rounded-lg overflow-hidden"><img src="/adc_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" /></div><span className="font-bold text-white">Flo Permit</span></div><p className="text-gray-500 text-sm">AI-powered permit analysis for South Florida contractors and homeowners.</p></div>
+          <div><div className="flex items-center gap-2 mb-4"><div className="w-8 h-8 rounded-lg overflow-hidden"><img src="/adc_logo.png" alt="Flo Permit" className="w-full h-full object-contain" /></div><span className="font-bold"><span className="text-cyan-400">Flo</span> <span className="text-white">Permit</span></span></div><p className="text-gray-500 text-sm">AI-powered permit analysis for South Florida contractors and homeowners.</p></div>
           <div><h4 className="font-semibold text-white mb-4">Product</h4><ul className="space-y-2"><li><button onClick={() => setPage('home')} className="text-gray-500 hover:text-cyan-400 text-sm">Analyze Permits</button></li><li><button onClick={() => setPage('how-it-works')} className="text-gray-500 hover:text-cyan-400 text-sm">How It Works</button></li><li><button onClick={() => setPage('pricing')} className="text-gray-500 hover:text-cyan-400 text-sm">Pricing</button></li><li><button onClick={() => setPage('about')} className="text-gray-500 hover:text-cyan-400 text-sm">About Us</button></li><li><button onClick={() => setPage('faq')} className="text-gray-500 hover:text-cyan-400 text-sm">FAQ</button></li></ul></div>
           <div><h4 className="font-semibold text-white mb-4">Legal</h4><ul className="space-y-2"><li><button onClick={() => setPage('terms')} className="text-gray-500 hover:text-cyan-400 text-sm">Terms & Conditions</button></li><li><button onClick={() => setPage('privacy')} className="text-gray-500 hover:text-cyan-400 text-sm">Privacy Policy</button></li></ul></div>
           <div><h4 className="font-semibold text-white mb-4">Support</h4><ul className="space-y-2"><li><button onClick={() => setPage('contact')} className="text-gray-500 hover:text-cyan-400 text-sm">Contact Us</button></li><li><button onClick={() => setPage('faq')} className="text-gray-500 hover:text-cyan-400 text-sm">FAQ</button></li><li><a href="mailto:support@flopermit.com" className="text-gray-500 hover:text-cyan-400 text-sm">support@flopermit.com</a></li></ul></div>
@@ -1951,10 +1951,10 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 rounded-xl overflow-hidden">
-              <img src="/adc_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" />
+              <img src="/adc_logo.png" alt="Flo Permit" className="w-full h-full object-contain" />
             </div>
             <div>
-              <h1 className="text-xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Flo Permit</h1>
+              <h1 className="text-xl font-black"><span className="text-cyan-400">Flo</span> <span className="text-white">Permit</span></h1>
               <p className="text-xs text-cyan-500 font-semibold">SOUTH FLORIDA</p>
             </div>
           </div>
@@ -1995,9 +1995,9 @@ export default function App() {
           <div className="text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-4 mb-6">
               <div className="w-16 h-16 rounded-2xl overflow-hidden">
-                <img src="/adc_logo.jpg" alt="Flo Permit" className="w-full h-full object-contain" />
+                <img src="/adc_logo.png" alt="Flo Permit" className="w-full h-full object-contain" />
               </div>
-              <h1 className="text-3xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Flo Permit</h1>
+              <h1 className="text-3xl font-black"><span className="text-cyan-400">Flo</span> <span className="text-white">Permit</span></h1>
             </div>
             
             <p className="text-xl text-gray-300 mb-4">Upload your permit package and get instant AI-powered analysis. Know what's missing before you submit.</p>
@@ -2058,8 +2058,6 @@ export default function App() {
                     <button type="submit" className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl hover:scale-[1.02] transition-transform">Create Account</button>
                   </form>
                   <p className="text-center mt-4 text-sm text-gray-500">Already have an account? <button onClick={() => { setShowRegister(false); setError('') }} className="text-cyan-400 hover:text-cyan-300">Log in</button></p>
-                  <div className="relative my-6"><div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-700"></div></div><div className="relative flex justify-center text-sm"><span className="px-4 bg-gray-900 text-gray-500">or</span></div></div>
-                  <button onClick={() => setShowSinglePurchase(true)} className="w-full py-3 border border-cyan-500/30 text-cyan-400 font-semibold rounded-xl hover:bg-cyan-500/10 transition-colors text-sm">One-Time Analysis • $15.99</button>
                 </>
               ) : (
                 <>
@@ -2072,8 +2070,7 @@ export default function App() {
                   </form>
                   <div className="mt-4 text-center"><button onClick={() => { setShowForgotPassword(true); setError('') }} className="text-cyan-400 hover:text-cyan-300 text-sm">Forgot password?</button></div>
                   <div className="relative my-6"><div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-700"></div></div><div className="relative flex justify-center text-sm"><span className="px-4 bg-gray-900 text-gray-500">or</span></div></div>
-                  <button onClick={() => { setShowRegister(true); setError('') }} className="w-full py-3 border border-gray-700 text-white font-bold rounded-xl hover:bg-gray-800 transition-colors mb-3">Create New Account</button>
-                  <button onClick={() => setShowSinglePurchase(true)} className="w-full py-3 border border-cyan-500/30 text-cyan-400 font-semibold rounded-xl hover:bg-cyan-500/10 transition-colors text-sm">One-Time Analysis • $15.99 <span className="text-gray-500">(valid 30 days)</span></button>
+                  <button onClick={() => { setShowRegister(true); setError('') }} className="w-full py-3 border border-gray-700 text-white font-bold rounded-xl hover:bg-gray-800 transition-colors">Create New Account</button>
                 </>
               )}
             </div>
