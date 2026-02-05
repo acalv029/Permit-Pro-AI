@@ -320,7 +320,7 @@ export default function App() {
         setCity(data.city)
         setPermitType(data.permit_type)
         // Set county based on city
-        if (['Fort Lauderdale', 'Pompano Beach', 'Hollywood', 'Coral Springs', 'Coconut Creek', 'Davie', 'Deerfield Beach', 'Lauderdale-by-the-Sea', 'Lighthouse Point', 'Margate', 'Miramar', 'Pembroke Pines', 'Plantation', 'Sunrise', 'Tamarac', 'Weston'].includes(data.city)) {
+        if (['Fort Lauderdale', 'Pompano Beach', 'Hollywood', 'Coral Springs', 'Coconut Creek', 'Davie', 'Deerfield Beach', 'Lauderdale-by-the-Sea', 'Lighthouse Point', 'Margate', 'Miramar', 'Oakland Park', 'Pembroke Pines', 'Plantation', 'Sunrise', 'Tamarac', 'Weston'].includes(data.city)) {
           setCounty('Broward')
         } else if (['Boca Raton', 'Boynton Beach', 'Delray Beach', 'Lake Worth Beach', 'West Palm Beach'].includes(data.city)) {
           setCounty('Palm Beach')
@@ -743,7 +743,7 @@ export default function App() {
           <div className="space-y-4">
             {[
               { q: "What is Flo Permit?", a: "Flo Permit is an AI-powered tool that analyzes your permit documents and tells you if your package is complete. Upload your files, and we'll identify missing documents, issues, and provide recommendations." },
-              { q: "Which cities do you support?", a: "We support 26 cities across Broward, Palm Beach, and Miami-Dade counties including Fort Lauderdale, Miami, Boca Raton, Hollywood, Pompano Beach, Hialeah, Coral Springs, Pembroke Pines, Weston, and many more!" },
+              { q: "Which cities do you support?", a: "We support 28 cities across Broward, Palm Beach, and Miami-Dade counties including Fort Lauderdale, Miami, Boca Raton, Hollywood, Pompano Beach, Hialeah, Coral Springs, Pembroke Pines, Weston, Oakland Park, North Miami, and many more!" },
               { q: "What permit types can you analyze?", a: "We support all major permit types: Roofing, HVAC/Mechanical, Electrical, Plumbing, Windows/Doors, Pool, Fence, Solar, Generator, Demolition, and Marine (Dock, Seawall, Boat Lift). Our AI auto-detects the permit type from your documents!" },
               { q: "What file types can I upload?", a: "We accept PDF, PNG, JPG, and JPEG files. You can upload up to 50 files at once, with a maximum total size of 200MB." },
               { q: "Is my data secure?", a: "Yes! We use industry-standard encryption, secure password hashing, and your documents are processed securely. We never share your data with third parties." },
@@ -1200,6 +1200,7 @@ export default function App() {
                       <option value="Lighthouse Point">Lighthouse Point</option>
                       <option value="Margate">Margate</option>
                       <option value="Miramar">Miramar</option>
+                      <option value="Oakland Park">Oakland Park</option>
                       <option value="Pembroke Pines">Pembroke Pines</option>
                       <option value="Plantation">Plantation</option>
                       <option value="Pompano Beach">Pompano Beach</option>
@@ -1224,6 +1225,7 @@ export default function App() {
                       <option value="Kendall">Kendall (Unincorporated)</option>
                       <option value="Miami">Miami</option>
                       <option value="Miami Gardens">Miami Gardens</option>
+                      <option value="North Miami">North Miami</option>
                     </>
                   )}
                 </select>
@@ -2001,7 +2003,7 @@ export default function App() {
             </div>
             
             <p className="text-xl text-gray-300 mb-4">Upload your permit package and get instant AI-powered analysis. Know what's missing before you submit.</p>
-            <p className="text-gray-500 mb-8">Serving 26 cities across South Florida</p>
+            <p className="text-gray-500 mb-8">Serving 28 cities across South Florida</p>
             
             <div className="grid grid-cols-3 gap-4">
               {[{icon:'⚡',title:'Instant'},{icon:'🎯',title:'Accurate'},{icon:'📋',title:'Complete'}].map((f,i) => (
@@ -2325,7 +2327,7 @@ export default function App() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="mt-12 grid grid-cols-3 gap-4 max-w-2xl mx-auto">
             {[
-              { num: '26', label: 'Cities Covered' },
+              { num: '28', label: 'Cities Covered' },
               { num: '50+', label: 'Permit Types' },
               { num: '<30s', label: 'Analysis Time' }
             ].map((s, i) => (
@@ -2343,7 +2345,7 @@ export default function App() {
       {/* ============================================================ */}
       <div className="relative z-10 py-20 px-6 border-t border-gray-800/50">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-black text-center mb-4 bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">26 Cities Across South Florida</h2>
+          <h2 className="text-3xl font-black text-center mb-4 bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">28 Cities Across South Florida</h2>
           <p className="text-gray-500 text-center mb-12">City-specific permit requirements for three major counties</p>
           
           <div className="grid md:grid-cols-3 gap-8">
@@ -2351,10 +2353,10 @@ export default function App() {
             <div className="bg-gray-900/60 rounded-2xl border border-gray-800 overflow-hidden">
               <div className="p-4 bg-cyan-500/10 border-b border-gray-800">
                 <h3 className="text-lg font-bold text-cyan-400">Broward County</h3>
-                <p className="text-gray-500 text-xs">16 cities</p>
+                <p className="text-gray-500 text-xs">17 cities</p>
               </div>
               <div className="p-4 space-y-2">
-                {['Coconut Creek','Coral Springs','Davie','Deerfield Beach','Fort Lauderdale','Hollywood','Lauderdale-by-the-Sea','Lighthouse Point','Margate','Miramar','Pembroke Pines','Plantation','Pompano Beach','Sunrise','Tamarac','Weston'].map((c, i) => (
+                {['Coconut Creek','Coral Springs','Davie','Deerfield Beach','Fort Lauderdale','Hollywood','Lauderdale-by-the-Sea','Lighthouse Point','Margate','Miramar','Oakland Park','Pembroke Pines','Plantation','Pompano Beach','Sunrise','Tamarac','Weston'].map((c, i) => (
                   <div key={i} className="flex items-center gap-2 text-sm">
                     <span className="text-emerald-400">✓</span>
                     <span className="text-gray-300">{c}</span>
@@ -2386,10 +2388,10 @@ export default function App() {
             <div className="bg-gray-900/60 rounded-2xl border border-gray-800 overflow-hidden">
               <div className="p-4 bg-purple-500/10 border-b border-gray-800">
                 <h3 className="text-lg font-bold text-purple-400">Miami-Dade County</h3>
-                <p className="text-gray-500 text-xs">5 cities</p>
+                <p className="text-gray-500 text-xs">6 cities</p>
               </div>
               <div className="p-4 space-y-2">
-                {['Hialeah','Homestead','Kendall (Unincorporated)','Miami','Miami Gardens'].map((c, i) => (
+                {['Hialeah','Homestead','Kendall (Unincorporated)','Miami','Miami Gardens','North Miami'].map((c, i) => (
                   <div key={i} className="flex items-center gap-2 text-sm">
                     <span className="text-emerald-400">✓</span>
                     <span className="text-gray-300">{c}</span>
@@ -2592,7 +2594,7 @@ export default function App() {
             <p className="text-xl text-gray-400 mb-4">Upload your permit package and get instant AI-powered analysis</p>
             <div className="flex items-center justify-center gap-4 text-sm">
               <span className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400">3 Counties</span>
-              <span className="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400">26 Cities</span>
+              <span className="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400">28 Cities</span>
               <span className="px-3 py-1 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-400">More Coming Soon</span>
             </div>
           </div>
@@ -2644,6 +2646,7 @@ export default function App() {
                           <option value="Lighthouse Point">Lighthouse Point</option>
                           <option value="Margate">Margate</option>
                           <option value="Miramar">Miramar</option>
+                          <option value="Oakland Park">Oakland Park</option>
                           <option value="Pembroke Pines">Pembroke Pines</option>
                           <option value="Plantation">Plantation</option>
                           <option value="Pompano Beach">Pompano Beach</option>
@@ -2668,6 +2671,7 @@ export default function App() {
                           <option value="Kendall">Kendall (Unincorporated)</option>
                           <option value="Miami">Miami</option>
                           <option value="Miami Gardens">Miami Gardens</option>
+                          <option value="North Miami">North Miami</option>
                         </>
                       )}
                     </select>

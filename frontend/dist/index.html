@@ -1,15 +1,102 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="AI-powered permit checking for South Florida contractors. Analyze building permits instantly." />
-    <title>South Florida Permit Checker | AI-Powered Analysis</title>
-    <script type="module" crossorigin src="/assets/index-D77TpCqj.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-GXzj5bb9.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/adc_logo.png" />
+    <link rel="apple-touch-icon" href="/adc_logo.png" />
+    
+    <!-- Primary SEO -->
+    <title>Flo Permit — AI-Powered Permit Analysis for South Florida | Broward, Palm Beach, Miami-Dade</title>
+    <meta name="description" content="Upload your permit documents and get instant AI-powered analysis. Flo Permit checks your package against city-specific requirements for 28 cities across Broward, Palm Beach, and Miami-Dade counties. Know what's missing before you submit." />
+    <meta name="keywords" content="permit analysis, building permit, South Florida, Fort Lauderdale permits, Broward County permits, Palm Beach permits, Miami-Dade permits, AI permit checker, construction permits, permit document checklist, Coral Springs, Boca Raton, Hollywood FL, Pembroke Pines, Pompano Beach, Oakland Park permits, North Miami permits, permit compliance" />
+    <meta name="author" content="Flo Permit" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://flopermit.vercel.app/" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://flopermit.vercel.app/" />
+    <meta property="og:title" content="Flo Permit — AI-Powered Permit Analysis for South Florida" />
+    <meta property="og:description" content="Upload your permit documents and get instant AI analysis. Know what's missing before you submit. Serving 28 cities across Broward, Palm Beach & Miami-Dade." />
+    <meta property="og:image" content="https://flopermit.vercel.app/adc_logo.png" />
+    <meta property="og:site_name" content="Flo Permit" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Flo Permit — AI-Powered Permit Analysis for South Florida" />
+    <meta name="twitter:description" content="Upload your permit documents and get instant AI analysis. Know what's missing before you submit. Serving 28 cities in South Florida." />
+    <meta name="twitter:image" content="https://flopermit.vercel.app/adc_logo.png" />
+    
+    <!-- Theme -->
+    <meta name="theme-color" content="#06b6d4" />
+    <meta name="msapplication-TileColor" content="#000000" />
+    
+    <!-- Structured Data / Schema.org -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Flo Permit",
+      "description": "AI-powered permit document analysis for South Florida. Upload your permit package and get instant compliance checks for 28 cities across Broward, Palm Beach, and Miami-Dade counties.",
+      "url": "https://flopermit.vercel.app",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "offers": [
+        {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "description": "Free plan with 3 analyses per month"
+        },
+        {
+          "@type": "Offer",
+          "price": "15.99",
+          "priceCurrency": "USD",
+          "description": "Single analysis"
+        },
+        {
+          "@type": "Offer",
+          "price": "29.99",
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "billingDuration": "P1M"
+          },
+          "description": "Pro plan with 30 analyses per month"
+        }
+      ],
+      "areaServed": {
+        "@type": "State",
+        "name": "Florida",
+        "containsPlace": [
+          { "@type": "AdministrativeArea", "name": "Broward County" },
+          { "@type": "AdministrativeArea", "name": "Palm Beach County" },
+          { "@type": "AdministrativeArea", "name": "Miami-Dade County" }
+        ]
+      },
+      "provider": {
+        "@type": "Organization",
+        "name": "ADC Builders",
+        "url": "https://flopermit.vercel.app"
+      }
+    }
+    </script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2V1MF78CPY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-2V1MF78CPY');
+    </script>
   </head>
   <body>
     <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
