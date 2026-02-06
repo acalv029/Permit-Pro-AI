@@ -58,11 +58,14 @@ export default function App() {
   const [newsletterStatus, setNewsletterStatus] = useState('')
   const [viewingAnalysis, setViewingAnalysis] = useState(null)
   const [activeTestimonial, setActiveTestimonial] = useState(0)
+  const [showReviewForm, setShowReviewForm] = useState(false)
+  const [reviewSubmitting, setReviewSubmitting] = useState(false)
+  const [adminReviews, setAdminReviews] = useState([])
 
   // Rotate featured testimonials
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveTestimonial(prev => (prev + 1) % 3)
+      setActiveTestimonial(prev => (prev + 1) % 4)
     }, 4000)
     return () => clearInterval(interval)
   }, [])
@@ -263,6 +266,54 @@ export default function App() {
 
   const loadHistory = async () => { setHistoryLoading(true); try { const res = await fetch(`${API_BASE_URL}/api/history`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setHistory(data.analyses || []) } } catch (err) { console.error(err) } finally { setHistoryLoading(false) } }
   const loadAdminStats = async () => { if (!authToken) return; setAdminLoading(true); try { const res = await fetch(`${API_BASE_URL}/api/admin/stats`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setAdminStats(data) } } catch (err) { console.error(err) } finally { setAdminLoading(false) } }
+  const loadAdminReviews = async () => { if (!authToken) return; try { const res = await fetch(`${API_BASE_URL}/api/admin/reviews`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setAdminReviews(data.reviews || []) } } catch (err) { console.error(err) } }
+  const submitReview = async (e) => {
+    e.preventDefault()
+    setReviewSubmitting(true)
+    try {
+      const form = e.target
+      const res = await fetch(`${API_BASE_URL}/api/reviews`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+        body: JSON.stringify({
+          name: form.name.value,
+          role: form.role.value,
+          city: form.city.value,
+          stars: parseInt(form.stars.value),
+          review_text: form.review_text.value
+        })
+      })
+      if (res.ok) {
+        alert('Thank you! Your review has been submitted for approval.')
+        setShowReviewForm(false)
+        form.reset()
+      } else {
+        const data = await res.json()
+        alert(data.detail || 'Failed to submit review')
+      }
+    } catch (err) { alert('Error submitting review') }
+    finally { setReviewSubmitting(false) }
+  }
+  const updateReview = async (reviewId, updates) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/admin/reviews/${reviewId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+        body: JSON.stringify(updates)
+      })
+      if (res.ok) loadAdminReviews()
+    } catch (err) { console.error(err) }
+  }
+  const deleteReview = async (reviewId) => {
+    if (!confirm('Delete this review?')) return
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/admin/reviews/${reviewId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${authToken}` }
+      })
+      if (res.ok) loadAdminReviews()
+    } catch (err) { console.error(err) }
+  }
   const loadProfile = async () => { if (!authToken) return; setProfileLoading(true); try { const res = await fetch(`${API_BASE_URL}/api/profile`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setProfile(data) } } catch (err) { console.error(err) } finally { setProfileLoading(false) } }
   const loadSubscription = async () => { if (!authToken) return; try { const res = await fetch(`${API_BASE_URL}/api/subscription`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setSubscription(data) } } catch (err) { console.error(err) } }
   const updateProfile = async (data) => { try { const res = await fetch(`${API_BASE_URL}/api/profile`, { method: 'PUT', headers: { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); if (res.ok) { await loadProfile(); setEditingProfile(false) } } catch (err) { alert('Error updating profile') } }
@@ -331,7 +382,7 @@ export default function App() {
     } catch (err) { console.error('Error loading purchase:', err) }
   }
 
-  useEffect(() => { if (page === 'history' && authToken) loadHistory(); if (page === 'profile' && authToken) { loadProfile(); loadSubscription() }; if (page === 'admin' && authToken && isAdmin) loadAdminStats(); if (page === 'pricing' && authToken) loadSubscription(); setMobileMenuOpen(false); window.scrollTo(0, 0) }, [page])
+  useEffect(() => { if (page === 'history' && authToken) loadHistory(); if (page === 'profile' && authToken) { loadProfile(); loadSubscription() }; if (page === 'admin' && authToken && isAdmin) { loadAdminStats(); loadAdminReviews() }; if (page === 'pricing' && authToken) loadSubscription(); setMobileMenuOpen(false); window.scrollTo(0, 0) }, [page])
 
   const canAnalyze = city && permitType && validFiles.length > 0 && totalSize <= 200 * 1024 * 1024 && agreedToTerms
   const getPermitTypes = () => {
@@ -743,7 +794,7 @@ export default function App() {
           <div className="space-y-4">
             {[
               { q: "What is Flo Permit?", a: "Flo Permit is an AI-powered tool that analyzes your permit documents and tells you if your package is complete. Upload your files, and we'll identify missing documents, issues, and provide recommendations." },
-              { q: "Which cities do you support?", a: "We support 28 cities across Broward, Palm Beach, and Miami-Dade counties including Fort Lauderdale, Miami, Boca Raton, Hollywood, Pompano Beach, Hialeah, Coral Springs, Pembroke Pines, Weston, Oakland Park, North Miami, and many more!" },
+              { q: "Which cities do you support?", a: "We support 30 cities across Broward, Palm Beach, and Miami-Dade counties including Fort Lauderdale, Miami, Miami Beach, Boca Raton, Hollywood, Wellington, Pompano Beach, Hialeah, Coral Springs, Oakland Park, and many more!" },
               { q: "What permit types can you analyze?", a: "We support all major permit types: Roofing, HVAC/Mechanical, Electrical, Plumbing, Windows/Doors, Pool, Fence, Solar, Generator, Demolition, and Marine (Dock, Seawall, Boat Lift). Our AI auto-detects the permit type from your documents!" },
               { q: "What file types can I upload?", a: "We accept PDF, PNG, JPG, and JPEG files. You can upload up to 50 files at once, with a maximum total size of 200MB." },
               { q: "Is my data secure?", a: "Yes! We use industry-standard encryption, secure password hashing, and your documents are processed securely. We never share your data with third parties." },
@@ -1215,6 +1266,7 @@ export default function App() {
                       <option value="Boynton Beach">Boynton Beach</option>
                       <option value="Delray Beach">Delray Beach</option>
                       <option value="Lake Worth Beach">Lake Worth Beach</option>
+                      <option value="Wellington">Wellington</option>
                       <option value="West Palm Beach">West Palm Beach</option>
                     </>
                   )}
@@ -1224,6 +1276,7 @@ export default function App() {
                       <option value="Homestead">Homestead</option>
                       <option value="Kendall">Kendall (Unincorporated)</option>
                       <option value="Miami">Miami</option>
+                      <option value="Miami Beach">Miami Beach</option>
                       <option value="Miami Gardens">Miami Gardens</option>
                       <option value="North Miami">North Miami</option>
                     </>
@@ -1559,6 +1612,60 @@ export default function App() {
                   </table>
                 </div>
               </div>
+              
+              {/* Reviews Management */}
+              <div className="bg-gradient-to-r from-amber-900/30 to-orange-900/30 rounded-xl p-6 border border-amber-500/30">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-bold text-white flex items-center gap-2"><span className="text-xl">★</span> Reviews Management</h3>
+                  <button onClick={loadAdminReviews} className="px-3 py-1 bg-amber-500/20 text-amber-400 rounded-lg text-sm hover:bg-amber-500/30">↻ Refresh</button>
+                </div>
+                {adminReviews.length === 0 ? (
+                  <p className="text-gray-500">No reviews yet</p>
+                ) : (
+                  <div className="space-y-4">
+                    {adminReviews.map(r => (
+                      <div key={r.id} className={`p-4 rounded-xl border ${r.is_approved ? 'bg-emerald-900/20 border-emerald-500/30' : 'bg-gray-800/50 border-gray-700'}`}>
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <span className="font-semibold text-white">{r.name}</span>
+                              {r.role && <span className="text-gray-500">• {r.role}</span>}
+                              {r.city && <span className="text-gray-500">• {r.city}</span>}
+                            </div>
+                            <div className="flex items-center gap-1 mb-2">
+                              {[...Array(5)].map((_, i) => (
+                                <span key={i} className={i < r.stars ? 'text-amber-400' : 'text-gray-600'}>★</span>
+                              ))}
+                            </div>
+                            <p className="text-gray-300 text-sm italic">"{r.review_text}"</p>
+                            <p className="text-gray-600 text-xs mt-2">{new Date(r.created_at).toLocaleDateString()}</p>
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <button 
+                              onClick={() => updateReview(r.id, { is_approved: !r.is_approved })}
+                              className={`px-3 py-1 rounded-lg text-xs font-bold ${r.is_approved ? 'bg-emerald-500/20 text-emerald-400' : 'bg-gray-700 text-gray-300'}`}
+                            >
+                              {r.is_approved ? '✓ Approved' : 'Approve'}
+                            </button>
+                            <button 
+                              onClick={() => updateReview(r.id, { is_featured: !r.is_featured })}
+                              className={`px-3 py-1 rounded-lg text-xs font-bold ${r.is_featured ? 'bg-amber-500/20 text-amber-400' : 'bg-gray-700 text-gray-300'}`}
+                            >
+                              {r.is_featured ? '★ Featured' : 'Feature'}
+                            </button>
+                            <button 
+                              onClick={() => deleteReview(r.id)}
+                              className="px-3 py-1 bg-red-500/20 text-red-400 rounded-lg text-xs font-bold hover:bg-red-500/30"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           ) : <p className="text-gray-500 text-center">Failed to load stats</p>}
         </div>
@@ -1655,6 +1762,15 @@ export default function App() {
                 ) : (
                   <button onClick={openBillingPortal} className="w-full mt-4 py-2 border border-gray-700 text-white font-bold rounded-lg hover:bg-gray-800">Manage Subscription</button>
                 )}
+              </div>
+              
+              {/* Leave a Review */}
+              <div className="bg-gray-900/80 rounded-2xl p-6 border border-gray-800">
+                <h2 className="text-xl font-bold text-white mb-4">Leave a Review</h2>
+                <p className="text-gray-400 text-sm mb-4">Love Flo Permit? We'd appreciate your feedback!</p>
+                <button onClick={() => setShowReviewForm(true)} className="w-full py-2 bg-amber-500/20 border border-amber-500/30 text-amber-400 font-bold rounded-lg hover:bg-amber-500/30 flex items-center justify-center gap-2">
+                  <span>★</span> Write a Review
+                </button>
               </div>
             </div>
           ) : <p className="text-gray-500">Could not load profile</p>}
@@ -2003,7 +2119,7 @@ export default function App() {
             </div>
             
             <p className="text-xl text-gray-300 mb-4">Upload your permit package and get instant AI-powered analysis. Know what's missing before you submit.</p>
-            <p className="text-gray-500 mb-8">Serving 28 cities across South Florida</p>
+            <p className="text-gray-500 mb-8">Serving 30 cities across South Florida</p>
             
             <div className="grid grid-cols-3 gap-4">
               {[{icon:'⚡',title:'Instant'},{icon:'🎯',title:'Accurate'},{icon:'📋',title:'Complete'}].map((f,i) => (
@@ -2127,13 +2243,14 @@ export default function App() {
         <div className="max-w-2xl mx-auto">
           <div className="relative h-28 overflow-hidden">
             {[
+              { name: 'ADC Builders', role: 'Coconut Creek', quote: 'When we pull permits now, we always analyze it first so we don\'t have to keep going back and forth with the building department.' },
               { name: 'Peter Calvo', role: 'City Wide Group', quote: 'Flo Permit has streamlined our entire permit submission process. We use it on every project now.' },
               { name: 'Marc McGowan', role: 'Boat Lift Installers', quote: 'I use Flo Permit for all my boat lift and seawall permitting. Total game changer for marine contractors.' },
               { name: 'Carlos M.', role: 'General Contractor', quote: 'Caught two missing documents I would have missed. Saved me a trip back to the permit office.' }
             ].map((t, i) => (
               <div 
                 key={i} 
-                className={`absolute inset-0 flex items-center justify-center text-center transition-all duration-700 ease-in-out ${activeTestimonial === i ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+                className={`absolute inset-0 flex items-center justify-center text-center transition-all duration-700 ease-in-out ${activeTestimonial % 4 === i ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
               >
                 <div>
                   <p className="text-lg text-gray-300 italic mb-3">"{t.quote}"</p>
@@ -2149,11 +2266,11 @@ export default function App() {
           </div>
           {/* Dots indicator */}
           <div className="flex justify-center gap-2 mt-4">
-            {[0, 1, 2].map(i => (
+            {[0, 1, 2, 3].map(i => (
               <button 
                 key={i} 
                 onClick={() => setActiveTestimonial(i)}
-                className={`w-2 h-2 rounded-full transition-colors ${activeTestimonial === i ? 'bg-cyan-400' : 'bg-gray-600 hover:bg-gray-500'}`}
+                className={`w-2 h-2 rounded-full transition-colors ${activeTestimonial % 4 === i ? 'bg-cyan-400' : 'bg-gray-600 hover:bg-gray-500'}`}
               />
             ))}
           </div>
@@ -2274,6 +2391,7 @@ export default function App() {
           <div className="flex animate-scroll-left">
             {/* First set of testimonials */}
             {[
+              { name: 'ADC Builders', role: 'General Contractor', city: 'Coconut Creek', stars: 5, quote: 'When we pull permits now, we always analyze it first so we don\'t have to keep going back and forth with the building department.' },
               { name: 'Peter Calvo', role: 'City Wide Group', city: 'South Florida', stars: 5, quote: 'Flo Permit has streamlined our entire permit submission process. We use it on every project now — residential, commercial, all of it.' },
               { name: 'Carlos M.', role: 'General Contractor', city: 'Fort Lauderdale', stars: 5, quote: 'Caught two missing documents I would have missed. Saved me a trip back to the permit office and probably a week of delays.' },
               { name: 'Marc McGowan', role: 'Boat Lift Installers', city: 'Broward County', stars: 5, quote: 'I use Flo Permit for all my boat lift and seawall permitting. It knows exactly what each city needs. Total game changer.' },
@@ -2298,6 +2416,7 @@ export default function App() {
             ))}
             {/* Duplicate set for seamless loop */}
             {[
+              { name: 'ADC Builders', role: 'General Contractor', city: 'Coconut Creek', stars: 5, quote: 'When we pull permits now, we always analyze it first so we don\'t have to keep going back and forth with the building department.' },
               { name: 'Peter Calvo', role: 'City Wide Group', city: 'South Florida', stars: 5, quote: 'Flo Permit has streamlined our entire permit submission process. We use it on every project now — residential, commercial, all of it.' },
               { name: 'Carlos M.', role: 'General Contractor', city: 'Fort Lauderdale', stars: 5, quote: 'Caught two missing documents I would have missed. Saved me a trip back to the permit office and probably a week of delays.' },
               { name: 'Marc McGowan', role: 'Boat Lift Installers', city: 'Broward County', stars: 5, quote: 'I use Flo Permit for all my boat lift and seawall permitting. It knows exactly what each city needs. Total game changer.' },
@@ -2327,7 +2446,7 @@ export default function App() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="mt-12 grid grid-cols-3 gap-4 max-w-2xl mx-auto">
             {[
-              { num: '28', label: 'Cities Covered' },
+              { num: '30', label: 'Cities Covered' },
               { num: '50+', label: 'Permit Types' },
               { num: '<30s', label: 'Analysis Time' }
             ].map((s, i) => (
@@ -2345,7 +2464,7 @@ export default function App() {
       {/* ============================================================ */}
       <div className="relative z-10 py-20 px-6 border-t border-gray-800/50">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-black text-center mb-4 bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">28 Cities Across South Florida</h2>
+          <h2 className="text-3xl font-black text-center mb-4 bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">30 Cities Across South Florida</h2>
           <p className="text-gray-500 text-center mb-12">City-specific permit requirements for three major counties</p>
           
           <div className="grid md:grid-cols-3 gap-8">
@@ -2369,10 +2488,10 @@ export default function App() {
             <div className="bg-gray-900/60 rounded-2xl border border-gray-800 overflow-hidden">
               <div className="p-4 bg-emerald-500/10 border-b border-gray-800">
                 <h3 className="text-lg font-bold text-emerald-400">Palm Beach County</h3>
-                <p className="text-gray-500 text-xs">5 cities</p>
+                <p className="text-gray-500 text-xs">6 cities</p>
               </div>
               <div className="p-4 space-y-2">
-                {['Boca Raton','Boynton Beach','Delray Beach','Lake Worth Beach','West Palm Beach'].map((c, i) => (
+                {['Boca Raton','Boynton Beach','Delray Beach','Lake Worth Beach','Wellington','West Palm Beach'].map((c, i) => (
                   <div key={i} className="flex items-center gap-2 text-sm">
                     <span className="text-emerald-400">✓</span>
                     <span className="text-gray-300">{c}</span>
@@ -2388,10 +2507,10 @@ export default function App() {
             <div className="bg-gray-900/60 rounded-2xl border border-gray-800 overflow-hidden">
               <div className="p-4 bg-purple-500/10 border-b border-gray-800">
                 <h3 className="text-lg font-bold text-purple-400">Miami-Dade County</h3>
-                <p className="text-gray-500 text-xs">6 cities</p>
+                <p className="text-gray-500 text-xs">7 cities</p>
               </div>
               <div className="p-4 space-y-2">
-                {['Hialeah','Homestead','Kendall (Unincorporated)','Miami','Miami Gardens','North Miami'].map((c, i) => (
+                {['Hialeah','Homestead','Kendall (Unincorporated)','Miami','Miami Beach','Miami Gardens','North Miami'].map((c, i) => (
                   <div key={i} className="flex items-center gap-2 text-sm">
                     <span className="text-emerald-400">✓</span>
                     <span className="text-gray-300">{c}</span>
@@ -2530,6 +2649,44 @@ export default function App() {
         </div>
       )}
 
+      {/* Review Form Modal */}
+      {showReviewForm && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="relative"><div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-orange-500 rounded-3xl blur-lg opacity-50"></div>
+            <div className="relative bg-gray-900 rounded-2xl p-8 max-w-md w-full border border-amber-500/20">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-black bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">Leave a Review</h2>
+                <button onClick={() => setShowReviewForm(false)} className="text-2xl text-gray-500 hover:text-white">&times;</button>
+              </div>
+              <form onSubmit={submitReview}>
+                <input name="name" type="text" required placeholder="Your Name" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-amber-500 focus:outline-none" />
+                <input name="role" type="text" placeholder="Role (e.g. General Contractor, Homeowner)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-amber-500 focus:outline-none" />
+                <input name="city" type="text" placeholder="City (optional)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-amber-500 focus:outline-none" />
+                
+                <div className="mb-4">
+                  <label className="block text-gray-400 text-sm mb-2">Rating</label>
+                  <div className="flex gap-2">
+                    {[1,2,3,4,5].map(star => (
+                      <label key={star} className="cursor-pointer">
+                        <input type="radio" name="stars" value={star} defaultChecked={star === 5} className="hidden peer" />
+                        <span className="text-3xl peer-checked:text-amber-400 text-gray-600 hover:text-amber-300 transition-colors">★</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                
+                <textarea name="review_text" required placeholder="Tell us about your experience with Flo Permit..." rows="4" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-amber-500 focus:outline-none resize-none"></textarea>
+                
+                <button type="submit" disabled={reviewSubmitting} className="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-bold rounded-xl disabled:opacity-50 flex items-center justify-center gap-2">
+                  {reviewSubmitting ? <><div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></div> Submitting...</> : '★ Submit Review'}
+                </button>
+              </form>
+              <p className="text-center mt-4 text-xs text-gray-500">Reviews are moderated before appearing on the site.</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {loading && (
         <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center">
           <div className="text-center">
@@ -2594,7 +2751,7 @@ export default function App() {
             <p className="text-xl text-gray-400 mb-4">Upload your permit package and get instant AI-powered analysis</p>
             <div className="flex items-center justify-center gap-4 text-sm">
               <span className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400">3 Counties</span>
-              <span className="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400">28 Cities</span>
+              <span className="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400">30 Cities</span>
               <span className="px-3 py-1 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-400">More Coming Soon</span>
             </div>
           </div>
@@ -2661,6 +2818,7 @@ export default function App() {
                           <option value="Boynton Beach">Boynton Beach</option>
                           <option value="Delray Beach">Delray Beach</option>
                           <option value="Lake Worth Beach">Lake Worth Beach</option>
+                          <option value="Wellington">Wellington</option>
                           <option value="West Palm Beach">West Palm Beach</option>
                         </>
                       )}
@@ -2670,6 +2828,7 @@ export default function App() {
                           <option value="Homestead">Homestead</option>
                           <option value="Kendall">Kendall (Unincorporated)</option>
                           <option value="Miami">Miami</option>
+                          <option value="Miami Beach">Miami Beach</option>
                           <option value="Miami Gardens">Miami Gardens</option>
                           <option value="North Miami">North Miami</option>
                         </>
