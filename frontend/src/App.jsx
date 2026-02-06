@@ -61,14 +61,41 @@ export default function App() {
   const [showReviewForm, setShowReviewForm] = useState(false)
   const [reviewSubmitting, setReviewSubmitting] = useState(false)
   const [adminReviews, setAdminReviews] = useState([])
+  const [publicReviews, setPublicReviews] = useState([])
+
+  // Default testimonials (shown when no user reviews yet)
+  const defaultTestimonials = [
+    { name: 'ADC Builders', role: 'General Contractor', city: 'Coconut Creek', stars: 5, review_text: 'When we pull permits now, we always analyze it first so we don\'t have to keep going back and forth with the building department.' },
+    { name: 'Peter Calvo', role: 'City Wide Group', city: 'South Florida', stars: 5, review_text: 'Flo Permit has streamlined our entire permit submission process. We use it on every project now — residential, commercial, all of it.' },
+    { name: 'Carlos M.', role: 'General Contractor', city: 'Fort Lauderdale', stars: 5, review_text: 'Caught two missing documents I would have missed. Saved me a trip back to the permit office and probably a week of delays.' },
+    { name: 'Marc McGowan', role: 'Boat Lift Installers', city: 'Broward County', stars: 5, review_text: 'I use Flo Permit for all my boat lift and seawall permitting. It knows exactly what each city needs. Total game changer.' },
+    { name: 'Sarah T.', role: 'Homeowner', city: 'Coral Springs', stars: 5, review_text: 'As a first-time homeowner doing a renovation, I had no idea what documents I needed. Flo Permit made it so simple.' },
+    { name: 'Mike R.', role: 'GC / Owner', city: 'Boca Raton', stars: 5, review_text: 'We run 10+ permits a month. This tool helps our office catch things before submission. Huge time saver for the whole team.' }
+  ]
+
+  // Combine default + user reviews
+  const allTestimonials = [...defaultTestimonials, ...publicReviews.filter(r => !r.is_featured)]
+  const featuredTestimonials = [
+    defaultTestimonials[0], // ADC Builders always first
+    ...publicReviews.filter(r => r.is_featured).slice(0, 3),
+    ...defaultTestimonials.slice(1, 4 - publicReviews.filter(r => r.is_featured).length)
+  ].slice(0, 4)
+
+  // Fetch public reviews on load
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/reviews`)
+      .then(res => res.json())
+      .then(data => setPublicReviews(data.reviews || []))
+      .catch(err => console.error('Error loading reviews:', err))
+  }, [])
 
   // Rotate featured testimonials
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveTestimonial(prev => (prev + 1) % 4)
+      setActiveTestimonial(prev => (prev + 1) % featuredTestimonials.length)
     }, 4000)
     return () => clearInterval(interval)
-  }, [])
+  }, [featuredTestimonials.length])
 
   // Load reCAPTCHA script
   useEffect(() => {
@@ -2242,23 +2269,18 @@ export default function App() {
       <div className="relative z-10 py-12 px-6">
         <div className="max-w-2xl mx-auto">
           <div className="relative h-28 overflow-hidden">
-            {[
-              { name: 'ADC Builders', role: 'Coconut Creek', quote: 'When we pull permits now, we always analyze it first so we don\'t have to keep going back and forth with the building department.' },
-              { name: 'Peter Calvo', role: 'City Wide Group', quote: 'Flo Permit has streamlined our entire permit submission process. We use it on every project now.' },
-              { name: 'Marc McGowan', role: 'Boat Lift Installers', quote: 'I use Flo Permit for all my boat lift and seawall permitting. Total game changer for marine contractors.' },
-              { name: 'Carlos M.', role: 'General Contractor', quote: 'Caught two missing documents I would have missed. Saved me a trip back to the permit office.' }
-            ].map((t, i) => (
+            {featuredTestimonials.map((t, i) => (
               <div 
                 key={i} 
-                className={`absolute inset-0 flex items-center justify-center text-center transition-all duration-700 ease-in-out ${activeTestimonial % 4 === i ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+                className={`absolute inset-0 flex items-center justify-center text-center transition-all duration-700 ease-in-out ${activeTestimonial % featuredTestimonials.length === i ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
               >
                 <div>
-                  <p className="text-lg text-gray-300 italic mb-3">"{t.quote}"</p>
+                  <p className="text-lg text-gray-300 italic mb-3">"{t.review_text || t.quote}"</p>
                   <div className="flex items-center justify-center gap-2 flex-wrap">
                     <div className="w-8 h-8 bg-gradient-to-br from-cyan-500 to-emerald-500 rounded-full flex items-center justify-center text-black font-bold text-xs">{t.name[0]}</div>
                     <span className="text-white font-semibold text-sm">{t.name}</span>
                     <span className="text-gray-500">•</span>
-                    <span className="text-cyan-400 text-sm">{t.role}</span>
+                    <span className="text-cyan-400 text-sm">{t.role}{t.city ? `, ${t.city}` : ''}</span>
                   </div>
                 </div>
               </div>
@@ -2266,11 +2288,11 @@ export default function App() {
           </div>
           {/* Dots indicator */}
           <div className="flex justify-center gap-2 mt-4">
-            {[0, 1, 2, 3].map(i => (
+            {featuredTestimonials.map((_, i) => (
               <button 
                 key={i} 
                 onClick={() => setActiveTestimonial(i)}
-                className={`w-2 h-2 rounded-full transition-colors ${activeTestimonial % 4 === i ? 'bg-cyan-400' : 'bg-gray-600 hover:bg-gray-500'}`}
+                className={`w-2 h-2 rounded-full transition-colors ${activeTestimonial % featuredTestimonials.length === i ? 'bg-cyan-400' : 'bg-gray-600 hover:bg-gray-500'}`}
               />
             ))}
           </div>
@@ -2390,51 +2412,37 @@ export default function App() {
           {/* Scrolling track */}
           <div className="flex animate-scroll-left">
             {/* First set of testimonials */}
-            {[
-              { name: 'ADC Builders', role: 'General Contractor', city: 'Coconut Creek', stars: 5, quote: 'When we pull permits now, we always analyze it first so we don\'t have to keep going back and forth with the building department.' },
-              { name: 'Peter Calvo', role: 'City Wide Group', city: 'South Florida', stars: 5, quote: 'Flo Permit has streamlined our entire permit submission process. We use it on every project now — residential, commercial, all of it.' },
-              { name: 'Carlos M.', role: 'General Contractor', city: 'Fort Lauderdale', stars: 5, quote: 'Caught two missing documents I would have missed. Saved me a trip back to the permit office and probably a week of delays.' },
-              { name: 'Marc McGowan', role: 'Boat Lift Installers', city: 'Broward County', stars: 5, quote: 'I use Flo Permit for all my boat lift and seawall permitting. It knows exactly what each city needs. Total game changer.' },
-              { name: 'Sarah T.', role: 'Homeowner', city: 'Coral Springs', stars: 5, quote: 'As a first-time homeowner doing a renovation, I had no idea what documents I needed. Flo Permit made it so simple.' },
-              { name: 'Mike R.', role: 'GC / Owner', city: 'Boca Raton', stars: 5, quote: 'We run 10+ permits a month. This tool helps our office catch things before submission. Huge time saver for the whole team.' }
-            ].map((t, i) => (
+            {allTestimonials.map((t, i) => (
               <div key={i} className="flex-shrink-0 w-80 mx-3 p-6 bg-gray-900/60 rounded-2xl border border-gray-800">
                 <div className="flex items-center gap-1 mb-3">
-                  {[...Array(t.stars)].map((_, s) => (
+                  {[...Array(t.stars || 5)].map((_, s) => (
                     <span key={s} className="text-amber-400 text-sm">★</span>
                   ))}
                 </div>
-                <p className="text-gray-300 text-sm mb-4 italic leading-relaxed">"{t.quote}"</p>
+                <p className="text-gray-300 text-sm mb-4 italic leading-relaxed">"{t.review_text || t.quote}"</p>
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 bg-gradient-to-br from-cyan-500 to-emerald-500 rounded-full flex items-center justify-center text-black font-bold text-sm">{t.name[0]}</div>
                   <div>
                     <p className="text-white font-semibold text-sm">{t.name}</p>
-                    <p className="text-gray-500 text-xs">{t.role} • {t.city}</p>
+                    <p className="text-gray-500 text-xs">{t.role}{t.city ? ` • ${t.city}` : ''}</p>
                   </div>
                 </div>
               </div>
             ))}
             {/* Duplicate set for seamless loop */}
-            {[
-              { name: 'ADC Builders', role: 'General Contractor', city: 'Coconut Creek', stars: 5, quote: 'When we pull permits now, we always analyze it first so we don\'t have to keep going back and forth with the building department.' },
-              { name: 'Peter Calvo', role: 'City Wide Group', city: 'South Florida', stars: 5, quote: 'Flo Permit has streamlined our entire permit submission process. We use it on every project now — residential, commercial, all of it.' },
-              { name: 'Carlos M.', role: 'General Contractor', city: 'Fort Lauderdale', stars: 5, quote: 'Caught two missing documents I would have missed. Saved me a trip back to the permit office and probably a week of delays.' },
-              { name: 'Marc McGowan', role: 'Boat Lift Installers', city: 'Broward County', stars: 5, quote: 'I use Flo Permit for all my boat lift and seawall permitting. It knows exactly what each city needs. Total game changer.' },
-              { name: 'Sarah T.', role: 'Homeowner', city: 'Coral Springs', stars: 5, quote: 'As a first-time homeowner doing a renovation, I had no idea what documents I needed. Flo Permit made it so simple.' },
-              { name: 'Mike R.', role: 'GC / Owner', city: 'Boca Raton', stars: 5, quote: 'We run 10+ permits a month. This tool helps our office catch things before submission. Huge time saver for the whole team.' }
-            ].map((t, i) => (
+            {allTestimonials.map((t, i) => (
               <div key={`dup-${i}`} className="flex-shrink-0 w-80 mx-3 p-6 bg-gray-900/60 rounded-2xl border border-gray-800">
                 <div className="flex items-center gap-1 mb-3">
-                  {[...Array(t.stars)].map((_, s) => (
+                  {[...Array(t.stars || 5)].map((_, s) => (
                     <span key={s} className="text-amber-400 text-sm">★</span>
                   ))}
                 </div>
-                <p className="text-gray-300 text-sm mb-4 italic leading-relaxed">"{t.quote}"</p>
+                <p className="text-gray-300 text-sm mb-4 italic leading-relaxed">"{t.review_text || t.quote}"</p>
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 bg-gradient-to-br from-cyan-500 to-emerald-500 rounded-full flex items-center justify-center text-black font-bold text-sm">{t.name[0]}</div>
                   <div>
                     <p className="text-white font-semibold text-sm">{t.name}</p>
-                    <p className="text-gray-500 text-xs">{t.role} • {t.city}</p>
+                    <p className="text-gray-500 text-xs">{t.role}{t.city ? ` • ${t.city}` : ''}</p>
                   </div>
                 </div>
               </div>
