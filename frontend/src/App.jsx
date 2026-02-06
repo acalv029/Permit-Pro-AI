@@ -2792,28 +2792,30 @@ export default function App() {
           <div className="text-center mb-12">
             <span className="px-4 py-1.5 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-sm font-semibold">AI-POWERED PERMIT ANALYSIS</span>
             <h1 className="text-5xl md:text-7xl font-black mt-4 mb-6"><span className="bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">South Florida</span><br/><span className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Permit Checker</span></h1>
-            <p className="text-xl text-gray-400 mb-4">Upload your permit package and get instant AI-powered analysis</p>
+            <p className="text-xl text-gray-400 mb-6">Upload your permit package and get instant AI-powered analysis</p>
             
-            {/* Floating Animated Reviews in Hero */}
-            <div className="relative h-24 mb-6 overflow-hidden">
-              {allTestimonials.slice(0, 6).map((t, i) => (
-                <div 
-                  key={i}
-                  className="hero-review absolute px-4 py-2 rounded-full border whitespace-nowrap"
-                  style={{
-                    left: `${10 + (i * 15) % 70}%`,
-                    top: `${20 + (i * 25) % 60}%`,
-                    animationDelay: `${i * 0.8}s`,
-                    background: 'linear-gradient(135deg, rgba(6,182,212,0.2) 0%, rgba(16,185,129,0.2) 100%)',
-                    borderColor: 'rgba(6,182,212,0.4)',
-                    boxShadow: '0 0 20px rgba(6,182,212,0.3), 0 0 40px rgba(16,185,129,0.2)'
-                  }}
-                >
-                  <span className="text-amber-400 mr-1">★★★★★</span>
-                  <span className="text-white font-semibold text-sm">{t.name}</span>
-                  <span className="text-cyan-400 text-sm ml-2">"{(t.review_text || t.quote).slice(0, 30)}..."</span>
-                </div>
-              ))}
+            {/* Horizontal Scrolling Reviews Ticker */}
+            <div className="relative overflow-hidden mb-6">
+              <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-black to-transparent z-10"></div>
+              <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-black to-transparent z-10"></div>
+              <div className="flex animate-ticker">
+                {[...allTestimonials, ...allTestimonials].map((t, i) => (
+                  <div 
+                    key={i}
+                    className="flex-shrink-0 mx-4 px-5 py-3 rounded-xl border border-cyan-500/30 bg-gradient-to-r from-cyan-500/10 to-emerald-500/10"
+                    style={{ boxShadow: '0 0 15px rgba(6,182,212,0.2)' }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-0.5 text-amber-400">
+                        {[...Array(t.stars || 5)].map((_, s) => <span key={s}>★</span>)}
+                      </div>
+                      <span className="text-white font-semibold">{t.name}</span>
+                      <span className="text-gray-400">—</span>
+                      <span className="text-cyan-300 italic">"{t.review_text || t.quote}"</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
             
             <div className="flex items-center justify-center gap-4 text-sm">
@@ -3076,24 +3078,17 @@ export default function App() {
           animation-delay: 1s;
         }
         
-        /* Hero floating reviews */
-        @keyframes hero-float {
-          0% { transform: translateX(-100%) translateY(0) rotate(-2deg); opacity: 0; }
-          10% { opacity: 1; }
-          45% { transform: translateX(50vw) translateY(-10px) rotate(1deg); opacity: 1; }
-          55% { transform: translateX(50vw) translateY(5px) rotate(-1deg); opacity: 1; }
-          90% { opacity: 1; }
-          100% { transform: translateX(120vw) translateY(0) rotate(2deg); opacity: 0; }
+        /* Hero ticker animation */
+        @keyframes ticker {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
         }
-        .hero-review {
-          animation: hero-float 12s ease-in-out infinite;
+        .animate-ticker {
+          animation: ticker 60s linear infinite;
         }
-        .hero-review:nth-child(1) { animation-delay: 0s; }
-        .hero-review:nth-child(2) { animation-delay: 2s; }
-        .hero-review:nth-child(3) { animation-delay: 4s; }
-        .hero-review:nth-child(4) { animation-delay: 6s; }
-        .hero-review:nth-child(5) { animation-delay: 8s; }
-        .hero-review:nth-child(6) { animation-delay: 10s; }
+        .animate-ticker:hover {
+          animation-play-state: paused;
+        }
       `}</style>
     </div>
   )
