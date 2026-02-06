@@ -2395,11 +2395,17 @@ export default function App() {
       </div>
 
       {/* ============================================================ */}
-      {/* SECTION: Testimonials / Social Proof */}
+      {/* SECTION: Testimonials / Social Proof - ANIMATED */}
       {/* ============================================================ */}
       <div className="relative z-10 py-20 border-t border-gray-800/50 overflow-hidden">
-        <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-3xl font-black text-center mb-4 bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Trusted by Builders</h2>
+        {/* Background glow effects */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+        </div>
+        
+        <div className="max-w-5xl mx-auto px-6 relative">
+          <h2 className="text-3xl font-black text-center mb-4 bg-gradient-to-r from-cyan-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent animate-pulse">⭐ Trusted by Builders ⭐</h2>
           <p className="text-gray-500 text-center mb-12">See why contractors and homeowners love Flo Permit</p>
         </div>
         
@@ -2413,36 +2419,66 @@ export default function App() {
           <div className="flex animate-scroll-left">
             {/* First set of testimonials */}
             {allTestimonials.map((t, i) => (
-              <div key={i} className="flex-shrink-0 w-80 mx-3 p-6 bg-gray-900/60 rounded-2xl border border-gray-800">
-                <div className="flex items-center gap-1 mb-3">
-                  {[...Array(t.stars || 5)].map((_, s) => (
-                    <span key={s} className="text-amber-400 text-sm">★</span>
-                  ))}
-                </div>
-                <p className="text-gray-300 text-sm mb-4 italic leading-relaxed">"{t.review_text || t.quote}"</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 bg-gradient-to-br from-cyan-500 to-emerald-500 rounded-full flex items-center justify-center text-black font-bold text-sm">{t.name[0]}</div>
-                  <div>
-                    <p className="text-white font-semibold text-sm">{t.name}</p>
-                    <p className="text-gray-500 text-xs">{t.role}{t.city ? ` • ${t.city}` : ''}</p>
+              <div 
+                key={i} 
+                className="review-card flex-shrink-0 w-80 mx-3 p-6 rounded-2xl relative overflow-hidden transition-all duration-300 hover:scale-105 hover:-translate-y-2"
+                style={{ 
+                  animationDelay: `${i * 0.2}s`,
+                  background: 'linear-gradient(135deg, rgba(6,182,212,0.15) 0%, rgba(16,185,129,0.15) 100%)',
+                  border: '1px solid rgba(6,182,212,0.3)',
+                  boxShadow: '0 0 20px rgba(6,182,212,0.2), 0 0 40px rgba(16,185,129,0.1)'
+                }}
+              >
+                {/* Animated glow border */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-500 via-emerald-500 to-cyan-500 opacity-30 animate-border-glow"></div>
+                <div className="absolute inset-[1px] rounded-2xl bg-gray-900/90"></div>
+                
+                <div className="relative z-10">
+                  <div className="flex items-center gap-1 mb-3">
+                    {[...Array(t.stars || 5)].map((_, s) => (
+                      <span key={s} className="star-twinkle text-amber-400 text-lg" style={{ animationDelay: `${s * 0.15}s` }}>★</span>
+                    ))}
+                  </div>
+                  <p className="text-gray-200 text-sm mb-4 italic leading-relaxed">"{t.review_text || t.quote}"</p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-full flex items-center justify-center text-black font-bold text-sm shadow-lg shadow-cyan-500/30 avatar-bounce" style={{ animationDelay: `${i * 0.3}s` }}>{t.name[0]}</div>
+                    <div>
+                      <p className="text-white font-semibold text-sm">{t.name}</p>
+                      <p className="text-cyan-400/80 text-xs">{t.role}{t.city ? ` • ${t.city}` : ''}</p>
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
             {/* Duplicate set for seamless loop */}
             {allTestimonials.map((t, i) => (
-              <div key={`dup-${i}`} className="flex-shrink-0 w-80 mx-3 p-6 bg-gray-900/60 rounded-2xl border border-gray-800">
-                <div className="flex items-center gap-1 mb-3">
-                  {[...Array(t.stars || 5)].map((_, s) => (
-                    <span key={s} className="text-amber-400 text-sm">★</span>
-                  ))}
-                </div>
-                <p className="text-gray-300 text-sm mb-4 italic leading-relaxed">"{t.review_text || t.quote}"</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 bg-gradient-to-br from-cyan-500 to-emerald-500 rounded-full flex items-center justify-center text-black font-bold text-sm">{t.name[0]}</div>
-                  <div>
-                    <p className="text-white font-semibold text-sm">{t.name}</p>
-                    <p className="text-gray-500 text-xs">{t.role}{t.city ? ` • ${t.city}` : ''}</p>
+              <div 
+                key={`dup-${i}`} 
+                className="review-card flex-shrink-0 w-80 mx-3 p-6 rounded-2xl relative overflow-hidden transition-all duration-300 hover:scale-105 hover:-translate-y-2"
+                style={{ 
+                  animationDelay: `${(i + allTestimonials.length) * 0.2}s`,
+                  background: 'linear-gradient(135deg, rgba(6,182,212,0.15) 0%, rgba(16,185,129,0.15) 100%)',
+                  border: '1px solid rgba(6,182,212,0.3)',
+                  boxShadow: '0 0 20px rgba(6,182,212,0.2), 0 0 40px rgba(16,185,129,0.1)'
+                }}
+              >
+                {/* Animated glow border */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-500 via-emerald-500 to-cyan-500 opacity-30 animate-border-glow"></div>
+                <div className="absolute inset-[1px] rounded-2xl bg-gray-900/90"></div>
+                
+                <div className="relative z-10">
+                  <div className="flex items-center gap-1 mb-3">
+                    {[...Array(t.stars || 5)].map((_, s) => (
+                      <span key={s} className="star-twinkle text-amber-400 text-lg" style={{ animationDelay: `${s * 0.15}s` }}>★</span>
+                    ))}
+                  </div>
+                  <p className="text-gray-200 text-sm mb-4 italic leading-relaxed">"{t.review_text || t.quote}"</p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-emerald-400 rounded-full flex items-center justify-center text-black font-bold text-sm shadow-lg shadow-cyan-500/30 avatar-bounce" style={{ animationDelay: `${(i + allTestimonials.length) * 0.3}s` }}>{t.name[0]}</div>
+                    <div>
+                      <p className="text-white font-semibold text-sm">{t.name}</p>
+                      <p className="text-cyan-400/80 text-xs">{t.role}{t.city ? ` • ${t.city}` : ''}</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -2757,6 +2793,29 @@ export default function App() {
             <span className="px-4 py-1.5 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-sm font-semibold">AI-POWERED PERMIT ANALYSIS</span>
             <h1 className="text-5xl md:text-7xl font-black mt-4 mb-6"><span className="bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">South Florida</span><br/><span className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Permit Checker</span></h1>
             <p className="text-xl text-gray-400 mb-4">Upload your permit package and get instant AI-powered analysis</p>
+            
+            {/* Floating Animated Reviews in Hero */}
+            <div className="relative h-24 mb-6 overflow-hidden">
+              {allTestimonials.slice(0, 6).map((t, i) => (
+                <div 
+                  key={i}
+                  className="hero-review absolute px-4 py-2 rounded-full border whitespace-nowrap"
+                  style={{
+                    left: `${10 + (i * 15) % 70}%`,
+                    top: `${20 + (i * 25) % 60}%`,
+                    animationDelay: `${i * 0.8}s`,
+                    background: 'linear-gradient(135deg, rgba(6,182,212,0.2) 0%, rgba(16,185,129,0.2) 100%)',
+                    borderColor: 'rgba(6,182,212,0.4)',
+                    boxShadow: '0 0 20px rgba(6,182,212,0.3), 0 0 40px rgba(16,185,129,0.2)'
+                  }}
+                >
+                  <span className="text-amber-400 mr-1">★★★★★</span>
+                  <span className="text-white font-semibold text-sm">{t.name}</span>
+                  <span className="text-cyan-400 text-sm ml-2">"{(t.review_text || t.quote).slice(0, 30)}..."</span>
+                </div>
+              ))}
+            </div>
+            
             <div className="flex items-center justify-center gap-4 text-sm">
               <span className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400">3 Counties</span>
               <span className="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400">30 Cities</span>
@@ -2968,11 +3027,73 @@ export default function App() {
           100% { transform: translateX(-50%); }
         }
         .animate-scroll-left {
-          animation: scroll-left 30s linear infinite;
+          animation: scroll-left 40s linear infinite;
         }
         .animate-scroll-left:hover {
           animation-play-state: paused;
         }
+        
+        /* Star twinkling animation */
+        @keyframes twinkle {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.5; transform: scale(1.3); }
+        }
+        .star-twinkle {
+          animation: twinkle 1.5s ease-in-out infinite;
+        }
+        
+        /* Avatar bounce animation */
+        @keyframes avatar-bounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-5px); }
+        }
+        .avatar-bounce {
+          animation: avatar-bounce 2s ease-in-out infinite;
+        }
+        
+        /* Glowing border animation */
+        @keyframes border-glow {
+          0%, 100% { opacity: 0.3; filter: blur(2px); }
+          50% { opacity: 0.6; filter: blur(4px); }
+        }
+        .animate-border-glow {
+          animation: border-glow 3s ease-in-out infinite;
+        }
+        
+        /* Review card float animation */
+        @keyframes float {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          25% { transform: translateY(-8px) rotate(0.5deg); }
+          75% { transform: translateY(-4px) rotate(-0.5deg); }
+        }
+        .review-card {
+          animation: float 4s ease-in-out infinite;
+        }
+        .review-card:nth-child(2n) {
+          animation-delay: 0.5s;
+        }
+        .review-card:nth-child(3n) {
+          animation-delay: 1s;
+        }
+        
+        /* Hero floating reviews */
+        @keyframes hero-float {
+          0% { transform: translateX(-100%) translateY(0) rotate(-2deg); opacity: 0; }
+          10% { opacity: 1; }
+          45% { transform: translateX(50vw) translateY(-10px) rotate(1deg); opacity: 1; }
+          55% { transform: translateX(50vw) translateY(5px) rotate(-1deg); opacity: 1; }
+          90% { opacity: 1; }
+          100% { transform: translateX(120vw) translateY(0) rotate(2deg); opacity: 0; }
+        }
+        .hero-review {
+          animation: hero-float 12s ease-in-out infinite;
+        }
+        .hero-review:nth-child(1) { animation-delay: 0s; }
+        .hero-review:nth-child(2) { animation-delay: 2s; }
+        .hero-review:nth-child(3) { animation-delay: 4s; }
+        .hero-review:nth-child(4) { animation-delay: 6s; }
+        .hero-review:nth-child(5) { animation-delay: 8s; }
+        .hero-review:nth-child(6) { animation-delay: 10s; }
       `}</style>
     </div>
   )
