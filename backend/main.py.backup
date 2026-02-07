@@ -67,7 +67,6 @@ load_dotenv()
 from reader import get_document_text
 from permit_data import get_permit_requirements, get_city_key, get_permit_types
 from analyzer import analyze_document_with_claude
-from gemini_provider import analyze_with_gemini, get_google_key, parse_analysis_json
 
 from auth import (
     UserRegister,
@@ -1872,7 +1871,6 @@ async def analyze_single_purchase(
             user_id=None,
             analysis_uuid=analysis_id,
             db_session=db,
-            tier="premium",
         )
 
         file_tree = [{"name": p["name"], "size": p["size"]} for p in processed_files]
@@ -2351,7 +2349,6 @@ async def analyze_permit_folder(
     files: List[UploadFile] = File(...),
     city: str = Form(...),
     permit_type: str = Form(...),
-    tier: str = Form("standard"),
     authorization: Optional[str] = Header(None),
     db: Session = Depends(get_db),
 ):
@@ -2457,11 +2454,6 @@ async def analyze_permit_folder(
                     detail=f"No requirements for {city} - {permit_type}",
                 )
 
-        # Determine AI tier based on subscription
-        ai_tier = "standard"  # default: Gemini Flash (cheap)
-        if user and user.subscription_tier in ("pro", "business"):
-            ai_tier = "premium"  # Claude Sonnet (better quality)
-
         analysis = analyze_folder_with_claude(
             "\n".join(all_text),
             requirements,
@@ -2470,7 +2462,6 @@ async def analyze_permit_folder(
             user_id=user_id,
             analysis_uuid=analysis_id,
             db_session=db,
-            tier=ai_tier,
         )
 
         file_tree = [{"name": p["name"], "size": p["size"]} for p in processed_files]
@@ -2519,7 +2510,6 @@ def analyze_folder_with_claude(
     user_id: int = None,
     analysis_uuid: str = None,
     db_session=None,
-    tier: str = "standard",
 ) -> dict:
     """Analyze with Claude - Enhanced version with city-specific knowledge"""
     import anthropic
@@ -3987,48 +3977,6 @@ SCORING:
 
 Be SPECIFIC about the permit type. Read the documents carefully to identify exactly what work is being done."""
 
-    # STANDARD TIER: Use Gemini Flash (95% cheaper)
-    if tier == "standard" and get_google_key():
-        try:
-            print(f"Using Gemini Flash (standard tier) for {city_name}")
-            result = analyze_with_gemini(prompt, max_tokens=4096)
-
-            print(
-                f"Gemini Usage: {result['input_tokens']:,} in + {result['output_tokens']:,} out "
-                f"= {result['total_tokens']:,} tokens (${result['cost_cents'] / 100:.3f})"
-            )
-
-            if db_session:
-                try:
-                    usage_log = AIUsageLog(
-                        user_id=user_id,
-                        analysis_uuid=analysis_uuid,
-                        model=result["model"],
-                        input_tokens=result["input_tokens"],
-                        output_tokens=result["output_tokens"],
-                        total_tokens=result["total_tokens"],
-                        cost_cents=result["cost_cents"],
-                        city=city_name,
-                        permit_type=permit_name,
-                    )
-                    db_session.add(usage_log)
-                    db_session.commit()
-                except Exception as log_err:
-                    print(f"Failed to log Gemini usage: {log_err}")
-
-            parsed = parse_analysis_json(result["response_text"])
-            parsed["_metadata"] = {
-                "provider": "gemini",
-                "model": result["model"],
-                "tier": "standard",
-                "estimated_cost_usd": result["cost_cents"] / 100,
-            }
-            return parsed
-
-        except Exception as gemini_err:
-            print(f"Gemini failed, falling back to Claude: {gemini_err}")
-
-    # PREMIUM TIER: Use Claude Sonnet (or fallback from Gemini failure)
     try:
         msg = client.messages.create(
             model="claude-sonnet-4-20250514",
@@ -4125,7 +4073,6 @@ async def startup():
     print(f"   API Key: {'✅' if get_api_key() else '❌'}")
     print(f"   JWT Key: {'✅' if os.getenv('JWT_SECRET_KEY') else '❌'}")
     print(f"   Resend Key: {'✅' if os.getenv('RESEND_API_KEY') else '❌'}")
-    print(f"   Google Key: {'✅' if os.getenv('GOOGLE_API_KEY') else '❌ (Gemini disabled)'}")
 
 
 if __name__ == "__main__":
