@@ -1185,7 +1185,7 @@ export default function App() {
               <div className="mb-6"><span className="text-4xl font-black text-white">$29</span><span className="text-gray-500">/month</span></div>
               <ul className="space-y-3 mb-8 flex-grow">
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>30 analyses/month</li>
-                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Priority AI analysis</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Enhanced AI (deeper analysis)</li>
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Email support</li>
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Analysis history</li>
               </ul>
@@ -1201,7 +1201,7 @@ export default function App() {
               <div className="mb-6"><span className="text-4xl font-black text-white">$99</span><span className="text-gray-500">/month</span></div>
               <ul className="space-y-3 mb-8 flex-grow">
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Unlimited analyses</li>
-                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Priority AI analysis</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Enhanced AI (deeper analysis)</li>
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Email support</li>
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Analysis history</li>
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Team features (soon)</li>
@@ -2611,6 +2611,57 @@ export default function App() {
         .animate-float-1 { animation: float-1 8s ease-in-out infinite; }
         .animate-float-2 { animation: float-2 10s ease-in-out infinite; }
         .animate-float-3 { animation: float-3 12s ease-in-out infinite; }
+        
+        /* Testimonial animations */
+        @keyframes scroll-left {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-scroll-left {
+          animation: scroll-left 40s linear infinite;
+        }
+        .animate-scroll-left:hover {
+          animation-play-state: paused;
+        }
+        
+        @keyframes twinkle {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.5; transform: scale(1.3); }
+        }
+        .star-twinkle {
+          animation: twinkle 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes avatar-bounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-5px); }
+        }
+        .avatar-bounce {
+          animation: avatar-bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes border-glow {
+          0%, 100% { opacity: 0.3; filter: blur(2px); }
+          50% { opacity: 0.6; filter: blur(4px); }
+        }
+        .animate-border-glow {
+          animation: border-glow 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          25% { transform: translateY(-8px) rotate(0.5deg); }
+          75% { transform: translateY(-4px) rotate(-0.5deg); }
+        }
+        .review-card {
+          animation: float 4s ease-in-out infinite;
+        }
+        .review-card:nth-child(2n) {
+          animation-delay: 0.5s;
+        }
+        .review-card:nth-child(3n) {
+          animation-delay: 1s;
+        }
       `}</style>
     </div>
   )
@@ -2793,30 +2844,6 @@ export default function App() {
             <span className="px-4 py-1.5 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-sm font-semibold">AI-POWERED PERMIT ANALYSIS</span>
             <h1 className="text-5xl md:text-7xl font-black mt-4 mb-6"><span className="bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">South Florida</span><br/><span className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Permit Checker</span></h1>
             <p className="text-xl text-gray-400 mb-6">Upload your permit package and get instant AI-powered analysis</p>
-            
-            {/* Horizontal Scrolling Reviews Ticker */}
-            <div className="relative overflow-hidden mb-6">
-              <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-black to-transparent z-10"></div>
-              <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-black to-transparent z-10"></div>
-              <div className="flex animate-ticker">
-                {[...allTestimonials, ...allTestimonials].map((t, i) => (
-                  <div 
-                    key={i}
-                    className="flex-shrink-0 mx-4 px-5 py-3 rounded-xl border border-cyan-500/30 bg-gradient-to-r from-cyan-500/10 to-emerald-500/10"
-                    style={{ boxShadow: '0 0 15px rgba(6,182,212,0.2)' }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-0.5 text-amber-400">
-                        {[...Array(t.stars || 5)].map((_, s) => <span key={s}>★</span>)}
-                      </div>
-                      <span className="text-white font-semibold">{t.name}</span>
-                      <span className="text-gray-400">—</span>
-                      <span className="text-cyan-300 italic">"{t.review_text || t.quote}"</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
             
             <div className="flex items-center justify-center gap-4 text-sm">
               <span className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400">3 Counties</span>
@@ -3023,72 +3050,6 @@ export default function App() {
         select::-webkit-scrollbar-track { background: #1f2937; border-radius: 4px; }
         select::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
         select::-webkit-scrollbar-thumb:hover { background: #6b7280; }
-        
-        @keyframes scroll-left {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        .animate-scroll-left {
-          animation: scroll-left 40s linear infinite;
-        }
-        .animate-scroll-left:hover {
-          animation-play-state: paused;
-        }
-        
-        /* Star twinkling animation */
-        @keyframes twinkle {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.5; transform: scale(1.3); }
-        }
-        .star-twinkle {
-          animation: twinkle 1.5s ease-in-out infinite;
-        }
-        
-        /* Avatar bounce animation */
-        @keyframes avatar-bounce {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-5px); }
-        }
-        .avatar-bounce {
-          animation: avatar-bounce 2s ease-in-out infinite;
-        }
-        
-        /* Glowing border animation */
-        @keyframes border-glow {
-          0%, 100% { opacity: 0.3; filter: blur(2px); }
-          50% { opacity: 0.6; filter: blur(4px); }
-        }
-        .animate-border-glow {
-          animation: border-glow 3s ease-in-out infinite;
-        }
-        
-        /* Review card float animation */
-        @keyframes float {
-          0%, 100% { transform: translateY(0) rotate(0deg); }
-          25% { transform: translateY(-8px) rotate(0.5deg); }
-          75% { transform: translateY(-4px) rotate(-0.5deg); }
-        }
-        .review-card {
-          animation: float 4s ease-in-out infinite;
-        }
-        .review-card:nth-child(2n) {
-          animation-delay: 0.5s;
-        }
-        .review-card:nth-child(3n) {
-          animation-delay: 1s;
-        }
-        
-        /* Hero ticker animation */
-        @keyframes ticker {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        .animate-ticker {
-          animation: ticker 60s linear infinite;
-        }
-        .animate-ticker:hover {
-          animation-play-state: paused;
-        }
       `}</style>
     </div>
   )
