@@ -429,7 +429,7 @@ export default function App() {
   const NavBar = ({ showBack = false }) => (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-cyan-500/20">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3 cursor-pointer" onClick={() => { setPage('home'); setResults(null); setMobileMenuOpen(false) }}>
+        <div className="flex items-center gap-3" onClick={() => { setPage('home'); setResults(null); setMobileMenuOpen(false) }}>
           <div className="w-11 h-11 rounded-xl overflow-hidden">
             <img src="/adc_logo.png" alt="Flo Permit" className="w-full h-full object-contain" />
           </div>
@@ -525,7 +525,7 @@ export default function App() {
           <div><h4 className="font-semibold text-white mb-4">Legal</h4><ul className="space-y-2"><li><button onClick={() => setPage('terms')} className="text-gray-500 hover:text-cyan-400 text-sm">Terms & Conditions</button></li><li><button onClick={() => setPage('privacy')} className="text-gray-500 hover:text-cyan-400 text-sm">Privacy Policy</button></li></ul></div>
           <div><h4 className="font-semibold text-white mb-4">Support</h4><ul className="space-y-2"><li><button onClick={() => setPage('contact')} className="text-gray-500 hover:text-cyan-400 text-sm">Contact Us</button></li><li><button onClick={() => setPage('faq')} className="text-gray-500 hover:text-cyan-400 text-sm">FAQ</button></li><li><a href="mailto:support@flopermit.com" className="text-gray-500 hover:text-cyan-400 text-sm">support@flopermit.com</a></li></ul></div>
         </div>
-        <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row items-center justify-between gap-4"><p className="text-gray-500 text-sm">© 2026 Flo Permit. All rights reserved.</p><p className="text-gray-600 text-xs">Serving Broward, Palm Beach & Miami-Dade Counties</p></div>
+        <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row items-center justify-between gap-4"><p className="text-gray-500 text-sm">© 2026 Flo Permit. All rights reserved.</p><p className="text-gray-600 text-xs">Serving South Florida</p></div>
       </div>
     </footer>
   )
@@ -2676,6 +2676,20 @@ export default function App() {
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
         <div className="absolute inset-0 opacity-20" style={{backgroundImage: 'linear-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(6, 182, 212, 0.1) 1px, transparent 1px)', backgroundSize: '50px 50px'}}></div>
+        
+        {/* Floating glowing particles */}
+        <div className="particle particle-1"></div>
+        <div className="particle particle-2"></div>
+        <div className="particle particle-3"></div>
+        <div className="particle particle-4"></div>
+        <div className="particle particle-5"></div>
+        <div className="particle particle-6"></div>
+        <div className="particle particle-7"></div>
+        <div className="particle particle-8"></div>
+        <div className="particle particle-9"></div>
+        <div className="particle particle-10"></div>
+        <div className="particle particle-11"></div>
+        <div className="particle particle-12"></div>
       </div>
       <NavBar />
 
@@ -3050,6 +3064,39 @@ export default function App() {
         select::-webkit-scrollbar-track { background: #1f2937; border-radius: 4px; }
         select::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
         select::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+        
+        /* Glowing particles */
+        .particle {
+          position: absolute;
+          border-radius: 50%;
+          pointer-events: none;
+          animation: particleFade 6s ease-in-out infinite, particleFloat 8s ease-in-out infinite;
+        }
+        .particle-1  { width: 4px; height: 4px; background: rgba(6,182,212,0.6); top: 8%; left: 12%; animation-delay: 0s; }
+        .particle-2  { width: 6px; height: 6px; background: rgba(16,185,129,0.5); top: 15%; left: 75%; animation-delay: 1s; }
+        .particle-3  { width: 3px; height: 3px; background: rgba(6,182,212,0.7); top: 25%; left: 30%; animation-delay: 2s; }
+        .particle-4  { width: 5px; height: 5px; background: rgba(139,92,246,0.4); top: 35%; left: 85%; animation-delay: 0.5s; }
+        .particle-5  { width: 4px; height: 4px; background: rgba(16,185,129,0.6); top: 50%; left: 8%;  animation-delay: 3s; }
+        .particle-6  { width: 7px; height: 7px; background: rgba(6,182,212,0.3); top: 60%; left: 65%; animation-delay: 1.5s; }
+        .particle-7  { width: 3px; height: 3px; background: rgba(139,92,246,0.5); top: 70%; left: 20%; animation-delay: 4s; }
+        .particle-8  { width: 5px; height: 5px; background: rgba(6,182,212,0.5); top: 80%; left: 50%; animation-delay: 2.5s; }
+        .particle-9  { width: 4px; height: 4px; background: rgba(16,185,129,0.4); top: 12%; left: 45%; animation-delay: 3.5s; }
+        .particle-10 { width: 6px; height: 6px; background: rgba(6,182,212,0.4); top: 45%; left: 92%; animation-delay: 0.8s; }
+        .particle-11 { width: 3px; height: 3px; background: rgba(139,92,246,0.6); top: 88%; left: 35%; animation-delay: 2.2s; }
+        .particle-12 { width: 5px; height: 5px; background: rgba(16,185,129,0.5); top: 5%;  left: 58%; animation-delay: 4.5s; }
+        
+        @keyframes particleFade {
+          0%, 100% { opacity: 0; transform: scale(0.5); }
+          20% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.8; transform: scale(1.2); }
+          80% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes particleFloat {
+          0%, 100% { transform: translateY(0) translateX(0); }
+          25% { transform: translateY(-15px) translateX(8px); }
+          50% { transform: translateY(-8px) translateX(-5px); }
+          75% { transform: translateY(-20px) translateX(12px); }
+        }
       `}</style>
     </div>
   )
