@@ -10,6 +10,16 @@
   box-sizing: border-box;
 }
 
+*, *::before, *::after {
+  cursor: default;
+}
+a, button, label, select, [role="button"], [onclick] {
+  cursor: pointer;
+}
+input, textarea {
+  cursor: text;
+}
+
 body {
   font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
