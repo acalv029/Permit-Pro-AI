@@ -2307,38 +2307,6 @@ async def delete_review_admin(
     return {"success": True}
 
 
-@app.get("/api/pricing")
-async def get_pricing():
-    return {
-        "tiers": [
-            {
-                "id": "free",
-                "name": "Free",
-                "price": 0,
-                "features": ["3 analyses/month", "Basic AI", "Email support"],
-            },
-            {
-                "id": "pro",
-                "name": "Pro",
-                "price": 49,
-                "features": [
-                    "Unlimited analyses",
-                    "Advanced AI",
-                    "Priority support",
-                    "History",
-                ],
-                "popular": True,
-            },
-            {
-                "id": "business",
-                "name": "Business",
-                "price": 149,
-                "features": ["Everything in Pro", "Team (5 users)", "API access"],
-            },
-        ]
-    }
-
-
 # ============================================================================
 # MULTI-FILE ANALYSIS
 # ============================================================================
@@ -2609,7 +2577,7 @@ LIGHTHOUSE POINT SPECIFIC REQUIREMENTS:
 
 LIGHTHOUSE POINT - NO OWNER/BUILDER ALLOWED FOR:
 - ALL electrical work
-- ALL roofing work  
+- ALL roofing work
 - ALL piling work
 Licensed contractors REQUIRED for these trades!
 
@@ -2766,7 +2734,7 @@ BOCA RATON COMMERCIAL:
 
 BOCA RATON MARINE CONSTRUCTION:
 - Outside agency approvals (DEP, County ERM, ACOE) required BEFORE city
-- Dock limits: <100ft waterway = 6ft max, ≥100ft = 8ft max projection
+- Dock limits: <100ft waterway = 6ft max, >=100ft = 8ft max projection
 - Dock setback from adjacent property: minimum 10 feet
 - Each dock requires ladder extending 2ft below mean low water
 
@@ -2951,7 +2919,6 @@ HOLLYWOOD NOC REQUIREMENTS:
 
 HOLLYWOOD PLAN REVIEW:
 - 30 working day review period
-- Does NOT include Planning, Zoning, Engineering, or Fire review time
 - Permit applications become NULL after 60 days if no action taken
 - Job value verified against R.S. Means Building Construction Cost Data
 
@@ -3034,30 +3001,22 @@ PLANTATION SPECIFIC REQUIREMENTS:
 PLANTATION WORK HOURS:
 - Monday-Friday: 7 AM - 8 PM
 - Saturday: 7 AM - 8 PM (pile-driving 8 AM - 5:30 PM only)
-- NO WORK on Sundays or holidays (City Ordinance Chapter 16, Sec 16-2)
+- NO WORK on Sundays or holidays
 
 PLANTATION ROUTING - SKIP ZONING FOR:
-- A/C changeouts - go DIRECTLY to Building Division
-- Re-roofing - go DIRECTLY to Building Division
-- Interior work
+- A/C changeouts, Re-roofing, Interior work - go DIRECTLY to Building Division
 
 PLANTATION CRITICAL REQUIREMENTS:
 - Demolition permits MUST include Building AND Electrical permits together
-- Plenum ceilings require specs on Structural, Electrical, Mechanical AND Plumbing plans
-- Pre-fab buildings MUST have State approved drawings (Miami-Dade or Florida State)
 - Product Approvals must be stamped 'approved' by Architect of record
 - Plans must be mechanically reproduced - hand-drawn plans rejected
 
 PLANTATION SPECIAL RULES:
-- Preliminary Review SUSPENDED as of 05/16/2024
 - COA/HOA/POA approval NOT required for building permit (effective 05/08/2023)
-- Temporary Power requires notarized signatures from owner, GC, AND electrical contractor
-- Burglar alarms (SFR) require registration permit from Plantation Police Dept
 - Marine work requires US Longshoreman's and Harbor Workers insurance
 
 PLANTATION FEES:
-- $20 application fee
-- $10 per page of plans (first page free)
+- $20 application fee, $10 per page of plans (first page free)
 - Fast Track available with $1,000 cost recovery account
 - Work without permit = 100% penalty fee added
 """
@@ -3066,40 +3025,20 @@ PLANTATION FEES:
 SUNRISE SPECIFIC REQUIREMENTS:
 - Portal: sunrisefl.gov/openforbusiness
 - Signed Checklist is REQUIRED - most common rejection reason!
-- Professional Day: Wednesdays 8 AM - Noon (walk-in with Plans Examiners)
+- Professional Day: Wednesdays 8 AM - Noon
 - Contractor registration expires September 30th ANNUALLY
 
 SUNRISE TWO-STEP PROCESS:
-Step 1: Broward County ePermits (broward.org/epermits) for:
-- Demolition, additions, alterations, new construction
-
+Step 1: Broward County ePermits for demolition, additions, alterations, new construction
 Step 2: City of Sunrise after County approval
 
 SUNRISE - GO DIRECTLY TO BUILDING (skip Zoning):
-- Re-roofing
-- Interior renovations
-- Fencing
-- Interior plumbing repairs
-- Interior electrical repairs
-- A/C changeouts
-
-SUNRISE - REQUIRES ZONING FIRST:
-- New construction
-- Additions
-- Alterations
-- Exterior elevation changes
+- Re-roofing, Interior renovations, Fencing, Interior plumbing/electrical repairs, A/C changeouts
 
 SUNRISE CRITICAL REQUIREMENTS:
 - Energy calculations must be in 2 SETS
-- Special Inspection forms must be signed by BOTH inspector AND Owner
 - Truss drawings need Engineer seal AND Architect/Engineer of record acceptance
 - Schedule inspections by 3 PM one day in advance
-- Call Chief Inspectors between 8:00-8:30 AM for specific times
-
-SUNRISE PROCESSING TIMES:
-- Simple permits (fence, re-roof): ~2 days if correct
-- Single-family permits: 2-3 weeks if correct
-- Delays usually from plans not promptly corrected
 
 SUNRISE PENALTIES:
 - Work without permit = DOUBLE fee charged
@@ -3108,7 +3047,7 @@ SUNRISE PENALTIES:
         city_context = """
 WEST PALM BEACH SPECIFIC REQUIREMENTS (PALM BEACH COUNTY):
 - Portal: EPL Civic Access Portal
-- NOT in HVHZ (Palm Beach County - still need Florida Product Approvals)
+- NOT in HVHZ (Palm Beach County)
 - Insurance MUST list: 'City of West Palm Beach, 401 Clematis Street, West Palm Beach, FL 33401'
 
 WEST PALM BEACH NOC REQUIREMENTS:
@@ -3407,7 +3346,7 @@ CITY OF HOMESTEAD SPECIFIC REQUIREMENTS (MIAMI-DADE COUNTY - HVHZ):
 - Files MUST follow format: BD-YY-XXXXX-PT-R-DISCIPLINE
 - Example: BD-25-12345-PT-R-ARCHITECTURAL
 - Files AUTO-REJECTED if naming convention not followed!
-- NO special characters: # % & { } / \\ ? < > * $ ! ' : @ " + ` | = ~ ( )
+- NO special characters: # % & {{ }} / \\ ? < > * $ ! ' : @ " + ` | = ~ ( )
 
 HOMESTEAD PLAN REQUIREMENTS:
 - Leave upper-right corner blank for City seal
@@ -3446,7 +3385,7 @@ HOMESTEAD NOC:
 """
     elif city_key == "oakland_park":
         city_context = """
-CITY OF OAKLAND PARK SPECIFIC REQUIREMENTS (BROWARD COUNTY - HVHZ):
+OAKLAND PARK SPECIFIC REQUIREMENTS (BROWARD COUNTY - HVHZ):
 Contact: 954-630-4350 | building@oaklandparkfl.gov | 5399 N. Dixie Hwy, Suite #3, Oakland Park, FL 33334
 Hours: Monday-Friday 7:30 AM - 4:30 PM
 Uses Broward County Uniform Building Permit Application for ALL permit types.
@@ -3936,7 +3875,7 @@ TASK: Analyze this permit package ({file_count} files) for {city_name}.
 
 YOUR FIRST JOB: Identify the SPECIFIC permit type from the documents. Don't just say "plumbing" - determine if it's:
 - Water heater changeout
-- Gas line installation  
+- Gas line installation
 - Sewer cap/line
 - Irrigation system
 - Backflow installation
@@ -4042,7 +3981,10 @@ Be SPECIFIC about the permit type. Read the documents carefully to identify exac
         output_tokens = msg.usage.output_tokens
         total_tokens = input_tokens + output_tokens
         # Claude Sonnet 4 pricing: $3/1M input, $15/1M output
-        cost_cents = int((input_tokens * 0.003 + output_tokens * 0.015) * 100)
+        # FIXED: divide by 1M first, then convert to cents
+        cost_cents = max(
+            1, int((input_tokens * 3 + output_tokens * 15) / 1_000_000 * 100)
+        )
 
         print(
             f"📊 AI Usage: {input_tokens:,} in + {output_tokens:,} out = {total_tokens:,} tokens (${cost_cents / 100:.2f})"
@@ -4125,7 +4067,9 @@ async def startup():
     print(f"   API Key: {'✅' if get_api_key() else '❌'}")
     print(f"   JWT Key: {'✅' if os.getenv('JWT_SECRET_KEY') else '❌'}")
     print(f"   Resend Key: {'✅' if os.getenv('RESEND_API_KEY') else '❌'}")
-    print(f"   Google Key: {'✅' if os.getenv('GOOGLE_API_KEY') else '❌ (Gemini disabled)'}")
+    print(
+        f"   Google Key: {'✅' if os.getenv('GOOGLE_API_KEY') else '❌ (Gemini disabled)'}"
+    )
 
 
 if __name__ == "__main__":
