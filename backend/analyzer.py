@@ -1,6 +1,13 @@
 """
-PermitPro AI - Document Analyzer Module (Cost-Optimized)
+PermitPro AI - Document Analyzer Module (Enhanced)
 Multi-provider AI analysis: Gemini Flash (default) + Claude Sonnet (premium)
+
+Key improvements over v1:
+    - Injects city-specific gotchas and rejection reasons into AI prompt
+    - City info (NOC thresholds, portals, submission rules) included
+    - Much stronger system prompt with domain expertise
+    - Higher token limits to avoid truncating real permit packages
+    - Smart document trimming preserves permit-critical content
 """
 
 import anthropic
@@ -15,10 +22,105 @@ from typing import Optional
 # ============================================================================
 COST_PER_1K = {
     "gemini-2.0-flash": {"input": 0.0000750, "output": 0.000300},
-    "gemini-2.0-flash-lite": {"input": 0.0000000, "output": 0.000000},  # Free tier
+    "gemini-2.0-flash-lite": {"input": 0.0000000, "output": 0.000000},
     "claude-sonnet-4-20250514": {"input": 0.003000, "output": 0.015000},
     "claude-haiku-3-20240307": {"input": 0.000250, "output": 0.001250},
 }
+
+
+# ============================================================================
+# CITY CONTEXT BUILDER
+# ============================================================================
+
+
+def build_city_context(requirements: dict) -> str:
+    """
+    Build a rich city-specific context block from the requirements dict.
+    This is the KEY improvement - permit_data.py has all this info,
+    but the old analyzer never passed it to the AI.
+    """
+    parts = []
+
+    city = requirements.get("city", "Unknown")
+    city_info = requirements.get("city_info", {})
+    gotchas = requirements.get("gotchas", [])
+
+    # City header
+    parts.append(f"CITY: {city}")
+
+    # Key city facts the AI needs
+    if city_info:
+        if city_info.get("submission"):
+            parts.append(f"SUBMISSION RULES: {city_info['submission']}")
+        if city_info.get("portal"):
+            parts.append(f"PORTAL: {city_info['portal']}")
+        if city_info.get("noc_threshold"):
+            noc_line = f"NOC THRESHOLD: ${city_info['noc_threshold']:,} general"
+            if city_info.get("noc_threshold_roofing"):
+                noc_line += f", ${city_info['noc_threshold_roofing']:,} roofing"
+            if city_info.get("noc_threshold_hvac"):
+                noc_line += f", ${city_info['noc_threshold_hvac']:,} HVAC"
+            parts.append(noc_line)
+        if city_info.get("plan_sets"):
+            parts.append(f"PLAN SETS REQUIRED: {city_info['plan_sets']}")
+        if city_info.get("insurance_holder"):
+            parts.append(
+                f"INSURANCE CERTIFICATE HOLDER MUST READ: '{city_info['insurance_holder']}'"
+            )
+        if city_info.get("hvhz"):
+            parts.append(
+                "HVHZ: Yes - Miami-Dade NOA or FL Product Approval required for ALL exterior products"
+            )
+        if city_info.get("fire_review_required"):
+            parts.append(f"FIRE REVIEW: {city_info['fire_review_required']}")
+        if city_info.get("no_owner_builder"):
+            trades = ", ".join(city_info["no_owner_builder"])
+            parts.append(f"NO OWNER-BUILDER ALLOWED FOR: {trades}")
+        if city_info.get("survey_max_age"):
+            parts.append(f"SURVEY MAX AGE: {city_info['survey_max_age']}")
+        if city_info.get("notarization_required"):
+            parts.append("NOTARIZATION: All applications MUST be notarized")
+
+    # Known gotchas - these are the #1 rejection reasons per city
+    if gotchas:
+        parts.append("")
+        parts.append(
+            f"KNOWN REJECTION REASONS FOR {city.upper()} (check ALL of these):"
+        )
+        for i, gotcha in enumerate(gotchas, 1):
+            parts.append(f"  {i}. {gotcha}")
+
+    return "\n".join(parts)
+
+
+# ============================================================================
+# EXPERT SYSTEM PROMPT
+# ============================================================================
+
+SYSTEM_PROMPT = """You are PermitPro AI, an expert South Florida building permit analyst with deep knowledge of Broward County, Palm Beach County, and Miami-Dade County building departments.
+
+YOUR EXPERTISE:
+- You know that EVERY city has different quirks: ink color requirements, notarization rules, NOC thresholds, and submission portals.
+- You know that the #1 cause of permit rejection is paperwork issues (missing signatures, wrong ink, missing NOC, expired surveys), NOT code violations.
+- You know HVHZ (High Velocity Hurricane Zone) covers most of Broward and all of Miami-Dade, requiring Miami-Dade NOAs for exterior products.
+- You know contractors constantly get burned by city-specific gotchas they didn't know about.
+
+YOUR JOB:
+1. Check every required document against what was actually uploaded
+2. Flag city-specific gotchas that apply to THIS permit package
+3. Identify missing, expired, or incomplete items
+4. Provide specific, actionable fixes — not vague suggestions
+5. Be the contractor's best friend who saves them from rejection
+
+ANALYSIS RULES:
+- If a document is mentioned but you can't verify its contents (e.g., "NOC attached"), mark it PARTIAL and note you couldn't verify the details
+- If a required document appears completely absent from the uploaded materials, mark it MISSING
+- If something looks present and correct, mark it FOUND with evidence
+- If text is unclear or partially readable, mark it UNCLEAR and explain what you could/couldn't read
+- Pay special attention to: dates (expired surveys, expired NOCs), dollar amounts (NOC thresholds), signatures, ink color mentions, and insurance certificate holders
+- ALWAYS check if the project value triggers NOC requirements based on the city's threshold
+
+RESPOND WITH ONLY VALID JSON. No markdown fences, no backticks, no explanation outside the JSON."""
 
 
 # ============================================================================
@@ -26,13 +128,10 @@ COST_PER_1K = {
 # ============================================================================
 
 
-def trim_document_smart(document_text: str, max_chars: int = 8000) -> str:
+def trim_document_smart(document_text: str, max_chars: int = 15000) -> str:
     """
     Intelligently trim document text to reduce token usage.
     Keeps the most permit-relevant sections instead of blindly truncating.
-
-    For a typical permit doc, the key info is in headers, first pages,
-    and sections mentioning permits, contractors, owners, etc.
     """
     if len(document_text) <= max_chars:
         return document_text
@@ -74,6 +173,17 @@ def trim_document_smart(document_text: str, max_chars: int = 8000) -> str:
         "mechanical",
         "roofing",
         "building",
+        "notari",
+        "survey",
+        "elevation",
+        "wind",
+        "product approval",
+        "noa",
+        "signature",
+        "ink",
+        "expire",
+        "date",
+        "certificate",
     ]
 
     lines = document_text.split("\n")
@@ -83,8 +193,8 @@ def trim_document_smart(document_text: str, max_chars: int = 8000) -> str:
         score = 0
         line_lower = line.lower().strip()
 
-        # Boost first 30 lines (header/summary area)
-        if i < 30:
+        # Boost first 40 lines (header/summary area)
+        if i < 40:
             score += 3
 
         # Boost lines with priority keywords
@@ -92,7 +202,7 @@ def trim_document_smart(document_text: str, max_chars: int = 8000) -> str:
             if kw in line_lower:
                 score += 2
 
-        # Boost lines that look like form fields (contain ":" or are short labels)
+        # Boost lines that look like form fields
         if ":" in line and len(line) < 200:
             score += 2
 
@@ -100,18 +210,21 @@ def trim_document_smart(document_text: str, max_chars: int = 8000) -> str:
         if any(c.isdigit() for c in line):
             score += 1
 
+        # Boost page headers (our reader adds these)
+        if line.startswith("--- Page"):
+            score += 3
+
         # Skip empty or very short lines
         if len(line_lower) < 3:
             score = 0
 
         scored_lines.append((score, i, line))
 
-    # Sort by score (descending), keep top lines, then re-sort by position
+    # Sort by score descending, keep top lines, re-sort by position
     scored_lines.sort(key=lambda x: x[0], reverse=True)
 
-    kept_lines = []
-    char_count = 0
     selected = []
+    char_count = 0
 
     for score, idx, line in scored_lines:
         if char_count + len(line) > max_chars:
@@ -119,19 +232,99 @@ def trim_document_smart(document_text: str, max_chars: int = 8000) -> str:
         selected.append((idx, line))
         char_count += len(line) + 1
 
-    # Re-sort by original position to maintain document order
+    # Re-sort by original position
     selected.sort(key=lambda x: x[0])
 
     trimmed = "\n".join(line for _, line in selected)
 
     if len(trimmed) < len(document_text):
-        trimmed += f"\n\n[Document trimmed from {len(document_text)} to {len(trimmed)} chars for analysis]"
+        trimmed += f"\n\n[Document trimmed from {len(document_text):,} to {len(trimmed):,} chars — most permit-relevant content preserved]"
 
     return trimmed
 
 
 # ============================================================================
-# GEMINI FLASH PROVIDER (Default - Low Cost)
+# PROMPT BUILDER
+# ============================================================================
+
+
+def build_analysis_prompt(
+    document_text: str, requirements: dict, max_doc_chars: int = 15000
+) -> str:
+    """
+    Build the full analysis prompt with city context, requirements, and document.
+    This is where the magic happens - we inject everything the AI needs.
+    """
+    # Trim document
+    trimmed_text = trim_document_smart(document_text, max_chars=max_doc_chars)
+
+    # Build city context from requirements (uses gotchas + city_info)
+    city_context = build_city_context(requirements)
+
+    # Format requirements checklist
+    items = requirements.get("items", [])
+    requirements_list = "\n".join(
+        [f"  {i + 1}. {item}" for i, item in enumerate(items)]
+    )
+
+    permit_name = requirements.get("name", "Building Permit")
+
+    # Build inspection sequence if available
+    inspections = requirements.get("inspections", [])
+    inspection_note = ""
+    if inspections:
+        inspection_note = "\nINSPECTION SEQUENCE (for reference):\n"
+        inspection_note += "\n".join(
+            [f"  {i + 1}. {insp}" for i, insp in enumerate(inspections)]
+        )
+
+    prompt = f"""Analyze this permit document package for a {permit_name}.
+
+=== CITY-SPECIFIC CONTEXT ===
+{city_context}
+{inspection_note}
+
+=== REQUIRED DOCUMENTS / ITEMS TO VERIFY ===
+{requirements_list}
+
+=== UPLOADED DOCUMENT CONTENT ===
+{trimmed_text}
+
+=== YOUR TASK ===
+Check EVERY required item above against the document content.
+Also check EVERY city-specific gotcha listed above.
+Flag anything that could cause this permit to be REJECTED.
+
+Respond with ONLY this JSON structure:
+{{
+    "summary": "2-3 sentence executive summary. Lead with the most critical issue or confirm readiness.",
+    "overall_status": "READY" or "NEEDS_ATTENTION" or "INCOMPLETE",
+    "compliance_score": <0-100>,
+    "items_found": [
+        {{
+            "requirement": "The requirement text",
+            "status": "FOUND" or "MISSING" or "PARTIAL" or "UNCLEAR",
+            "evidence": "Quote or describe where you found it. Be specific.",
+            "recommendation": "Exact action needed if not FOUND. Include city-specific details."
+        }}
+    ],
+    "critical_issues": ["Must-fix items that WILL cause rejection. Be specific about the city rule."],
+    "recommendations": ["Nice-to-have improvements or things to double-check"],
+    "city_warnings": ["City-specific gotchas that apply to THIS permit package"],
+    "next_steps": ["Ordered actions the contractor should take right now"]
+}}
+
+IMPORTANT:
+- Every item in the requirements list MUST appear in items_found
+- If a city gotcha is relevant to the uploaded documents, include it in city_warnings
+- compliance_score: 90-100 = ready to submit, 70-89 = minor fixes, 50-69 = significant gaps, below 50 = major rework needed
+- Be the expert who saves the contractor from a rejection"""
+
+    return prompt, trimmed_text
+
+
+# ============================================================================
+# GEMINI FLASH PROVIDER (Standard Tier)
 # ============================================================================
 
 
@@ -143,9 +336,7 @@ def analyze_with_gemini(
 ) -> dict:
     """
     Analyze permit document using Google Gemini Flash.
-    ~90% cheaper than Claude Sonnet for structured analysis tasks.
-
-    Cost: ~$0.001-$0.01 per analysis vs $0.05-$0.15 for Sonnet
+    Cost: ~$0.002-$0.01 per analysis
     """
     try:
         import google.generativeai as genai
@@ -158,69 +349,38 @@ def analyze_with_gemini(
 
     genai.configure(api_key=api_key)
 
-    # Trim document to save tokens
-    trimmed_text = trim_document_smart(document_text, max_chars=8000)
-
-    requirements_list = "\n".join(
-        [f"  {i + 1}. {item}" for i, item in enumerate(requirements.get("items", []))]
+    prompt, trimmed_text = build_analysis_prompt(
+        document_text, requirements, max_doc_chars=10000
     )
 
-    permit_name = requirements.get("name", "Building Permit")
-
-    prompt = f"""You are PermitPro AI, an expert permit analyst for South Florida building permits.
-Analyze this permit document against requirements for a {permit_name}.
-
-REQUIREMENTS TO CHECK:
-{requirements_list}
-
-DOCUMENT CONTENT:
----
-{trimmed_text}
----
-
-Respond with ONLY valid JSON (no markdown, no backticks) using this exact structure:
-{{
-    "summary": "Brief 2-3 sentence executive summary",
-    "overall_status": "READY" or "NEEDS_ATTENTION" or "INCOMPLETE",
-    "compliance_score": <number 0-100>,
-    "items_found": [
-        {{
-            "requirement": "The requirement text",
-            "status": "FOUND" or "MISSING" or "PARTIAL" or "UNCLEAR",
-            "evidence": "Where/how this was found (if applicable)",
-            "recommendation": "Action needed (if not FOUND)"
-        }}
-    ],
-    "critical_issues": ["List of must-fix items"],
-    "recommendations": ["List of improvements"],
-    "next_steps": ["Ordered actions to take"]
-}}
-
-Be specific. Quote relevant sections when possible."""
-
     try:
-        gen_model = genai.GenerativeModel(model)
+        gen_model = genai.GenerativeModel(
+            model,
+            system_instruction=SYSTEM_PROMPT,
+        )
         response = gen_model.generate_content(
             prompt,
             generation_config=genai.types.GenerationConfig(
-                max_output_tokens=3000,
-                temperature=0.1,  # Low temp for consistent structured output
+                max_output_tokens=4000,
+                temperature=0.1,
             ),
         )
 
         response_text = response.text
         analysis = parse_analysis_response(response_text)
 
-        # Estimate token usage (rough: 4 chars ≈ 1 token)
-        est_input_tokens = len(prompt) // 4
+        # Estimate token usage
+        est_input_tokens = (len(SYSTEM_PROMPT) + len(prompt)) // 4
         est_output_tokens = len(response_text) // 4
 
         analysis["_metadata"] = {
             "model": model,
             "provider": "google",
             "tier": "standard",
-            "permit_type": permit_name,
+            "permit_type": requirements.get("name", ""),
+            "city": requirements.get("city", ""),
             "requirements_checked": len(requirements.get("items", [])),
+            "gotchas_injected": len(requirements.get("gotchas", [])),
             "document_length": len(document_text),
             "trimmed_length": len(trimmed_text),
             "tokens_used": {"input": est_input_tokens, "output": est_output_tokens},
@@ -254,61 +414,21 @@ def analyze_with_claude(
 ) -> dict:
     """
     Analyze permit document using Claude Sonnet (premium tier).
-    Higher quality analysis for paying customers.
+    Higher quality, more nuanced analysis for paying customers.
     """
     client = anthropic.Anthropic(api_key=api_key)
 
-    # Still trim, but allow more content for premium
-    trimmed_text = trim_document_smart(document_text, max_chars=12000)
-
-    requirements_list = "\n".join(
-        [f"  {i + 1}. {item}" for i, item in enumerate(requirements.get("items", []))]
+    # Premium gets more document content
+    prompt, trimmed_text = build_analysis_prompt(
+        document_text, requirements, max_doc_chars=20000
     )
-
-    permit_name = requirements.get("name", "Building Permit")
-
-    system_prompt = """You are PermitPro AI, an expert permit analyst for South Florida building permits. 
-Your job is to analyze permit documents and check them against municipal requirements.
-You are thorough, accurate, and helpful. You identify both issues AND positive aspects.
-You provide specific, actionable recommendations when items are missing or incomplete.
-Always respond with structured JSON output only - no markdown fences."""
-
-    user_prompt = f"""Analyze this permit document against the requirements for a {permit_name}.
-
-REQUIREMENTS TO CHECK:
-{requirements_list}
-
-DOCUMENT CONTENT:
----
-{trimmed_text}
----
-
-Provide a JSON response with this exact structure:
-{{
-    "summary": "Brief 2-3 sentence executive summary of the analysis",
-    "overall_status": "READY" | "NEEDS_ATTENTION" | "INCOMPLETE",
-    "compliance_score": <number 0-100>,
-    "items_found": [
-        {{
-            "requirement": "The requirement text",
-            "status": "FOUND" | "MISSING" | "PARTIAL" | "UNCLEAR",
-            "evidence": "Quote or description of where this was found (if applicable)",
-            "recommendation": "Specific action needed (if not FOUND)"
-        }}
-    ],
-    "critical_issues": ["List of critical items that MUST be addressed"],
-    "recommendations": ["List of recommended improvements"],
-    "next_steps": ["Ordered list of what to do next"]
-}}
-
-Be specific about what you found and what's missing. Quote relevant sections when possible."""
 
     try:
         message = client.messages.create(
             model=model,
-            max_tokens=3500,
-            messages=[{"role": "user", "content": user_prompt}],
-            system=system_prompt,
+            max_tokens=4096,
+            messages=[{"role": "user", "content": prompt}],
+            system=SYSTEM_PROMPT,
         )
 
         response_text = message.content[0].text
@@ -329,8 +449,10 @@ Be specific about what you found and what's missing. Quote relevant sections whe
             "model": model,
             "provider": "anthropic",
             "tier": "premium",
-            "permit_type": permit_name,
+            "permit_type": requirements.get("name", ""),
+            "city": requirements.get("city", ""),
             "requirements_checked": len(requirements.get("items", [])),
+            "gotchas_injected": len(requirements.get("gotchas", [])),
             "document_length": len(document_text),
             "trimmed_length": len(trimmed_text),
             "tokens_used": {
@@ -389,31 +511,25 @@ def analyze_document(
 
     Fallback: If preferred provider fails, falls back to the other.
     """
-
     if tier == "premium" and anthropic_api_key:
-        # Premium tier: Claude Sonnet
         result = analyze_with_claude(document_text, requirements, anthropic_api_key)
         if result.get("overall_status") != "ERROR":
             return result
-        # Fallback to Gemini if Claude fails
         if google_api_key:
             print("⚠️ Claude failed, falling back to Gemini Flash")
             return analyze_with_gemini(document_text, requirements, google_api_key)
         return result
 
     elif google_api_key:
-        # Standard tier: Gemini Flash
         result = analyze_with_gemini(document_text, requirements, google_api_key)
         if result.get("overall_status") != "ERROR":
             return result
-        # Fallback to Claude if Gemini fails
         if anthropic_api_key:
             print("⚠️ Gemini failed, falling back to Claude Sonnet")
             return analyze_with_claude(document_text, requirements, anthropic_api_key)
         return result
 
     elif anthropic_api_key:
-        # No Google key, use Claude for everything
         return analyze_with_claude(document_text, requirements, anthropic_api_key)
 
     else:
@@ -425,7 +541,7 @@ def analyze_document(
 
 
 # ============================================================================
-# QUICK CHECK (Uses Haiku - cheapest option)
+# QUICK CHECK
 # ============================================================================
 
 
@@ -438,7 +554,6 @@ def quick_check(
     Quick check if a document is a valid permit document.
     Uses the cheapest available provider.
     """
-
     snippet = document_text[:2000]
 
     prompt = f"""Look at this document text and quickly assess:
@@ -451,7 +566,6 @@ Document (first 2000 chars):
 
 Respond with ONLY valid JSON: {{"is_permit_document": true/false, "permit_type": "string", "jurisdiction": "string", "confidence": 0.0-1.0}}"""
 
-    # Prefer Gemini Flash (cheapest) → Haiku → Sonnet
     if google_api_key:
         try:
             import google.generativeai as genai
@@ -466,21 +580,20 @@ Respond with ONLY valid JSON: {{"is_permit_document": true/false, "permit_type":
             )
             return parse_analysis_response(response.text)
         except Exception:
-            pass  # Fall through to Haiku
+            pass
 
     if anthropic_api_key:
         try:
             client = anthropic.Anthropic(api_key=anthropic_api_key)
             message = client.messages.create(
-                model="claude-haiku-3-20240307",  # Cheapest Claude model
+                model="claude-haiku-3-20240307",
                 max_tokens=200,
                 messages=[{"role": "user", "content": prompt}],
             )
             return parse_analysis_response(message.content[0].text)
-        except Exception as e:
+        except Exception:
             pass
 
-    # Default: assume it's a permit doc and proceed
     return {
         "is_permit_document": True,
         "permit_type": "unknown",
@@ -506,7 +619,6 @@ def analyze_document_with_claude(
     """
     google_key = os.getenv("GOOGLE_API_KEY")
 
-    # If Google key is available, use standard (cheap) tier by default
     if google_key:
         return analyze_document(
             document_text,
@@ -516,12 +628,11 @@ def analyze_document_with_claude(
             google_api_key=google_key,
         )
 
-    # Otherwise fall back to Claude
     return analyze_with_claude(document_text, requirements, api_key, model)
 
 
 # ============================================================================
-# JSON PARSER (unchanged)
+# JSON PARSER
 # ============================================================================
 
 
@@ -584,6 +695,9 @@ if __name__ == "__main__":
         print("Error: Set ANTHROPIC_API_KEY or GOOGLE_API_KEY")
         exit(1)
 
+    # Import permit_data for a real test
+    from permit_data import get_permit_requirements, get_city_key
+
     test_document = """
     BUILDING PERMIT APPLICATION
     City of Fort Lauderdale
@@ -593,44 +707,29 @@ if __name__ == "__main__":
     Project Description: Kitchen remodel including new cabinets, countertops,
     and electrical upgrades for new appliances.
     Estimated Value: $45,000
+    Insurance: Certificate of Liability - Holder: City of Fort Lauderdale
     Attachments:
     - Site plan (2 copies)
     - Electrical drawings
-    - Notice of Commencement
+    - Notice of Commencement #2024-12345
     """
 
-    test_requirements = {
-        "name": "Building Permit",
-        "items": [
-            "Two (2) sets of plans signed and sealed by a Florida licensed professional",
-            "Completed permit application signed by owner or authorized agent",
-            "Notice of Commencement (NOC) recorded with Broward County",
-            "Contractor must be registered with City of Fort Lauderdale",
-            "Proof of workers' compensation insurance or exemption",
-        ],
-    }
+    # Use REAL requirements with gotchas
+    city_key = get_city_key("Fort Lauderdale")
+    test_requirements = get_permit_requirements(city_key, "building")
 
-    # Test standard tier (Gemini Flash)
-    print("=" * 50)
-    print("Testing STANDARD tier (Gemini Flash)...")
-    print("=" * 50)
+    print("=" * 60)
+    print(
+        f"Testing with {len(test_requirements.get('gotchas', []))} city gotchas injected"
+    )
+    print(f"City: {test_requirements.get('city', 'N/A')}")
+    print(f"Permit: {test_requirements.get('name', 'N/A')}")
+    print("=" * 60)
+
     result = analyze_document(
         test_document,
         test_requirements,
         tier="standard",
-        anthropic_api_key=anthropic_key,
-        google_api_key=google_key,
-    )
-    print(json.dumps(result, indent=2))
-
-    # Test premium tier (Claude Sonnet)
-    print("\n" + "=" * 50)
-    print("Testing PREMIUM tier (Claude Sonnet)...")
-    print("=" * 50)
-    result = analyze_document(
-        test_document,
-        test_requirements,
-        tier="premium",
         anthropic_api_key=anthropic_key,
         google_api_key=google_key,
     )
