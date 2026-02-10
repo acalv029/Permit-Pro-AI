@@ -2417,7 +2417,7 @@ export default function App() {
           <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none"></div>
           
           {/* Scrolling track */}
-          <div className="flex animate-scroll-left">
+          <div className="flex animate-scroll-right">
             {/* First set of testimonials */}
             {allTestimonials.map((t, i) => (
               <div 
@@ -2613,19 +2613,20 @@ export default function App() {
         .animate-float-2 { animation: float-2 10s ease-in-out infinite; }
         .animate-float-3 { animation: float-3 12s ease-in-out infinite; }
         /* Global cursor fix */
-        * { cursor: default !important; }
+        * { cursor: default !important; -webkit-user-select: none; -moz-user-select: none; user-select: none; }
         a, button, label, select, [role="button"], [onclick], .cursor-pointer { cursor: pointer !important; }
-        input, textarea { cursor: text !important; }
+        input, textarea { cursor: text !important; -webkit-user-select: text; -moz-user-select: text; user-select: text; }
+        p, h1, h2, h3, h4, h5, h6, span, li, td, th { -webkit-user-select: none; -moz-user-select: none; user-select: none; }
         
         /* Testimonial animations */
-        @keyframes scroll-left {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+        @keyframes scroll-right {
+          0% { transform: translateX(-50%); }
+          100% { transform: translateX(0); }
         }
-        .animate-scroll-left {
-          animation: scroll-left 40s linear infinite;
+        .animate-scroll-right {
+          animation: scroll-right 25s linear infinite;
         }
-        .animate-scroll-left:hover {
+        .animate-scroll-right:hover {
           animation-play-state: paused;
         }
         
@@ -3070,9 +3071,10 @@ export default function App() {
         select::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
         select::-webkit-scrollbar-thumb:hover { background: #6b7280; }
         /* Global cursor fix */
-        * { cursor: default !important; }
+        * { cursor: default !important; -webkit-user-select: none; -moz-user-select: none; user-select: none; }
         a, button, label, select, [role="button"], [onclick], .cursor-pointer { cursor: pointer !important; }
-        input, textarea { cursor: text !important; }
+        input, textarea { cursor: text !important; -webkit-user-select: text; -moz-user-select: text; user-select: text; }
+        p, h1, h2, h3, h4, h5, h6, span, li, td, th { -webkit-user-select: none; -moz-user-select: none; user-select: none; }
         
         /* Glowing particles */
         .particle {
