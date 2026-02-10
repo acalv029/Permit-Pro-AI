@@ -318,6 +318,8 @@ IMPORTANT:
 - Every item in the requirements list MUST appear in items_found
 - If a city gotcha is relevant to the uploaded documents, include it in city_warnings
 - compliance_score: 90-100 = ready to submit, 70-89 = minor fixes, 50-69 = significant gaps, below 50 = major rework needed
+- CITY MISMATCH CHECK: If the documents mention a DIFFERENT city than the one selected above, flag this as a CRITICAL issue immediately. Example: user selected "Pompano Beach" but documents say "City of Fort Lauderdale" — this means the wrong city was selected and ALL requirements may be wrong.
+- PERMIT TYPE MISMATCH CHECK: If the documents clearly describe a DIFFERENT type of work than the permit type selected, flag this as a CRITICAL issue. Example: user selected "Electrical" but documents describe roofing work, or user selected "Plumbing" but documents are about an HVAC changeout. Tell the user what permit type the documents actually appear to be for.
 - Be the expert who saves the contractor from a rejection"""
 
     return prompt, trimmed_text

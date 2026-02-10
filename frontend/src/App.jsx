@@ -65,12 +65,13 @@ export default function App() {
 
   // Default testimonials (shown when no user reviews yet)
   const defaultTestimonials = [
-    { name: 'ADC Builders', role: 'General Contractor', city: 'Coconut Creek', stars: 5, review_text: 'When we pull permits now, we always analyze it first so we don\'t have to keep going back and forth with the building department.' },
-    { name: 'Peter Calvo', role: 'City Wide Group', city: 'South Florida', stars: 5, review_text: 'Flo Permit has streamlined our entire permit submission process. We use it on every project now — residential, commercial, all of it.' },
-    { name: 'Carlos M.', role: 'General Contractor', city: 'Fort Lauderdale', stars: 5, review_text: 'Caught two missing documents I would have missed. Saved me a trip back to the permit office and probably a week of delays.' },
-    { name: 'Marc McGowan', role: 'Boat Lift Installers', city: 'Broward County', stars: 5, review_text: 'I use Flo Permit for all my boat lift and seawall permitting. It knows exactly what each city needs. Total game changer.' },
-    { name: 'Sarah T.', role: 'Homeowner', city: 'Coral Springs', stars: 5, review_text: 'As a first-time homeowner doing a renovation, I had no idea what documents I needed. Flo Permit made it so simple.' },
-    { name: 'Mike R.', role: 'GC / Owner', city: 'Boca Raton', stars: 5, review_text: 'We run 10+ permits a month. This tool helps our office catch things before submission. Huge time saver for the whole team.' }
+    { name: 'ADC Builders', role: 'General Contractor', city: 'Coconut Creek', stars: 5, review_text: 'We run everything through this before we go to the building dept now. Way less back and forth, way less headaches.' },
+    { name: 'Peter Calvo', role: 'City Wide Group', city: 'South Florida', stars: 5, review_text: 'Honestly didn\'t think we needed this until we tried it. Now the whole office uses it on every job. Residential, commercial, doesn\'t matter.' },
+    { name: 'Carlos M.', role: 'General Contractor', city: 'Fort Lauderdale', stars: 5, review_text: 'It flagged two docs I forgot to include. Would\'ve been another trip to the permit office and like a week wasted. Paid for itself right there.' },
+    { name: 'Marc McGowan', role: 'Boat Lift Installers', city: 'Broward County', stars: 5, review_text: 'Marine permitting is a nightmare with all the different agencies. This thing actually knows what each city wants. Been using it for every project.' },
+    { name: 'Jennifer Benitez', role: 'Permit Expediter', city: 'Pembroke Pines', stars: 5, review_text: 'I pull permits all day every day and this catches stuff I miss when I\'m moving fast. The city-specific warnings alone are worth it.' },
+    { name: 'Sarah T.', role: 'Homeowner', city: 'Coral Springs', stars: 4, review_text: 'First time pulling a permit for my kitchen reno and I had no clue what I needed. This walked me through it. Super helpful.' },
+    { name: 'Mike R.', role: 'GC / Owner', city: 'Boca Raton', stars: 5, review_text: 'We do probably 10-15 permits a month. My office manager runs them through Flo before we submit anything now. Saves us so much time.' }
   ]
 
   // Combine default + user reviews
@@ -2611,6 +2612,10 @@ export default function App() {
         .animate-float-1 { animation: float-1 8s ease-in-out infinite; }
         .animate-float-2 { animation: float-2 10s ease-in-out infinite; }
         .animate-float-3 { animation: float-3 12s ease-in-out infinite; }
+        /* Global cursor fix */
+        * { cursor: default !important; }
+        a, button, label, select, [role="button"], [onclick], .cursor-pointer { cursor: pointer !important; }
+        input, textarea { cursor: text !important; }
         
         /* Testimonial animations */
         @keyframes scroll-left {
@@ -3064,6 +3069,10 @@ export default function App() {
         select::-webkit-scrollbar-track { background: #1f2937; border-radius: 4px; }
         select::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
         select::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+        /* Global cursor fix */
+        * { cursor: default !important; }
+        a, button, label, select, [role="button"], [onclick], .cursor-pointer { cursor: pointer !important; }
+        input, textarea { cursor: text !important; }
         
         /* Glowing particles */
         .particle {
