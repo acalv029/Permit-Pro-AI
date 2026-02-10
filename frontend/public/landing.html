@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flo Permit — Stop Getting Rejected at the Permit Counter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  :root {
+    --cyan: #06b6d4;
+    --emerald: #10b981;
+    --dark: #0a0a0a;
+    --card: #111111;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--dark);
+    color: #e5e7eb;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* ── NAV ── */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    padding: 16px 24px;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(6,182,212,0.15);
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: 100%;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; }
+  .nav-logo img { width: 40px; height: 40px; border-radius: 10px; }
+  .nav-logo span { font-size: 20px; font-weight: 800; }
+  .nav-logo .flo { color: var(--cyan); }
+  .nav-cta {
+    padding: 10px 24px;
+    background: linear-gradient(135deg, var(--cyan), var(--emerald));
+    color: #000; font-weight: 700; font-size: 14px;
+    border: none; border-radius: 10px; cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(6,182,212,0.4); }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 140px 24px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    background: rgba(6,182,212,0.1);
+    border: 1px solid rgba(6,182,212,0.3);
+    border-radius: 100px;
+    font-size: 13px; font-weight: 600;
+    color: var(--cyan);
+    margin-bottom: 24px;
+    letter-spacing: 0.5px;
+  }
+  .hero h1 {
+    font-size: clamp(32px, 6vw, 56px);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    letter-spacing: -1px;
+  }
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--cyan), var(--emerald));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: clamp(16px, 2.5vw, 20px);
+    color: #9ca3af;
+    max-width: 560px;
+    margin: 0 auto 36px;
+    line-height: 1.5;
+  }
+  .hero-cta {
+    display: inline-block;
+    padding: 16px 40px;
+    background: linear-gradient(135deg, var(--cyan), var(--emerald));
+    color: #000; font-weight: 800; font-size: 17px;
+    border: none; border-radius: 14px; cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    letter-spacing: -0.3px;
+  }
+  .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(6,182,212,0.35); }
+  .hero-free {
+    display: block;
+    margin-top: 12px;
+    font-size: 14px;
+    color: #6b7280;
+  }
+  .hero-free strong { color: #9ca3af; }
+
+  /* ── PAIN POINTS ── */
+  .pain {
+    padding: 60px 24px;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .pain-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .pain-card {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 28px 24px;
+    text-align: left;
+  }
+  .pain-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .pain-card h3 {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .pain-card p {
+    font-size: 14px;
+    color: #9ca3af;
+    line-height: 1.5;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how {
+    padding: 80px 24px;
+    text-align: center;
+  }
+  .section-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: clamp(24px, 4vw, 38px);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 48px;
+    letter-spacing: -0.5px;
+  }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 32px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .step {
+    position: relative;
+  }
+  .step-num {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(6,182,212,0.15), rgba(16,185,129,0.15));
+    border: 1px solid rgba(6,182,212,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 800; color: var(--cyan);
+    margin: 0 auto 16px;
+  }
+  .step h3 {
+    color: #fff;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .step p {
+    font-size: 14px;
+    color: #9ca3af;
+    max-width: 260px;
+    margin: 0 auto;
+  }
+
+  /* ── WHAT IT CATCHES ── */
+  .catches {
+    padding: 60px 24px 80px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .catch-list {
+    list-style: none;
+    display: grid;
+    gap: 12px;
+  }
+  .catch-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 20px;
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    font-size: 15px;
+    color: #d1d5db;
+  }
+  .catch-check {
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    background: rgba(16,185,129,0.15);
+    border: 1px solid rgba(16,185,129,0.4);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--emerald);
+    font-size: 13px;
+    font-weight: 700;
+    margin-top: 1px;
+  }
+
+  /* ── SOCIAL PROOF ── */
+  .proof {
+    padding: 60px 24px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .proof-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .proof-card {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 24px;
+  }
+  .proof-stars { color: #facc15; font-size: 14px; letter-spacing: 2px; margin-bottom: 12px; }
+  .proof-text {
+    font-size: 15px;
+    color: #d1d5db;
+    font-style: italic;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+  .proof-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .proof-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--cyan), var(--emerald));
+    display: flex; align-items: center; justify-content: center;
+    color: #000; font-weight: 700; font-size: 14px;
+  }
+  .proof-name { color: #fff; font-weight: 600; font-size: 14px; }
+  .proof-role { color: #6b7280; font-size: 13px; }
+
+  /* ── COMPARISON ── */
+  .compare {
+    padding: 60px 24px 80px;
+    text-align: center;
+  }
+  .compare-box {
+    max-width: 700px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .compare-col {
+    padding: 28px 24px;
+    border-radius: 14px;
+    text-align: left;
+  }
+  .compare-col.old {
+    background: rgba(239,68,68,0.06);
+    border: 1px solid rgba(239,68,68,0.15);
+  }
+  .compare-col.new {
+    background: rgba(16,185,129,0.06);
+    border: 1px solid rgba(16,185,129,0.2);
+  }
+  .compare-col h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .compare-col.old h3 { color: #ef4444; }
+  .compare-col.new h3 { color: var(--emerald); }
+  .compare-col ul {
+    list-style: none;
+    display: grid;
+    gap: 10px;
+  }
+  .compare-col li {
+    font-size: 14px;
+    color: #9ca3af;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.4;
+  }
+  .compare-col.old li::before { content: '✕'; color: #ef4444; font-weight: 700; font-size: 12px; margin-top: 2px; }
+  .compare-col.new li::before { content: '✓'; color: var(--emerald); font-weight: 700; font-size: 12px; margin-top: 2px; }
+
+  /* ── FINAL CTA ── */
+  .final-cta {
+    padding: 80px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .final-cta::before {
+    content: '';
+    position: absolute; bottom: -100px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .final-cta h2 {
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+  .final-cta p {
+    color: #9ca3af;
+    font-size: 17px;
+    margin-bottom: 32px;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    padding: 32px 24px;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    font-size: 13px;
+    color: #4b5563;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .compare-box { grid-template-columns: 1fr; }
+    .hero { padding: 120px 20px 60px; }
+    .nav-cta { padding: 8px 16px; font-size: 13px; }
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-in {
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards;
+  }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.3s; }
+  .delay-4 { animation-delay: 0.4s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">
+    <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--cyan),var(--emerald));display:flex;align-items:center;justify-content:center;font-weight:900;color:#000;font-size:18px;">F</div>
+    <span><span class="flo">Flo</span> Permit</span>
+  </div>
+  <a href="https://flopermit.com" class="nav-cta">Try Free →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge animate-in">SOUTH FLORIDA CONTRACTORS</div>
+  <h1 class="animate-in delay-1">Stop getting <em>rejected</em><br>at the permit counter.</h1>
+  <p class="hero-sub animate-in delay-2">Upload your permit docs. Our AI checks them against your city's actual requirements and tells you exactly what's missing — before you drive to the building department.</p>
+  <a href="https://flopermit.com" class="hero-cta animate-in delay-3">Check My Permit Package Free</a>
+  <span class="hero-free animate-in delay-4"><strong>3 free analyses/month.</strong> No credit card needed.</span>
+</section>
+
+<!-- PAIN POINTS -->
+<section class="pain">
+  <div class="pain-grid">
+    <div class="pain-card">
+      <span class="pain-icon">🚫</span>
+      <h3>Another rejection</h3>
+      <p>Missing one document. Now you're making another trip to the building department and losing a day.</p>
+    </div>
+    <div class="pain-card">
+      <span class="pain-icon">🤷</span>
+      <h3>Every city is different</h3>
+      <p>Fort Lauderdale wants it one way, Pompano wants it another. Hard to keep up with every city's rules.</p>
+    </div>
+    <div class="pain-card">
+      <span class="pain-icon">💸</span>
+      <h3>Expediters are expensive</h3>
+      <p>Paying $300-500 per permit for someone to check your paperwork adds up fast when you're pulling 10+ a month.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="section-label">How It Works</div>
+  <h2 class="section-title">Three steps. Thirty seconds.</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Pick your city</h3>
+      <p>Select from Fort Lauderdale, Pompano Beach, Hollywood, Boca Raton, and more.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>Upload your docs</h3>
+      <p>Drag in your entire permit package — applications, plans, NOCs, insurance certs, all of it.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>Get your checklist</h3>
+      <p>See exactly what's missing, what's wrong, and what each city specifically requires.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT IT CATCHES -->
+<section class="catches">
+  <div class="section-label" style="text-align:center;">What It Catches</div>
+  <h2 class="section-title" style="text-align:center;">The stuff that gets you rejected</h2>
+  <ul class="catch-list">
+    <li><span class="catch-check">✓</span>Missing or unrecorded Notice of Commencement</li>
+    <li><span class="catch-check">✓</span>Insurance cert with wrong certificate holder name</li>
+    <li><span class="catch-check">✓</span>Unsigned or unsealed plans and applications</li>
+    <li><span class="catch-check">✓</span>Wrong number of plan sets for that city</li>
+    <li><span class="catch-check">✓</span>Missing product approvals or NOAs for HVHZ</li>
+    <li><span class="catch-check">✓</span>Submitting paper when the city requires digital</li>
+    <li><span class="catch-check">✓</span>Missing energy calculations, load calcs, or surveys</li>
+    <li><span class="catch-check">✓</span>Contractor not registered with that specific city</li>
+  </ul>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section class="proof">
+  <div class="section-label" style="text-align:center;">Contractors Using Flo Permit</div>
+  <h2 class="section-title" style="text-align:center; margin-bottom: 32px;">Don't take our word for it</h2>
+  <div class="proof-grid">
+    <div class="proof-card">
+      <div class="proof-stars">★★★★★</div>
+      <p class="proof-text">"We run everything through this before we go to the building dept now. Way less back and forth, way less headaches."</p>
+      <div class="proof-author">
+        <div class="proof-avatar">A</div>
+        <div><div class="proof-name">ADC Builders</div><div class="proof-role">General Contractor · Coconut Creek</div></div>
+      </div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-stars">★★★★★</div>
+      <p class="proof-text">"It flagged two docs I forgot to include. Would've been another trip to the permit office and like a week wasted."</p>
+      <div class="proof-author">
+        <div class="proof-avatar">C</div>
+        <div><div class="proof-name">Carlos M.</div><div class="proof-role">General Contractor · Fort Lauderdale</div></div>
+      </div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-stars">★★★★★</div>
+      <p class="proof-text">"I pull permits all day every day and this catches stuff I miss when I'm moving fast. The city-specific warnings alone are worth it."</p>
+      <div class="proof-author">
+        <div class="proof-avatar">J</div>
+        <div><div class="proof-name">Jennifer Benitez</div><div class="proof-role">Permit Expediter · Pembroke Pines</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="compare">
+  <div class="section-label">Why Flo Permit</div>
+  <h2 class="section-title">Permit expediter vs Flo Permit</h2>
+  <div class="compare-box">
+    <div class="compare-col old">
+      <h3>Permit Expediter</h3>
+      <ul>
+        <li>$300–500 per permit</li>
+        <li>Takes 1–3 days to review</li>
+        <li>Only knows a few cities well</li>
+        <li>Phone tag and back-and-forth</li>
+        <li>Not available at 11pm when you're prepping</li>
+      </ul>
+    </div>
+    <div class="compare-col new">
+      <h3>Flo Permit</h3>
+      <ul>
+        <li>Starts free. Plans from $29/mo</li>
+        <li>Results in 30 seconds</li>
+        <li>City-specific rules built in</li>
+        <li>Upload and done</li>
+        <li>Available 24/7 whenever you need it</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2>Upload your docs. See what's missing.</h2>
+  <p>3 free analyses. No credit card. No signup required.</p>
+  <a href="https://flopermit.com" class="hero-cta">Try Flo Permit Free →</a>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  © 2025 Flo Permit · Serving South Florida · Broward · Palm Beach · Miami-Dade
+</footer>
+
+</body>
+</html>
