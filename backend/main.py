@@ -148,17 +148,18 @@ async def verify_recaptcha(token: str, action: str = None) -> bool:
 
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 STRIPE_PRICES = {
-    "pro": "price_1StYmAF8sW0Jp8OD2qc8v7d4",
-    "business": "price_1StYmUF8sW0Jp8ODrL2fEoQB",
-    "single": "price_SINGLE_ANALYSIS",  # TODO: Create this price in Stripe dashboard - $15.99 one-time
+    "pro": "price_1SzRiSJuq6kN4g8CTycjBM4o",
+    "business": "price_1SzRlFJuq6kN4g8C06KWetjV",
+    "single": "price_1SzRlwJuq6kN4g8CId3bCjec",
 }
+
 TIER_LIMITS = {
     "free": 3,
     "pro": 30,
-    "business": 999999,  # unlimited
-    "single": 1,  # one-time purchase
+    "business": 999999,
+    "single": 1,
 }
-SINGLE_ANALYSIS_PRICE = 1599  # $15.99 in cents
+SINGLE_ANALYSIS_PRICE = 1599
 
 # ============================================================================
 # DATABASE SETUP
