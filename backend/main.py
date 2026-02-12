@@ -1775,7 +1775,152 @@ async def get_single_purchase(purchase_uuid: str, db: Session = Depends(get_db))
         "gotchas": requirements.get("gotchas", [])[:5] if requirements else [],
     }
 
+# ============================================================================
+# SINGLE PURCHASE - UPDATE & ADMIN ENDPOINTS
+# ============================================================================
+# ADD THESE AFTER the get_single_purchase endpoint and BEFORE analyze-single
 
+
+@app.put("/api/single-purchase/{purchase_uuid}")
+async def update_single_purchase(
+    purchase_uuid: str,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    """Allow buyer to change city/permit_type BEFORE analysis is used"""
+    purchase = (
+        db.query(SinglePurchase)
+        .filter(SinglePurchase.purchase_uuid == purchase_uuid)
+        .first()
+    )
+
+    if not purchase:
+        raise HTTPException(status_code=404, detail="Purchase not found")
+
+    if purchase.analysis_used:
+        raise HTTPException(
+            status_code=400,
+            detail="Cannot modify after analysis has been used. Contact support for help.",
+        )
+
+    if purchase.payment_status != "paid":
+        raise HTTPException(status_code=402, detail="Payment not completed")
+
+    data = await request.json()
+
+    if "city" in data and data["city"]:
+        purchase.city = data["city"]
+    if "permit_type" in data and data["permit_type"]:
+        purchase.permit_type = data["permit_type"]
+
+    db.commit()
+
+    # Return updated checklist for new city/permit_type
+    city_key = get_city_key(purchase.city)
+    requirements = get_permit_requirements(city_key, purchase.permit_type)
+
+    return {
+        "success": True,
+        "message": "Purchase updated successfully",
+        "purchase_uuid": purchase.purchase_uuid,
+        "city": purchase.city,
+        "permit_type": purchase.permit_type,
+        "checklist": requirements.get("documents", []) if requirements else [],
+        "gotchas": requirements.get("gotchas", [])[:5] if requirements else [],
+    }
+
+
+@app.get("/api/admin/single-purchases")
+async def get_all_single_purchases(
+    authorization: str = Header(None), db: Session = Depends(get_db)
+):
+    """Admin: list all single purchases"""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
+    token = authorization[7:]
+    payload = decode_access_token(token)
+    user_id = int(payload.get("sub"))
+    require_admin(user_id, db)
+
+    purchases = (
+        db.query(SinglePurchase)
+        .order_by(SinglePurchase.created_at.desc())
+        .limit(50)
+        .all()
+    )
+
+    return {
+        "purchases": [
+            {
+                "id": p.id,
+                "purchase_uuid": p.purchase_uuid,
+                "email": p.email,
+                "city": p.city,
+                "permit_type": p.permit_type,
+                "payment_status": p.payment_status,
+                "analysis_used": p.analysis_used,
+                "analysis_id": p.analysis_id,
+                "amount_cents": p.amount_cents,
+                "created_at": p.created_at.isoformat(),
+                "expires_at": p.expires_at.isoformat() if p.expires_at else None,
+            }
+            for p in purchases
+        ]
+    }
+
+
+@app.put("/api/admin/single-purchase/{purchase_uuid}")
+async def admin_update_single_purchase(
+    purchase_uuid: str,
+    request: Request,
+    authorization: str = Header(None),
+    db: Session = Depends(get_db),
+):
+    """Admin: update city/permit_type, reset analysis, or extend expiry"""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
+    token = authorization[7:]
+    payload = decode_access_token(token)
+    user_id = int(payload.get("sub"))
+    require_admin(user_id, db)
+
+    purchase = (
+        db.query(SinglePurchase)
+        .filter(SinglePurchase.purchase_uuid == purchase_uuid)
+        .first()
+    )
+
+    if not purchase:
+        raise HTTPException(status_code=404, detail="Purchase not found")
+
+    data = await request.json()
+
+    if "city" in data and data["city"]:
+        purchase.city = data["city"]
+    if "permit_type" in data and data["permit_type"]:
+        purchase.permit_type = data["permit_type"]
+    if data.get("reset_analysis"):
+        purchase.analysis_used = False
+        purchase.analysis_id = None
+    if data.get("extend_days"):
+        days = int(data["extend_days"])
+        base = purchase.expires_at or datetime.utcnow()
+        purchase.expires_at = base + timedelta(days=days)
+
+    db.commit()
+
+    return {
+        "success": True,
+        "message": "Purchase updated by admin",
+        "purchase_uuid": purchase.purchase_uuid,
+        "city": purchase.city,
+        "permit_type": purchase.permit_type,
+        "analysis_used": purchase.analysis_used,
+        "expires_at": purchase.expires_at.isoformat() if purchase.expires_at else None,
+    }
+    
 @app.post("/api/analyze-single/{purchase_uuid}")
 @limiter.limit("5/minute")
 async def analyze_single_purchase(
