@@ -60,8 +60,7 @@ export default function App() {
   const [activeTestimonial, setActiveTestimonial] = useState(0)
   const [showReviewForm, setShowReviewForm] = useState(false)
   const [reviewSubmitting, setReviewSubmitting] = useState(false)
-  const [adminReviews, setAdminReviews] = useState([])
-  const [adminPurchases, setAdminPurchases] = useState([])
+  loadAdminStats(); loadAdminReviews() }
   const [adminPurchases, setAdminPurchases] = useState([])
   const [publicReviews, setPublicReviews] = useState([])
 
@@ -444,7 +443,7 @@ export default function App() {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-4">
           {showBack && <button onClick={() => setPage('home')} className="text-gray-400 hover:text-white">← Back</button>}
-          {!showBack && currentUser && (<>{isAdmin && <button onClick={() => setPage('admin')} className="text-sm font-semibold text-purple-400 hover:text-purple-300">Admin</button>}<button onClick={() => { setPage('home'); setResults(null) }} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Home</button><button onClick={() => setPage('how-it-works')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">How It Works</button><button onClick={() => setPage('pricing')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Pricing</button><button onClick={() => setPage('profile')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Profile</button>{subscription?.tier && subscription.tier !== 'free' && <button onClick={() => setPage('history')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">History</button>}<button onClick={logout} className="text-sm text-red-400 hover:text-red-300">Logout</button></>)}
+          {!showBack && currentUser && (<>{isAdmin && <button onClick={() => setPage('admin')} className="text-sm font-semibold text-purple-400 hover:text-purple-300">Admin</button>}<button onClick={() => { setPage('home'); setResults(null) }} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Home</button><button onClick={() => setPage('how-it-works')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">How It Works</button><button onClick={() => setPage('pricing')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Pricing</button><button onClick={() => setPage('profile')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Profile</button><button onClick={() => setPage('history')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">History</button><button onClick={logout} className="text-sm text-red-400 hover:text-red-300">Logout</button></>)}
           {!showBack && !currentUser && (<><button onClick={() => setPage('pricing')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Pricing</button><button onClick={() => setPage('faq')} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">FAQ</button><button onClick={() => setShowLogin(true)} className="text-sm font-semibold text-gray-400 hover:text-cyan-400">Log In</button><button onClick={() => setShowRegister(true)} className="relative group"><div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-xl blur opacity-60 group-hover:opacity-100"></div><div className="relative px-5 py-2.5 bg-black text-white text-sm font-bold rounded-xl">Sign Up</div></button></>)}
         </div>
 
@@ -467,7 +466,7 @@ export default function App() {
               <button onClick={() => { setPage('how-it-works'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">How It Works</button>
               <button onClick={() => { setPage('pricing'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">Pricing</button>
               <button onClick={() => { setPage('profile'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">Profile</button>
-              {subscription?.tier && subscription.tier !== 'free' && <button onClick={() => { setPage('history'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">History</button>}
+              <button onClick={() => { setPage('history'); setMobileMenuOpen(false) }} className="block w-full text-left text-gray-300 hover:text-cyan-400 py-2">History</button>
               <div className="border-t border-gray-800 pt-3 mt-3">
                 <button onClick={() => { logout(); setMobileMenuOpen(false) }} className="block w-full text-left text-red-400 hover:text-red-300 py-2">Logout</button>
               </div>
@@ -702,7 +701,7 @@ export default function App() {
               <button onClick={() => setPage('home')} className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl hover:scale-105 transition-transform text-lg">
                 Try It Now - Analyze Your Permits
               </button>
-              <p className="text-gray-500 text-sm mt-4">1 free analysis, no credit card required</p>
+              <p className="text-gray-500 text-sm mt-4">3 free analyses, no credit card required</p>
             </div>
           </div>
         </div>
@@ -831,7 +830,7 @@ export default function App() {
               { q: "What file types can I upload?", a: "We accept PDF, PNG, JPG, and JPEG files. You can upload up to 50 files at once, with a maximum total size of 200MB." },
               { q: "Is my data secure?", a: "Yes! We use industry-standard encryption, secure password hashing, and your documents are processed securely. We never share your data with third parties." },
               { q: "Does this guarantee my permit will be approved?", a: "No. Flo Permit is an informational tool only. We help identify potential issues, but you should always verify requirements with your local permitting office." },
-              { q: "Is there a free tier?", a: "Yes! Free accounts get 1 analysis per month. Need more? Contact us about Pro plans." },
+              { q: "Is there a free tier?", a: "Yes! Free accounts get 3 analyses per month. Need more? Contact us about Pro plans." },
               { q: "How accurate is the AI analysis?", a: "Our AI is trained on South Florida permit requirements and is highly accurate. However, requirements can change, so always verify with your local office." },
               { q: "Can I save my analysis history?", a: "Yes! Create a free account to save all your analyses and access them anytime." },
               { q: "How do I contact support?", a: "Email us at support@flopermit.com or use the Contact page. We typically respond within 24 hours." },
@@ -1173,7 +1172,7 @@ export default function App() {
               <h3 className="text-xl font-bold text-white mb-2">Free</h3>
               <div className="mb-6"><span className="text-4xl font-black text-white">$0</span><span className="text-gray-500">/month</span></div>
               <ul className="space-y-3 mb-8 flex-grow">
-                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>1 analysis/month</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>3 analyses/month</li>
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Basic AI analysis</li>
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Email support</li>
               </ul>
@@ -2631,7 +2630,7 @@ export default function App() {
       <div className="relative z-10 py-20 px-6 border-t border-gray-800/50">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-3xl font-black mb-4 text-white">Ready to Submit with Confidence?</h2>
-          <p className="text-gray-400 mb-8">Start with 1 free analysis. No credit card required.</p>
+          <p className="text-gray-400 mb-8">Start with 3 free analyses. No credit card required.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button onClick={() => { setShowRegister(true); window.scrollTo({top: 0, behavior: 'smooth'}) }} className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl hover:scale-105 transition-transform text-lg shadow-lg shadow-cyan-500/25">
               Get Started Free →
