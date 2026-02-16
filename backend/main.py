@@ -154,7 +154,7 @@ STRIPE_PRICES = {
 }
 
 TIER_LIMITS = {
-    "free": 3,
+    "free": 1,
     "pro": 30,
     "business": 999999,
     "single": 1,
@@ -818,6 +818,22 @@ async def register(user_data: UserRegister, db: Session = Depends(get_db)):
 
         access_token = create_access_token(new_user.id, new_user.email)
 
+        # Notify admin of new signup
+        try:
+            import resend
+
+            resend.api_key = os.getenv("RESEND_API_KEY")
+            resend.Emails.send(
+                {
+                    "from": "Flo Permit <noreply@flopermit.com>",
+                    "to": ["toshygluestick@gmail.com"],
+                    "subject": f"New Signup: {user_data.email}",
+                    "html": f"<h3>New user signed up!</h3><p><b>Email:</b> {user_data.email}</p><p><b>Name:</b> {user_data.full_name or 'Not provided'}</p><p><b>Company:</b> {user_data.company_name or 'Not provided'}</p><p><b>Time:</b> {datetime.utcnow().isoformat()}</p>",
+                }
+            )
+        except Exception as e:
+            print(f"Admin notification email failed: {e}")
+
         return TokenResponse(
             access_token=access_token,
             user=UserResponse(
@@ -836,48 +852,6 @@ async def register(user_data: UserRegister, db: Session = Depends(get_db)):
         print(traceback.format_exc())
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Registration failed: {str(e)}")
-
-
-@app.post("/api/auth/login", response_model=TokenResponse)
-async def login(user_data: UserLogin, db: Session = Depends(get_db)):
-    """Login and get access token"""
-    try:
-        # Verify reCAPTCHA
-        if not await verify_recaptcha(user_data.recaptcha_token, "login"):
-            raise HTTPException(
-                status_code=400,
-                detail="reCAPTCHA verification failed. Please try again.",
-            )
-
-        user = db.query(User).filter(User.email == user_data.email).first()
-        if not user:
-            raise HTTPException(status_code=401, detail="Invalid email or password")
-
-        if not verify_password(user_data.password, user.hashed_password):
-            raise HTTPException(status_code=401, detail="Invalid email or password")
-
-        if not user.is_active:
-            raise HTTPException(status_code=401, detail="Account is disabled")
-
-        access_token = create_access_token(user.id, user.email)
-
-        return TokenResponse(
-            access_token=access_token,
-            user=UserResponse(
-                id=user.id,
-                email=user.email,
-                full_name=user.full_name,
-                company_name=user.company_name,
-                subscription_tier=user.subscription_tier,
-                created_at=user.created_at,
-            ),
-        )
-    except HTTPException:
-        raise
-    except Exception as e:
-        print(f"❌ Login error: {str(e)}")
-        print(traceback.format_exc())
-        raise HTTPException(status_code=500, detail=f"Login failed: {str(e)}")
 
 
 @app.get("/api/auth/me", response_model=UserResponse)
@@ -1355,7 +1329,12 @@ async def get_admin_stats(
         )
 
         # Total analyses
-        total_analyses = db.query(AnalysisHistory).count()
+        total_# Block history for free users
+    user = db.query(User).filter(User.id == user_id).first()
+    if user and user.subscription_tier == "free":
+        raise HTTPException(status_code=403, detail="History is available for Pro and Business subscribers. Upgrade to access your analysis history.")
+
+    analyses = db.query(AnalysisHistory).count()
 
         # Analyses this month
         analyses_this_month = (
@@ -1775,6 +1754,7 @@ async def get_single_purchase(purchase_uuid: str, db: Session = Depends(get_db))
         "gotchas": requirements.get("gotchas", [])[:5] if requirements else [],
     }
 
+
 # ============================================================================
 # SINGLE PURCHASE - UPDATE & ADMIN ENDPOINTS
 # ============================================================================
@@ -1920,7 +1900,8 @@ async def admin_update_single_purchase(
         "analysis_used": purchase.analysis_used,
         "expires_at": purchase.expires_at.isoformat() if purchase.expires_at else None,
     }
-    
+
+
 @app.post("/api/analyze-single/{purchase_uuid}")
 @limiter.limit("5/minute")
 async def analyze_single_purchase(
@@ -2371,7 +2352,7 @@ async def get_all_reviews_admin(
     user_id = int(payload.get("sub"))
 
     user = db.query(User).filter(User.id == user_id).first()
-    if not user or not user.is_admin:
+    if not user or user.email not in ["toshygluestick@gmail.com"]:
         raise HTTPException(status_code=403, detail="Admin access required")
 
     reviews = db.query(Review).order_by(Review.created_at.desc()).all()
@@ -2410,7 +2391,7 @@ async def update_review_admin(
     user_id = int(payload.get("sub"))
 
     user = db.query(User).filter(User.id == user_id).first()
-    if not user or not user.is_admin:
+    if not user or user.email not in ["toshygluestick@gmail.com"]:
         raise HTTPException(status_code=403, detail="Admin access required")
 
     review = db.query(Review).filter(Review.id == review_id).first()
@@ -2441,7 +2422,7 @@ async def delete_review_admin(
     user_id = int(payload.get("sub"))
 
     user = db.query(User).filter(User.id == user_id).first()
-    if not user or not user.is_admin:
+    if not user or user.email not in ["toshygluestick@gmail.com"]:
         raise HTTPException(status_code=403, detail="Admin access required")
 
     review = db.query(Review).filter(Review.id == review_id).first()
