@@ -1369,8 +1369,8 @@ async def get_admin_stats(
 
         # Total analyses
         total_# Block history for free users
-    user = db.query(User).filter(User.id == user_id).first()
-    if user and user.subscription_tier == "free":
+    user_check = db.query(User).filter(User.id == user_id).first()
+    if user_check and user_check.subscription_tier == "free":
         raise HTTPException(status_code=403, detail="History is available for Pro and Business subscribers. Upgrade to access your analysis history.")
 
     analyses = db.query(AnalysisHistory).count()
