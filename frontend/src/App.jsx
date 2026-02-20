@@ -11,7 +11,7 @@ if (SENTRY_DSN) {
   })
 }
 
-const API_BASE_URL = 'https://permit-pro-ai-production.up.railway.app'
+const API_BASE_URL = 'https://permit-pro-ai-production-cab1.up.railway.app'
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI' // Test key as fallback
 
 export default function App() {
