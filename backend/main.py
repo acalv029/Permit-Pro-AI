@@ -821,13 +821,16 @@ async def register(user_data: UserRegister, db: Session = Depends(get_db)):
         # Notify admin of new signup
         try:
             import resend
+
             resend.api_key = os.getenv("RESEND_API_KEY")
-            resend.Emails.send({
-                "from": "Flo Permit <noreply@flopermit.com>",
-                "to": ["toshygluestick@gmail.com"],
-                "subject": f"New Signup: {user_data.email}",
-                "html": f"<h3>New user signed up!</h3><p><b>Email:</b> {user_data.email}</p><p><b>Name:</b> {user_data.full_name or 'Not provided'}</p><p><b>Company:</b> {user_data.company_name or 'Not provided'}</p><p><b>Time:</b> {datetime.utcnow().isoformat()}</p>"
-            })
+            resend.Emails.send(
+                {
+                    "from": "Flo Permit <noreply@flopermit.com>",
+                    "to": ["toshygluestick@gmail.com"],
+                    "subject": f"New Signup: {user_data.email}",
+                    "html": f"<h3>New user signed up!</h3><p><b>Email:</b> {user_data.email}</p><p><b>Name:</b> {user_data.full_name or 'Not provided'}</p><p><b>Company:</b> {user_data.company_name or 'Not provided'}</p><p><b>Time:</b> {datetime.utcnow().isoformat()}</p>",
+                }
+            )
         except Exception as e:
             print(f"Admin notification email failed: {e}")
 
@@ -863,6 +866,9 @@ async def login(user_data: UserLogin, db: Session = Depends(get_db)):
             )
 
         user = db.query(User).filter(User.email == user_data.email).first()
+        print(
+            f"DEBUG login: user_id={user.id if user else None}, email={user_data.email}"
+        )
         if not user:
             raise HTTPException(status_code=401, detail="Invalid email or password")
 
@@ -1788,6 +1794,7 @@ async def get_single_purchase(purchase_uuid: str, db: Session = Depends(get_db))
         "gotchas": requirements.get("gotchas", [])[:5] if requirements else [],
     }
 
+
 # ============================================================================
 # SINGLE PURCHASE - UPDATE & ADMIN ENDPOINTS
 # ============================================================================
@@ -1933,7 +1940,8 @@ async def admin_update_single_purchase(
         "analysis_used": purchase.analysis_used,
         "expires_at": purchase.expires_at.isoformat() if purchase.expires_at else None,
     }
-    
+
+
 @app.post("/api/analyze-single/{purchase_uuid}")
 @limiter.limit("5/minute")
 async def analyze_single_purchase(
