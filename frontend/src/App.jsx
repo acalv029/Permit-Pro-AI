@@ -2722,6 +2722,43 @@ export default function App() {
           animation-delay: 1s;
         }
       `}</style>
+      {showLogin && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="relative"><div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-3xl blur-lg opacity-50"></div>
+            <div className="relative bg-gray-900 rounded-2xl p-8 max-w-md w-full border border-cyan-500/20">
+              <div className="flex justify-between items-center mb-6"><h2 className="text-2xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Log In</h2><button onClick={() => { setShowLogin(false); setError('') }} className="text-2xl text-gray-500 hover:text-white">&times;</button></div>
+              <form onSubmit={handleLogin}>
+                <input name="email" type="email" required placeholder="Email" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
+                <input name="password" type="password" required placeholder="Password" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
+                {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
+                <button type="submit" className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Log In</button>
+              </form>
+              <div className="mt-4 text-center"><button onClick={() => { setShowLogin(false); setShowForgotPassword(true); setError('') }} className="text-cyan-400 hover:text-cyan-300 text-sm">Forgot password?</button></div>
+              <p className="text-center mt-4 text-sm text-gray-500">No account? <button onClick={() => { setShowLogin(false); setShowRegister(true); setError('') }} className="text-cyan-400 hover:text-cyan-300">Sign up</button></p>
+            </div>
+          </div>
+        </div>
+      )}
+      {showRegister && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="relative"><div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-3xl blur-lg opacity-50"></div>
+            <div className="relative bg-gray-900 rounded-2xl p-8 max-w-md w-full border border-cyan-500/20">
+              <div className="flex justify-between items-center mb-6"><h2 className="text-2xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Create Account</h2><button onClick={() => { setShowRegister(false); setError('') }} className="text-2xl text-gray-500 hover:text-white">&times;</button></div>
+              <form onSubmit={handleRegister}>
+                <input name="fullName" type="text" placeholder="Full Name" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
+                <input name="company" type="text" placeholder="Company (optional)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
+                <input name="email" type="email" required placeholder="Email" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
+                <input name="password" type="password" required minLength="8" placeholder="Password (min 8)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
+                <input name="promoCode" type="text" placeholder="Promo Code (optional)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none uppercase tracking-wider" />
+                <label className="flex items-start gap-3 mb-4 cursor-pointer"><input type="checkbox" required className="mt-1 w-4 h-4 accent-cyan-500" /><span className="text-gray-400 text-sm">I agree to the Terms and Privacy Policy</span></label>
+                {error && <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl mb-4"><p className="text-red-400 text-sm font-medium">{error}</p></div>}
+                <button type="submit" className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Create Account</button>
+              </form>
+              <p className="text-center mt-4 text-sm text-gray-500">Have an account? <button onClick={() => { setShowRegister(false); setShowLogin(true); setError('') }} className="text-cyan-400 hover:text-cyan-300">Log in</button></p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 
