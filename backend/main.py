@@ -162,6 +162,13 @@ TIER_LIMITS = {
 SINGLE_ANALYSIS_PRICE = 1599
 
 # ============================================================================
+# PROMO CODE CONFIGURATION
+# ============================================================================
+PROMO_CODES = {
+    "CONTRACTOR3": {"bonus_analyses": 3, "max_redemptions": 30, "description": "3 free analyses for contractors"},
+}
+
+# ============================================================================
 # DATABASE SETUP
 # ============================================================================
 
@@ -423,6 +430,22 @@ def migrate_database():
 
     inspector = inspect(engine)
     columns = [col["name"] for col in inspector.get_columns("users")]
+
+    # Add promo columns
+    if "bonus_analyses" not in columns:
+        print("\U0001f4e6 Adding promo code columns to users table...")
+        for col_sql in [
+            "ALTER TABLE users ADD COLUMN IF NOT EXISTS bonus_analyses INTEGER DEFAULT 0",
+            "ALTER TABLE users ADD COLUMN IF NOT EXISTS promo_code_used VARCHAR(50)",
+        ]:
+            try:
+                with engine.begin() as conn:
+                    conn.execute(text(col_sql))
+            except Exception as e:
+                print(f"\u26a0\ufe0f Promo column add note: {e}")
+        print("\u2705 Promo code columns migration complete")
+    else:
+        print("\u2705 Promo code columns already exist")
 
     if "stripe_customer_id" not in columns:
         print("📦 Adding Stripe columns to users table...")
@@ -1848,6 +1871,33 @@ async def update_single_purchase(
         "checklist": requirements.get("documents", []) if requirements else [],
         "gotchas": requirements.get("gotchas", [])[:5] if requirements else [],
     }
+
+
+@app.get("/api/admin/promo-stats")
+async def get_promo_stats(
+    authorization: str = Header(None), db: Session = Depends(get_db)
+):
+    """Admin: get promo code usage stats"""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    token = authorization[7:]
+    payload = decode_access_token(token)
+    user_id = int(payload.get("sub"))
+    require_admin(user_id, db)
+
+    stats = []
+    for code, config in PROMO_CODES.items():
+        used_count = db.query(User).filter(User.promo_code_used == code).count()
+        users = db.query(User).filter(User.promo_code_used == code).order_by(User.created_at.desc()).limit(10).all()
+        stats.append({
+            "code": code,
+            "bonus_analyses": config["bonus_analyses"],
+            "max_redemptions": config["max_redemptions"],
+            "used_count": used_count,
+            "remaining": config["max_redemptions"] - used_count,
+            "recent_users": [{"email": u.email, "name": u.full_name, "created_at": u.created_at.isoformat()} for u in users]
+        })
+    return {"promo_stats": stats}
 
 
 @app.get("/api/admin/single-purchases")
