@@ -190,6 +190,7 @@ export default function App() {
           password: e.target.password.value, 
           full_name: e.target.fullName.value || null, 
           company_name: e.target.company.value || null,
+          promo_code: e.target.promoCode?.value || null,
           recaptcha_token: recaptchaToken
         }) 
       })
