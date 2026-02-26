@@ -154,7 +154,7 @@ STRIPE_PRICES = {
 }
 
 TIER_LIMITS = {
-    "free": 1,
+    "free": 3,
     "pro": 30,
     "business": 999999,
     "single": 1,
@@ -165,7 +165,64 @@ SINGLE_ANALYSIS_PRICE = 1599
 # PROMO CODE CONFIGURATION
 # ============================================================================
 PROMO_CODES = {
-    "CONTRACTOR3": {"bonus_analyses": 3, "max_redemptions": 30, "description": "3 free analyses for contractors"},
+    # Outreach codes (hand out at building depts, events, emails)
+    "CONTRACTOR3": {
+        "bonus_analyses": 3,
+        "max_redemptions": 100,
+        "description": "General outreach - 3 free analyses",
+    },
+    "BROWARD3": {
+        "bonus_analyses": 3,
+        "max_redemptions": 50,
+        "description": "Broward County outreach",
+    },
+    "FTLAUD3": {
+        "bonus_analyses": 3,
+        "max_redemptions": 50,
+        "description": "Fort Lauderdale outreach",
+    },
+    "POMPANO3": {
+        "bonus_analyses": 3,
+        "max_redemptions": 50,
+        "description": "Pompano Beach outreach",
+    },
+    "HOLLYWOOD3": {
+        "bonus_analyses": 3,
+        "max_redemptions": 50,
+        "description": "Hollywood outreach",
+    },
+    "BOCA3": {
+        "bonus_analyses": 3,
+        "max_redemptions": 50,
+        "description": "Boca Raton outreach",
+    },
+    "MIAMI3": {
+        "bonus_analyses": 3,
+        "max_redemptions": 50,
+        "description": "Miami-Dade outreach",
+    },
+    # Event / partner codes
+    "CASF2026": {
+        "bonus_analyses": 5,
+        "max_redemptions": 100,
+        "description": "CASF networking event",
+    },
+    "GCBA2026": {
+        "bonus_analyses": 5,
+        "max_redemptions": 50,
+        "description": "Gold Coast Builders Assoc",
+    },
+    "EXPEDITER5": {
+        "bonus_analyses": 5,
+        "max_redemptions": 30,
+        "description": "Permit expediter partners",
+    },
+    # Referral
+    "FRIEND3": {
+        "bonus_analyses": 3,
+        "max_redemptions": 200,
+        "description": "Referral - tell a friend",
+    },
 }
 
 # ============================================================================
@@ -304,6 +361,8 @@ class User(Base):
     stripe_customer_id = Column(String(255), nullable=True)
     stripe_subscription_id = Column(String(255), nullable=True)
     subscription_ends_at = Column(DateTime, nullable=True)
+    bonus_analyses = Column(Integer, default=0)
+    promo_code_used = Column(String(50), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -807,7 +866,7 @@ def send_contact_email(name: str, email: str, subject: str, message: str) -> boo
 
 @app.post("/api/auth/register", response_model=TokenResponse)
 async def register(user_data: UserRegister, db: Session = Depends(get_db)):
-    """Register a new user"""
+    """Register a new user with optional promo code"""
     try:
         # Verify reCAPTCHA
         if not await verify_recaptcha(user_data.recaptcha_token, "register"):
@@ -825,6 +884,28 @@ async def register(user_data: UserRegister, db: Session = Depends(get_db)):
                 status_code=400, detail="Password must be at least 8 characters"
             )
 
+        # === PROMO CODE HANDLING ===
+        bonus_analyses = 0
+        promo_code_applied = None
+
+        if hasattr(user_data, "promo_code") and user_data.promo_code:
+            code = user_data.promo_code.strip().upper()
+            if code in PROMO_CODES:
+                promo_config = PROMO_CODES[code]
+                used_count = db.query(User).filter(User.promo_code_used == code).count()
+                if used_count < promo_config["max_redemptions"]:
+                    bonus_analyses = promo_config["bonus_analyses"]
+                    promo_code_applied = code
+                    print(
+                        f"🎟️ Promo code {code} applied: +{bonus_analyses} analyses for {user_data.email}"
+                    )
+                else:
+                    print(
+                        f"⚠️ Promo code {code} maxed out ({used_count}/{promo_config['max_redemptions']})"
+                    )
+            else:
+                print(f"⚠️ Invalid promo code attempted: {code}")
+
         new_user = User(
             email=user_data.email,
             hashed_password=hash_password(user_data.password),
@@ -833,6 +914,26 @@ async def register(user_data: UserRegister, db: Session = Depends(get_db)):
         )
 
         db.add(new_user)
+        db.flush()
+
+        # Apply promo bonus
+        if promo_code_applied and bonus_analyses > 0:
+            try:
+                from sqlalchemy import text as sa_text
+
+                db.execute(
+                    sa_text(
+                        "UPDATE users SET bonus_analyses = :bonus, promo_code_used = :code WHERE id = :uid"
+                    ),
+                    {
+                        "bonus": bonus_analyses,
+                        "code": promo_code_applied,
+                        "uid": new_user.id,
+                    },
+                )
+            except Exception as promo_err:
+                print(f"⚠️ Failed to apply promo code to DB: {promo_err}")
+
         db.commit()
         db.refresh(new_user)
 
@@ -846,12 +947,18 @@ async def register(user_data: UserRegister, db: Session = Depends(get_db)):
             import resend
 
             resend.api_key = os.getenv("RESEND_API_KEY")
+            promo_line = (
+                f"<p><b>Promo Code:</b> {promo_code_applied} (+{bonus_analyses} analyses)</p>"
+                if promo_code_applied
+                else ""
+            )
             resend.Emails.send(
                 {
                     "from": "Flo Permit <noreply@flopermit.com>",
                     "to": ["toshygluestick@gmail.com"],
-                    "subject": f"New Signup: {user_data.email}",
-                    "html": f"<h3>New user signed up!</h3><p><b>Email:</b> {user_data.email}</p><p><b>Name:</b> {user_data.full_name or 'Not provided'}</p><p><b>Company:</b> {user_data.company_name or 'Not provided'}</p><p><b>Time:</b> {datetime.utcnow().isoformat()}</p>",
+                    "subject": f"New Signup: {user_data.email}"
+                    + (f" [PROMO: {promo_code_applied}]" if promo_code_applied else ""),
+                    "html": f"<h3>New user signed up!</h3><p><b>Email:</b> {user_data.email}</p><p><b>Name:</b> {user_data.full_name or 'Not provided'}</p><p><b>Company:</b> {user_data.company_name or 'Not provided'}</p>{promo_line}<p><b>Time:</b> {datetime.utcnow().isoformat()}</p>",
                 }
             )
         except Exception as e:
@@ -875,6 +982,79 @@ async def register(user_data: UserRegister, db: Session = Depends(get_db)):
         print(traceback.format_exc())
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Registration failed: {str(e)}")
+
+
+class RedeemPromoRequest(BaseModel):
+    code: str
+
+
+@app.post("/api/promo/redeem")
+async def redeem_promo_code(
+    body: RedeemPromoRequest,
+    authorization: str = Header(None),
+    db: Session = Depends(get_db),
+):
+    """Redeem a promo code for bonus analyses (existing users)"""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
+    token = authorization[7:]
+    user_id = get_current_user_id(token)
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    code = body.code.strip().upper()
+    if not code:
+        raise HTTPException(status_code=400, detail="No promo code provided")
+
+    if code not in PROMO_CODES:
+        raise HTTPException(status_code=400, detail="Invalid promo code")
+
+    # Check if user already used a promo code
+    try:
+        from sqlalchemy import text as sa_text
+
+        result = db.execute(
+            sa_text("SELECT promo_code_used FROM users WHERE id = :uid"),
+            {"uid": user.id},
+        ).fetchone()
+        if result and result[0]:
+            raise HTTPException(
+                status_code=400, detail=f"You already used promo code: {result[0]}"
+            )
+    except HTTPException:
+        raise
+    except Exception:
+        pass
+
+    promo_config = PROMO_CODES[code]
+    used_count = db.query(User).filter(User.promo_code_used == code).count()
+    if used_count >= promo_config["max_redemptions"]:
+        raise HTTPException(status_code=400, detail="This promo code has expired")
+
+    try:
+        from sqlalchemy import text as sa_text
+
+        db.execute(
+            sa_text(
+                "UPDATE users SET bonus_analyses = COALESCE(bonus_analyses, 0) + :bonus, promo_code_used = :code WHERE id = :uid"
+            ),
+            {"bonus": promo_config["bonus_analyses"], "code": code, "uid": user.id},
+        )
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=500, detail=f"Failed to apply promo code: {str(e)}"
+        )
+
+    return {
+        "success": True,
+        "code": code,
+        "bonus_analyses": promo_config["bonus_analyses"],
+        "message": f"Promo code applied! You got {promo_config['bonus_analyses']} bonus analyses.",
+    }
 
 
 @app.post("/api/auth/login", response_model=TokenResponse)
@@ -1102,6 +1282,9 @@ async def get_profile(
         "business": {"analyses_per_month": -1},
     }
     tier_limits = limits.get(user.subscription_tier, limits["free"])
+    bonus = getattr(user, "bonus_analyses", 0) or 0
+    base_limit = tier_limits["analyses_per_month"]
+    effective_limit = base_limit + bonus if base_limit > 0 else base_limit
 
     return {
         "user": {
@@ -1116,10 +1299,10 @@ async def get_profile(
             "tier": user.subscription_tier,
             "limits": tier_limits,
             "analyses_this_month": analyses_this_month,
-            "analyses_remaining": tier_limits["analyses_per_month"]
-            - analyses_this_month
-            if tier_limits["analyses_per_month"] > 0
+            "analyses_remaining": effective_limit - analyses_this_month
+            if effective_limit > 0
             else -1,
+            "bonus_analyses": bonus,
         },
         "stats": {
             "total_analyses": total_analyses,
@@ -1590,6 +1773,35 @@ async def submit_contact_form(form_data: ContactForm):
         raise HTTPException(status_code=500, detail="Failed to send message")
 
 
+class NewsletterSubscribe(BaseModel):
+    email: str
+
+
+@app.post("/api/newsletter")
+async def subscribe_newsletter(data: NewsletterSubscribe):
+    """Save newsletter subscriber (emails admin + logs)"""
+    email = data.email.strip().lower()
+    if not email or "@" not in email:
+        raise HTTPException(status_code=400, detail="Invalid email")
+
+    print(f"📧 Newsletter signup: {email}")
+
+    # Notify admin
+    try:
+        resend.Emails.send(
+            {
+                "from": "Flo Permit <noreply@flopermit.com>",
+                "to": ["toshygluestick@gmail.com"],
+                "subject": f"Newsletter Signup: {email}",
+                "html": f"<h3>New newsletter subscriber!</h3><p><b>Email:</b> {email}</p><p><b>Time:</b> {datetime.utcnow().isoformat()}</p>",
+            }
+        )
+    except Exception as e:
+        print(f"⚠️ Newsletter notification failed: {e}")
+
+    return {"success": True, "message": "Subscribed!"}
+
+
 # ============================================================================
 # STRIPE PAYMENTS
 # ============================================================================
@@ -1888,15 +2100,30 @@ async def get_promo_stats(
     stats = []
     for code, config in PROMO_CODES.items():
         used_count = db.query(User).filter(User.promo_code_used == code).count()
-        users = db.query(User).filter(User.promo_code_used == code).order_by(User.created_at.desc()).limit(10).all()
-        stats.append({
-            "code": code,
-            "bonus_analyses": config["bonus_analyses"],
-            "max_redemptions": config["max_redemptions"],
-            "used_count": used_count,
-            "remaining": config["max_redemptions"] - used_count,
-            "recent_users": [{"email": u.email, "name": u.full_name, "created_at": u.created_at.isoformat()} for u in users]
-        })
+        users = (
+            db.query(User)
+            .filter(User.promo_code_used == code)
+            .order_by(User.created_at.desc())
+            .limit(10)
+            .all()
+        )
+        stats.append(
+            {
+                "code": code,
+                "bonus_analyses": config["bonus_analyses"],
+                "max_redemptions": config["max_redemptions"],
+                "used_count": used_count,
+                "remaining": config["max_redemptions"] - used_count,
+                "recent_users": [
+                    {
+                        "email": u.email,
+                        "name": u.full_name,
+                        "created_at": u.created_at.isoformat(),
+                    }
+                    for u in users
+                ],
+            }
+        )
     return {"promo_stats": stats}
 
 
@@ -2249,15 +2476,18 @@ async def get_subscription(
 
         tier = user.subscription_tier or "free"
         tier_limit = TIER_LIMITS.get(tier, 3)
+        bonus = getattr(user, "bonus_analyses", 0) or 0
+        effective_limit = tier_limit + bonus
 
         return {
             "tier": tier,
             "analyses_this_month": analyses_this_month,
-            "analyses_limit": tier_limit,
-            "analyses_remaining": max(0, tier_limit - analyses_this_month)
-            if tier_limit < 999999
+            "analyses_limit": effective_limit,
+            "analyses_remaining": max(0, effective_limit - analyses_this_month)
+            if effective_limit < 999999
             else -1,
             "has_subscription": bool(user.stripe_subscription_id),
+            "bonus_analyses": bonus,
         }
     except HTTPException:
         raise
@@ -2568,10 +2798,13 @@ async def analyze_permit_folder(
         )
 
         tier_limit = TIER_LIMITS.get(user.subscription_tier, 3)
-        if analyses_this_month >= tier_limit:
+        # Add bonus analyses from promo codes
+        bonus = getattr(user, "bonus_analyses", 0) or 0
+        effective_limit = tier_limit + bonus
+        if analyses_this_month >= effective_limit:
             raise HTTPException(
                 status_code=403,
-                detail=f"Monthly limit reached ({tier_limit} analyses). Please upgrade your plan.",
+                detail=f"Monthly limit reached ({effective_limit} analyses). Please upgrade your plan.",
             )
 
     if len(files) > MAX_FILES_PER_UPLOAD:

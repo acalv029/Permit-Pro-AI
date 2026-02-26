@@ -24,7 +24,7 @@ COST_PER_1K = {
     "gemini-2.0-flash": {"input": 0.0000750, "output": 0.000300},
     "gemini-2.0-flash-lite": {"input": 0.0000000, "output": 0.000000},
     "claude-sonnet-4-20250514": {"input": 0.003000, "output": 0.015000},
-    "claude-haiku-3-20240307": {"input": 0.000250, "output": 0.001250},
+    "claude-haiku-4-5-20251001": {"input": 0.000800, "output": 0.004000},
 }
 
 
@@ -352,7 +352,7 @@ def analyze_with_gemini(
     genai.configure(api_key=api_key)
 
     prompt, trimmed_text = build_analysis_prompt(
-        document_text, requirements, max_doc_chars=10000
+        document_text, requirements, max_doc_chars=15000
     )
 
     try:
@@ -588,7 +588,7 @@ Respond with ONLY valid JSON: {{"is_permit_document": true/false, "permit_type":
         try:
             client = anthropic.Anthropic(api_key=anthropic_api_key)
             message = client.messages.create(
-                model="claude-haiku-3-20240307",
+                model="claude-haiku-4-5-20251001",
                 max_tokens=200,
                 messages=[{"role": "user", "content": prompt}],
             )

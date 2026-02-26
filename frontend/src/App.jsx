@@ -58,6 +58,9 @@ export default function App() {
   const [newsletterStatus, setNewsletterStatus] = useState('')
   const [viewingAnalysis, setViewingAnalysis] = useState(null)
   const [activeTestimonial, setActiveTestimonial] = useState(0)
+  const [promoInput, setPromoInput] = useState('')
+  const [promoStatus, setPromoStatus] = useState('')
+  const [promoLoading, setPromoLoading] = useState(false)
   const [showReviewForm, setShowReviewForm] = useState(false)
   const [reviewSubmitting, setReviewSubmitting] = useState(false)
   const [adminReviews, setAdminReviews] = useState([])
@@ -394,6 +397,31 @@ export default function App() {
     finally { setCheckoutLoading(false) }
   }
 
+  const redeemPromoCode = async () => {
+    if (!promoInput.trim()) return
+    setPromoLoading(true)
+    setPromoStatus('')
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/promo/redeem`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+        body: JSON.stringify({ code: promoInput.trim().toUpperCase() })
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setPromoStatus(`success:${data.message}`)
+        setPromoInput('')
+        loadProfile()
+      } else {
+        setPromoStatus(`error:${data.detail || 'Invalid code'}`)
+      }
+    } catch (err) {
+      setPromoStatus('error:Something went wrong')
+    } finally {
+      setPromoLoading(false)
+    }
+  }
+
   const loadSinglePurchase = async (purchaseId) => {
     try {
       const res = await fetch(`${API_BASE_URL}/api/single-purchase/${purchaseId}`)
@@ -508,8 +536,15 @@ export default function App() {
                 className="flex-1 px-4 py-2.5 bg-black/50 border border-gray-700 rounded-xl text-white text-sm placeholder-gray-500 focus:border-cyan-500 focus:outline-none"
               />
               <button 
-                onClick={() => {
+                onClick={async () => {
                   if (newsletterEmail && newsletterEmail.includes('@')) {
+                    try {
+                      await fetch(`${API_BASE_URL}/api/newsletter`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: newsletterEmail })
+                      })
+                    } catch (err) { console.error('Newsletter error:', err) }
                     setNewsletterStatus('success')
                     setNewsletterEmail('')
                     setTimeout(() => setNewsletterStatus(''), 3000)
@@ -831,7 +866,7 @@ export default function App() {
               { q: "What file types can I upload?", a: "We accept PDF, PNG, JPG, and JPEG files. You can upload up to 50 files at once, with a maximum total size of 200MB." },
               { q: "Is my data secure?", a: "Yes! We use industry-standard encryption, secure password hashing, and your documents are processed securely. We never share your data with third parties." },
               { q: "Does this guarantee my permit will be approved?", a: "No. Flo Permit is an informational tool only. We help identify potential issues, but you should always verify requirements with your local permitting office." },
-              { q: "Is there a free tier?", a: "Yes! Free accounts get 1 analysis per month. Need more? Contact us about Pro plans." },
+              { q: "Is there a free tier?", a: "Yes! Free accounts get 3 analyses per month. Have a promo code? Sign up and enter it to get even more free analyses. Need more? Check out our Pro plan at $29/month." },
               { q: "How accurate is the AI analysis?", a: "Our AI is trained on South Florida permit requirements and is highly accurate. However, requirements can change, so always verify with your local office." },
               { q: "Can I save my analysis history?", a: "Yes! Create a free account to save all your analyses and access them anytime." },
               { q: "How do I contact support?", a: "Email us at support@flopermit.com or use the Contact page. We typically respond within 24 hours." },
@@ -1173,7 +1208,7 @@ export default function App() {
               <h3 className="text-xl font-bold text-white mb-2">Free</h3>
               <div className="mb-6"><span className="text-4xl font-black text-white">$0</span><span className="text-gray-500">/month</span></div>
               <ul className="space-y-3 mb-8 flex-grow">
-                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>1 analysis/month</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>3 analyses/month</li>
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Basic AI analysis</li>
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Email support</li>
               </ul>
@@ -1837,7 +1872,7 @@ export default function App() {
               <div className="bg-gray-900/80 rounded-2xl p-6 border border-gray-800">
                 <h2 className="text-xl font-bold text-white mb-4">Subscription</h2>
                 <div className={`inline-block px-3 py-1 rounded-full text-sm font-bold mb-4 ${profile.subscription.tier === 'pro' ? 'bg-cyan-500/20 text-cyan-400' : profile.subscription.tier === 'business' ? 'bg-purple-500/20 text-purple-400' : 'bg-gray-700 text-gray-300'}`}>{profile.subscription.tier.toUpperCase()}</div>
-                <div className="space-y-3"><div className="flex justify-between"><span className="text-gray-400">This Month</span><span className="text-white font-bold">{profile.subscription.analyses_this_month} analyses</span></div>{profile.subscription.analyses_remaining >= 0 && <div className="flex justify-between"><span className="text-gray-400">Remaining</span><span className="text-cyan-400 font-bold">{profile.subscription.analyses_remaining}</span></div>}<div className="flex justify-between"><span className="text-gray-400">Total</span><span className="text-white">{profile.stats.total_analyses}</span></div></div>
+                <div className="space-y-3"><div className="flex justify-between"><span className="text-gray-400">This Month</span><span className="text-white font-bold">{profile.subscription.analyses_this_month} analyses</span></div>{profile.subscription.analyses_remaining >= 0 && <div className="flex justify-between"><span className="text-gray-400">Remaining</span><span className="text-cyan-400 font-bold">{profile.subscription.analyses_remaining}</span></div>}{profile.subscription.bonus_analyses > 0 && <div className="flex justify-between"><span className="text-gray-400">Bonus (promo)</span><span className="text-amber-400 font-bold">+{profile.subscription.bonus_analyses}</span></div>}<div className="flex justify-between"><span className="text-gray-400">Total</span><span className="text-white">{profile.stats.total_analyses}</span></div></div>
                 {profile.subscription.tier === 'free' ? (
                   <button onClick={() => setPage('pricing')} className="w-full mt-4 py-2 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-lg">Upgrade to Pro</button>
                 ) : (
@@ -1845,6 +1880,33 @@ export default function App() {
                 )}
               </div>
               
+              {/* Promo Code Redemption */}
+              <div className="bg-gray-900/80 rounded-2xl p-6 border border-gray-800">
+                <h2 className="text-xl font-bold text-white mb-3">Have a Promo Code?</h2>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={promoInput}
+                    onChange={e => setPromoInput(e.target.value.toUpperCase())}
+                    placeholder="e.g. BROWARD3"
+                    className="flex-1 px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white uppercase tracking-wider placeholder-gray-500 focus:border-cyan-500 focus:outline-none"
+                  />
+                  <button
+                    onClick={redeemPromoCode}
+                    disabled={promoLoading || !promoInput.trim()}
+                    className="px-5 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-bold rounded-xl disabled:opacity-50 whitespace-nowrap"
+                  >
+                    {promoLoading ? '...' : 'Redeem'}
+                  </button>
+                </div>
+                {promoStatus.startsWith('success:') && (
+                  <p className="text-emerald-400 text-sm mt-2">{promoStatus.replace('success:', '')}</p>
+                )}
+                {promoStatus.startsWith('error:') && (
+                  <p className="text-red-400 text-sm mt-2">{promoStatus.replace('error:', '')}</p>
+                )}
+              </div>
+
               {/* Leave a Review */}
               <div className="bg-gray-900/80 rounded-2xl p-6 border border-gray-800">
                 <h2 className="text-xl font-bold text-white mb-4">Leave a Review</h2>
@@ -2749,7 +2811,7 @@ export default function App() {
                 <input name="company" type="text" placeholder="Company (optional)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
                 <input name="email" type="email" required placeholder="Email" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
                 <input name="password" type="password" required minLength="8" placeholder="Password (min 8)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
-                <input name="promoCode" type="text" placeholder="Promo Code (optional)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none uppercase tracking-wider" />
+                <div className="mb-4"><input name="promoCode" type="text" placeholder="Promo Code (optional)" className="w-full px-4 py-3 bg-gradient-to-r from-amber-500/5 to-orange-500/5 border border-amber-500/30 rounded-xl text-white placeholder-gray-400 focus:border-amber-400 focus:outline-none uppercase tracking-wider" /><p className="text-xs text-gray-500 mt-1.5 ml-1">Got a code from an event or contractor? Enter it for free bonus analyses</p></div>
                 <label className="flex items-start gap-3 mb-4 cursor-pointer"><input type="checkbox" required className="mt-1 w-4 h-4 accent-cyan-500" /><span className="text-gray-400 text-sm">I agree to the Terms and Privacy Policy</span></label>
                 {error && <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl mb-4"><p className="text-red-400 text-sm font-medium">{error}</p></div>}
                 <button type="submit" className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Create Account</button>
@@ -2832,7 +2894,7 @@ export default function App() {
                 <input name="company" type="text" placeholder="Company (optional)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
                 <input name="email" type="email" required placeholder="Email" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
                 <input name="password" type="password" required minLength="8" placeholder="Password (min 8)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
-                <input name="promoCode" type="text" placeholder="Promo Code (optional)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none uppercase tracking-wider" />
+                <div className="mb-4"><input name="promoCode" type="text" placeholder="Promo Code (optional)" className="w-full px-4 py-3 bg-gradient-to-r from-amber-500/5 to-orange-500/5 border border-amber-500/30 rounded-xl text-white placeholder-gray-400 focus:border-amber-400 focus:outline-none uppercase tracking-wider" /><p className="text-xs text-gray-500 mt-1.5 ml-1">Got a code from an event or contractor? Enter it for free bonus analyses</p></div>
                 <label className="flex items-start gap-3 mb-4 cursor-pointer">
                   <input type="checkbox" required className="mt-1 w-4 h-4 accent-cyan-500" />
                   <span className="text-gray-400 text-sm">I agree to the <button type="button" onClick={() => { setShowRegister(false); setPage('terms') }} className="text-cyan-400 hover:underline">Terms & Conditions</button> and <button type="button" onClick={() => { setShowRegister(false); setPage('privacy') }} className="text-cyan-400 hover:underline">Privacy Policy</button></span>
@@ -2961,6 +3023,21 @@ export default function App() {
               <span className="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400">30 Cities</span>
               <span className="px-3 py-1 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-400">More Coming Soon</span>
             </div>
+            
+            {/* Homeowner CTA - shows for non-logged-in users */}
+            {!currentUser && (
+              <div className="mt-6 flex flex-col items-center gap-3">
+                <button
+                  onClick={() => { setPage('pricing'); setTimeout(() => setShowSinglePurchase(true), 100) }}
+                  className="px-5 py-2.5 bg-gradient-to-r from-cyan-500/10 to-emerald-500/10 border border-cyan-500/30 rounded-xl text-cyan-400 text-sm font-semibold hover:border-cyan-400 transition-all flex items-center gap-2"
+                >
+                  <span>🏠</span> Homeowner? Get a single analysis for $15.99 — no account needed
+                </button>
+                <p className="text-gray-500 text-sm">
+                  Have a promo code? <button onClick={() => setShowRegister(true)} className="text-cyan-400 hover:text-cyan-300 underline">Sign up free</button> to redeem it
+                </p>
+              </div>
+            )}
           </div>
           <div className="relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/50 via-emerald-500/50 to-purple-500/50 rounded-3xl blur-xl opacity-30"></div>
