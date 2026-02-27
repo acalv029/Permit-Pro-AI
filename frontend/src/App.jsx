@@ -135,7 +135,7 @@ export default function App() {
     const purchaseId = params.get('purchase_id')
     
     if (token) { setResetToken(token); setPage('reset-password'); window.history.replaceState({}, document.title, window.location.pathname) }
-    if (payment === 'success') { setSuccessMessage('Payment successful! Your subscription is now active.'); setPage('profile'); window.history.replaceState({}, document.title, window.location.pathname) }
+    if (payment === 'success') { setSuccessMessage('Payment successful! Your subscription is now active.'); setPage('profile'); window.history.replaceState({}, document.title, window.location.pathname); if (window.gtag) { window.gtag('event', 'conversion', { 'send_to': 'AW-17945789173/purchase', 'event_category': 'purchase', 'event_label': 'subscription_payment', 'value': 29.99, 'currency': 'USD' }) } }
     if (payment === 'cancelled') { window.history.replaceState({}, document.title, window.location.pathname) }
     
     // Handle single purchase success
@@ -202,6 +202,8 @@ export default function App() {
       setAuthToken(data.access_token); setCurrentUser(data.user)
       localStorage.setItem('authToken', data.access_token); localStorage.setItem('currentUser', JSON.stringify(data.user))
       setShowRegister(false)
+      // Google Ads conversion tracking - new signup
+      if (window.gtag) { window.gtag('event', 'conversion', { 'send_to': 'AW-17945789173/signup', 'event_category': 'engagement', 'event_label': 'new_registration' }) }
     } catch (err) { setError(err.message) }
   }
 
