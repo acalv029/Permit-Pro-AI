@@ -165,3 +165,4 @@ def get_current_user_id(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token payload"
         )
     return int(user_id)
+

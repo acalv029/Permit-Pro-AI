@@ -250,3 +250,4 @@ if __name__ == "__main__":
             print(f"\n... [{len(result) - 3000} more characters]")
     else:
         print("Usage: python reader.py <file_path>")
+

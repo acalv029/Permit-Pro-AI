@@ -91,7 +91,7 @@ from auth import (
 # ============================================================================
 
 resend.api_key = os.getenv("RESEND_API_KEY")
-FRONTEND_URL = os.getenv("FRONTEND_URL", "https://flopermit.vercel.app")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "https://flopermit.us")
 
 # ============================================================================
 # RECAPTCHA CONFIGURATION
@@ -626,7 +626,7 @@ ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:3000",
     "http://127.0.0.1:5173",
-    "https://flopermit.vercel.app",
+    "https://flopermit.us",
     "https://permit-pro-ai.vercel.app",
     "https://permitpro-ai.vercel.app",
 ]
@@ -4526,3 +4526,4 @@ if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
+

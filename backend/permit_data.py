@@ -1159,3 +1159,4 @@ def get_permit_types(city_name=None):
         {"value": "plumbing", "label": "Plumbing"},
         {"value": "marine", "label": "Marine (Dock, Seawall, Boat Lift)"},
     ]
+

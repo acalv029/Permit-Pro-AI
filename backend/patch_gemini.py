@@ -225,3 +225,4 @@ from gemini_provider import analyze_with_gemini, get_google_key, parse_analysis_
 
 if __name__ == "__main__":
     patch_main()
+
