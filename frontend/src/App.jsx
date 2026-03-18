@@ -942,7 +942,7 @@ export default function App() {
                 <li><strong className="text-gray-300">Service</strong> refers to the Application or the Website or both.</li>
                 <li><strong className="text-gray-300">Subscriptions</strong> refer to the services or access to the Service offered on a subscription basis by the Company to You.</li>
                 <li><strong className="text-gray-300">Terms and Conditions</strong> means these Terms and Conditions that form the entire agreement between You and the Company regarding the Service.</li>
-                <li><strong className="text-gray-300">Website</strong> refers to Flo Permit, accessible from <a href="https://flopermit.us" className="text-cyan-400 hover:underline">https://flopermit.us</a>.</li>
+                <li><strong className="text-gray-300">Website</strong> refers to Flo Permit, accessible from <a href="https://flopermit.vercel.app" className="text-cyan-400 hover:underline">https://flopermit.vercel.app</a>.</li>
                 <li><strong className="text-gray-300">You</strong> means the individual accessing or using the Service, or the company, or other legal entity on behalf of which such individual is accessing or using the Service.</li>
               </ul>
             </div>
