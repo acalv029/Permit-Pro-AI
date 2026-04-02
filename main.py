@@ -2748,21 +2748,41 @@ FORT LAUDERDALE MARINE REQUIREMENTS:
     elif city_key == "pompano_beach":
         city_context = """
 POMPANO BEACH SPECIFIC REQUIREMENTS:
-- Portal: Click2Gov
-- Applications MUST be in BLACK INK - will be rejected otherwise!
+- Portal: Click2Gov (create app) + ePlan (upload docs) — SEPARATE credentials
+- Applications MUST be in BLACK INK — will be rejected otherwise!
 - Plan sets: Only 1 required (100% electronic review)
-- Fire Review Application REQUIRED for ALL permits (Pompano-specific)
+- Insurance holder MUST read exactly: "City of Pompano Beach, 100 W Atlantic Blvd, Pompano Beach, FL 33060"
+- Fire Review Application required for multi-family/condo/commercial — NOT for single-family residential
 - Both owner AND contractor signatures required, notarized
-- NOC thresholds vary: General >$2,500, HVAC >$5,000, Roofing >$7,500
+- NOC thresholds: General >$2,500, Most trades >$5,000, Roofing >$7,500
 - New/relocated electrical service must be UNDERGROUND (City Ordinance 152.07)
-- Emergency A/C repairs: Must notify Chief Mechanical Inspector BEFORE starting
+- Emergency A/C: notify Scott.Maxwell@copbfl.com with job address BEFORE starting; submit permit next business day
 - EPD must be approved BEFORE city submittal
 - Work without permit = DOUBLE the permit fee
+- Broward Uniform App revision January 8, 2026 required (effective March 9, 2026) — must indicate Private Provider status
+- License-exempt contractors per HB 735 use BTR number instead of license
+- Private Provider: one-time registration at Building@copbfl.com; same PP must do plan review AND inspections
+- Owner/Builder NOT applicable for condominiums; NOT permitted for asphalt installation/removal
+- Generator exhaust must be 10 feet from any building opening
+- Kitchen/bath 2nd floor+ condo: STC 50 dB and IIC 50 dB sound barrier required
+- Standalone solar systems: Quick Service 3 business day review
 
 POMPANO BEACH MARINE REQUIREMENTS:
 - Dock extension: 10% of waterway width OR 8 feet (whichever is less)
 - Boat lift: 20% of waterway width OR 20 feet (whichever is less)
 - Engineering permit fee: 4% of construction cost (min $100)
+- Electrical permit ALWAYS required for docks (not conditional)
+- Approval sequence: County EPD then FL DEP then Army Corps then Local permit
+
+POMPANO BEACH FEES (from Fee Schedule 10/01/2025):
+- Engineering fee: 4% of construction cost (min $100)
+- Plan revision: $100 per revision
+- Reinspection (first disapproval): $60
+- Reinspection (additional): $250
+- Re-inspection for wrong address/work not ready: 4x first reinspection fee
+- Overtime inspections: $225 first 3 hours + $75/additional hour
+- TCO/Partial CO: $550 per unit (same for renewal/extension)
+- Change of contractor: $100
 """
     elif city_key == "lauderdale_by_the_sea":
         city_context = """
