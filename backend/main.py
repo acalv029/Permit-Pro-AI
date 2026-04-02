@@ -4267,6 +4267,7 @@ Be SPECIFIC about the permit type. Read the documents carefully to identify exac
                                 d.get("issue", str(d))
                                 for d in parsed["critical_issues"]
                             ]
+                        parsed["disclaimer"] = "Flo Permit checks your permit package for completeness against official city requirements. A complete package does not guarantee permit approval — final approval depends on plan review, code compliance, engineering accuracy, and other factors determined by the building department."
                         return parsed
                 except:
                     continue
@@ -4275,9 +4276,10 @@ Be SPECIFIC about the permit type. Read the documents carefully to identify exac
             "summary": resp[:500],
             "compliance_score": 50,
             "overall_status": "NEEDS_REVIEW",
+            "disclaimer": "Flo Permit checks your permit package for completeness against official city requirements. A complete package does not guarantee permit approval — final approval depends on plan review, code compliance, engineering accuracy, and other factors determined by the building department.",
         }
     except Exception as e:
-        return {"error": str(e), "overall_status": "ERROR"}
+        return {"error": str(e), "overall_status": "ERROR", "disclaimer": "Flo Permit checks your permit package for completeness against official city requirements. A complete package does not guarantee permit approval — final approval depends on plan review, code compliance, engineering accuracy, and other factors determined by the building department."}
 
 
 @app.on_event("startup")

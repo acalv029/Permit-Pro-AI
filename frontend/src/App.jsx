@@ -2108,7 +2108,12 @@ export default function App() {
               
               {/* Disclaimer */}
               <div className="px-8 pb-4">
-                <div className="p-3 bg-gray-800/50 border border-gray-700 rounded-lg">
+                {results.analysis?.disclaimer && (
+                  <p style={{fontSize: '12px', color: '#9ca3af', marginTop: '16px', fontStyle: 'italic'}}>
+                    {results.analysis.disclaimer}
+                  </p>
+                )}
+                <div className="p-3 bg-gray-800/50 border border-gray-700 rounded-lg mt-2">
                   <p className="text-gray-500 text-xs"><strong>Disclaimer:</strong> This analysis is informational only. Always verify requirements with your local permitting office.</p>
                 </div>
               </div>
