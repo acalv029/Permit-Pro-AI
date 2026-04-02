@@ -2748,41 +2748,21 @@ FORT LAUDERDALE MARINE REQUIREMENTS:
     elif city_key == "pompano_beach":
         city_context = """
 POMPANO BEACH SPECIFIC REQUIREMENTS:
-- Portal: Click2Gov (create app) + ePlan (upload docs) — SEPARATE credentials
-- Applications MUST be in BLACK INK — will be rejected otherwise!
+- Portal: Click2Gov
+- Applications MUST be in BLACK INK - will be rejected otherwise!
 - Plan sets: Only 1 required (100% electronic review)
-- Insurance holder MUST read exactly: "City of Pompano Beach, 100 W Atlantic Blvd, Pompano Beach, FL 33060"
-- Fire Review Application required for multi-family/condo/commercial — NOT for single-family residential
+- Fire Review Application REQUIRED for ALL permits (Pompano-specific)
 - Both owner AND contractor signatures required, notarized
-- NOC thresholds: General >$2,500, Most trades >$5,000, Roofing >$7,500
+- NOC thresholds vary: General >$2,500, HVAC >$5,000, Roofing >$7,500
 - New/relocated electrical service must be UNDERGROUND (City Ordinance 152.07)
-- Emergency A/C: notify Scott.Maxwell@copbfl.com with job address BEFORE starting; submit permit next business day
+- Emergency A/C repairs: Must notify Chief Mechanical Inspector BEFORE starting
 - EPD must be approved BEFORE city submittal
 - Work without permit = DOUBLE the permit fee
-- Broward Uniform App revision January 8, 2026 required (effective March 9, 2026) — must indicate Private Provider status
-- License-exempt contractors per HB 735 use BTR number instead of license
-- Private Provider: one-time registration at Building@copbfl.com; same PP must do plan review AND inspections
-- Owner/Builder NOT applicable for condominiums; NOT permitted for asphalt installation/removal
-- Generator exhaust must be 10 feet from any building opening
-- Kitchen/bath 2nd floor+ condo: STC 50 dB and IIC 50 dB sound barrier required
-- Standalone solar systems: Quick Service 3 business day review
 
 POMPANO BEACH MARINE REQUIREMENTS:
 - Dock extension: 10% of waterway width OR 8 feet (whichever is less)
 - Boat lift: 20% of waterway width OR 20 feet (whichever is less)
 - Engineering permit fee: 4% of construction cost (min $100)
-- Electrical permit ALWAYS required for docks (not conditional)
-- Approval sequence: County EPD then FL DEP then Army Corps then Local permit
-
-POMPANO BEACH FEES (from Fee Schedule 10/01/2025):
-- Engineering fee: 4% of construction cost (min $100)
-- Plan revision: $100 per revision
-- Reinspection (first disapproval): $60
-- Reinspection (additional): $250
-- Re-inspection for wrong address/work not ready: 4x first reinspection fee
-- Overtime inspections: $225 first 3 hours + $75/additional hour
-- TCO/Partial CO: $550 per unit (same for renewal/extension)
-- Change of contractor: $100
 """
     elif city_key == "lauderdale_by_the_sea":
         city_context = """
@@ -3232,74 +3212,32 @@ MIRAMAR FEES:
     elif city_key == "plantation":
         city_context = """
 PLANTATION SPECIFIC REQUIREMENTS:
-- Portal: Accela Citizen Access (ACA) — digital ONLY since 11/14/2022
-- Portal URL: https://aca.plantation.org/CitizenAccess/
+- Portal: Broward ePermits
 - Application must be signed and notarized by QUALIFIER
+- Walk-Thru permits: Mon, Wed, Fri 8-10 AM only (3 permit limit per person)
 - Insurance COI must list 'City of Plantation' as Certificate Holder
-- Only apply for master permit — sub-permits created by staff after submission
-
-PLANTATION FILE NAMING — CRITICAL (REJECTION TRIGGER):
-- ALL digital submittals MUST use 2-letter prefix: BD-Roof, EL-Generator, PL-Irrigation, ME-HVAC, BD-Pool, BD-Fence, BD-Sign, BD-Demo, etc.
-- Incorrectly named files are REJECTED before review even starts
-- Reserve 4x4 inch space in top right corner for City's digital approval stamp
-- Scanned drawings: 300 DPI minimum
-- When submitting revisions: do NOT resubmit entire plan set — only changed pages, same sheet numbers
-
-PLANTATION DIGITAL SIGNATURES — CRITICAL (REJECTION TRIGGER):
-- Design professionals MUST use DIGITAL signatures backed by certificate authority
-- Regular electronic signatures are REJECTED
-- If not digitally signed: must submit notarized affidavit from designer of record
 
 PLANTATION WORK HOURS:
 - Monday-Friday: 7 AM - 8 PM
 - Saturday: 7 AM - 8 PM (pile-driving 8 AM - 5:30 PM only)
-- NO WORK on Sundays or holidays (Chapter 16, Sec 16-2)
+- NO WORK on Sundays or holidays
 
-PLANTATION ROUTING — SKIP ZONING FOR:
-- A/C changeouts, Re-roofing, Interior work — go DIRECTLY to Building Division
+PLANTATION ROUTING - SKIP ZONING FOR:
+- A/C changeouts, Re-roofing, Interior work - go DIRECTLY to Building Division
 
 PLANTATION CRITICAL REQUIREMENTS:
-- THREE (3) sets of energy calculations (most cities require 2)
-- Fault Current Calculations REQUIRED for ALL electrical service work (Plantation-specific)
-- Re-nailing inspection NOT required on roof permits (unique among Broward cities — saves time)
 - Demolition permits MUST include Building AND Electrical permits together
 - Product Approvals must be stamped 'approved' by Architect of record
-- Plans must be mechanically reproduced — hand-drawn plans rejected (FBC 107.3.5.1)
-- Plenum ceilings require specs on Structural, Electrical, Mechanical AND Plumbing plans
-- Pre-fab buildings MUST have State approved drawings (Miami-Dade or Florida State)
-- PAID (Plantation Acres Improvement District) properties MUST have PAID review stamp
+- Plans must be mechanically reproduced - hand-drawn plans rejected
 
 PLANTATION SPECIAL RULES:
 - COA/HOA/POA approval NOT required for building permit (effective 05/08/2023)
-- Owner-Builder MUST apply IN-PERSON with proof of ownership (Warranty Deed, Settlement Statement, Tax Bill, DL, Utility bill)
-- Preliminary Review SUSPENDED as of 05/16/2024
-- LEED/FGBC certified GREEN buildings get FREE Fast Track Plan Review
-- Fixturing permit required BEFORE Certificate of Occupancy
-- Food/Restaurant plans must be stamped by FDACS or DBPR BEFORE permit submittal
-- Burglar alarm (SFR) requires registration from Plantation Police Dept
 - Marine work requires US Longshoreman's and Harbor Workers insurance
-- Temporary Power requires notarized signatures from owner, GC, AND electrical contractor
 
-PLANTATION FEES & PENALTIES:
-- Fees per Chapter 5, Article II of City Code
-- Walk-Thru permits: Mon/Wed/Fri 8-10 AM (3 permit limit per person)
-- Fast Track: $1,000 cost recovery account deposit
-- Failed inspection: $100 re-inspection fee
-- Work without permit: 100% penalty fee added
-- Only franchised C&D firms: Waste Management, Republic Services, Bicon/S&S National Waste
-
-PLANTATION PERMITS — CONFIDENCE NOTES (surface as ⚠️ warnings where applicable):
-- Building, Electrical, Plumbing, Mechanical, Roofing, Demolition, Shed, Fire System, Windows/Doors, Certificate of Occupancy: 100% verified — no caveats needed
-- Pool/Spa (90%): Plantation does not publish pool-specific checklist. Standard Broward/FBC applies. Recommend calling (954) 797-2765 to confirm no additional pool forms
-- Fence (90%): Specific setback distances per zoning district not published. Call (954) 797-2765
-- Solar (90%): No solar-specific checklist. Unknown if FSEC cert accepted in lieu of full PE. Call (954) 797-2765
-- EV Charger (95%): Standard electrical permit. No EV-specific forms found. Call (954) 797-2765
-- Sign (85%): Max sign area, height limits, illumination rules by district not published. Call Planning & Zoning (954) 797-2200
-- Generator (85%): Placement rules, noise dB limits (Chapter 16), structural pad requirements not published. Call (954) 797-2765
-- Screen Enclosure (85%): Unknown if full PE engineering required for all sizes. Call (954) 797-2765
-- Driveway (85%): Unknown if separate ROW permit needed. Call (954) 797-2765
-- Marine/Dock (80%): Plantation is inland — may defer all marine to Broward County. Call (954) 797-2765
-- Private Provider (90%): Fee discount schedule not published. Call (954) 797-2765
+PLANTATION FEES:
+- $20 application fee, $10 per page of plans (first page free)
+- Fast Track available with $1,000 cost recovery account
+- Work without permit = 100% penalty fee added
 """
     elif city_key == "sunrise":
         city_context = """
