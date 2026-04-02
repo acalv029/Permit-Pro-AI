@@ -406,18 +406,108 @@ CITY_INFO = {
     },
     "lake_worth_beach": {
         "name": "Lake Worth Beach",
-        "department": "Building Division, Department of Community Sustainability",
-        "address": "1900 2nd Ave North, Lake Worth Beach, FL 33461",
-        "phone": "561-586-1647",
-        "email": "building@lakeworthbeachfl.gov",
-        "portal": "Online Portal",
+        "formerly": "Lake Worth (renamed 2019)",
         "county": "Palm Beach",
-        "noc_threshold": 2500,
+        "state": "FL",
+        "population": 37000,
+        "area_sq_miles": 7,
         "hvhz": False,
-        "walk_in_hours": "1st & 3rd Wednesdays 8AM-12PM",
-        "inspection_request_deadline": "4:00 PM day before",
-        "work_without_permit_penalty": "Permit + 3x fee",
-        "historic_district": True,
+        "wind_zone": "Wind-Borne Debris Region (WBDR) — NOT HVHZ",
+        "product_approval_system": "FL Product Approval (FL#) — NOT Miami-Dade NOA",
+        "code_edition": "FBC 7th Edition (2020) with local amendments",
+        "electrical_code": "2017 National Electric Code (NEC)",
+        "building_division": {
+        "department": "Department for Community Sustainability — Building Division",
+        "address": "1900 2nd Avenue North, Lake Worth Beach, FL 33461",
+        "phone": "(561) 586-1647",
+        "inspection_line": "(561) 586-1691",
+        "email": "bpermits@lakeworthbeachfl.gov",
+        "hours": "Monday–Friday, 8:00 AM – 4:00 PM",
+        "walk_in_hours": "1st & 3rd Wednesdays, 8:00 AM – 12:00 PM (no appointment needed)",
+        "walk_in_location": "Department of Community Sustainability lobby, 1900 2nd Ave N",
+    },
+        "historic_preservation": {
+        "phone": "(561) 586-1687",
+        "email": "pzoning@lakeworthbeachfl.gov",
+        "hp_email": "pzhp@lakeworthbeachfl.gov",
+        "districts": 6,
+        "individually_designated_landmarks": 4,
+        "coa_required": True,
+        "coa_note": "Certificate of Appropriateness (COA) REQUIRED before building permit issued for ANY exterior work in historic district or on designated landmark",
+    },
+        "portals": {
+        "permit_application": "portal.lakeworthbeachfl.gov/online-services/building-permit-application/",
+        "hub": "hub.lakeworthbeachfl.gov/building-permit-application",
+        "permit_search": "c2g.lakeworthbeachfl.gov/Click2GovBP/index.html",
+        "inspection_scheduling": "Click2Gov (online) or phone (561) 586-1691",
+        "historic_coa": "portal.lakeworthbeachfl.gov/online-services/certificate-of-appropriateness/",
+        "historic_districts_map": "lakeworth.maps.arcgis.com (ArcGIS WebAppViewer)",
+        "flood_zone_lookup": "maps.co.palm-beach.fl.us/cwgis/?app=floodzones",
+    },
+        "submission_methods": [
+        "Online via portal.lakeworthbeachfl.gov",
+        "Online via hub.lakeworthbeachfl.gov (Hub portal)",
+        "In-person drop-off at 1900 2nd Avenue North (drop box by front door)",
+        "Email to bpermits@lakeworthbeachfl.gov (10MB limit; larger files via website)",
+        ],
+        "payment_methods": {
+        "online": "Credit card (2.65% convenience fee) or e-check ($1.25 fee)",
+        "in_person": "Available at office",
+        "note": "Online bill pay available via Permit Search > Select Permit > Application Fees",
+    },
+        "noc_thresholds": {
+        "general": "$5,000",
+        "fence": "$2,500",
+        "wood_deck": "$2,500",
+        "ac_existing_system": "$15,000",
+        "noc_timing": "Recorded at PBC Clerk of Court AND posted on job site BEFORE first inspection",
+        "noc_form": "City-specific NOC form available on Required Documents page",
+        "recording_location": "Palm Beach County Clerk of the Circuit Court",
+    },
+        "permit_exemptions": {
+        "threshold": "$1,000 for replacement/repair work",
+        "condition": "Must not adversely affect structural integrity, fire rating, exit access or egress",
+        "exempt_items": [
+        "AC Window Unit: in existing opening with existing electrical",
+        "Appliance Replacement (cord and plug): excluding water heater",
+        "Doors: interior only, SFR/R-3",
+        "Drywall: interior wall repair, less than 3 sheets of 4'x8'",
+        "Electrical: replacement of lights, outlets, switches for SFR/R-3 per NEC",
+        "Fence: repair/replace previously permitted fence, up to 16' or 2 sections — EXCLUDING pool barriers",
+        "Gutters and downspouts: SFR/R-3",
+        "Plumbing Fixtures: replacement of common household fixtures SFR/R-3 same location — EXCLUDING bathtub/shower",
+        "Soffit and/or Fascia: repair and replace up to 25% of total",
+        "Stucco: repair only SFR/R-3",
+        "Wood Deck: repair up to 100 sq ft of previously permitted deck boards (no framing members)",
+        ],
+    },
+        "penalties": {
+        "work_without_permit": "Permit fee PLUS penalty (double the permit fee per code violation notice)",
+        "work_without_permit_note": "Plus potential 3rd party engineering analysis costs for concealed work, plus litigation risk on resale",
+        "third_plan_review": "$50 fee",
+        "fourth_plus_plan_review": "4x Plan Filing Fee",
+        "reinspection_fee": "Per fee schedule",
+    },
+        "inspection_rules": {
+        "request_deadline": "4:00 PM the business day before desired inspection date",
+        "request_method": "Automated phone line (561) 586-1691 or online via Click2Gov",
+        "same_day_inspection": "Call (561) 586-1647 for availability — additional fees assessed",
+    },
+        "milestone_inspection": {
+        "applies_to": "Condominiums/Cooperative associations, buildings 3+ stories, 30+ years old",
+        "deadline": "Milestone inspection report submitted to city prior to December 31, 2024",
+        "contact": "(561) 586-1647",
+    },
+        "plan_review": {
+        "method": "Digital review",
+        "delivery": "Reviewed plans sent by email or file transfer to contractor of record",
+        "sets_required": "1 set of submittal documents for all permits",
+        "resubmittal_email": "Bpermits@lakeworthbeachfl.gov (10MB limit)",
+        "resubmittal_large_files": "Submit via website portal",
+        "resubmittal_rule": "Complete responses required — partial submittals NOT accepted",
+    },
+        "application_note": "Can use Palm Beach County Universal Permit Application OR Lake Worth Beach Permit Application",
+        "utility_provider": "Lake Worth Beach Utilities (city-owned electric + water/sewer)",
     },
     "margate": {
         "name": "Margate",
@@ -509,259 +599,104 @@ CITY_INFO = {
     },
     "tamarac": {
         "name": "Tamarac",
+        "county": "Broward",
         "department": "Building Department",
-        "address": "7525 NW 88th Avenue, Tamarac, FL 33321",
+        "address": "6011 Nob Hill Road, Tamarac, FL 33321-6200",  # CORRECTED — First Floor
+        "city_hall_address": "7525 NW 88th Avenue, Tamarac, FL 33321",  # City Hall — NOT building dept
         "phone": "954-597-3420",
-        "portal": "ePermits (Click2Gov)",
-        "submission": "100% PAPERLESS - all electronic since 2014",
-        "plan_sets": 0,
-        "noc_threshold": 2500,
-        "hvhz": True,
-        "paperless": True,
-        "ivr_system": True,
-        "private_provider_discount": "5% inspection, 10% plan review + inspection",
-        "work_without_permit_penalty": "DOUBLE fee or $285 contractors / $190 homeowners",
-    },
-    "deerfield_beach": {
-        "name": "Deerfield Beach",
-        "county": "Broward",
-        "department": "Building Services (CAP Government, Inc.)",
-        "address": "150 NE 2 Avenue, Deerfield Beach, FL 33441",
-        "phone": "954-250-4060",
-        "inspections_phone": "954-571-4504",
-        "fax": "954-422-5812",
-        "email": "DeerfieldInspRequest@cgasolutions.com",
-        "online_submittal_email": "dbonline@cgasolutions.com",
-        "portal": "CAP Government Online Permit Submittal + ePermitsOneStop (Broward County)",
-        "portal_url": "https://www.deerfield-beach.com/294/Building-Services",
-        "epermits_url": "https://deerfieldbeach.geocivix.com/secure/",
-        "submission": "Online via CAP Government (since 12/15/2025) + in-person at City Hall; applications in BLACK INK; OWNER SIGNATURE REQUIRED on ALL permit applications",
-        "hours": "Mon-Fri 7:30 AM - 4:30 PM",
-        "plan_sets": 2,
-        "noc_threshold": 2500,  # GENERAL threshold — BUT varies by permit type! See below
-        "noc_threshold_fence": 5000,
+        "fax": "954-597-3450",
+        "email": "Permit@tamarac.gov",
+        "contractor_email": "Contractor@Tamarac.gov",
+        "virtual_inspections_email": "Virtualinspections@Tamarac.gov",
+        "portal": "ePermits (Click2Gov) + Broward County ePermitsOneStop",
+        "portal_url": "https://e-gov.tamarac.org/Click2GovBP/index.html",
+        "epermits_onestop_url": "https://www.broward.org/ePermits/Pages/Default.aspx",
+        "electronic_plan_review_url": "https://tamarac-fl-us.avolvecloud.com/Portal/Login/Index/TAFL-Prod",
+        "submission": "100% PAPERLESS since March 2014 — ALL electronic via ePermits",
+        "plan_sets": "Electronic — 1 copy via ePermits. Paper plans (up to 3 large pages) converted for $3/page fee. Over 3 pages MUST be submitted online or flash drive/CD.",
+        "noc_threshold": 2500,  # Standard — but varies by permit type! See individual permits.
+        "noc_threshold_roofing": 5000,
         "noc_threshold_windows_doors": 5000,
-        "noc_threshold_ac_changeout": 15000,
+        "noc_threshold_pool": 5000,
+        "noc_threshold_fence": 5000,
         "noc_threshold_demolition": 5000,
-        "noc_timing": "Recorded NOC required AT SUBMITTAL (prior to permit issuance)",
+        "noc_threshold_driveway": 5000,
+        "noc_threshold_electric_service": 5000,
+        "noc_threshold_solar": 5000,
+        "noc_threshold_signs": 5000,
+        "noc_threshold_water_heater": 5000,
+        "noc_threshold_ac_residential": 15000,  # CRITICAL EXCEPTION
+        "noc_before_submittal": True,  # City prefers before submittal; state requires before inspections
         "hvhz": True,
-        "hoa_affidavit_required": True,  # Required for ALL residential permits
-        "asbestos_required_reroofs": True,  # Mandatory for ALL re-roofs
-        "private_provider_discount": "25% reduction plan review + inspection; 15% reduction inspection only",
-        "work_without_permit_penalty": "DOUBLE the permit fee (FBC 109 BCAP)",
-        "expired_permit_renewal": "50% of original permit fee",
-        "reinspection_fee": 75.00,
-        "change_of_contractor_fee": 75.00,
-        "co_fee_residential": 75.00,
-        "co_fee_nonresidential": 125.00,
-        "payment_methods": "In-person at City cashier; online payments accepted (transaction fee applies to checking/credit/debit/auto-pay for online only, NOT in-person)",
-        "waterfront": True,
-        "building_safety_inspection": "25-year program (Broward County BORA Policy 05-05); exempt for SFR/duplex/3-4 family ≤3 stories; then every 10 years",
-        "insurance_cert_holder": "The City of Deerfield Beach\n150 NE 2 Avenue\nDeerfield Beach, FL 33441",
+        "no_permit_threshold": 1500,  # No permit required for maintenance/repairs ≤ $1,500
+        "plan_review_fee_threshold": 10000,  # Value over $10,000 requires plan review fee at submittal
+        "payment_methods": "Online, credit/debit card (NO AMEX), cash, check payable to 'Tamarac Building Department'",
+        "payment_timing": "Most permits at issuance. Value >$10,000 requires plan review fee upfront.",
+        "lobby_hours": "Mon-Thu 7:30am-4:00pm, Fri 7:30am-3:00pm",
+        "office_hours": "Mon-Thu 7:30am-4:30pm, Fri 7:30am-3:30pm",
+        "plan_reviewer_walkin_hours": "Mon-Thu 7:30am-8:00am and 2:30pm-4:00pm",
+        "fast_trac_hours": "Thursdays only, 1:30pm-3:30pm",
+        "fast_trac_types": "Residential water heater and residential AC changeout ONLY",
+        "fast_trac_limit": "2 applications per customer per session",
+        "inspection_scheduling_deadline": "3:00 PM",
+        "inspection_phone": "954-597-3435",
+        "inspection_ivr": True,
+        "inspection_ivr_pin_required": True,
+        "inspection_morning_time_call": "7:00-8:00 AM",
+        "virtual_inspections": "Roof permits ONLY at this time",
+        "review_time_minor": "5-10 business days",
+        "review_time_major": "Up to 30 business days",
+        "chief_building_official": "Tony Palacios",
+        "structural_chief": "Adolfo Evia — 954-597-3454",
+        "plumbing_chief": "Cary Bauer — 954-597-3441",
+        "mechanical_chief": "Anthony Penevolpe — 954-597-3440",
+        "electrical_chief": "Pete Deveaugh — 954-597-3459",
+        "ias_accredited": True,
+        "predevelopment_meetings": True,
+        "concurrent_review": True,  # ePermits allows concurrent staff review
+        "hoa_warning": "Building permit does NOT guarantee HOA approval. Contractor/owner responsible to obtain separately.",
+        "work_without_permit_penalty_contractor": "$285 or DOUBLE permit fee (whichever greater)",
+        "work_without_permit_penalty_homeowner": "$190 or DOUBLE permit fee (whichever greater)",
+        "citation_work_without_permit_1st": 250,
+        "citation_work_without_permit_2nd": 500,
+        "permit_extension_fee": 122,
+        "change_of_contractor_fee": 122,
+        "reinspection_fee_1st": 122,
+        "reinspection_fee_2nd": 122,
+        "reinspection_fee_3rd": 195,
+        "reinspection_fee_4th": 285,
+        "expedited_plan_review_per_discipline": 366,
+        "private_provider_discount_inspections_only": "5%",
+        "private_provider_discount_plan_review_and_inspections": "10%",
+        "certificate_of_occupancy_fee_residential_sf": "No additional charge",
+        "certificate_of_occupancy_fee_commercial": 86,
+        "certificate_of_occupancy_fee_multifamily": 105,
+        "temp_co_fee_per_90_days": 254,
+        "certificate_of_completion_fee": 122,
+        "bsip_processing_fee": 293,  # 25-Year Building Safety Inspection Program
+        "bsip_initial_age": 25,  # Broward = 25 years (NOT 40 like state standard)
+        "bsip_recertification_interval": 10,
+        "early_start_fee": "122 or minimum $273 (whichever greater)",
+        "early_start_emergency_trades": "AC and Electric Services can begin work while waiting for permit",
+        "scanning_fee_per_page": 0.15,
+        "scanning_fee_large_plans_per_page": 3.00,
+        "scanning_max_large_pages": 5,
+        "public_art_fee": True,  # Assessed on construction value per Ordinance 0-2004-15
+        "new_application_effective_date": "March 9, 2026",
+        "notary_jurat_required": False,  # NO LONGER NEEDED with new application version
+        "contractor_registration_fee": 0,  # Free to register
+        "contractor_registration_url": "https://Tamarac.gov/ContractorRegistration",
+        "contractor_update_email": "Contractor@Tamarac.gov",
+        "insurance_cert_holder_wording": "City of Tamarac, 6011 Nob Hill Road, Tamarac, FL 33321",
+        "insurance_requirement": "City of Tamarac must be named as additional insured for GL and shown as certificate holder",
         "contractor_registration_docs": [
-        "1. State/County License",
-        "2. Workers Compensation Insurance",
-        "3. General Liability Insurance",
-        "4. County Occupational License (Business Tax Receipt)",
+        "Contractor Registration Form (online)",
+        "State or Local Contractor License (current)",
+        "Business Tax Receipt (current)",
+        "General Liability Insurance Certificate (City of Tamarac as additional insured + certificate holder)",
+        "Workers' Compensation Certificate or Exemption",
         ],
-        "contractor_registration_fee": "No registration fees required",
-        "contractor_registration_email": "DeerfieldInspRequest@cgasolutions.com",
-        "code_edition": "FBC 8th Edition (2023)",
-    },
-    "pembroke_pines": {
-        "name": "Pembroke Pines",
-        "county": "Broward",
-        "department": "Building Department (operated by CGA Solutions)",
-        "address": "601 City Center Way, Pembroke Pines, FL 33025",
-        "phone": "954-450-1060",
-        "inspections_phone": "954-435-6502",
-        "email": "pinespermits@cgasolutions.com",
-        "early_start_email": "PpinesEarlyStart@cgasolutions.com",
-        "closeout_email": "PpinesCloseOutDocuments@cgasolutions.com",
-        "private_provider_email": "privateprovider@cgasolutions.com",
-        "portal": "Development HUB (Energov)",
-        "portal_url": "https://pembrokepinesfl-energovweb.tylerhost.net/apps/selfservice#/search",
-        "hours": "Monday-Thursday 7:00 AM - 6:00 PM; CLOSED FRIDAY",
-        "inspection_hours": "Monday-Thursday 7:00 AM - 6:00 PM",
-        "code_edition": "Florida Building Code 8th Edition (2023), effective Dec 31, 2023",
-        "hvhz": True,
-        "exposure_category": "C (unless D applies per ASCE 7.22 Section 26.7)",
-        "submission": "In-person (physically signed/sealed plans) OR Online via Development HUB (digitally signed/sealed plans)",
-        "notarization_required": True,
-        "plan_sets": "2 sets (in-person: physical sign/seal; online: digital sign/seal)",
-        "online_plan_upload": "BATCH BY TRADE - Structural in one PDF, Mechanical in one PDF, Electrical in one PDF, Plumbing in one PDF",
-        "noc_threshold": 5000,
-        "noc_threshold_hvac": 15000,
-        "noc_timing": "Must be recorded, submitted, and displayed prior to scheduling FIRST INSPECTION (preferred but NOT required at submittal)",
-        "permit_validity_days": 180,
-        "subsequent_inspection_window": 90,
-        "renewal_fee_under_90_days": "50% of original permit fee",
-        "renewal_fee_over_90_days": "100% of original permit fee",
-        "renewal_fee_over_6_months": "New application required",
-        "work_without_permit_penalty": "DOUBLE the permit fee",
-        "plan_review_time": "15 working days (does not include Zoning, Engineering, Fire review time)",
-        "three_failed_reviews": "Hold placed on permit; meeting required with Building Dept, Contractor Qualifier, and Design Professional of Record",
-        "rejection_penalty": "After 2nd review rejection for same violation: 20% of permit fee",
-        "hoa_affidavit_required": True,
-        "hoa_affidavit_note": "MANDATORY with EVERY permit submittal even if property is NOT in an HOA",
-        "condo_approval_letter": "Required if property use = '04 - Condominium' on Broward County Property Appraiser; must be signed and notarized by registered agent on Sunbiz",
-        "landscape_affidavit_required": True,
-        "construction_debris_vendor": "Waste Pro of Florida, Inc. (EXCLUSIVE - City Ordinance 2013-09; fines up to $250/day for non-compliance)",
-        "payment_methods": "Checks and money orders payable to 'City of Pembroke Pines' - CASH NOT ACCEPTED",
-        "contractor_registration": "Email copies of: (1) State of FL Certification/Registration OR Broward County Certificate of Competency, (2) Certificates of Liability Insurance, (3) Workers Compensation or Exemption to pinespermits@cgasolutions.com",
-        "noise_ordinance": "No construction between 6:00 PM and 7:30 AM exceeding 10 dBA above ambient at property line",
-        "epd_required": True,
-        "epd_timing": "Broward County EPD submittal/approval required PRIOR to Building Dept submittal",
-        "elevator_review": "Broward County Elevator submittal/approval required PRIOR to Building Dept submittal (allow 1 week)",
-        "south_broward_drainage": "If project located on SBDD, permit release must be obtained from SBDD",
-        "airspace_review": "Projects near FLL or North Perry Airport (HWO) may require FAA Obstruction Approval + BCAD review",
-        "private_provider_allowed": True,
-        "private_provider_city_only_inspections": "Fire, Engineering, Zoning - CANNOT be done by Private Provider",
-        "private_provider_report_deadline": "Within 2 business days after inspection",
-        "early_start_fee": "$448.52",
-        "building_safety_inspection": "25-Year Building Safety Inspection Program (formerly 40-year; per F.S. 553.899 and BORA)",
-        "building_safety_email": "ppinessafetyprogram@cgasolutions.com",
-        "atf_owner_builder": "After-the-Fact permits NOT allowed as Owner-Builder - licensed contractor required",
-        "owner_builder_rules": "Must own one-family or two-family residence for own use/occupancy; cannot sell/rent/lease for 1 year after final inspection; see F.S. 489.103(b)(7)",
-    },
-    "hollywood": {
-        "name": "City of Hollywood",
-        "county": "Broward",
-        "hvhz": True,
-        "code_edition": "Florida Building Code 8th Edition (2023)",
-        "portal_name": "ACCELA + BCLA (ePermitsOneStop)",
-        "portal_url": "https://aca-prod.accela.com/hollywood/default.aspx",
-        "epermit_email": "ePermits@hollywoodfl.org",
-        "phone": "954-921-3335",
-        "address": "2600 Hollywood Blvd., Hollywood, FL 33020",
-        "mailing_address": "City of Hollywood, P.O. Box 229045, Hollywood, FL 33022-9045",
-        "hours": "Monday – Thursday, 7:00 AM – 6:00 PM (CLOSED FRIDAYS)",
-        "consultation_hours": "Monday – Thursday, 7:30 AM – 9:30 AM (via QLess app)",
-        "insurance_cert_holder_verbatim": "City of Hollywood, Department of Development Services, 2600 Hollywood Blvd., Hollywood, FL 33020",
-        "insurance_additional_insured": "City of Hollywood is named as Additional Insured",
-        "noc_threshold_general": "$2,500",
-        "noc_threshold_ac": "$15,000 (per AC checklist, updated 8/20/24)",
-        "noc_threshold_roofing": "$5,000 (per Roofing checklist, updated 8/20/24)",
-        "noc_threshold_pool": "$5,000 (per Pool checklist, rev 7/24)",
-        "noc_threshold_other_trades": "$5,000 (per individual trade checklists)",
-        "noc_timing": "NOT required for permit issuance; required before first inspection can be scheduled",
-        "plan_review_period": "30 working days (does NOT include Planning, Zoning, Engineering, Fire review time)",
-        "plan_sets_required": 2,
-        "permit_validity": "180 days if work not commenced; expires if abandoned for 90 days",
-        "application_expiration": "60 calendar days after last review notification if no action taken",
-        "extension_available": "One-time 180-day extension before expiration; fee = 10% of permit fee or $20, max $300",
-        "expired_permit_renewal_fee": "50% of original calculated building permit fees",
-        "work_without_permit_penalty_contractor": "$200 minimum or double the permit fee, whichever is greater, per discipline",
-        "work_without_permit_penalty_homeowner": "$100 or double the permit fee, whichever is greater, per discipline",
-        "reinspection_fee": "$75 per discipline",
-        "change_of_contractor_fee": "$50",
-        "early_start_request_fee": "$200",
-        "after_hours_inspection": "$75 per hour",
-        "building_safety_inspection": "$300",
-        "payment_methods": "Check with Building Division — payments accepted via portal and in-person",
-        "permit_fee_up_to_1000": "10.00% of value (minimum $100)",
-        "permit_fee_1001_to_1M": "2.20% of value (cumulative)",
-        "permit_fee_1M_to_2M": "1.65% of value (cumulative)",
-        "permit_fee_over_2M": "1.15% of value (cumulative)",
-        "state_surcharge": "3% total (1.5% DCA + 1.5% DBPR)",
-        "county_surcharge": "$0.52 per $1,000 of work value (min $2)",
-        "technology_fee": "2% of calculated building permit fee",
-        "educational_fee": "1% of calculated building permit fee",
-        "processing_fee_new": "25% of estimated job cost (non-refundable)",
-        "processing_fee_other": "Minimum $10 per building discipline (non-refundable)",
-        "owner_builder_restriction": "Cannot sell house/duplex for 1 YEAR after final inspection",
-        "express_permits": "A/C changeouts and electrical service changes via Accela portal",
-        "appointment_system": "QLess Virtual Check-In",
-        "building_safety_program": "Milestone inspections for buildings 40+ years old",
-    },
-    "miramar": {
-        "name": "Miramar",
-        "department": "Building, Permits & Inspections (Building, Planning & Zoning Department)",
-        "address": "2200 Civic Center Place, Miramar, FL 33025",  # NOTE: 2200 for building dept, 2300 is City Hall,
-        "mailing_address": "2300 Civic Center Place, Miramar, FL 33025",
-        "phone": "954-602-3200",
-        "fax": "954-602-3635",
-        "general_phone": "954-602-4357",  # 954-602-HELP,
-        "email": "customerservice@miramarfl.gov",
-        "contractor_registration_email": "Contractorupdates@miramarfl.gov",
-        "portal": "Permits & Self Services",
-        "portal_url": "https://mss.miramarfl.gov/MSS/citizens/PermitsInspections/",
-        "forms_url": "https://www.miramarfl.gov/Departments/Building-Planning-Zoning/Building-Permits-Inspections/Applications-Forms",
-        "submission": "Digital (True PDF) + In-Person; Applications must be in BLACK INK",
-        "hours": "Mon-Thur 7:00 AM - 6:00 PM; CLOSED FRIDAYS",
-        "plan_sets": 4,  # Four sets required for engineered plans,
-        "noc_threshold": 5000,  # $5,000 general per FS 713.135,
-        "noc_threshold_hvac": 15000,  # $15,000 for AC repair/replacement per FS 713.135(d),
-        "noc_timing": "Required at FIRST INSPECTION (not at submittal)",
-        "noc_recording": "Broward County Government Center / Records Division, 115 S. Andrews Ave., Fort Lauderdale, FL 33301",
-        "hvhz": True,
-        "county": "Broward",
-        "code_edition": "FBC 8th Edition (2023)",
-        "closed_fridays": True,
-        "black_ink_required": True,
-        "no_highlighting": True,  # Highlighted info on plans = REJECTED,
-        "true_pdf_required": True,  # Digital submissions must be True PDF,
-        "hoa_affidavit_required": True,  # Even if NOT in HOA,
-        "debris_affidavit_required": True,  # Construction Debris Removal Affidavit mandatory for ALL permits,
-        "debris_hauler": "Waste Pro of Florida ONLY (City Ordinance §18-7)",
-        "survey_age_limit_years": 7,
-        "survey_requirements": "Full scalable updated boundary survey; reduced/faxed/enlarged/altered NOT acceptable; original s/s by Professional Land Surveyor",
-        "notarization_required": True,  # Broward County Uniform App is notarized,
-        "insurance_cert_holder": "City of Miramar",  # EXACT VERBATIM from Contractor Registration PDF,
-        "insurance_cert_holder_address": None,  # No specific address listed on registration form - just "City of Miramar",
-        "permit_fee_percentage": 1.75,  # 1.75% of construction cost,
-        "plan_review_fee_percentage": 0.75,  # 0.75% of construction cost,
-        "min_fee_residential": 75,
-        "min_fee_commercial": 150,
-        "admin_surcharge": 8,  # 8% on all building fees,
-        "work_without_permit_penalty": "DOUBLE permit fee",
-        "reinspection_fee_1st_2nd": 80,
-        "reinspection_fee_subsequent": 80,  # Plus additional $80 each,
-        "reinspection_fine": 100,
-        "same_day_reinspection": 100,
-        "overtime_inspection": 450,  # Per discipline, 3-hr minimum,
-        "overtime_inspection_additional_hr": 150,
-        "change_of_contractor_fee": 150,  # Flat fee + application fee,
-        "change_of_contractor_app_fee_res": 75,
-        "change_of_contractor_app_fee_comm": 150,
-        "tco_co_renewal": 550,
-        "certificate_of_occupancy_min": 515,
-        "low_voltage_permit": 40,
-        "after_3rd_review_fee": 500,  # Per discipline,
-        "expedited_review_residential": 300,  # Per discipline,
-        "expedited_review_commercial": 600,  # Per discipline,
-        "lien_search_standard": 150,  # 5-7 business days,
-        "lien_search_expedited": 250,  # 2-4 business days,
-        "pool_safety_barrier_down_fine": 250,
-        "building_safety_inspection_fee": 325,  # Plus application fee,
-        "bsip_review_after_2nd": 150,  # Per review,
-        "bsip_extension": 100,  # Per extension,
-        "bsip_delinquent_fine": 200,
-        "fire_alarm_testing_fee": 120,  # Flat fee,
-        "private_provider_discount_full": "35% reduction (plan review + inspections)",
-        "private_provider_discount_inspection_only": "20% reduction (inspections only)",
-        "quick_service_available": True,
-        "quick_service_day": "Tuesday",
-        "quick_service_hours": "7:30 AM - 11:00 AM (cutoff 10:45 AM)",
-        "quick_service_location": "2200 Civic Center Place, Miramar, FL 33025",
-        "quick_service_max_per_contractor": 5,
-        "quick_service_turnaround": "Permits ready following Monday",
-        "epd_required_before_submittal": True,  # Per GFL Alliance,
-        "elevator_review_time": "1 week",
-        "inland_city": True,  # No waterfront, no docks/seawalls,
-        "inspection_request_online": "Permits & Self Services portal",
-        "inspection_request_phone": "954-602-3200",
-        "inspector_contact_window": "7:30 AM - 8:00 AM on morning of scheduled inspection",
-        "plan_review_residential_days": 14,  # Working days average,
-        "plan_review_commercial_days": 28,  # Working days average,
-        "revision_requirements": "Revision Coversheet form (in color), Architect's Narrative, clouds and deltas, signatures NOT required",
-        "drc_not_required_for_submittal": True,
-        "tree_removal_res_1_2": 51.50,
-        "tree_removal_res_3_6": 77.25,
-        "tree_violation_fine": 500,
-        "early_start_letter_fee": 300,
-    },
-    "plantation": {
+    },    "plantation": {
         "name": "Plantation",
         "department": "Department of Building Safety",
         "address": "401 NW 70th Terrace, Plantation, FL 33317",
@@ -1513,16 +1448,72 @@ KNOWN_GOTCHAS = {
     "GOTCHA: Some older city checklists (Addition, Solar) still show pre-July 2023 NOC thresholds of $2,500/$7,500 — the CORRECT current thresholds are $5,000/$15,000.",
 ],
     "lake_worth_beach": [
-        "Walk-In Hours: 1st & 3rd Wednesdays 8AM-12PM only (no appointment needed)",
-        "Inspection requests must be made by 4:00 PM the business day before",
-        "Work without permit = Permit fee PLUS 3x fee (without surcharges)",
-        "Historic district properties require Certificate of Appropriateness BEFORE permit",
-        "Full demolition in historic district: $500 fee (primary), $250 (accessory)",
-        "Third plan review = $50 fee, Fourth+ = 4x Plan Filing Fee",
-        "Contractor must be registered with city before pulling permits",
-        "NOC must be recorded with Clerk of Court AND posted on job site",
-        "Plan Filing Fee (50% of permit) is non-refundable",
-        "Permits under $1,000 for minor repairs may be exempt - check list",
+        # HISTORIC DISTRICT — THE #1 GOTCHA FOR LWB
+        "GOTCHA: Lake Worth Beach has SIX (6) historic districts + 4 individually designated landmarks. ANY exterior work in these areas requires a Certificate of Appropriateness (COA) BEFORE a building permit can be issued. COA and building permit must be submitted CONCURRENTLY. Failure to obtain COA = stop work order.",
+        "GOTCHA: Pre-application meetings are REQUIRED for projects involving new construction, demolitions, or changes of use in historic districts. Pre-app strongly encouraged for major additions. Email pzhp@lakeworthbeachfl.gov to schedule.",
+        "GOTCHA: COA construction must commence within 12 months of issuance and 50% complete within 12 months of commencement. CO required within 24 months of commencement.",
+
+        # SUBPERMIT FEE TRAP
+        "GOTCHA: Primary permit fees INCLUDE sub-permit fees ONLY IF all applicable subcontractor qualifier signatures are on the application AND plans include sub details. Missing a sub-qualifier signature = SEPARATE permit + SEPARATE fees for that trade.",
+
+        # NOC THRESHOLDS — MULTIPLE DIFFERENT THRESHOLDS
+        "GOTCHA: LWB has THREE different NOC thresholds: $5,000 general, $2,500 for fences and wood decks, $15,000 for AC existing system replacements. Using the wrong threshold will cause rejection.",
+        "GOTCHA: NOC must be RECORDED at PBC Clerk of Court AND POSTED ON JOB SITE before first inspection — not at submittal, not at issuance. Both conditions required.",
+
+        # WALK-IN HOURS
+        "GOTCHA: Walk-in hours are ONLY 1st & 3rd Wednesdays 8AM-12PM. Outside those windows, you cannot walk in without an appointment.",
+
+        # INSPECTION TIMING
+        "GOTCHA: Inspections must be requested by 4:00 PM the business day BEFORE desired date. Same-day inspections require direct call to (561) 586-1647 and carry ADDITIONAL FEES.",
+
+        # PLAN REVIEW
+        "GOTCHA: 3rd plan review = $50 fee. 4th+ plan review = 4x Plan Filing Fee. Plan Filing Fee (50% of permit) is NON-REFUNDABLE. Getting it right the first time saves significant money.",
+        "GOTCHA: Plan resubmittals must be COMPLETE — partial submittals NOT accepted. Emails limited to 10MB; larger files must go through website portal.",
+
+        # APPLICATION NOTARIZATION
+        "GOTCHA: Building permit application requires NOTARIZATION — both owner and contractor signatures must be sworn/affirmed before a notary. Not having a notary available = no submission.",
+
+        # ALL SIGNATURES MUST BE ORIGINAL
+        "GOTCHA: ALL signatures on the permit application MUST BE ORIGINAL. Digital/copied signatures may be rejected.",
+
+        # CONTRACTOR REGISTRATION
+        "GOTCHA: Contractor MUST be registered with city BEFORE pulling permits. Registration requires: PBC Occupational License, PBC Certification or State of FL Certification/Registration, Certificate of Liability Insurance, Workers Comp or Exemption, and Qualifier's Driver's License.",
+
+        # CITY-OWNED UTILITIES
+        "GOTCHA: Lake Worth Beach has its OWN municipal electric utility (not FPL). Service disconnects, reconnects, and coordination go through LWB Utilities Customer Service (561) 533-7300, NOT FPL.",
+
+        # DRIVEWAY APPROACH
+        "GOTCHA: Driveway approach in public right-of-way requires a SEPARATE Right-of-Way Application — not just the building permit.",
+
+        # PERMIT EXEMPTION LOWER THRESHOLD
+        "GOTCHA: LWB's permit exemption threshold is $1,000 (LOWER than the typical $2,500 FL standard). Work valued at $1,001+ requires a permit even for minor repairs.",
+
+        # WIND ZONE
+        "GOTCHA: Lake Worth Beach is NOT in the HVHZ — it's in the Wind-Borne Debris Region. Uses FL Product Approval (FL#), NOT Miami-Dade NOA. Submitting MDC NOAs instead of FL Product Approvals = rejection.",
+
+        # POOL IN HISTORIC DISTRICT
+        "GOTCHA: Pools in designated historic districts are subject to review by historic preservation staff and MAY REQUIRE a Board appearance — which will DELAY permit processing.",
+
+        # WINDOWS IN HISTORIC DISTRICT
+        "GOTCHA: Windows and doors replaced in designated historic districts are subject to review by historic preservation staff and MAY REQUIRE a Board appearance — delays processing.",
+
+        # SIGNS IN HISTORIC DISTRICT
+        "GOTCHA: Sign permits in historic districts or on main thoroughfares require COA approval by the Historic/Zoning Board — additional delay.",
+
+        # FENCE GATE/REMOVAL AGREEMENT
+        "GOTCHA: Fence permits require a Fence/Gate Removal Agreement RECORDED with PBC Clerk of Court AND a Hold Harmless/Indemnification Agreement. Both are city-specific forms. Missing either = hold.",
+
+        # FENCE FINISHED SIDE
+        "GOTCHA: Finished side of fence MUST face adjacent property. If not, a notarized affidavit from affected property owner waiving the requirement must be submitted BEFORE final inspection.",
+
+        # COMMERCIAL — PBC IMPACT FEE STAMP
+        "GOTCHA: New commercial construction must have Palm Beach County IMPACT FEE STAMP prior to permit issuance. Missing this = no permit issued.",
+
+        # DEMOLITION — ZONING FIRST
+        "GOTCHA: Demolition requires Planning, Zoning and Historic Preservation APPROVAL FIRST before proceeding with any other release forms. If structure is historically significant or contributing, COA from HRPB is required FIRST.",
+
+        # PROPERTY FILES
+        "GOTCHA: Requests to view city property files must be received 2 business days in advance and appointment required for non-electronic files. Email bpermits@lakeworthbeachfl.gov.",
     ],
     "margate": [
         "GOTCHA: Broward County Uniform Application MUST be the January 8, 2026 revised version — effective March 9, 2026 NO previous versions accepted. Address on page 2 is MANDATORY.",
@@ -1808,6 +1799,49 @@ KNOWN_GOTCHAS = {
         "GOTCHA: AC Replacement — Owner-builder limited to DUCTWORK AND VENTILATION ONLY. Cannot self-permit the mechanical equipment replacement.",
         "GOTCHA: Screen enclosures with SOLID ROOFS typically require 20ft rear setback (vs 5ft for screen roof). This catches many homeowners.",
     ],
+    "wellington": [
+        "GOTCHA: Application must be signed by BOTH property owner AND contractor — missing either signature = rejection",
+        "GOTCHA: Insurance cert holder must read EXACTLY: 'Village of Wellington / 12300 Forest Hill Blvd / Wellington, FL 33414' — any variation rejected",
+        "GOTCHA: Contractor Registration Application MUST BE NOTARIZED — unsigned/unnotarized = rejected at registration",
+        "GOTCHA: Registration requires $5,000 surety bond payable to the municipality per Ordinance 1983-19",
+        "GOTCHA: NOC must be recorded AND posted before first inspection — NO subsequent inspections without certified copy — this is strictly enforced",
+        "GOTCHA: HVAC NOC threshold is $15,000 (NOT the standard $5,000) — contractors often file NOC unnecessarily for small AC changeouts",
+        "GOTCHA: Aggregate value = TOTAL COST of ALL improvements, not just the individual permit work — if total project across all permits ≥ $5,000, fee simple titleholder/bonding co/architect/mortgage lender info required",
+        "GOTCHA: ALL plans/docs must be PDF format — other formats cause issues in ProjectDox ePlans system",
+        "GOTCHA: Accepted plan sizes: 8.5\"x11\", 11\"x17\", or 24\"x36\" ONLY — do NOT change plan size when resubmitting corrections",
+        "GOTCHA: Wellington has SPECIFIC file naming requirements for ProjectDox uploads — non-compliance delays review",
+        "GOTCHA: ProjectDox plans folder only accepts INDIVIDUAL plan pages that must be digitally signed — batch uploads of full plan sets may be rejected",
+        "GOTCHA: Must print ONE set of approved plans for Permit Box or job site after permit issued — inspectors check for this",
+        "GOTCHA: Closeout documents must be submitted electronically BEFORE scheduling final inspection — not at the inspection",
+        "GOTCHA: Permit does NOT assure HOA compliance — contractor should verify HOA requirements separately BEFORE applying",
+        "GOTCHA: Failure to obtain permit = 4X the normal building permit fee — this is the penalty, not 2X or 3X",
+        "GOTCHA: Pool filling without required Pool Barrier Inspection approval = $500 first offense, $1,000 repeat — per contractor",
+        "GOTCHA: Fence permits require ARB Approved Fence Form — specific approved designs, materials, and colors enforced",
+        "GOTCHA: Stockade wooden vertical fences are PROHIBITED in Wellington",
+        "GOTCHA: White vinyl fences are PROHIBITED — only beige, brown, or gray vinyl permitted",
+        "GOTCHA: All fences adjacent to right-of-way require hedges (exception: some fence types in EPA per Article 6 LDR)",
+        "GOTCHA: Finished side of fence MUST face the adjacent property — not your own yard",
+        "GOTCHA: Vinyl-coated chain link fence requires hedge for ENTIRE perimeter — black, green, or brown only",
+        "GOTCHA: Re-roofing over existing space-sheathed decks is NOT permitted — must be replaced",
+        "GOTCHA: Existing plywood must be re-nailed (min 8d ring-shank at 6\" OC) before underlayment installation",
+        "GOTCHA: Tile In-Progress inspection must be scheduled before 20% of tile is applied — missing this = failed inspection",
+        "GOTCHA: Foam applicators must be properly licensed/certified — unlicensed applicators = stop work order",
+        "GOTCHA: Early Power Release requires ALL other final inspections approved within 30 days — if not, release denied",
+        "GOTCHA: Early Power Release form must be ON SITE for inspection — if passed but no form on site, inspector FAILS the inspection",
+        "GOTCHA: No Early Power Release forms accepted at the office — must be on job site only",
+        "GOTCHA: Private Provider inspections: must email PrivateProvider@Wellingtonfl.gov within 2 business days BEFORE scheduled inspection AND results within 2 business days AFTER",
+        "GOTCHA: Application not considered complete until ALL departmental approvals obtained: Planning, Zoning, Engineering, Fire Rescue, Environmental, FL Dept of Health",
+        "GOTCHA: Certified state license holders based in another county must provide Business Tax Receipt from their home county",
+        "GOTCHA: CO with less than 24-hour notice = $250 fee — plan ahead",
+        "GOTCHA: Conditional CO: Residential $900, Commercial <5K SF $1,200, Commercial >5K SF $2,000 — nonrefundable",
+        "GOTCHA: Owner-Builder must PERSONALLY APPEAR at Building Dept and sign — corporations/LLCs CANNOT qualify for owner-builder exemption per AGO 91-05",
+        "GOTCHA: Demolition requires Asbestos Letter AND Asbestos Notification Guide from PBC Health Dept + utility disconnection confirmations",
+        "GOTCHA: Equestrian properties in EOZD require separate Planning & Zoning approval for stables/manure bins",
+        "GOTCHA: Engineering permits (fill, excavation, paving, grading, drainage) require as-built drawings approved BEFORE final inspection",
+        "GOTCHA: Customized/Engineered Product Approval Review costs $900 — plan for this if using non-standard products",
+        "GOTCHA: Window/Door Buck Affidavit required — where buck thickness < 1.5\", specific anchoring requirements apply per FBC R609.7",
+    ],
+
     "west_palm_beach": [
     # Insurance — THE critical gotcha
     "GOTCHA: Insurance cert holder wording DIFFERS between two official city pages! Permitting Info page says: 'City of West Palm Beach, 401 Clematis Street, West Palm Beach, Florida 33401'. FAQ page says: 'City of West Palm Beach, 401 Clematis St West Palm Beach, F 33401'. USE the full Permitting Info version. Call 561-805-6700 to confirm EXACT required wording before submitting.",
@@ -5768,41 +5802,61 @@ DETAILED_CHECKLISTS = {
         },
     },
     "wellington": {
+        "name": "Village of Wellington",
         "county": "Palm Beach",
+        "jurisdiction_type": "Village",  # NOT a city — this matters for official docs
+        "address": "12300 Forest Hill Boulevard, Wellington, FL 33414",
+        "phone": "561-753-2430",
+        "phone_alt": "561-363-7907",
+        "fax": "561-791-4045",
+        "email": "BuildingDocs@WellingtonFL.gov",
+        "private_provider_email": "PrivateProvider@Wellingtonfl.gov",
+        "website": "https://www.wellingtonfl.gov/214/Building",
+        "forms_page": "https://www.wellingtonfl.gov/1011/Building-Forms-Applications",
+        "portal": "ProjectDox (Electronic Plan Review)",
+        "portal_url": "https://wellingtonfl.gov/SelfService",
+        "submission_method": "Email application to BuildingDocs@WellingtonFL.gov → ProjectDox login emailed within 1 minute",
+        "hours": "Mon-Fri 7:00 AM - 4:00 PM",
+        "lobby_hours": "Mon-Fri 7:00 AM - 4:00 PM",
+        "inspection_hours": "Mon-Fri 7:00 AM - 3:30 PM",
+        "after_hours_inspections": "Available upon request and based on availability",
+        "code_edition": "FBC 8th Edition (2023) — effective December 31, 2023",
         "hvhz": False,
-        "jurisdiction_type": "VILLAGE (not city) — same building code framework",
-        "wind_zone": "Wind-Borne Debris Region (NOT HVHZ) — 130 mph shingle requirement",
+        "wind_zone": "Wind-Borne Debris Region (NOT HVHZ)",
         "product_approval_system": "FL Product Approval — NOT Miami-Dade NOA",
-        "roofing": {
-            "subcategory": "Re-Roof",
-            "total_required_docs": 14,
-            "noc_threshold": "$5,000 ($15,000 AC)",
-            "submittal_method": "Email application + ProjectDox (electronic plan review)",
-            "portal_url": "wellingtonfl.gov/252/Building-Permits",
-            "code_edition": "FBC 8th Ed (2023)",
-            "county": "Palm Beach",
-            "source_document": "Wellington Guide to Permitting + Building Forms + Reroof Checklist + Technical Codes",
-            "last_verified": "2026-03-16",
-            "documents": [
-                {"name": "NOT in HVHZ — Wind-Borne Debris Region", "required": "REQUIRED", "condition": "All roofing", "notes": "PBC is NOT in HVHZ. WBDR standards. FL Product Approval. Shingles must resist 130 mph (ASTM D3161 Class F or D7158 Class H)."},
-                {"name": "Building Permit Application (signed & notarized)", "required": "REQUIRED", "condition": "All re-roofs", "notes": "Submit by EMAIL to Building Dept. Contractor's registered email used as ProjectDox login."},
-                {"name": "Reroof Checklist / Packet", "required": "REQUIRED", "condition": "All re-roofs", "notes": "WELLINGTON: City-specific Reroof Checklist (FBC 8th Edition 2023); includes Roof Material Worksheet for all proposed systems"},
-                {"name": "FL Product Approval", "required": "REQUIRED", "condition": "All roofing materials", "notes": "FL Product Approval with valid FL# numbers; NOT MDC NOA"},
-                {"name": "ProjectDox Electronic Plan Review", "required": "REQUIRED", "condition": "All permits", "notes": "ALL permits processed electronically ONLY via ProjectDox. PDF preferred. Sizes: 8.5x11, 11x17, 24x36. Do NOT change size on resubmission."},
-                {"name": "File Naming Requirements", "required": "REQUIRED", "condition": "All digital submittals", "notes": "WELLINGTON: Specific naming requirements mandatory — non-compliance may delay review"},
-                {"name": "Contractor Registration Packet", "required": "REQUIRED", "condition": "Before permits", "notes": "City-specific packet; Permit Runners must also register separately"},
-                {"name": "Notice of Commencement", "required": "REQUIRED", "condition": "Job value > $5,000; $15,000 AC", "notes": "City-specific NOC form; recorded at PBC Courthouse"},
-                {"name": "Print One Set for Job Site", "required": "REQUIRED", "condition": "After permit issued", "notes": "Must print one set of approved plans for Permit Box or job site"},
-            ],
-            "conditional_documents": [
-                {"name": "Contractor Affidavits for Inspections", "condition": "Roof sheathing / metal / flat roofs", "notes": "WELLINGTON UNIQUE: Contractor affidavits + engineer certification CAN BE ACCEPTED with SUFFICIENT PHOTOGRAPHIC EVIDENCE"},
-            ],
-            "roofing_rules": [
-                "Tile In-Progress inspection must be scheduled before 20% of tile applied",
-                "Re-roofing over existing space-sheathed decks is NOT permitted",
-                "Foam applicators must be properly licensed/certified",
-            ],
-        },
+        "noc_threshold": "$5,000 direct contract ($15,000 for HVAC repair/replacement)",
+        "noc_timing": "Recorded AND posted on job site BEFORE first inspection — NO subsequent inspections without certified copy",
+        "insurance_cert_holder_verbatim": "Village of Wellington\n12300 Forest Hill Blvd\nWellington, FL 33414",
+        "building_official": "Matt Mills, CBO — 561-753-2506",
+        "chief_inspector": "William Wyatt — 561-753-2586",
+        "permitting_manager": "Stephen Crane — 561-753-2591",
+        "permitting_supervisor": "Nicole Sanchez — 561-753-2526",
+        "senior_plans_examiner": "Joseph Crisafulle — 561-753-2528",
+        "zoning_plans_examiner": "Juan Sanchez, LDR — 561-791-4793",
+        "structural_inspectors": [
+        "Mark Candreva — 561-753-2574",
+        "Laumary Carrasquel — 561-753-2573 (Habla Español)",
+        ],
+        "payment_methods": "Via Self-Service portal (wellingtonfl.gov/SelfService)",
+        "inspection_scheduling": "Online via Self-Service portal OR by text message",
+        "inspection_text_format": "Text to schedule: S [Permit#] [Code] [Date] [AM/PM] — Example: S BP25-0000 123 10/05 AM",
+        "inspection_cancel_text": "Text to cancel: C [Permit#] [Code] — Example: C BP25-0000 100",
+        "inspection_results_text": "Text for results: R [Permit#] — Example: R BP25-0000",
+        "permit_validity_days": 180,
+        "permit_validity_notes": "Expires if work not started and inspection not requested within 180 days; after work begins, expires if suspended/abandoned for 180 days; automatically extended 180 days from any approved inspection",
+        "engineering_inspection_advance": "48 hours in advance via Citizens Self Service (CSS) portal",
+        "special_notes": [
+        "VILLAGE — not a city (use 'Village of Wellington' in all official docs)",
+        "Equestrian Capital of the World — has unique Stable/Manure Bin permits",
+        "Equestrian Overlay Zoning District (EOZD) — special Planning & Zoning approval for equestrian properties",
+        "Acme Improvement District — manages canals/drainage; culvert/irrigation connections require coordination",
+        "ALL permits processed electronically ONLY through ProjectDox — no paper submissions",
+        "First-time ProjectDox uploaders: Call 561-753-2430 or 561-363-7907 after completing task to verify",
+        "Permit Runners must register SEPARATELY with Building Dept",
+        "HOA approval is NOT guaranteed by a building permit — get HOA approval first",
+        "Open permits may result in CILB referral or CBAA action",
+        ],
+    },
         "electrical": {
             "subcategory": "Panel / Service / Trade", "total_required_docs": 10, "noc_threshold": "$5,000 ($15,000 AC)",
             "submittal_method": "Email + ProjectDox", "code_edition": "FBC 8th Ed (2023)", "county": "Palm Beach",
@@ -5850,94 +5904,12 @@ DETAILED_CHECKLISTS = {
             "documents": [],
         },
     },
-    "west_palm_beach": {
-        "county": "Palm Beach",
-        "hvhz": False,
-        "wind_zone": "Wind-Borne Debris Region (NOT HVHZ)",
-        "product_approval_system": "FL Product Approval — NOT Miami-Dade NOA",
-        "roofing": {
-            "subcategory": "Re-Roof",
-            "total_required_docs": 14,
-            "noc_threshold": "$5,000 ($15,000 AC)",
-            "submittal_method": "EPL / Civic Access Portal",
-            "portal_url": "wpb.org — EPL / Civic Access",
-            "code_edition": "FBC 8th Ed (2023)",
-            "county": "Palm Beach",
-            "source_document": "WPB Permitting Information + Building Division + Permit Place verification",
-            "last_verified": "2026-03-16",
-            "documents": [
-                {"name": "NOT in HVHZ — Wind-Borne Debris Region", "required": "REQUIRED", "condition": "All roofing", "notes": "PBC is NOT in HVHZ. WBDR standards. FL Product Approval (NOT MDC NOA)."},
-                {"name": "Building Permit Application (via EPL/Civic Access)", "required": "REQUIRED", "condition": "All re-roofs", "notes": "EPL launched 7/31/2023; Civic Access portal for online submittal, status, inspections"},
-                {"name": "FL Product Approval", "required": "REQUIRED", "condition": "All roofing materials", "notes": "FL Product Approval numbers required; NOT MDC NOA"},
-                {"name": "City of WPB Contractor Registration", "required": "REQUIRED", "condition": "Before permits", "notes": "Email: license, insurance (cert holder: City of West Palm Beach, 401 Clematis Street, WPB FL 33401), WC/exemption, phone, email. Allow 1 business day."},
-                {"name": "Notice of Commencement", "required": "REQUIRED", "condition": "Job value > $5,000; $15,000 AC", "notes": "Recorded at PBC Recording Dept, 205 N Dixie Hwy (4th Floor), WPB FL 33401 (561-355-2991). Email PDF copy to WPB with permit # in subject."},
-            ],
-            "conditional_documents": [
-                {"name": "143 Building Miscellaneous Inspection (pre-work)", "condition": "Recommended for all re-roofs", "notes": "WPB UNIQUE: Schedule before starting to MEET inspector and discuss expectations. Inspector advises if affidavit/pictures allowed."},
-                {"name": "PBC Roofing Affidavit (if needed)", "condition": "If weather prevents timely inspections", "notes": "WPB has NO city-specific roofing affidavit — use PBC affidavit; pass/fail at inspector discretion"},
-            ],
-            "review_timeline": "5-40 days depending on project type; NO expedited review",
-        },
-        "electrical": {
-            "subcategory": "Panel / Service / Trade", "total_required_docs": 10, "noc_threshold": "$5,000 ($15,000 AC)",
-            "submittal_method": "EPL / Civic Access Portal", "code_edition": "FBC 8th Ed (2023)", "county": "Palm Beach",
-            "documents": [
-                {"name": "Building Permit Application (via EPL)", "required": "REQUIRED", "condition": "All electrical", "notes": "Via EPL/Civic Access portal"},
-                {"name": "Contractor Registration", "required": "REQUIRED", "condition": "All electrical", "notes": "Must be registered with City of WPB"},
-                {"name": "NOC", "required": "REQUIRED", "condition": "Job value > $5,000; $15,000 AC", "notes": "PBC Recording Dept; email copy to WPB"},
-            ],
-        },
-        "plumbing": {
-            "subcategory": "General / Trade", "total_required_docs": 10, "noc_threshold": "$5,000",
-            "submittal_method": "EPL / Civic Access Portal", "code_edition": "FBC 8th Ed (2023)", "county": "Palm Beach",
-            "documents": [
-                {"name": "Building Permit Application (via EPL)", "required": "REQUIRED", "condition": "All plumbing", "notes": "Via EPL/Civic Access portal"},
-                {"name": "Contractor Registration", "required": "REQUIRED", "condition": "All plumbing", "notes": "Must be registered"},
-                {"name": "NOC", "required": "REQUIRED", "condition": "Job value > $5,000", "notes": "PBC Recording Dept"},
-            ],
-        },
-        "building": {
-            "subcategory": "New Construction / Additions", "total_required_docs": 18,
-            "noc_threshold": "$5,000 ($15,000 AC)", "submittal_method": "EPL / Civic Access Portal",
-            "code_edition": "FBC 8th Ed (2023)", "county": "Palm Beach",
-            "documents": [
-                {"name": "Building Permit Application (via EPL)", "required": "REQUIRED", "condition": "All building", "notes": "EPL launched 7/31/2023; all applications via Civic Access portal"},
-                {"name": "Plans (signed & sealed)", "required": "REQUIRED", "condition": "All requiring plan review", "notes": "Reviewed for code compliance, structural, fire, energy, ADA. Commercial: multiple depts concurrent. 2-3 correction cycles typical."},
-                {"name": "Contractor Registration", "required": "REQUIRED", "condition": "All building", "notes": "Email: license, insurance (cert holder exactly: City of West Palm Beach, 401 Clematis Street, WPB FL 33401), WC/exemption, phone, email"},
-                {"name": "NOC", "required": "REQUIRED", "condition": "Job value > $5,000; $15,000 AC", "notes": "PBC Recording Dept, 205 N Dixie Hwy 4th Floor; email PDF copy to WPB"},
-            ],
-            "conditional_documents": [
-                {"name": "CO/CC Request (by email)", "condition": "After final inspection approved", "notes": "Email with 'CO Request' or 'CC Request' in subject; include master permit #, address; 1-2 business days"},
-                {"name": "Expired/Open Permits", "condition": "If property has existing issues", "notes": "Email expiredpermits@wpb.org with property address in subject; 2-4 business days for response"},
-            ],
-            "review_timeline": "5-40 days; no expedited review; largest city in PBC",
-        },
-        "marine": {
-            "subcategory": "Docks / Seawalls — Intracoastal + Lake Worth Lagoon",
-            "noc_threshold": "$5,000",
-            "submittal_method": "EPL (city) + PBC ERM + SFWMD + USACE + FDEP",
-            "notes": "West Palm Beach has SIGNIFICANT waterfront: Intracoastal Waterway, Lake Worth Lagoon, canals. Requires: city permit via EPL + PBC ERM + SFWMD ERP + USACE + FDEP CCCL. NOC at PBC Recording Dept.",
-            "dock_documents": [
-                {"name": "City Permit Application (EPL)", "required": "REQUIRED", "condition": "All marine", "notes": "Via EPL/Civic Access"},
-                {"name": "Plans (signed & sealed)", "required": "REQUIRED", "condition": "All marine", "notes": "By FL PE"},
-                {"name": "Survey (current)", "required": "REQUIRED", "condition": "All marine", "notes": "Existing conditions"},
-                {"name": "NOC", "required": "REQUIRED", "condition": "Job value > $5,000", "notes": "PBC Recording Dept; email copy to WPB"},
-            ],
-            "dock_conditional": [
-                {"name": "PBC ERM approval", "condition": "Coastal work", "notes": "PBC Environmental Resources Management"},
-                {"name": "SFWMD ERP", "condition": "When required", "notes": "DEP General Permit for docks <= 1,000 sq ft"},
-                {"name": "USACE Section 10/404", "condition": "Navigable waters/wetlands", "notes": "Army Corps"},
-                {"name": "FDEP CCCL Permit", "condition": "Coastal Construction Control Line", "notes": "FDEP District 4"},
-            ],
-        },
-    },
-}
-
 
 # =============================================================================
-# CITY-SPECIFIC PERMIT REQUIREMENTS (Full permit-type-level data)
-# Added: April 2026 — Pompano Beach (22 PDFs verified) + Plantation (city website + GFL Alliance)
+# CITY_SPECIFIC_PERMITS — Maps city keys to their full PERMITS dicts
+# get_permit_requirements() checks this FIRST before falling back to generic data
 # =============================================================================
+
 
 POMPANO_BEACH_PERMITS = {
 
@@ -6581,8 +6553,6 @@ POMPANO_BEACH_PERMITS = {
     },
 }
 
-
-
 PLANTATION_PERMITS = {
     "building": {
         "name": "Building Permit",
@@ -7086,7 +7056,6 @@ PLANTATION_PERMITS = {
 # CITY_SPECIFIC_PERMITS — Maps city keys to their full PERMITS dicts
 # get_permit_requirements() checks this FIRST before falling back to generic data
 # =============================================================================
-
 
 HIALEAH_PERMITS = {
     "building": {
@@ -7776,7 +7745,7 @@ OAKLAND_PARK_PERMITS = {
             "GOTCHA: Drainage District Approval Letter REQUIRED if fence borders a waterway — also triggers Engineering review stop. Get Drainage District Permit Info from city",
             "'Fences for New or Existing Pools' form — when fence serves as pool barrier",
             "ZONING REQUIREMENTS (Oakland Park Residential Fence Requirements PDF):",
-            "R-1 & R-2 DISTRICTS: Front yard fence max 5 feet. All other locations max 6 feet ½ inch (NOT 6'6\" — the official doc says 6'-1/2\"). Up to 8 feet ONLY if abutting non-residential or multifamily district (even if separated by street, alley, or canal)",
+            "R-1 & R-2 DISTRICTS: Front yard fence max 5 feet. All other locations max 6 feet ½ inch (NOT 6'6\" — the official doc says 6'-1/2-inch). Up to 8 feet ONLY if abutting non-residential or multifamily district (even if separated by street, alley, or canal)",
             "R-1A, R-1B, R-1C DISTRICTS: Max 6 feet (measured from finished grade). Up to 8 feet when abutting commercial/industrial. Corner lots: opaque fences max 30 inches within 25-foot sight triangle",
             "Height measured from finished grade of abutting properties; along ROW measured from crown of road",
             "Front yard setback: 25 feet (35 feet on 40-foot-wide R-1 lots). Setbacks measured from property line",
@@ -17018,6 +16987,2024 @@ MARGATE_FEE_SCHEDULE = {
     },
 }
 
+
+TAMARAC_PERMITS = {
+    "building": {
+        "name": "Building Permit - General Construction",
+        "items": [
+            # Portal & Submission
+            "Submit via ePermits (Click2Gov) portal: https://e-gov.tamarac.org/Click2GovBP/index.html",
+            "100% PAPERLESS department since March 2014 — ALL paperwork submitted online via ePermits",
+            "ePermitsOneStop available for combined Tamarac + Broward County permits: https://www.broward.org/ePermits/Pages/Default.aspx",
+            "Electronic submission allows concurrent staff review, cutting turnaround time in half",
+            "GOTCHA: As of March 9, 2026 — NEW Broward County Uniform Permit Application required. Previous version NO LONGER ACCEPTED.",
+            "Notary Jurat form is NO LONGER needed with the new application version",
+            "Paper plans (up to 3 large pages) will be converted to electronic for $3.00/page fee. Over 3 pages MUST be submitted online or flash drive/CD.",
+            "Digital copies accepted with third-party seal and signature certified",
+            
+            # Application Requirements
+            "Broward County Uniform Building Permit Application (NEW version as of 03/09/2026)",
+            "Two (2) sets of plans — signed and sealed by FL Architect/Engineer when required",
+            "Current signed and sealed survey (not required for interior-only work)",
+            "Product Approvals / NOAs — must be stamped/approved by architect if part of a designed plan set",
+            "NOTE: NOAs for replacement permits (windows, doors, re-roof) do NOT need architect review — can be submitted online",
+            "Energy Calculations (signed & sealed) — when applicable",
+            "Structural Calculations (signed & sealed) — when applicable",
+            "Owner/Agent Letter — must have owner and agent notarized signatures",
+            "DRC (Development Review Committee) approved plans if applicable — not required for interior-only work. Once DRC approved, documented in ePermits system.",
+            
+            # Contractor Registration
+            "Contractor must be registered with City of Tamarac BEFORE being selected for a permit application — no fee to register",
+            "Registration via online form: https://Tamarac.gov/ContractorRegistration",
+            "Registration requires: (1) Registration Form, (2) State/Local License, (3) Business Tax Receipt, (4) GL Insurance Certificate, (5) Workers' Comp or Exemption",
+            "GOTCHA: Insurance certificate must list 'City of Tamarac' as ADDITIONAL INSURED for GL and as CERTIFICATE HOLDER",
+            "UNCERTAINTY (90%): Exact verbatim cert holder address wording: 'City of Tamarac, 6011 Nob Hill Road, Tamarac, FL 33321' — contractor registration form URL blocked; inferred from building dept address + vendor application. Call 954-597-3420 to confirm exact wording.",
+            "GOTCHA: Existing registered contractors — DO NOT use full registration form for updates. Email updated documents to Contractor@Tamarac.gov or fax to 954-597-3450.",
+            
+            # Broward County EPD
+            "Broward County EPD (Environmental Protection Division) submittal/approval required PRIOR to Building Dept submittal for all exterior/non-interior work",
+            "Apply online for Security Code & Application Number — walk-thru review",
+            "Impact fees determined during EPD review if any",
+            "Submit Asbestos form (SRRA) if interior-only OR if renovation/addition",
+            "Elevator permits — Broward County Elevator submittal/approval required PRIOR to Building Dept submittal. Submit plans only (no application). Allow 1 week review.",
+            
+            # NOC
+            "Notice of Commencement (NOC) — recorded at Broward County Recording office prior to Building Dept submittal",
+            "NOC not required if value of work under $2,500",
+            "Secure 2 certified copies of recorded NOC",
+            "NOTE: City prefers NOC before permit issuance; state requires before inspections are scheduled. Safest: record before submittal.",
+            
+            # HVHZ / Product Approvals
+            "HVHZ (High-Velocity Hurricane Zone) — all applicable products require Miami-Dade NOAs",
+            "Roof Calculations (HVHZ) — must be complete package with roof NOAs and roof plan",
+            "Roof Truss Shop Drawings — must be signed/sealed by engineer and include all calcs",
+            "Fire Sprinkler/Alarm Drawings — must have hydraulic calcs and cut sheets of all devices and panels",
+            
+            # Fees
+            "Review time: 5-10 business days (minor projects), up to 30 days (larger projects)",
+            "Plan Processing Fee at submittal for jobs >$10,000: $500 ($10K-$50K), $2,000 ($50K-$100K), $3,000 ($100K-$500K), $5,000 (>$500K) — non-refundable, applied to permit fee at issuance",
+            "SFR new construction fees include ALL disciplines (not including roof): $4,845 (≤1,500 SF) to $10,788 (>6,000 SF)",
+            "SFR addition: $1,211 (≤1,500 SF), $1,535 (>1,500 SF) — includes ALL disciplines except roof",
+            "SFR remodel: $2,995 (≤$25K) to $5,931 (>$100K) — includes ALL disciplines",
+            "Reinspection fees: 1st fail $122, 2nd $122, 3rd $195, 4th $285",
+            "Expedited plan review: $366 per discipline (Structural, Electrical, Mechanical, Plumbing, Fire, Zoning, Engineering)",
+            "Plan resubmission (prior to issuance): $100 per discipline",
+            
+            # Revisions
+            "GOTCHA: Revisions require Architect's Narrative + clouds and deltas on drawings",
+            "Responses cannot be submitted during review until entire review is complete",
+            "Response submission: email or mail",
+            "Inspections NOT stopped during revision process, but finals cannot be completed",
+            
+            # Private Provider
+            "Private Provider Package available — form on city website",
+            "5% permit fee reduction for inspections only; 10% for plan review + inspections",
+            
+            # Early Start
+            "Early Start Request form available — fee $122 or minimum $273 (whichever greater)",
+            "Emergency permits: AC and Electric Services can begin work while waiting for permit — application and fees due first succeeding business day",
+            
+            # Owner/Builder
+            "Owner/builder requirements: Permit application, proof of residence (phone or utility bill), FL driver's license or state ID, Owner/Builder Affidavit, plans/documents",
+            "Owner/Builder Affidavit form and example available on city website",
+            
+            # Inspection
+            "Inspection scheduling: online via ePermits, phone 954-597-3435, or IVR system",
+            "GOTCHA: IVR system requires PIN number — found on permit inspection sheets",
+            "Inspection scheduling deadline: 3:00 PM for next-day",
+            "Call 7:00-8:00 AM morning of inspection for approximate time",
+            "No automatic notification system for inspection arrival time",
+            
+            # Expiration / Close-Out
+            "Permit Extension Request Form available — $122 fee (prior to expiration)",
+            "Certificate of Completion: $122 — provided if requested on company letterhead",
+            "Certificate of Occupancy: Residential SF — no additional charge; Multi-family $105; Commercial $86 + $3/1,000 SF",
+            "Temporary CO: $254 per 90-day period",
+            
+            # Penalties
+            "GOTCHA: Work without permit penalty — Contractors: $285 or DOUBLE permit fee (whichever greater); Homeowners: $190 or DOUBLE",
+            "Citation: 1st offense $250; 2nd and each additional $500",
+            
+            # Building Safety
+            "Building Safety Inspection Program: required at 25 YEARS from CO date (Broward BORA Policy 05-05 — supersedes state SB 154). Then every 10 years. Processing fee: $293.",
+            
+            # Misc
+            "No permit required for general maintenance/repairs ≤$1,500 that don't change occupancy or structural integrity",
+            "Public Art Fee assessed on construction value per City Ordinance 0-2004-15",
+            "GOTCHA: HOA approval is separate — building permit does NOT guarantee HOA approval",
+            "Predevelopment meetings available upon request for complex projects",
+            "NOTE: Sub-permits NOT required to be submitted with master building permit application",
+            "NOTE: Sub-permits do not require owner signature (unless owner/builder)",
+            "NOTE: Plans can be submitted by owner, architect, or engineer for review prior to selecting a GC",
+            "NOTE: === WOOD DECK ===",
+            "Broward County Uniform Building Permit Application",
+            "NOC if over $5,000",
+            "HVHZ — product approvals required",
+            "Contractor must be registered with City of Tamarac",
+            "Fees: Up to 200 SF $190; each additional 100 SF $33",
+            "NOTE: === SIDING ===",
+            "Broward County Uniform Building Permit Application",
+            "NOC if over $5,000",
+            "Product approvals for HVHZ",
+            "Contractor must be registered with City of Tamarac",
+            "NOTE: === CANVAS AWNING ===",
+            "Broward County Uniform Building Permit Application",
+            "Product approvals for HVHZ",
+            "NOTE: === CARPORT CANOPY ===",
+            "Broward County Uniform Building Permit Application",
+            "Product approvals for HVHZ",
+            "Fees: Metal/Canvas Carport & Canopy $219; Temporary Tent for Special Events $190",
+            "NOTE: === CELLULAR WIRELESS ===",
+            "Broward County Uniform Building Permit Application",
+            "Maintenance and new equipment on existing towers only",
+            "Includes electrical and structural disciplines",
+            "NOTE: === BUILDING SAFETY INSPECTION ===",
+            "Required when building reaches 25 years from Certificate of Occupancy date",
+            "Subsequent inspections every 10 years",
+            "BORA sends notification list every June",
+            "Building Permit Application required — processing fee $293",
+            "BCPA Ownership documentation required",
+            "Email application number to Rosemary.Fisher@Tamarac.gov for compliance tracking",
+            "Inspection forms available from Broward County Board of Rules and Appeals",
+        ],
+    },
+
+    "electrical": {
+        "name": "Electrical Permit",
+        "items": [
+            "Submit via ePermits portal — 100% paperless",
+            "Broward County Uniform Permit Application (Electrical checked) — NEW version as of 03/09/2026",
+            "Trade application — must be in BLACK INK if paper; values, SF & quantities required; signed by Owner & trade Contractor",
+            "Copy of current license and insurance required",
+            "Contractor must be registered with City of Tamarac (no fee)",
+            "NOC required if work value over $5,000 (per specific permit pages) — record at Broward County before submittal",
+            "Two (2) sets electrical plans (signed & sealed) when required for service change",
+            "HVHZ — NOAs required for all applicable electrical products",
+            "Insurance certificate: City of Tamarac as additional insured + certificate holder",
+            "Fees: Service change up to 200 amps $254; 200-400 amps $304; each additional 100 amps over 400 $10",
+            "Meter Can Replacement: $122",
+            "Burglar Alarm: Commercial $254; Residential $40",
+            "Commercial Site Lighting: $404",
+            "Low Voltage Wiring (data, intercom, telephone, video, sound, cable TV): $136 each",
+            "Door Access System: $174",
+            "NOTE: === ELECTRICAL SERVICE CHANGE ===",
+            "Broward County Uniform Permit Application (NEW version as of 03/09/2026)",
+            "NOC required if work value over $5,000",
+            "Riser Diagram — REQUIRED",
+            "Fault Current Settings — REQUIRED",
+            "Contractor must be registered with City of Tamarac",
+            "License and insurance on file",
+            "GOTCHA: Emergency electrical service permits can begin work while waiting for permit — application and fees due first succeeding business day",
+            "Fees: Up to 200 amps $254; 200-400 amps $304; each 100 amps over 400 add $10",
+        ],
+    },
+
+    "plumbing": {
+        "name": "Plumbing Permit",
+        "items": [
+            "Submit via ePermits portal — 100% paperless",
+            "Broward County Uniform Permit Application (Plumbing checked) — NEW version as of 03/09/2026",
+            "Trade application in BLACK INK if paper; values, SF & quantities required; signed by Owner & trade Contractor",
+            "Copy of current license and insurance required",
+            "Contractor must be registered with City of Tamarac (no fee)",
+            "NOC required if work value over $5,000",
+            "Two (2) sets plans (signed & sealed) when required for non-simple work",
+            "Insurance certificate: City of Tamarac as additional insured + certificate holder",
+            "Fees: Replace fixtures — 1 fixture $122; up to 5 fixtures $190; each additional $23",
+            "Water Well: $130",
+            "Backflow Devices: up to 4 devices $130; each additional $50",
+            "Irrigation: Residential $130; Commercial $200",
+            "LP Gas System: up to 4 outlets $191; each additional outlet $66",
+            "LP Gas Tank: $130",
+        ],
+    },
+
+    "mechanical": {
+        "name": "Mechanical/HVAC Permit",
+        "items": [
+            "Submit via ePermits portal — 100% paperless",
+            "Broward County Uniform Permit Application (Mechanical checked) — NEW version as of 03/09/2026",
+            "Trade application in BLACK INK if paper; values, SF & quantities required",
+            "Copy of current license and insurance required",
+            "Contractor must be registered with City of Tamarac (no fee)",
+            "Insurance certificate: City of Tamarac as additional insured + certificate holder",
+            "Fees: Split system replacement $190; Air handler or condenser only $122",
+            "Package unit <5 ton ground $150; <5 ton rooftop $200; >5 ton $250; ≥10 ton $390 + $15/additional ton",
+            "GOTCHA: Smoke detector may be required with package unit — additional $122",
+            "Ductwork: When attached to AC permit $122; Ductwork only $190",
+            "Hood System with Fire Suppression (Type 1) $390; Type 2 $250",
+            "Bathroom Exhaust Fan: $122",
+            "NOTE: === MECHANICAL AC RESIDENTIAL ===",
+            "GOTCHA: Eligible for Fast Trac Permit — Thursdays 1:30-3:30 PM only, max 2 applications per customer",
+            "Broward County Uniform Permit Application (NEW version as of 03/09/2026)",
+            "GOTCHA: A/C Equipment Information Sheet REQUIRED — Tamarac-specific form",
+            "Ventilation Calculation — REQUIRED",
+            "AHRI Docs (Certificate) — REQUIRED",
+            "BPM Engineered Drawings — REQUIRED",
+            "Signed and sealed plans MAY BE required",
+            "GOTCHA: NOC threshold for AC Residential is $15,000 — NOT $2,500 or $5,000 like other permit types. This is a UNIQUE Tamarac threshold.",
+            "GOTCHA: Emergency AC permits can begin work while waiting for permit — application and fees due first succeeding business day",
+            "GOTCHA: Smoke detector may be required with package unit — additional $122 fee",
+            "Contractor must be registered and credentials updated AHEAD of pulling permit",
+            "Fast Trac documents must be 8.5 x 11 paper only",
+            "Fees: Split system replacement $190; Package unit varies by tonnage and location",
+            "Electrical connection for new AC system: $195; Change-out $122",
+        ],
+    },
+
+    "roofing": {
+        "name": "Roofing / Re-Roof / Roof Repair",
+        "items": [
+            "Submit via ePermits portal — 100% paperless",
+            "Broward County Uniform Building Permit Application (NEW version as of 03/09/2026)",
+            "NOC required if work value over $5,000 — record at Broward County before submittal",
+            "GOTCHA: Roofing Package — Tamarac-specific form. Complete HVHZ roofing package with NOAs and roof plan REQUIRED.",
+            "Product Approvals — vents, skylights, solar fan — if applicable",
+            "Signed and sealed plans (if roof is altered structurally)",
+            "Plans (non-signed and sealed) for standard re-roofs",
+            "Product Approvals + Manufacturer Specs",
+            "Roof Asbestos Approval — submit asbestos form via Broward EPD online (SRRA)",
+            "Contractor must be registered with City of Tamarac (no fee)",
+            "License and insurance on file — City of Tamarac as additional insured + cert holder",
+            "GOTCHA: Roofing inspections — pictures are NOT accepted for inspection approval (FBC 1512.4.2). Must be in-person.",
+            "NOTE: Virtual Roof Inspections currently offered — schedule by email to Virtualinspections@Tamarac.gov or call 954-597-3420 with permit number ready.",
+            "GOTCHA: Multi-family rooftop AC stands — new FL Building Energy Code (eff. Jan 1, 2023) requires larger AC units with larger physical dimensions. CONTACT BUILDING DEPT BEFORE submitting condo re-roof permits to discuss AC stand compliance.",
+            "GOTCHA: Renailing wood decks may be required per Chapter 16 (HVHZ requirement)",
+            "NOTE: NOAs for re-roof permits do NOT need architect review — can be submitted online",
+            "GOTCHA: AC Stands structural inspection is separate — $122 per stand per inspection",
+            "Fees: Re-roof up to 1,000 SF $234; each additional 500 SF $33",
+            "Roof repairs: ≤25,000 SF $190; 25K-50K $240; 50K-100K $290; >100K $340",
+            "Predevelopment meetings available for complex roofing projects",
+        ],
+    },
+
+    "pool_spa": {
+        "name": "Pool / Spa - Residential / Commercial",
+        "items": [
+            "Submit via ePermits portal — 100% paperless",
+            "Broward County Uniform Building Permit Application (NEW version as of 03/09/2026)",
+            "NOC required if work value over $5,000",
+            "Signed and Sealed Plans — REQUIRED",
+            "Isometric Plumbing Drawing — REQUIRED",
+            "GOTCHA: Pool Barrier Affidavit — REQUIRED (Tamarac-specific form)",
+            "Site plans, survey, manufacturer specs, riser diagram — may be required",
+            "Easement Agreement Procedure — if applicable",
+            "Franchised Utility Easement Instructions — if applicable",
+            "Fence criteria documents apply (separate for each type): PVC/Metal, Chain Link, Wood",
+            "GOTCHA: PVC or Metal fence around pool requires Product Approval/engineer detail",
+            "Contractor must be registered with City of Tamarac (no fee)",
+            "HVHZ — all applicable products require NOAs",
+            "Fees: Residential/Commercial pool ≤16,000 gal $1,311; 16,001-30,000 gal $1,505 (includes ALL disciplines)",
+            "Re-marciting commercial pools: $207",
+            "Above-ground portable pool/spa safety determination: $249",
+            "Screen Enclosure (pool): ≤1,500 SF $347; >1,500 SF $501",
+        ],
+    },
+
+    "demolition": {
+        "name": "Demolition - Entire Building",
+        "items": [
+            "Submit via ePermits portal — 100% paperless",
+            "Broward County Uniform Building Permit Application (NEW version as of 03/09/2026)",
+            "NOC required if work value over $5,000",
+            "GOTCHA: Refrigerant Recovery Form — REQUIRED (Tamarac-specific form)",
+            "Site Plans — REQUIRED",
+            "Signed and Sealed Plans — REQUIRED",
+            "Asbestos Abatement documentation — REQUIRED",
+            "Broward County Environmental Rev Certificate — REQUIRED",
+            "Franchised Utility Easement Instructions — may be required",
+            "Demolition Permit Procedures document — available on city website",
+            "Contractor must be registered with City of Tamarac",
+            "NOTE: Interior/Exterior alteration demo has separate checklist — $122 per discipline (structural, electrical, mechanical, plumbing)",
+            "NOTE: Demo in conjunction with build-out permit — no additional demo fee",
+            "Fees: Demolition of entire building $570",
+        ],
+    },
+
+    "sign": {
+        "name": "Sign Permit",
+        "items": [
+            "Submit via ePermits portal — 100% paperless",
+            "Broward County Uniform Building Permit Application (NEW version as of 03/09/2026)",
+            "NOC required if work value over $5,000",
+            "Signed and Sealed Plans — REQUIRED",
+            "Plans (non-signed and sealed) — REQUIRED",
+            "Special Inspector Form — may be required",
+            "Site Plans — may be required",
+            "Manufacturer Specs — may be required",
+            "Contractor must be registered with City of Tamarac",
+            "Fees: All wall signs $232; All monument signs $568; All temporary signs $298; Banners (30 days once/year) $44; Directional signs $122/each; Face change only $201",
+            "Electrical sign connection: $131 each",
+        ],
+    },
+
+    "fence": {
+        "name": "Fence Permit",
+        "items": [
+            "Submit via ePermits portal — 100% paperless",
+            "Broward County Uniform Building Permit Application (NEW version as of 03/09/2026)",
+            "NOC required if work value over $5,000",
+            "Plans (non-signed and sealed) — REQUIRED",
+            "GOTCHA: Different fence criteria documents for each type — Chain Link, PVC/Metal, and Wood each have separate requirement forms",
+            "GOTCHA: PVC or Metal fences require Product Approval / engineer detail",
+            "Franchised Utility Easement Instructions — may be required",
+            "Site plans, signed/sealed plans, survey — may be required",
+            "Product Approvals — may be required (especially PVC/metal)",
+            "Contractor must be registered with City of Tamarac",
+            "Fees: Up to 150 LF $190; each additional 50 LF $33",
+            "NOTE: === MASONRY WALL ===",
+            "Broward County Uniform Building Permit Application",
+            "NOC if over $5,000",
+            "HVHZ — product approvals required",
+            "Signed and sealed plans required",
+            "Contractor must be registered with City of Tamarac",
+            "Fees: Up to 100 LF $464; each additional 100 LF $61",
+        ],
+    },
+
+    "solar": {
+        "name": "Solar Panels / Photovoltaic System",
+        "items": [
+            "Submit via ePermits portal — 100% paperless",
+            "NOTE: Solar permits are EXPEDITED with a 3-business day turnaround",
+            "Broward County Uniform Permit Application (NEW version as of 03/09/2026)",
+            "NOC required if work value over $5,000",
+            "GOTCHA: Special Inspector Form — REQUIRED. Must be signed and sealed by the special inspector. Since April 1, 2023 the 'In-Progress' inspection must be covered by a special inspector report.",
+            "GOTCHA: Owner's Notification for Solar Panel Installation — REQUIRED (Tamarac-specific form)",
+            "Signed and Sealed Plans OR FSEC Certification — REQUIRED",
+            "Contractor must be registered with City of Tamarac",
+            "HVHZ — product approvals required for all solar equipment",
+            "Fees: Up to 20 modules $500; Over 20 modules $1,000 (includes electrical and structural disciplines)",
+        ],
+    },
+
+    "windows_doors": {
+        "name": "Windows and Doors Permit",
+        "items": [
+            "Submit via ePermits portal — 100% paperless",
+            "Broward County Uniform Building Permit Application (NEW version as of 03/09/2026)",
+            "NOC required if work value over $5,000",
+            "GOTCHA: Window Door Permit Package — REQUIRED (Tamarac-specific form)",
+            "Plans (non-signed and sealed) — REQUIRED",
+            "Product Approvals (NOAs) — REQUIRED — HVHZ Miami-Dade NOAs",
+            "Window Door Shutter Checklist — may be required",
+            "Manufacturer Specs — may be required",
+            "NOTE: NOAs for replacement window/door permits do NOT need architect review — can be submitted online",
+            "Contractor must be registered with City of Tamarac",
+            "Fees: First 5 windows/doors $141; each additional $23",
+            "Hurricane Shutters: first 5 shutters $141; each additional $23",
+            "Any combination of windows/doors/shutters up to 5: $141",
+            "NOTE: === GARAGE DOOR ===",
+            "Broward County Uniform Building Permit Application (NEW version as of 03/09/2026)",
+            "NOC if over $5,000",
+            "Product Approvals / NOAs required (HVHZ)",
+            "Contractor must be registered with City of Tamarac",
+        ],
+    },
+
+    "driveway": {
+        "name": "Driveway, Paving and Parking",
+        "items": [
+            "Submit via ePermits portal — 100% paperless",
+            "Broward County Uniform Building Permit Application (NEW version as of 03/09/2026)",
+            "NOC required if work value over $5,000",
+            "GOTCHA: Franchised Utility Easement Instructions — REQUIRED (Tamarac-specific form)",
+            "Plans (non-signed and sealed) — REQUIRED",
+            "Site Plans — may be required",
+            "Survey — may be required",
+            "Broward County Environmental Rev Certificate — may be required",
+            "Contractor must be registered with City of Tamarac",
+            "Fees: Concrete Paving & Parking (driveways & pavers) $249",
+            "Walkways only: $249",
+            "Slab (porch/patio-monolithic): $249",
+            "Sealcoat/Restripe: ≤25,000 SF $273; 25K-100K $285; >100K add $145",
+        ],
+    },
+
+    "shed": {
+        "name": "Utility Shed Permit",
+        "items": [
+            "Submit via ePermits portal — 100% paperless",
+            "Broward County Uniform Building Permit Application (NEW version as of 03/09/2026)",
+            "NOC required if work value over $5,000",
+            "HVHZ — product approvals required for shed",
+            "Contractor must be registered with City of Tamarac",
+            "Fees: Utility Shed $235",
+        ],
+    },
+
+    "screen_enclosure": {
+        "name": "Screen Enclosure (Patio/Porch/Pool)",
+        "items": [
+            "Submit via ePermits portal — 100% paperless",
+            "Broward County Uniform Building Permit Application (NEW version as of 03/09/2026)",
+            "NOC required if work value over $5,000",
+            "HVHZ — product approvals and NOAs required",
+            "Signed and sealed plans when required",
+            "Contractor must be registered with City of Tamarac",
+            "Fees: ≤1,500 SF $347; >1,500 SF $501",
+        ],
+    },
+
+    "change_of_contractor": {
+        "name": "Change of Contractor",
+        "items": [
+            "Change of Contractor Form available on city website",
+            "Fee: $122",
+            "New contractor must be registered with City of Tamarac before change can be processed",
+            "New contractor license and insurance must be current and on file",
+        ],
+    },
+
+    "private_provider": {
+        "name": "Private Provider Package",
+        "items": [
+            "Private Provider Package form available on city website",
+            "Certificate of insurance as required by section 553.791(18), Florida Statutes",
+            "5% permit fee reduction for inspections only",
+            "10% permit fee reduction for plan review AND inspections",
+            "Building Official retains authority to review plans, make required inspections, and enforce applicable codes",
+            "Changes to listed private providers must be updated within 1 business day or 2 business days before next scheduled inspection",
+        ],
+    },
+
+    "dock": {
+        "name": "Dock Permit",
+        "items": [
+            "NOTE: Tamarac is primarily an INLAND city — dock permits are rare but do exist on the forms page",
+            "Submit via ePermits portal",
+            "Broward County Uniform Building Permit Application",
+            "Multi-agency approval may be required: Broward County DPEP, Army Corps, FL DEP",
+            "Contractor must be registered with City of Tamarac",
+            "Fees: $346",
+        ],
+    },
+
+    "seawall": {
+        "name": "Seawall Repairs",
+        "items": [
+            "Submit via ePermits portal",
+            "Broward County Uniform Building Permit Application",
+            "Signed and sealed plans required",
+            "Multi-agency approval may be required",
+            "Contractor must be registered with City of Tamarac",
+            "Fees: 3.0% of cost of construction",
+        ],
+    },
+
+    "generator": {
+        "name": "Generator Permit",
+        "items": [
+            "Broward County Uniform Permit Application",
+            "NOC if over $5,000",
+            "Fees: Residential (with transfer switch) up to 20 KW $190",
+            "Commercial (with transfer switch) up to 20 KW $285; each additional KW over 20 $8",
+            "Transfer Switch only: Residential 200 amps $122; Commercial 200 amps $190; each 100 amps over 200 add $45",
+            "NOTE: === ELECTRICAL GENERATOR ===",
+            "Broward County Uniform Permit Application",
+            "NOC if over $5,000",
+            "Fees: Residential (with transfer switch) up to 20 KW $190",
+            "Commercial (with transfer switch) up to 20 KW $285; each additional KW over 20 $8",
+            "Transfer Switch only: Residential 200 amps $122; Commercial 200 amps $190; each 100 amps over 200 add $45",
+        ],
+    },
+    "water_heater": {
+        "name": "Water Heater Permit",
+        "items": [
+            "GOTCHA: Eligible for Fast Trac Permit — Thursdays 1:30-3:30 PM only, max 2 applications per customer",
+            "Broward County Uniform Permit Application (NEW version as of 03/09/2026)",
+            "GOTCHA: Water Heater Replacement Data Form REQUIRED — Tamarac-specific form",
+            "NOC required if work value over $5,000",
+            "Contractor must be registered and credentials updated AHEAD of pulling permit",
+            "Fast Trac documents must be 8.5 x 11 paper only",
+            "Fees: Domestic Water Heater/Tankless $122; Solar Pool Heater/Water Heater $130",
+            "NOTE: === PLUMBING WATER HEATER ===",
+            "GOTCHA: Eligible for Fast Trac Permit — Thursdays 1:30-3:30 PM only, max 2 applications per customer",
+            "Broward County Uniform Permit Application (NEW version as of 03/09/2026)",
+            "GOTCHA: Water Heater Replacement Data Form REQUIRED — Tamarac-specific form",
+            "NOC required if work value over $5,000",
+            "Contractor must be registered and credentials updated AHEAD of pulling permit",
+            "Fast Trac documents must be 8.5 x 11 paper only",
+            "Fees: Domestic Water Heater/Tankless $122; Solar Pool Heater/Water Heater $130",
+        ],
+    },
+    "kitchen_bath": {
+        "name": "Kitchen / Bath Permit",
+        "items": [
+            "Broward County Uniform Building Permit Application",
+            "NOTE: === KITCHEN CABINETS ===",
+            "Broward County Uniform Building Permit Application",
+        ],
+    },
+}
+
+WELLINGTON_PERMITS = {
+    # ------------------------------------------------------------------
+    # BUILDING (General / New Construction / Additions / Remodeling)
+    # ------------------------------------------------------------------
+    "building": {
+        "name": "Building Permit (General / New Construction / Additions / Remodeling)",
+        "items": [
+            # --- Submission & Portal ---
+            "Village of Wellington Building Permit Application (FBC 8th Edition 2023) — signed by BOTH property owner AND contractor",
+            "Submit completed application by EMAIL to BuildingDocs@WellingtonFL.gov",
+            "ALL permits processed electronically ONLY through ProjectDox — no paper submissions accepted",
+            "Contractor's registered email used as ProjectDox login — within 1 minute of entry, temp password emailed",
+            "First-time uploaders: Call 561-753-2430 or 561-363-7907 after completing task to verify process done correctly",
+            "GOTCHA: ProjectDox plans folder only accepts INDIVIDUAL plan pages — pages must be digitally signed",
+            "Preferred format: PDF — other formats may cause issues in ePlans Review System",
+            "Plan sizes: 8.5\"x11\", 11\"x17\", or 24\"x36\" ONLY",
+            "GOTCHA: Do NOT change plan size when resubmitting corrections — will cause processing issues",
+            "Wellington has SPECIFIC file naming requirements — review Guide to Permitting before uploading",
+            # --- Contractor Registration ---
+            "Contractor Registration Packet required — email to BuildingDocs@WellingtonFL.gov",
+            "Registration requires: (1) PBC/County-wide Business Tax Receipt (current fiscal year), (2) Qualifier's Driver's License or photo ID, (3) PBC Certificate of Competency AND/OR State of FL DBPR License, (4) Certificate of Liability Insurance, (5) Certificate of Workers Comp Insurance or Exemption",
+            "GOTCHA: Insurance cert holder MUST read EXACTLY: 'Village of Wellington / 12300 Forest Hill Blvd / Wellington, FL 33414'",
+            "GOTCHA: Contractor Registration Application must be NOTARIZED — State of Florida, County of Palm Beach",
+            "Registration requires $5,000 surety bond payable to the municipality (Ordinance 1983-19)",
+            "Registration fee: $50 initial / $25 renewal (by January 30) / $50 if renewal delayed past January 30",
+            "Certified State license holders based in another county: provide Business Tax Receipt from home county",
+            "NOTE: Permit Runners must register SEPARATELY with the Building Dept",
+            # --- NOC ---
+            "Notice of Commencement required for direct contract > $5,000 (HVAC exception: > $15,000)",
+            "NOC must be recorded at PBC Courthouse AND posted on job site BEFORE first inspection",
+            "GOTCHA: In absence of certified copy of recorded NOC, NO subsequent inspections can be performed",
+            "NOC must contain: name/address of owner, name/address of contractor, address of property",
+            "Wellington-specific NOC form available on Building Forms page",
+            # --- Aggregate Value Requirements ---
+            "When aggregate value (total cost ALL improvements) ≥ $5,000: Fee Simple Titleholder, Bonding Co, Architect/Engineer, and Mortgage Lender info required on application",
+            "Exception: HVAC repair/replacement < $15,000 exempt from aggregate value requirement",
+            # --- Product Approval ---
+            "NOT in HVHZ — Wind-Borne Debris Region — FL Product Approval required (NOT Miami-Dade NOA)",
+            "Shingles must resist 130 mph wind speed (ASTM D3161 Class F or D7158 Class H)",
+            "PBC wind speed determination via GIS tools per Risk Category",
+            # --- Departmental Approvals ---
+            "Application not complete until ALL approvals obtained: Planning, Zoning, Engineering, Fire Rescue, Environmental, FL Dept of Health",
+            # --- New Residential ---
+            "New Residential Packet required for new SFR construction",
+            "Plans signed/sealed by FL licensed architect or engineer",
+            "Survey, site plan with drainage, energy calculations required",
+            "Truss drawings signed/sealed when applicable",
+            "New Construction Affidavit — Wellington-specific form",
+            "Building Code Windload/Flood Resistant Design Certification form",
+            "Residential Permission to Stock form (when applicable)",
+            # --- New Commercial ---
+            "New Commercial Packet required for new commercial construction",
+            "Fire Plan Review Application — REQUIRED for ALL commercial new construction",
+            "Fire Alarm Packet, Fire Sprinkler Packet, Fire Suppression Packet as applicable",
+            "Commercial Permission to Stock/Train form (when applicable)",
+            # --- Residential Addition/Remodel ---
+            "Commercial Addition, Remodel & Misc Packet for commercial work",
+            "Residential additions: review by Building, Zoning, Engineering — 10 working days first review",
+            # --- Flood Zone ---
+            "Floodplain Development Packet required for flood zone properties — fee $225",
+            "Building Official determines if proposed work = substantial improvement or repair of substantial damage",
+            "If substantial improvement: must meet requirements of FBC Section 1612 or R322 AND Wellington Flood Damage Prevention Ordinance",
+            # --- Special Inspector ---
+            "Special Inspector Packet for threshold buildings",
+            # --- Detached Accessory Unit ---
+            "Detached Accessory Unit Packet — reviewed by Building, Engineering, Zoning — 10 working days",
+            # --- Inspections ---
+            "Schedule inspections online via Self-Service portal or by TEXT message",
+            "Text format: S [Permit#] [Code] [Date] [AM/PM] — Example: S BP25-0000 123 10/05 AM",
+            "Inspector arrival time emailed when inspector routes inspections",
+            "If no email received: contact inspector between 7:00-7:30 AM at 561-753-2430",
+            "Upload inspection docs to 'Inspection Documentation Folder' in ProjectDox before inspection",
+            "Closeout documents must be submitted electronically BEFORE scheduling final inspection",
+            "Must print ONE set of approved plans for Permit Box or job site",
+            # --- Private Provider ---
+            "Private Provider option per F.S. 553.791 — credits: Plan Review 12%, Inspection 28%, Combined 40%",
+            "Private Provider Certificate of Inspections Compliance form — hand delivered, mailed, or emailed (NO fax)",
+            "Private Provider: email PrivateProvider@Wellingtonfl.gov within 2 business days before AND after inspection",
+            # --- Fees ---
+            "Permit fee formula: $150 min (up to $7,500 value) + 2% ($7,500-$100K) + 1.75% ($100K-$500K) + 1.50% ($500K-$1.5M) + 1.25% (over $1.5M)",
+            "Plan review fee: 50% of permit fee or minimum $75",
+            "DBPR surcharge: 1% of permit cost (minimum $2)",
+            "BCAI surcharge: 1.5% of permit cost (minimum $2)",
+            "Zoning review: SFR $75, Multi-family $150, Commercial/Industrial $200, Misc $50",
+            "Expedited review: Residential $430, Commercial <5K SF $875, Commercial ≥5K SF $1,875 (in addition to regular fees)",
+            # --- Penalties & Renewals ---
+            "GOTCHA: Failure to obtain permit penalty: 4X the building permit fee",
+            "Re-inspection fees: 1st $60, 2nd (same type) $120, 3rd $180, 4th $300",
+            "Partial inspection (contractor requested): $60",
+            "Permit renewal: 30% of permit fee or minimum $75 — 30-day extensions at no charge at discretion of Building Official",
+            "Permit reissuance (before expiration): $90 minimum + 30% plan review fee",
+            "After-hours/weekend inspection: $250 per inspection (2-hour block)",
+            "Transfer of permit (new contractor): $65",
+            "Appeal of Building Official determination: $500",
+            "CBAA filing fee: $250",
+            "Address correction after permit issuance: $55 per permit",
+            # --- CO ---
+            "Request for Certificate of Occupancy/Completion form required",
+            "CO with less than 24-hour notice: $250 fee",
+            "CO with more than 24-hour notice: No fee",
+            "Conditional/Temporary CO (at Building Official discretion): Residential $900, Commercial <5K SF $1,200, Commercial >5K SF $2,000 — nonrefundable, 90 days initial, 45-day renewal extensions",
+            # --- Refunds ---
+            "Refund available up to 1 year from application date only",
+            "Before plan review: 100% plan review fee + 50% permit fee refunded (min retainer $125, max $3,000)",
+            "After plan review before issuance: 50% permit fee refunded (max retainer $3,000)",
+            "After issuance before construction: 50% permit fee refunded (max retainer $5,000)",
+            # --- Annual Facility Permit ---
+            "NOTE: Annual Facility Permit available — Building Official can issue for routine/emergency service, repair, refurbishing, minor renovations of electrical/gas/mechanical/plumbing systems",
+            # --- Miscellaneous ---
+            "Mold Remediation — reviewed by Building, 5-day turnaround",
+            "Agricultural Verification Packet — reviewed by Building + Engineering, 5-day turnaround",
+            "Temporary Tent Packet — reviewed by Building, Zoning, Fire, 5-day turnaround",
+            "Completion Agreement form available for unresolved conditions",
+            "Waiver Request Form: $75 each",
+            "NOTE: Permit does NOT assure HOA compliance — get HOA approval first",
+            "NOTE: Open permits may result in CILB referral or CBAA action",
+            # --- Plan Review Timeframes ---
+            "NOTE: Plan Review Timeframes — New residential/commercial: 10 working days first review, 4 days revision; AC changeout/water heater: 0 days (over the counter); Reroof: 1 day (24-hr turnaround); Electrical/plumbing/mechanical/fence/pool/screen/solar/sign: 4 working days first review, 1 day revision",
+            "NOTE: === AWNING ===",
+            "Submit application by email to BuildingDocs@WellingtonFL.gov → ProjectDox",
+            "Contractor must be registered with Village",
+            "GOTCHA: Insurance cert holder: 'Village of Wellington / 12300 Forest Hill Blvd / Wellington, FL 33414'",
+            "NOC required for job value > $5,000",
+            "FL Product Approval required — NOT MDC NOA",
+            "Fees based on construction value per standard formula",
+            "NOTE: === STABLE MANURE BIN ===",
+            "NOTE: Wellington is the 'Equestrian Capital of the World' — this permit type is UNIQUE to Wellington",
+            "Submit application by email to BuildingDocs@WellingtonFL.gov → ProjectDox",
+            "Livestock waste must be containerized and covered",
+            "Manure bins must prevent stormwater from discharging waste",
+            "Size based on number of horses and waste volume",
+            "Planning & Zoning approval required if in EOZD (Equestrian Overlay Zoning District)",
+            "Stable Non-Residential review: 10 working days (Building, Zoning, Fire, Engineering) — 12-day turnaround",
+            "Stable with Residence review: 10 working days (Building, Engineering, Zoning, Fire) — 12-day turnaround",
+            "Manure Bin review: 4 working days (Building, Zoning, Engineering) — 5-day turnaround",
+            "Fees based on construction value per standard formula",
+            "NOTE: === ENGINEERING SITEWORK ===",
+            "Culvert/irrigation connections to Acme Improvement District canal require coordination",
+            "Submit through ProjectDox ePlans system",
+            "Drainage Certificate of Compliance form available",
+            "Engineering permit fee: 4% of construction cost up to $1M, 2% additional over $1M",
+            "Closeout: as-built drawings must be approved by Village BEFORE final inspection",
+            "Engineering inspections: 48 hours advance via Citizens Self Service (CSS) portal",
+            "Time requests accommodated if available — Permit Tech confirms via email",
+            "Plat applications require: Unity of Title, fee simple title opinion, Restrictive Covenants, Utility Easement Consent Form",
+            "Mortgagee/Lienholder must execute under Mortgagee signature block",
+            "Must be executed and notarized AFTER Restrictive Covenant or Grant of Easement",
+            "Exhibit B & C: letter size (8.5x11) set of final as-builts approved by Village",
+            "NOTE: === FLOODPLAIN ===",
+            "Required for ALL development in flood zone per Wellington Flood Damage Prevention Ordinance",
+            "Building Official determines substantial improvement or substantial damage",
+            "If substantial: must meet FBC Section 1612 or R322 AND Wellington ordinance requirements",
+            "Floodplain Development Permit fee: $225 FLAT FEE (from fee schedule)",
+            "Submit through ProjectDox",
+            "NOTE: === MISCELLANEOUS ===",
+            "For work that doesn't fit standard permit categories",
+            "Review: 4 working days (Building, Zoning/Engineering if applicable)",
+            "Fees based on construction value per standard formula",
+        ],
+    },
+
+    # ------------------------------------------------------------------
+    # ELECTRICAL
+    # ------------------------------------------------------------------
+    "electrical": {
+        "name": "Electrical Permit (Panel / Service / Low Voltage / Alarm)",
+        "items": [
+            "Electrical & Low Voltage Packet — Wellington-specific form on Building Forms page",
+            "Submit application by email to BuildingDocs@WellingtonFL.gov → ProjectDox",
+            "Contractor must be registered with Village — FL DBPR or PBC CILB electrical license required",
+            "GOTCHA: Insurance cert holder: 'Village of Wellington / 12300 Forest Hill Blvd / Wellington, FL 33414'",
+            "NOC required for job value > $5,000 (HVAC exception: > $15,000) — recorded AND posted before first inspection",
+            "NOT in HVHZ — Wind-Borne Debris Region — FL Product Approval (NOT MDC NOA)",
+            "Plan review: 4 working days first review, 1 day revision — 5-day turnaround",
+            "Low Voltage permits: reviewed by Building (Fire if applicable) — 4 working days",
+            # --- Early Power Release ---
+            "Early Power Release form available — for testing AC, refrigeration, lighting before final",
+            "GOTCHA: Early Power Release requires ALL other final inspections approved within 30 days — if not, release denied",
+            "GOTCHA: Early Power Release form must be ON SITE for inspection — no form on site = FAILED inspection",
+            "GOTCHA: No Early Power Release forms accepted at the office — must be on job site only",
+            "Wellington will not release electrical meter on new construction without Early Power Release form",
+            "If inspection passes: inspector signs form and returns to office authorizing meter release",
+            "If inspection fails: inspector leaves correction notice indicating needed corrections",
+            # --- Annual Facility Permit ---
+            "NOTE: Annual Facility Permit available for routine/emergency electrical service, repair, refurbishing",
+            # --- Fees ---
+            "Fees based on construction value per standard formula",
+            "Re-inspection: 1st $60, 2nd $120, 3rd $180, 4th $300",
+            "Failure to obtain permit: 4X permit fee",
+        ],
+    },
+
+    # ------------------------------------------------------------------
+    # PLUMBING
+    # ------------------------------------------------------------------
+    "plumbing": {
+        "name": "Plumbing Permit (General / Backflow / Gas)",
+        "items": [
+            "Plumbing Packet — Wellington-specific form on Building Forms page",
+            "Backflow Packet — separate Wellington-specific form for backflow devices",
+            "Gas Packet — separate Wellington-specific form for gas installations",
+            "Submit application by email to BuildingDocs@WellingtonFL.gov → ProjectDox",
+            "Contractor must be registered — FL DBPR or PBC CILB plumbing license required",
+            "GOTCHA: Insurance cert holder: 'Village of Wellington / 12300 Forest Hill Blvd / Wellington, FL 33414'",
+            "NOC required for job value > $5,000 — recorded AND posted before first inspection",
+            "NOT in HVHZ — FL Product Approval required",
+            "Plan review: Plumbing/Backflow 4 working days (Building, Fire/Utilities if applicable)",
+            "Gas permits: 4 working days (Building only)",
+            "Backflow permit fee: $200 per permit request (standard flat fee)",
+            "Grease Trap Packet available — reviewed by Building + Utilities, 5-day turnaround",
+            "Irrigation or Landscaping Packet — separate form for irrigation systems",
+            "Irrigation system (1 acre+): reviewed by Building + Engineering, 5-day turnaround",
+            "NOTE: Annual Facility Permit available for routine/emergency plumbing service/repair",
+        ],
+    },
+
+    # ------------------------------------------------------------------
+    # MECHANICAL / HVAC
+    # ------------------------------------------------------------------
+    "mechanical": {
+        "name": "Mechanical / HVAC Permit (AC Changeout / New Install)",
+        "items": [
+            "AC Change Out Packet — Wellington-specific form for HVAC changeouts",
+            "Mechanical Packet — Wellington-specific form for other mechanical work",
+            "Submit application by email to BuildingDocs@WellingtonFL.gov → ProjectDox",
+            "Contractor must be registered — FL DBPR or PBC CILB mechanical license required",
+            "GOTCHA: Insurance cert holder: 'Village of Wellington / 12300 Forest Hill Blvd / Wellington, FL 33414'",
+            # --- NOC Exception ---
+            "NOC threshold for HVAC: $15,000 (NOT the standard $5,000) — per application and FL Statutes",
+            "GOTCHA: Aggregate value requirement also has HVAC exception: repair/replacement < $15,000 exempt from fee simple titleholder/bonding co/architect/mortgage lender info requirement",
+            # --- Plan Review ---
+            "AC Changeout: 0 working days — OVER THE COUNTER (no plan review wait)",
+            "Mechanical permits (non-changeout): 4 working days first review, 1 day revision",
+            # --- Fees ---
+            "HVAC changeout fee: $125 per unit (5 tons or less) — FLAT FEE from fee schedule",
+            "HVAC changeout over 5 tons per unit: value per standard permit fee formula",
+            "AHRI certificate should be included with changeout documentation",
+            "Manual J (load calc), Manual S (equipment), Manual D (duct design) for new installations",
+            "Energy calculations required for new installations",
+            "FL Product Approval for equipment — NOT MDC NOA",
+            # --- Hood Systems ---
+            "Hood System Packet — separate form for commercial kitchen hoods — reviewed by Building + Fire",
+            "NOTE: Annual Facility Permit available for routine/emergency mechanical service/repair",
+        ],
+    },
+
+    # ------------------------------------------------------------------
+    # ROOFING
+    # ------------------------------------------------------------------
+    "roofing": {
+        "name": "Roofing Permit (Re-Roof / New Roof)",
+        "items": [
+            "Reroof Packet — Wellington-specific Reroof Checklist (FBC 8th Edition 2023)",
+            "Includes Roof Material Worksheet for ALL proposed roofing systems",
+            "Submit application by email to BuildingDocs@WellingtonFL.gov → ProjectDox",
+            "Contractor must be registered — FL DBPR or PBC CILB roofing license required",
+            "GOTCHA: Insurance cert holder: 'Village of Wellington / 12300 Forest Hill Blvd / Wellington, FL 33414'",
+            "NOC required for job value > $5,000 — recorded AND posted before first inspection",
+            # --- Wind Zone ---
+            "NOT in HVHZ — Wind-Borne Debris Region (WBDR standards apply)",
+            "FL Product Approval with valid FL# numbers required — NOT Miami-Dade NOA",
+            "Shingles must resist 130 mph wind speed (ASTM D3161 Class F or D7158 Class H)",
+            "Different roof pitches may require different FL Product Approval numbers — each pitch needs its own",
+            # --- Plan Review ---
+            "Reroof plan review: 1 working day — 24-HOUR TURNAROUND (fastest in Wellington)",
+            "Roof Determination: 4 working days if needed",
+            # --- Technical Requirements ---
+            "GOTCHA: Re-roofing over existing space-sheathed decks is NOT permitted — must replace",
+            "GOTCHA: Existing plywood must be re-nailed: minimum 8d ring-shank nails at 6\" OC before underlayment",
+            "GOTCHA: Tile In-Progress inspection must be scheduled BEFORE 20% of tile is applied — missing this = failed inspection",
+            "GOTCHA: Foam applicators must be properly licensed/certified",
+            "Roofing plan showing ALL pitches with FL Product Approval number for EACH pitch",
+            "Plywood thickness must be indicated on plans",
+            "Manufacturer installation specifications specific to the proposed job",
+            "If roof-over (existing shingles not removed): product approval must indicate compatibility",
+            # --- Affidavits ---
+            "Hurricane Mitigation Affidavit — required upon COMPLETION of re-roof",
+            "Contractor affidavits + engineer certification CAN BE ACCEPTED with SUFFICIENT PHOTOGRAPHIC EVIDENCE (Wellington unique — for roof sheathing/metal/flat roofs)",
+            # --- Fees ---
+            "Fees based on construction value per standard formula",
+            "Must print ONE set of approved plans for Permit Box or job site",
+        ],
+    },
+
+    # ------------------------------------------------------------------
+    # POOL / SPA
+    # ------------------------------------------------------------------
+    "pool_spa": {
+        "name": "Swimming Pool & Spa Permit",
+        "items": [
+            "Swimming Pool Packet — Wellington-specific form",
+            "Swimming Pool Barrier Packet — SEPARATE packet required",
+            "Swimming Pool Barrier Requirements Affidavit — MANDATORY (FL Pool Safety Act)",
+            "Submit application by email to BuildingDocs@WellingtonFL.gov → ProjectDox",
+            "Contractor must be registered — FL DBPR or PBC CILB pool contractor license required",
+            "GOTCHA: Insurance cert holder: 'Village of Wellington / 12300 Forest Hill Blvd / Wellington, FL 33414'",
+            "NOC required for job value > $5,000 — recorded AND posted before first inspection",
+            "NOT in HVHZ — FL Product Approval required (NOT MDC NOA)",
+            # --- Sub-permits ---
+            "Pool sub-permits (electrical, plumbing, etc.) can be issued anytime after primary permit",
+            "GOTCHA: EXCEPT deck permits — deck permits MUST be issued simultaneously with pool permit",
+            # --- Barrier ---
+            "Pool must be enclosed by fence/barrier at least 4 feet high with self-closing, self-latching gates",
+            "GOTCHA: Penalty for filling pool without required Pool Barrier Inspection approval: $500 first offense, $1,000 repeat per contractor",
+            # --- Plan Review ---
+            "Pool/Spa review: 4 working days (Building, Zoning, Utilities if applicable)",
+            "Pool Barrier Permit: 4 working days (Building, Zoning, Engineering if applicable)",
+            "NOTE: Oakmont/Castellina pools reviewed by Building, Zoning, Utilities",
+            # --- Health Dept ---
+            "FL Dept of Health approval required for public/commercial pools",
+            # --- Fees ---
+            "Fees based on construction value per standard formula",
+        ],
+    },
+
+    # ------------------------------------------------------------------
+    # DEMOLITION
+    # ------------------------------------------------------------------
+    "demolition": {
+        "name": "Demolition Permit",
+        "items": [
+            "Demolition Packet — Wellington-specific form",
+            "Submit application by email to BuildingDocs@WellingtonFL.gov → ProjectDox",
+            "GOTCHA: Insurance cert holder: 'Village of Wellington / 12300 Forest Hill Blvd / Wellington, FL 33414'",
+            # --- Required Documents ---
+            "Asbestos Letter — Wellington-specific form REQUIRED",
+            "Asbestos Notification Guide — Wellington-specific reference document",
+            "Asbestos Notification — PBC Health Department form",
+            "Utility disconnection confirmations required",
+            # --- Plan Review ---
+            "Demolition review: 2 working days (Building, Zoning, Engineering/Fire if applicable) — 3-day turnaround",
+            # --- Fees ---
+            "Demolition fee: 1% of full contract value, minimum $125",
+            "DBPR surcharge: 1% (min $2) + BCAI surcharge: 1.5% (min $2)",
+            "Failure to obtain permit: 4X permit fee",
+        ],
+    },
+
+    # ------------------------------------------------------------------
+    # FENCE / WALL
+    # ------------------------------------------------------------------
+    "fence": {
+        "name": "Fence / Wall Permit",
+        "items": [
+            "Fence/Wall Packet — Wellington-specific form",
+            "ARB Approved Fence Form — REQUIRED (Architectural Review Board)",
+            "Landscape and Fence Affidavit — Wellington-specific form",
+            "Swimming Pool Barrier Requirements Affidavit — if fence serves as pool barrier",
+            "Submit application by email to BuildingDocs@WellingtonFL.gov → ProjectDox",
+            "Contractor must be registered with Village",
+            "GOTCHA: Insurance cert holder: 'Village of Wellington / 12300 Forest Hill Blvd / Wellington, FL 33414'",
+            "NOC required for job value > $5,000",
+            # --- ARB Approved Designs ---
+            "WOOD FENCES (4-6 ft): Shadow Box (horizontal/vertical), Board on Board Privacy, Picket, 3 or 4 Board",
+            "Wood finish: natural, clear coat, OR painted tan, gray, or white",
+            "Wood in EPA/along thoroughfare: natural, clear-coat, OR painted black, gray, or white",
+            "GOTCHA: Horizontal fences — no unfinished edges visible",
+            "GOTCHA: Stockade wooden vertical fences are PROHIBITED in Wellington",
+            "VINYL FENCES (4-6 ft): Lattice Top, Board on Board Privacy (horizontal/vertical), Powder Coated Metal Estate Style",
+            "GOTCHA: Vinyl permitted colors: beige, brown, or gray ONLY — WHITE IS PROHIBITED",
+            "VINYL-COATED CHAIN LINK (4-6 ft): Permitted colors black, green, brown — REQUIRES hedge for entire fence perimeter",
+            "ALUMINUM FENCES (4-6 ft): Permitted colors black, bronze, or white",
+            "GOTCHA: All fence types adjacent to right-of-way REQUIRE hedges (exception: some EPA properties per Article 6 LDR)",
+            "GOTCHA: Finished side of fence MUST face adjacent property",
+            # --- Ordinances ---
+            "Hedges and Fences Ordinance No. 2021-18 (effective 10/26/2021)",
+            "Ordinance No. 2024-02 (adopted 7/16/2024) — addresses hedge height, fence setbacks, hedge material challenges, uniform appearance along thoroughfares",
+            # --- Plan Review ---
+            "Fence/Wall review: 4 working days (Building, Zoning, Engineering if applicable)",
+            # --- Fees ---
+            "Fence permit fee (under $10,000 value): $100 FLAT FEE",
+            "Fence permit fee (over $10,000 value): standard permit fee formula",
+        ],
+    },
+
+    # ------------------------------------------------------------------
+    # SIGN
+    # ------------------------------------------------------------------
+    "sign": {
+        "name": "Sign Permit",
+        "items": [
+            "Sign Packet — Wellington-specific form",
+            "Submit application by email to BuildingDocs@WellingtonFL.gov → ProjectDox",
+            "Contractor must be registered with Village",
+            "GOTCHA: Insurance cert holder: 'Village of Wellington / 12300 Forest Hill Blvd / Wellington, FL 33414'",
+            "Sign permit review: 4 working days (Building + Zoning)",
+            "NOC required for job value > $5,000",
+            "Fees based on construction value per standard formula",
+        ],
+    },
+
+    # ------------------------------------------------------------------
+    # SOLAR
+    # ------------------------------------------------------------------
+    "solar": {
+        "name": "Solar Panel Permit",
+        "items": [
+            "Solar Panel Packet — Wellington-specific form",
+            "Submit application by email to BuildingDocs@WellingtonFL.gov → ProjectDox",
+            "Contractor must be registered with Village",
+            "GOTCHA: Insurance cert holder: 'Village of Wellington / 12300 Forest Hill Blvd / Wellington, FL 33414'",
+            "NOC required for job value > $5,000",
+            "NOT in HVHZ — FL Product Approval required",
+            "Structural analysis/engineering letter confirming roof can support solar load — REQUIRED",
+            "Electrical permit ALSO required separately — solar involves both building and electrical work",
+            "Solar panel review: 4 working days (Building only) — 5-day turnaround",
+            "Fees based on construction value per standard formula",
+        ],
+    },
+
+    # ------------------------------------------------------------------
+    # WINDOWS / DOORS / SHUTTERS
+    # ------------------------------------------------------------------
+    "windows_doors": {
+        "name": "Windows, Doors & Shutters Permit",
+        "items": [
+            "Window, Door & Shutter Packet — Wellington-specific form (listed as separate packets in forms)",
+            "Window and Door Buck Affidavit — REQUIRED (Wellington-specific form)",
+            "Submit application by email to BuildingDocs@WellingtonFL.gov → ProjectDox",
+            "Contractor must be registered with Village",
+            "GOTCHA: Insurance cert holder: 'Village of Wellington / 12300 Forest Hill Blvd / Wellington, FL 33414'",
+            "NOC required for job value > $5,000",
+            "NOT in HVHZ — Wind-Borne Debris Region — FL Product Approval required (NOT MDC NOA)",
+            # --- Buck Affidavit Details ---
+            "FBC 2023 8th Edition: R609.7 Residential, and 704.1 and 707.4 Existing Building",
+            "Where wood shim/buck thickness < 1.5 inches: anchors must be fastened directly into masonry/concrete/structural substrate",
+            "Unless otherwise tested: bucks must extend beyond interior face providing full support",
+            "Shims must be capable of sustaining applicable loads per current NOA or product approval",
+            "Anchors must transfer load from frame to rough opening",
+            # --- Plan Review ---
+            "Hurricane Shutters review: 4 working days (Building only)",
+            "Windows/Doors review: 4 working days (Building only)",
+            "Fees based on construction value per standard formula",
+        ],
+    },
+
+    # ------------------------------------------------------------------
+    # DRIVEWAY
+    # ------------------------------------------------------------------
+    "driveway": {
+        "name": "Driveway Permit",
+        "items": [
+            "Driveway Packet — Wellington-specific form (FBC 8th Edition 2023)",
+            "Submit application by email to BuildingDocs@WellingtonFL.gov → ProjectDox",
+            "Contractor must be registered with Village",
+            "GOTCHA: Insurance cert holder: 'Village of Wellington / 12300 Forest Hill Blvd / Wellington, FL 33414'",
+            "NOC required for job value > $5,000",
+            "Driveway review: 4 working days (Building, Zoning, Engineering) — 5-day turnaround",
+            "Zoning code dimensions and restrictions apply — verify with Wellington LDR",
+            "Fees based on construction value per standard formula",
+            "Zoning review fee: SFR $75 in addition to permit fee",
+        ],
+    },
+
+    # ------------------------------------------------------------------
+    # GENERATOR
+    # ------------------------------------------------------------------
+    "generator": {
+        "name": "Generator Permit",
+        "items": [
+            "Generator Packet — Wellington-specific form",
+            "Submit application by email to BuildingDocs@WellingtonFL.gov → ProjectDox",
+            "Contractor must be registered with Village",
+            "GOTCHA: Insurance cert holder: 'Village of Wellington / 12300 Forest Hill Blvd / Wellington, FL 33414'",
+            "NOC required for job value > $5,000",
+            "Building and electrical permits required",
+            "Possible gas/mechanical permits depending on fuel type",
+            "FL Product Approval required — NOT MDC NOA",
+            "Fees based on construction value per standard formula",
+        ],
+    },
+
+    # ------------------------------------------------------------------
+    # WATER HEATER
+    # ------------------------------------------------------------------
+    "water_heater": {
+        "name": "Water Heater Change-Out Permit",
+        "items": [
+            "Water Heater Change Out Packet — Wellington-specific form",
+            "Submit application by email to BuildingDocs@WellingtonFL.gov → ProjectDox",
+            "Contractor must be registered with Village",
+            "GOTCHA: Insurance cert holder: 'Village of Wellington / 12300 Forest Hill Blvd / Wellington, FL 33414'",
+            "Water heater changeout: 0 working days — OVER THE COUNTER (no plan review wait)",
+            "Water heater replacement permit fee: $80 FLAT FEE (from official fee schedule)",
+            "NOC required if job value > $5,000 (most water heater changeouts will be under this)",
+        ],
+    },
+
+    # ------------------------------------------------------------------
+    # SCREEN ENCLOSURE
+    # ------------------------------------------------------------------
+    "screen_enclosure": {
+        "name": "Screen Enclosure Permit",
+        "items": [
+            "Screen Enclosure Packet — Wellington-specific form",
+            "Submit application by email to BuildingDocs@WellingtonFL.gov → ProjectDox",
+            "Contractor must be registered with Village",
+            "GOTCHA: Insurance cert holder: 'Village of Wellington / 12300 Forest Hill Blvd / Wellington, FL 33414'",
+            "NOC required for job value > $5,000",
+            "FL Product Approval required — NOT MDC NOA",
+            "Screen enclosure review: 4 working days (Building, Zoning, Engineering if applicable)",
+            "Fees based on construction value per standard formula",
+        ],
+    },
+
+    # ------------------------------------------------------------------
+    # SHED
+    # ------------------------------------------------------------------
+    "shed": {
+        "name": "Shed Permit",
+        "items": [
+            "Shed Packet — Wellington-specific form",
+            "Submit application by email to BuildingDocs@WellingtonFL.gov → ProjectDox",
+            "Contractor must be registered with Village (if contractor is doing work)",
+            "NOC required for job value > $5,000",
+            "FL Product Approval required — NOT MDC NOA",
+            "Fees based on construction value per standard formula",
+        ],
+    },
+
+    # ------------------------------------------------------------------
+    # AWNING
+    # ------------------------------------------------------------------
+    # ------------------------------------------------------------------
+    # FIRE SYSTEMS (Alarm / Sprinkler / Suppression)
+    # ------------------------------------------------------------------
+    "fire_system": {
+        "name": "Fire System Permit (Alarm / Sprinkler / Suppression)",
+        "items": [
+            "Fire Alarm Packet — Wellington-specific form",
+            "Fire Sprinkler Packet — Wellington-specific form",
+            "Fire Suppression Packet — Wellington-specific form",
+            "Fire Plan Review Application — REQUIRED for all commercial new construction",
+            "Submit application by email to BuildingDocs@WellingtonFL.gov → ProjectDox",
+            "Contractor must be registered with Village — appropriate fire system license required",
+            "GOTCHA: Insurance cert holder: 'Village of Wellington / 12300 Forest Hill Blvd / Wellington, FL 33414'",
+            "NOC required for job value > $5,000",
+            "Fire Suppression review: 4 working days (Building + Fire)",
+            "Fees based on construction value per standard formula",
+        ],
+    },
+
+    # ------------------------------------------------------------------
+    # CHANGE OF CONTRACTOR
+    # ------------------------------------------------------------------
+    "change_of_contractor": {
+        "name": "Change of Contractor",
+        "items": [
+            "Change of Contractor Form — Wellington-specific form",
+            "GOTCHA: Form MUST BE NOTARIZED — both new contractor AND property owner signatures notarized separately",
+            "New contractor provides: name, address, license number, license type, qualifier name and signature",
+            "Property owner signs Hold Harmless statement: assumes total responsibility for work completed to date",
+            "Sub-permits affected: Yes/No must be indicated",
+            "Requires Building Dept approval",
+            "Transfer of permit fee: $65 per occurrence (new contractor)",
+            "Transfer to new lot: treated as plan revision (separate fee schedule)",
+        ],
+    },
+
+    # ------------------------------------------------------------------
+    # CERTIFICATE OF OCCUPANCY
+    # ------------------------------------------------------------------
+    "certificate_of_occupancy": {
+        "name": "Certificate of Occupancy / Completion",
+        "items": [
+            "Request for Certificate of Occupancy/Completion form — Wellington-specific",
+            "All final inspections must be passed before CO issuance",
+            "All closeout documents submitted electronically before final inspection",
+            "CO with more than 24-hour notice: NO FEE",
+            "GOTCHA: CO with less than 24-hour notice: $250 fee",
+            "Conditional/Temporary CO (at Building Official discretion):",
+            "  - Residential: $900 initial/renewal",
+            "  - Commercial <5,000 SF: $1,200 initial/renewal",
+            "  - Commercial ≥5,000 SF: $2,000 initial/renewal",
+            "  - Nonrefundable; 90-day initial; 45-day renewal extensions",
+            "  - Only issued when unresolved conditions don't affect health/life safety",
+            "No CO issued until all professional service charges paid",
+        ],
+    },
+
+    # ------------------------------------------------------------------
+    # PRIVATE PROVIDER
+    # ------------------------------------------------------------------
+    "private_provider": {
+        "name": "Private Provider Package",
+        "items": [
+            "Private Provider Packet — Wellington-specific form",
+            "Private Provider Certificate of Inspections Compliance form",
+            "Private Provider Inspection Checklist",
+            "Private Provider Inspection Report",
+            "Private Provider Job Site Identification Form",
+            "Private Provider Notice to Building Official",
+            "Per F.S. 553.791 — applicant may choose private provider for plan review and/or inspections",
+            "Credits: Plan Review only 12%, Inspection only 28%, Combined 40%",
+            "No credits if discounted fees are less than minimum fees in fee schedule",
+            "GOTCHA: Certificate of Inspections/Compliance — hand delivered, mailed, or emailed to PrivateProvider@Wellingtonfl.gov (NO fax)",
+            "GOTCHA: Must email PrivateProvider@Wellingtonfl.gov within 2 business days BEFORE inspection request AND within 2 business days AFTER completed inspection",
+        ],
+    },
+
+    # ------------------------------------------------------------------
+    # STABLE / MANURE BIN (Wellington Equestrian Unique)
+    # ------------------------------------------------------------------
+    # ------------------------------------------------------------------
+    # ENGINEERING / SITEWORK
+    # ------------------------------------------------------------------
+    # ------------------------------------------------------------------
+    # FLOODPLAIN DEVELOPMENT
+    # ------------------------------------------------------------------
+    # ------------------------------------------------------------------
+    # MISCELLANEOUS IMPROVEMENTS
+    # ------------------------------------------------------------------
+}
+
+
+# ============================================================================
+# SECTION 4: CITY_DIFFERENCES CORRECTIONS
+# ============================================================================
+
+WELLINGTON_CITY_DIFFERENCES = {
+    # --- Existing entries to verify/update ---
+    "wellington_reroof_24hr": {
+        "wellington": "Reroof plan review: 1 working day — 24-hour turnaround (fastest permit type in Wellington)"
+    },
+    "wellington_4x_no_permit_penalty": {
+        "wellington": "Failure to obtain permit: 4X the building permit fee (not 2X or 3X)"
+    },
+    "wellington_co_24hr_fee": {
+        "wellington": "CO with less than 24-hour notice: $250 fee; more than 24-hour notice: no fee"
+    },
+    "wellington_hvac_noc_15000": {
+        "wellington": "HVAC NOC threshold: $15,000 (NOT standard $5,000) — also exempt from aggregate value titleholder/bonding info requirement"
+    },
+    "wellington_permit_renewal_30pct": {
+        "wellington": "Permit renewal: 30% of permit fee or minimum $75 — NOT a flat fee; 30-day extensions possible at no charge at Building Official discretion"
+    },
+    "wellington_refund_1year_limit": {
+        "wellington": "Refunds ONLY available up to 1 year from permit application date — after that, no refund possible"
+    },
+    "wellington_5633_permits_annually": {
+        "wellington": "NOTE: Wellington processes ~5,633 permit applications and ~22,201 inspections annually — high volume department"
+    },
+    "wellington_tile_20pct_inspection": {
+        "wellington": "Tile In-Progress inspection: must be scheduled BEFORE 20% of tile applied — missing this = automatic failure"
+    },
+}
+
+
+# ============================================================================
+# SECTION 5: DETAILED_CHECKLISTS CORRECTIONS
+# ============================================================================
+# The existing DETAILED_CHECKLISTS entry for wellington should be updated/expanded
+# to include the complete form list and fee details discovered above.
+# Key additions to existing checklist data:
+
+WELLINGTON_DETAILED_CHECKLIST_UPDATES = {
+}
+
+
+# ============================================================================
+# SECTION 6: UNCERTAINTY_FLAGS
+# ============================================================================
+
+WELLINGTON_UNCERTAINTY_FLAGS = {
+    
+}
+
+
+# ============================================================================
+# COMPLETE FORMS LIST FROM BUILDING FORMS PAGE
+# (For reference — every single form available on wellingtonfl.gov/1011)
+# ============================================================================
+
+WELLINGTON_ALL_FORMS = [
+    "Agricultural Verification Packet",
+    "AC Change Out Packet",
+    "Asbestos Letter",
+    "Asbestos Notification Guide",
+    "Asbestos Notification",
+    "Awning Packet",
+    "Backflow Packet",
+    "Building Code Windload",
+    "Building Permit Application (FBC 8th Edition 2023)",
+    "Change of Architect-Engineer",
+    "Change of Contractor",
+    "Commercial Addition, Remodel & Misc Packet",
+    "Commercial Permission to Stock/Train",
+    "Completion Agreement",
+    "Contractor Registration Packet",
+    "Demolition Packet",
+    "Detached Accessory Unit Packet",
+    "Drainage Certificate of Compliance",
+    "Driveway Packet",
+    "Early Power Release",
+    "Electrical & Low Voltage Packet",
+    "Fence/Wall Packet",
+    "Fire Alarm Packet",
+    "Fire Plan Review Application",
+    "Fire Sprinkler Packet",
+    "Fire Suppression Packet",
+    "Floodplain Development Packet",
+    "Gas Packet",
+    "Generator Packet",
+    "Grease Trap Packet",
+    "Hold Harmless Affidavit",
+    "Hood System Packet",
+    "Irrigation or Landscaping Packet",
+    "Landscape and Fence Affidavit",
+    "Mechanical Packet",
+    "Miscellaneous Improvements Form",
+    "New Commercial Packet",
+    "New Construction Affidavit",
+    "New Residential Packet",
+    "Notice of Commencement",
+    "Owner Builder Affidavit",
+    "Permit Extension Form",
+    "Permit Revision Form",
+    "Plumbing Packet",
+    "Private Provider Certificate of Inspections Compliance",
+    "Private Provider Inspection Checklist",
+    "Private Provider Inspection Report",
+    "Private Provider Job Site Identification Form",
+    "Private Provider Notice to Building Official",
+    "Private Provider Packet",
+    "Reduction Request",
+    "Refund Request",
+    "Request for Certificate of Occupancy/Completion",
+    "Reroof Packet",
+    "Residential Permission to Stock",
+    "Screen Enclosure Packet",
+    "Shed Packet",
+    "Sign Packet",
+    "Solar Panel Packet",
+    "Special Inspector Packet",
+    "Stable and Manure Bin Packet",
+    "Swimming Pool Barrier Requirements Affidavit",
+    "Swimming Pool Barrier Packet",
+    "Swimming Pool Packet",
+    "Temporary Tent Packet",
+    "Utility Easement Consent Form",
+    "Waiver Request Form",
+    "Water Heater Change Out Packet",
+    "ARB Approved Fence Form",
+    "Window, Door & Shutter Packet",
+    "Window and Door Buck Affidavit",
+]
+
+
+# ============================================================================
+# COMPLETE FEE SCHEDULE (from official wellingtonfl.gov/282/Permit-Fee-Schedule)
+# ============================================================================
+
+WELLINGTON_FEE_SCHEDULE = {
+    "plan_review": "50% of permit fee or minimum $75",
+    "demolition": "1% of contract value, minimum $125",
+    "miscellaneous_inspection": "$60",
+    "failure_to_obtain_permit": "4X building permit fee",
+    "plan_revision_pre_permit": "No charge",
+    "plan_revision_post_permit": "$90 minimum per reviewing agency; $90/hr per quarter hour",
+    "transfer_of_permit_new_contractor": "$65",
+    "transfer_of_permit_new_lot": "Treated as plan revision",
+    "appeal_building_official": "$500",
+    "permit_renewal": "30% of permit fee or minimum $75",
+    "permit_reissuance": "$90 minimum + 30% of original building permit fee",
+    "after_hours_inspection": "$250 per inspection (2-hour block)",
+    "co_less_than_24hr_notice": "$250",
+    "co_more_than_24hr_notice": "No fee",
+    "address_correction": "$55 per permit",
+    "waiver_request": "$75 each",
+    "customized_product_approval_review": "$900",
+    "unsafe_unsanitary_penalty": "$200",
+    "cbaa_filing": "$250",
+    "professional_services": "$90 minimum per occurrence",
+    "permit_status_request": "$40 minimum (first quarter hour) + $40 per quarter hour",
+    "engineering_permit": "4% of construction cost up to $1M; 2% additional over $1M",
+}
+
+
+# ============================================================================
+# PLAN REVIEW TIMEFRAMES (from official chart)
+# ============================================================================
+
+WELLINGTON_PLAN_REVIEW_TIMEFRAMES = {
+    # Format: "Type": (First Review Days, Revision Days, Comment)
+    "AC Changeout": (0, 0, "Over the counter"),
+    "Water Heater Changeout": (0, 0, "Over the counter"),
+    "Reroof": (1, 1, "24-hr turnaround"),
+    "Demolition": (2, 1, "3-day turnaround"),
+    "Agricultural Verification": (3, 2, "5-day turnaround"),
+    "Driveway": (4, 1, "5-day turnaround"),
+    "Electric": (4, 1, "5-day turnaround"),
+    "Fence/Wall": (4, 1, "5-day turnaround"),
+    "Fire Suppression": (4, 1, "5-day turnaround"),
+    "Foundation Only": (4, 1, "5-day turnaround"),
+    "Gas": (4, 1, "5-day turnaround"),
+    "Grease Interceptor": (4, 1, "5-day turnaround"),
+    "Hood System": (4, 1, "5-day turnaround"),
+    "Hurricane Shutters": (4, 1, "5-day turnaround"),
+    "Irrigation (1 acre+)": (4, 1, "5-day turnaround"),
+    "Low Voltage": (4, 1, "5-day turnaround"),
+    "Manure Bin": (4, 1, "5-day turnaround"),
+    "Mechanical": (4, 1, "5-day turnaround"),
+    "Miscellaneous": (4, 1, "5-day turnaround"),
+    "Mold Remediation": (4, 1, "5-day turnaround"),
+    "Plumbing/Backflow": (4, 1, "5-day turnaround"),
+    "Pool Barrier": (4, 1, "5-day turnaround"),
+    "Refrigeration": (4, 1, "5-day turnaround"),
+    "Roof Determination": (4, 1, "5-day turnaround"),
+    "Screen Enclosure": (4, 1, "5-day turnaround"),
+    "Sign": (4, 1, "5-day turnaround"),
+    "Solar Panel": (4, 1, "5-day turnaround"),
+    "Swimming Pool/Spa": (4, 1, "5-day turnaround"),
+    "Temporary Tent": (4, 1, "5-day turnaround"),
+    "Commercial Addition": (10, 4, "12-day turnaround"),
+    "Commercial Misc": (10, 4, "12-day turnaround"),
+    "Commercial Remodeling": (10, 5, "12-day turnaround"),
+    "Detached Accessory Unit": (10, 4, "12-day turnaround"),
+    "Landscaping": (10, 4, "12-day turnaround"),
+    "New Residential (all types)": (10, 4, "12-day turnaround"),
+    "New Commercial (all types)": (10, 4, "12-day turnaround"),
+    "Residential Addition": (10, 4, "12-day turnaround"),
+    "Residential Remodeling": (10, 4, "12-day turnaround"),
+    "Stable (Non-Residential)": (10, 4, "12-day turnaround"),
+    "Stable (with Residence)": (10, 4, "12-day turnaround"),
+    "Tenant Build-out": (10, 4, "12-day turnaround"),
+}
+
+LAKE_WORTH_BEACH_PERMITS = {
+
+    # ==================== BUILDING ====================
+    "building": {
+        "name": "Building Permit (New Construction / Additions / Alterations) — Lake Worth Beach",
+        "items": [
+            # PORTAL & SUBMISSION
+            "Submit via: portal.lakeworthbeachfl.gov OR hub.lakeworthbeachfl.gov OR in-person drop-off at 1900 2nd Ave N (drop box) OR email bpermits@lakeworthbeachfl.gov (10MB limit)",
+            "Can use Palm Beach County Universal Permit Application OR City of Lake Worth Beach Permit Application",
+            "One (1) complete set of submittal documents required for all permits (PDF format for digital)",
+            "Plan review is performed DIGITALLY — reviewed plans sent by email or file transfer to contractor of record",
+            "Walk-In Hours: 1st & 3rd Wednesdays only, 8AM-12PM, no appointment needed — all other times require appointment",
+
+            # CONTRACTOR REGISTRATION
+            "Contractor must be REGISTERED with city before pulling permits — registration form on Required Documents page",
+            "Contractor registration requires: (1) PBC Occupational License, (2) Palm Beach County Certification or State of FL Certification/Registration, (3) Certificate of Liability Insurance, (4) Workers Compensation or Exemption, (5) Qualifier's Driver's License",
+            "Registration documents may be emailed to: bpermits@lakeworthbeachfl.gov",
+            "UNCERTAINTY (85%): Insurance certificate holder exact verbatim wording not specified on Contractor Registration PDF — likely 'City of Lake Worth Beach, 1900 2nd Avenue North, Lake Worth Beach, FL 33461' based on building division address, but MUST VERIFY with building department at (561) 586-1647",
+
+            # APPLICATION REQUIREMENTS
+            "Application requires NOTARIZATION — both owner and contractor signatures must be sworn/affirmed before a notary",
+            "ALL SIGNATURES MUST BE ORIGINAL on the permit application",
+            "Primary permit fees include sub-permit fees IF all applicable subcontractor qualifier signatures are on the application AND plans include details of all sub work",
+            "GOTCHA: Missing a sub-qualifier signature = SEPARATE permit + SEPARATE fees for that trade",
+            "Current registration required at time of submittal",
+
+            # WIND ZONE / PRODUCT APPROVALS
+            "NOT in HVHZ — Wind-Borne Debris Region (WBDR). Uses FL Product Approval (FL#), NOT Miami-Dade NOA",
+            "All windows/doors/garage doors/hurricane shutters require FL Product Approvals",
+            "All construction plans reviewed for compliance with FBC 7th Edition (2020)",
+            "State licensed professionals must review all plans to ensure code compliance",
+
+            # NOC
+            "NOC required for job value over $5,000",
+            "NOC must be RECORDED at PBC Clerk of the Circuit Court AND POSTED ON JOB SITE before first inspection",
+            "City provides NOC form on Required Documents page",
+            "NOTE: NOC is required by Florida Construction Lien Law — F.S. Chapter 713",
+
+            # 1-2 FAMILY DWELLING CHECKLIST (from PDF)
+            "1-2 Family Dwelling checklist required for residential (from city form): completed application, drawing package at min 1/8-inch scale (site plan, elevations, foundation plan, floor plans, roof framing, wall sections with hurricane strapping, electrical plan with riser diagram, plumbing plan), recent survey, FL Product Approvals for doors/windows/garage doors/shutters, energy calculations per FBC",
+            "FEMA Flood Elevation Certificate required on file PRIOR TO FINAL INSPECTION for construction in designated flood zones",
+            "All submitted plans must conform to conditions/variances approved by Planning and Zoning Board",
+
+            # COMMERCIAL CHECKLIST (from PDF)
+            "Commercial checklist adds: Engineered Drainage Plan + Calculations, Landscape/Irrigation Plan, Life Safety Plan (exits/lighting), Approval Letter/COA from Planning & Zoning Board",
+            "GOTCHA: Commercial — ALL structural pages must be signed and sealed by design professional for wind load certification per FBC",
+            "GOTCHA: Commercial — Palm Beach County IMPACT FEE STAMP required prior to permit issuance",
+            "GOTCHA: Commercial — No mechanical equipment or structures allowed in setbacks",
+
+            # HISTORIC DISTRICT
+            "GOTCHA: Properties in any of Lake Worth Beach's SIX (6) historic districts require Certificate of Appropriateness (COA) BEFORE building permit can be issued for ANY exterior work",
+            "COA and building permit must be submitted CONCURRENTLY via the portal",
+            "Pre-application meetings REQUIRED for new construction, demolitions, changes of use in historic districts",
+            "Historic Preservation contact: (561) 586-1687 or pzhp@lakeworthbeachfl.gov",
+            "Historic Districts Map: lakeworth.maps.arcgis.com (ArcGIS)",
+
+            # PLAN REVIEW
+            "Plan review delays caused by: incomplete application, missing disciplines, unsealed plans, outdated survey, improper setbacks/lot coverage, height exceedances, accessibility issues, missing COA for historic districts, LDR conflicts",
+            "3rd plan review = $50 fee, 4th+ plan review = 4x Plan Filing Fee",
+            "Plan Filing Fee (50% of permit fee) is NON-REFUNDABLE",
+            "Plan resubmittals must be COMPLETE — partial submittals not accepted",
+
+            # INSPECTIONS
+            "Inspections: request by 4:00 PM business day before via automated line (561) 586-1691 or online (Click2Gov)",
+            "Same-day inspections available by calling (561) 586-1647 — subject to availability + additional fees",
+
+            # OWNER-BUILDER
+            "Owner-builder affidavit required if applicable — must be completed as part of permit application",
+
+            # PERMIT EXEMPTIONS
+            "Permits NOT required for replacement/repair work under $1,000 provided no structural/fire/egress impact (LWB local amendment — lower than standard FL threshold)",
+
+            # PENALTIES
+            "Work without permit = permit fee PLUS penalty per code violation",
+            "Unlicensed contractor: misdemeanor of the first degree — up to 1 year prison and/or $5,000 fine (F.S. 489.127)",
+
+            # MILESTONE INSPECTION
+            "Milestone Inspection Program: Condos/co-ops 3+ stories and 30+ years old — milestone inspection report required per 2022 FL legislation",
+
+            # FEES
+            "Online payment: credit card (2.65% convenience fee) or e-check ($1.25 fee)",
+            "Fee schedule available at lakeworthbeachfl.gov in city operating budget",
+
+            # UTILITIES NOTE
+            "NOTE: Lake Worth Beach has MUNICIPAL electric utility — NOT FPL. Service coordination through LWB Utilities Customer Service (561) 533-7300",
+            "NOTE: === WOOD DECK ===",
+            "City-specific Wood Deck Installation Checklist REQUIRED",
+            "(1) Completed permit application with all signatures + owner-builder affidavit if applicable",
+            "(2) Drawing package at min 1/8-inch scale showing plan view and cross section with dimensions, materials, and attachment details",
+            "Decks 30 inches or more above grade: safety railings REQUIRED",
+            "Decks 30 inches or more above grade: wind load requirements must be met and structural connections SIGNED/SEALED by Engineer/Architect",
+            "Size of lumber for deck covering must be specified",
+            "ALL construction in designated historic districts subject to historic preservation review",
+            "GOTCHA: NOC required before first inspection for wood decks valued over $2,500 (NOT the standard $5,000 threshold)",
+            "Wood deck REPAIR up to 100 sq ft of previously permitted deck boards (no framing) is EXEMPT under $1,000",
+            "Contractor must be registered with city",
+            "NOTE: === REVISION ===",
+            "NOTE: This is NOT the same as Plan Re-Submittal (which is for plan review corrections before issuance)",
+            "Contractor must be registered with city",
+            "NOTE: === PLAN RESUBMITTAL ===",
+            "NOT for revisions to an issued permit (use Revision Form instead)",
+            "Email to Bpermits@lakeworthbeachfl.gov — limited to 10MB. Larger files submit through website",
+            "One (1) set of documents required — PDF format for digital submittal",
+            "GOTCHA: COMPLETE responses required — PARTIAL submittals will NOT be accepted",
+            "Check all applicable disciplines: Residential, Commercial, Building, Mechanical, Electrical, Plumbing, Zoning, Fire",
+            "NOTE: === NEW COMMERCIAL ===",
+            "City-specific New Commercial Checklist REQUIRED (Rev 7-6-2023)",
+            "(1) Completed permit application with all signatures + owner-builder affidavit",
+            "(2) Drawing package at min 1/8-inch scale showing plan view and cross section with dimensions and materials",
+            "ALL structural pages signed and sealed by design professional for wind load certification per FBC",
+            "(3) Recent survey showing all boundaries and easements",
+            "(4) FL Product Approvals for doors/windows/garage doors/shutters",
+            "(5) Energy calculations per FBC",
+            "(6) Approval Letter/COA with conditions from Planning and Zoning Board",
+            "Items marked with asterisk must match all prior board approvals",
+            "GOTCHA: All submissions must have Palm Beach County IMPACT FEE STAMP prior to permit issuance",
+            "No mechanical equipment or structures in setbacks",
+            "All construction in historic districts subject to historic preservation review",
+            "Submitted plans must conform to conditions/variances approved by P&Z Board",
+            "NOC required for job value over $5,000",
+            "Contractor must be registered with city",
+            "NOTE: === BOARD UP ===",
+            "Required for boarding up structures (hurricane damage, vacancy, etc.)",
+            "UNCERTAINTY (90%): Board-up certificate specific requirements not extractable from PDF — contact building department (561) 586-1647",
+            "NOTE: === CERTIFICATE OF APPROPRIATENESS ===",
+            "COA required BEFORE building permit can be issued — submit concurrently with building permit application",
+            "Apply online at portal.lakeworthbeachfl.gov/online-services/certificate-of-appropriateness/",
+            "COA covers: exterior changes on both primary façades (facing public ROW) and secondary façades (not facing ROW)",
+            "Pre-application meetings REQUIRED for: new construction, demolitions, changes of use",
+            "Pre-application meetings STRONGLY ENCOURAGED for major additions",
+            "Email pzhp@lakeworthbeachfl.gov to schedule BEFORE finalizing architectural designs or purchasing materials",
+            "COA construction must commence within 12 months of issuance",
+            "50% of approved improvements must be completed within 12 months of commencement",
+            "Certificate of Occupancy required within 24 months of commencement",
+            "One-time 12-month extension available from Dept of Community Sustainability",
+            "HRPB may grant additional extensions at its discretion",
+            "Work without COA = STOP WORK ORDER from building official or Director of Community Sustainability",
+            "No building permit valid without accompanying COA in historic districts",
+            "Six (6) historic districts: check Historic Districts Map at lakeworth.maps.arcgis.com",
+        ],
+    },
+
+    # ==================== ELECTRICAL ====================
+    "electrical": {
+        "name": "Electrical Permit — Lake Worth Beach",
+        "items": [
+            "Submit via portal or in-person at 1900 2nd Ave N, Lake Worth Beach, FL 33461",
+            "Electrical sub-permit included in primary permit fees IF electrical qualifier signature is on master application AND plans include electrical details",
+            "If NOT included on master application = SEPARATE electrical permit + SEPARATE fees",
+            "Contractor must be registered with city — current registration required at submittal",
+            "NOC required for job value over $5,000 — recorded at PBC Clerk AND posted on site before first inspection",
+            "NOT in HVHZ — Wind-Borne Debris Region. FL Product Approval system",
+            "Code: 2017 National Electric Code (NEC)",
+            "Inspection by 4:00 PM day before via (561) 586-1691",
+            "GOTCHA: LWB has its own municipal electric utility — coordinate service changes through LWB Utilities (561) 533-7300, NOT FPL",
+            "NOTE: Senate Bill 612 (July 2024) changed line-side electrical disconnect rules — verify current requirements with building division",
+            "UNCERTAINTY (90%): Service change/disconnect procedures specific to LWB municipal utility not fully documented on forms page — call (561) 533-7300 to confirm process",
+        ],
+    },
+
+    # ==================== PLUMBING ====================
+    "plumbing": {
+        "name": "Plumbing Permit — Lake Worth Beach",
+        "items": [
+            "Submit via portal or in-person at 1900 2nd Ave N",
+            "Plumbing sub-permit included in primary permit fees IF plumbing qualifier signature is on master application AND plans include plumbing details",
+            "If NOT included = SEPARATE plumbing permit + SEPARATE fees",
+            "Contractor must be registered with city",
+            "NOC required for job value over $5,000",
+            "Separate plumbing permit required for demolition sewer cap/water disconnect",
+            "Plumbing fixture replacement (common household, same location, SFR/R-3) EXEMPT under $1,000 — EXCLUDING bathtub/shower",
+            "Inspection by 4:00 PM day before via (561) 586-1691",
+            "NOTE: === GAS PIPING ===",
+            "Gas permit available as sub-permit on master application",
+            "Natural gas service coordination through Florida Public Utilities (FPU)",
+            "Removal of above/below ground propane tanks/lines requires SEPARATE permit application",
+            "Contractor must be registered with city",
+        ],
+    },
+
+    # ==================== MECHANICAL / HVAC ====================
+    "mechanical": {
+        "name": "Mechanical / HVAC Permit — Lake Worth Beach",
+        "items": [
+            "Submit via portal or in-person at 1900 2nd Ave N",
+            "City provides TWO separate forms: (1) AC Checklist (new system or changeout) and (2) HVAC Efficiency Card (replacement only)",
+
+            # AC CHECKLIST — NEW SYSTEM
+            "NEW A/C SYSTEM requires: completed application, complete set of drawings (duct sizes/R-values, distribution/return grille sizes+locations+cfm, survey/site plan with equipment location), HOA approval if applicable, equipment specs (manufacturer, model, KW, tonnage, SEER), existing electrical service size in amps",
+            "NO MECHANICAL EQUIPMENT allowed in zoning setbacks unless variance obtained from zoning board",
+
+            # AC CHECKLIST — CHANGEOUT
+            "EQUIPMENT CHANGEOUT ONLY requires: completed application, equipment specs, existing electrical service size, survey/site plan with location",
+            "GOTCHA: AHRI Certificate REQUIRED for equipment changeout — this is on the AC Checklist form",
+
+            # ENERGY CODE
+            "ENERGY CODE forms required when: (a) installing in previously un-conditioned space, (b) renovations exceed 30% of market value",
+
+            # NOC — DIFFERENT THRESHOLD
+            "GOTCHA: NOC for AC existing systems over $15,000 (HIGHER than the standard $5,000 threshold — per the AC Checklist form)",
+
+            # HVAC EFFICIENCY CARD
+            "HVAC Efficiency Card form required for REPLACEMENT of mechanical equipment — includes both existing and replacement system technical info (manufacturer, model, voltage, heat strip, tonnage, circuit ampacity, breaker size, wire size)",
+
+            "Contractor must be registered with city",
+            "Inspection by 4:00 PM day before via (561) 586-1691",
+            "NOTE: LWB has municipal electric utility — electrical service upgrades coordinate through LWB Utilities (561) 533-7300",
+        ],
+    },
+
+    # ==================== ROOFING ====================
+    "roofing": {
+        "name": "Roof / Reroof Permit — Lake Worth Beach",
+        "items": [
+            "Submit via portal, Hub, or in-person at 1900 2nd Ave N",
+            "City-specific Roof/Reroof Checklist REQUIRED — available on Required Documents page",
+
+            # CHECKLIST ITEMS
+            "Roof/Reroof Checklist requires: use of building (1-2 family, multi-family 3+, non-residential), exposure category, existing roof material, roof type (new/re-roofing/recovering/repair with % section), roof slope, deck type, roof height",
+            "Proposed roof covering checkboxes: Flat Roof, Mechanically Fastened Tile, Mortar/Foam Set Tile, Asphalt Shingles, Metal Panel/Shingle, Wood Shakes/Shingles, Other",
+            "Slope of roofing work by area: Flat Roofs up to ≤2\"/12\" (sf), Slope Roofs >2.5\"/12\" (sf)",
+            "Enhanced Nailing per NOA: Yes/No — MUST be indicated on checklist",
+            "Qualifier name, signature, and date required on certification",
+
+            # PRODUCT APPROVALS
+            "NOT in HVHZ — Wind-Borne Debris Region. FL Product Approval (FL#) required for all roofing materials — NOT MDC NOA",
+
+            # NOC
+            "NOC required for job value over $5,000 — recorded at PBC Clerk AND posted on site before first inspection",
+
+            # GENERAL REQUIREMENTS
+            "Contractor must be registered with city — current registration at submittal",
+            "Building permit application required (master application)",
+            "All signatures original, application notarized",
+            "Primary fees include sub-permit fees if all sub-qualifier signatures present",
+
+            # HISTORIC
+            "GOTCHA: Roofing in historic districts requires COA — may delay processing",
+
+            # AFFIDAVIT
+            "UNCERTAINTY (90%): F.S. 553.844 roofing affidavit ($300K threshold for SFR) not specifically referenced on LWB roof checklist PDF — standard FL requirement likely applies but city-specific form not found. Verify with building department (561) 586-1647",
+        ],
+    },
+
+    # ==================== POOL/SPA ====================
+    "pool_spa": {
+        "name": "Pool / Spa Permit — Lake Worth Beach",
+        "items": [
+            "Submit via portal or in-person at 1900 2nd Ave N",
+            "City-specific Pool Checklist REQUIRED — available on Required Documents page",
+
+            # CHECKLIST ITEMS (from PDF)
+            "Pool Checklist requires: (1) Completed permit application with all signatures + owner-builder affidavit if applicable",
+            "(2) Homeowner association or developer approval if applicable",
+            "(3) COMPLETED PERMIT APPLICATIONS FOR PLUMBING AND ELECTRICAL WORK — separate sub-permit apps required",
+            "(4) Survey showing: setbacks to pool deck edge AND pool inside edge, location/distance from power lines + structures + sewer lines, lot coverage information",
+            "(5) One set of ENGINEERED PLANS signed and sealed",
+            "(6) Size of existing electrical service must be indicated on plans",
+            "(7) Method of compliance with residential pool barrier requirements FBC 4501.17 must be specified",
+
+            # PUBLIC POOLS
+            "PUBLIC POOLS additional requirements: plans stamped by Palm Beach County Health Department, soil analysis report, survey and site plan with deck AND pool elevations",
+
+            # HISTORIC DISTRICT
+            "GOTCHA: ALL pools in designated historic districts are subject to review by historic preservation staff and MAY REQUIRE Board appearance — will DELAY permit processing",
+
+            # NOC
+            "NOC required for job value over $5,000",
+            "Contractor must be registered with city",
+
+            # POOL BARRIER
+            "Pool barrier requirements per FBC 4501.17 — compliance method MUST be specified on plans",
+            "If fence IS the pool barrier, all windows and doors within fenced area must be shown on plans and fence must meet ALL pool barrier requirements",
+
+            "NOTE: Pool deck work may require additional building permit if structural — verify with building division",
+        ],
+    },
+
+    # ==================== DEMOLITION ====================
+    "demolition": {
+        "name": "Demolition Permit — Lake Worth Beach",
+        "items": [
+            "Submit via portal or in-person at 1900 2nd Ave N",
+            "City-specific Demolition Package REQUIRED — multi-page package with release forms (Rev 1-27-2026)",
+            "Excludes sidewalks and driveways in public right-of-way",
+
+            # CRITICAL SEQUENCE
+            "GOTCHA: ZONING APPROVAL REQUIRED FIRST for demolition of ALL structures — obtain BEFORE all other releases",
+            "GOTCHA: If structure is historically significant or contributing, Certificate of Appropriateness (COA) from Historic Resources Preservation Board (HRPB) required FIRST",
+            "DO NOT proceed with ANY release forms before receiving approval from Planning, Zoning and Historical Division",
+
+            # RELEASE FORMS (4 separate forms)
+            "Release Form #1: PLANNING, ZONING AND HISTORIC PRESERVATION — email pzoning@lakeworthbeachfl.gov, phone (561) 586-1687",
+            "Requires: minimum 1 COLOR PHOTOGRAPH of EACH SIDE/FAÇADE of structure to be demolished",
+            "Release Form #2: LANDSCAPING — Community Sustainability Department — email pzlandscaping@lakeworthbeachfl.gov, phone (561) 586-1687",
+            "NOTE: Commercial demolitions may require landscape plan review and approval",
+            "Release Form #3: UTILITIES (Water & Electric) — email customer_service@lakeworthbeachfl.gov, phone (561) 533-7300",
+            "Must arrange disconnection of potable water AND electric service",
+            "Release Form #4: FPU (Florida Public Utilities) — Natural Gas Service (if applicable). Separate permit for above/below ground propane tank/line removal",
+
+            # CONTRACTOR RESPONSIBILITIES
+            "Contractor must obtain and provide:",
+            "(a) Boundary survey or site plan showing ALL structures (including driveways, pools) to be demolished",
+            "(b) COMMERCIAL ONLY: Asbestos and/or lead paint survey of all structures. If abatement needed, SEPARATE permit by licensed abatement contractor per F.S. 469 + FDEP Form 62-257-900",
+            "(c) Certification from LICENSED PEST CONTROL OPERATOR (PCO) that all structures are rodent free — letter or invoice with address and inspection date under PCO signature",
+            "(d) Separate permit by LICENSED PLUMBING CONTRACTOR to disconnect and cap sanitary sewer and/or water service. Inform city if water meter to be pulled or capped",
+            "(e) Best Management Practices (BMP) for storm water drainage protection — silt fence along property lines and drainage inlet protection for commercial. Must be inspected/approved by building division BEFORE demolition begins — call (561) 586-1691",
+            "(f) All vacant properties must be maintained per Sections 2-75.6.2 and 23.6-1(i) of LWB Code of Ordinances",
+
+            # DEMOLITION PROCESS
+            "During and after demolition, contractor responsible for: dust control, traffic control, adjacent property protection, site filling for drainage, ROW cleaning, sidewalk/curb/street repair, compliance with FBC Chapter 33 (Sections 3301-3312), final grading, sod with Bahia or better",
+
+            # FINAL INSPECTION
+            "Contractor must schedule final demolition inspection through Building Division — call (561) 586-1691",
+
+            # FEES
+            "Full demolition fee: $500 (primary structure), $250 (accessory) in historic districts",
+
+            "NOC required for job value over $5,000",
+            "Contractor must be registered with city",
+        ],
+    },
+
+    # ==================== SIGN ====================
+    "sign": {
+        "name": "Sign Installation Permit — Lake Worth Beach",
+        "items": [
+            "Submit via portal or in-person at 1900 2nd Ave N",
+            "City-specific Sign Installation Checklist REQUIRED — available on Required Documents page",
+
+            # CHECKLIST (from PDF)
+            "(1) Completed permit application with all signatures + owner-builder affidavit if applicable",
+            "(2) One copy of current survey or site plan to scale showing: location of ALL EXISTING signs + total sq footage, proposed new signage locations with setbacks and heights above grade, lot size and building size along property lines",
+            "(3) One copy of structural detail of new signs: material, anchorage/fastenings, all supports — MUST BE SIGNED AND SEALED BY AN ENGINEER with wind load calculations",
+            "(4) One copy of SIGN FACE including all text and logos — TO SCALE and IN COLOR",
+            "(5) Electrical details and permit application if sign is illuminated",
+
+            # NOTES FROM PDF
+            "Permits ARE required for repair, re-painting, and face changes of existing signs",
+            "TEMPORARY SIGNS for commercial construction require permits — may remain until construction complete",
+            "Signs for special events not issued until special events permit approved",
+            "ALL EXISTING NON-CONFORMING SIGNS when part of permit application must be brought into compliance or REMOVED",
+            "Landscaping REQUIRED for ALL freestanding signs",
+            "Signs along main thoroughfares must meet applicable Major Thoroughfare Design Guidelines",
+            "GOTCHA: All sign permits in historic districts or on main thoroughfares subject to COA approval by Historic/Zoning Board — additional delay",
+            "Current codes REQUIRE LICENSED SIGN CONTRACTORS for ALL signs",
+
+            "NOC required for job value over $5,000",
+            "Contractor must be registered with city",
+        ],
+    },
+
+    # ==================== FENCE ====================
+    "fence": {
+        "name": "Fence Installation Permit — Lake Worth Beach",
+        "items": [
+            "Submit via portal or in-person at 1900 2nd Ave N",
+            "City-specific Fence Installation Checklist REQUIRED — available on Required Documents page",
+            "All fencing must comply with LDR Chapter 23 Section 23.4-4 (Fences, Walls and Gates)",
+
+            # CHECKLIST (from PDF)
+            "(1) Completed permit application with all signatures + owner-builder affidavit if applicable",
+            "(2) Fence/Gate Removal Agreement — MUST BE RECORDED with PBC Clerk of the Court (city-specific form in packet)",
+            "(3) Hold Harmless/Indemnification Agreement — NOTARIZED (city-specific form in packet)",
+
+            # NOC — DIFFERENT THRESHOLD
+            "GOTCHA: Fence NOC threshold is $2,500 (NOT the standard $5,000) — required prior to building inspection. Does NOT apply to Owner-Builder permits",
+
+            # SURVEY
+            "(4) Survey: Residential — within last 2 years / Commercial — within last 6 months",
+            "Older survey MAY be used with completed Land Survey Affidavit form IF certified to current owner AND no changes since survey. Photo documentation must accompany. Verified at inspection.",
+
+            # SITE PLAN
+            "(5) Site plan or survey (to scale) showing ALL: proposed fence/wall location, fence material type (wood, chain link, concrete, etc.), height above grade, length in linear feet, location of gates/openings and swing direction, pool location and approved pool barrier",
+            "No gate shall swing onto or over city properties (sidewalks, alleys, etc.)",
+
+            # POOL BARRIER
+            "If fence IS the pool barrier: plans must show all windows and doors within fenced area + fence MUST meet ALL pool barrier requirements",
+
+            # FINISHED SIDE
+            "GOTCHA: Finished side of fence must face adjacent property — if not, notarized affidavit from affected property owner waiving requirement must be submitted before FINAL inspection",
+
+            # UTILITY LOCATES
+            "Call 8-1-1 for free utility location services before digging",
+
+            # EXEMPT FENCES
+            "Fence repair/replace for previously permitted fence up to 16' or 2 sections is EXEMPT under $1,000 — EXCLUDING pool barriers",
+
+            "Contractor must be registered with city",
+            "Application placed on HOLD until all required items submitted",
+        ],
+    },
+
+    # ==================== WINDOWS/DOORS ====================
+    "windows_doors": {
+        "name": "Window & Door Installation/Replacement Permit — Lake Worth Beach",
+        "items": [
+            "Submit via portal or in-person at 1900 2nd Ave N",
+            "City-specific Window and Door Installation or Replacement Checklist REQUIRED (Rev 7-11-2023)",
+
+            # NEW OPENINGS
+            "FOR NEW WINDOWS/DOORS (including openings): (1) Completed application + owner-builder affidavit, (2) One set of drawings showing: existing floor plan with window/door locations and sizes, new floor plan with all new opening sizes including emergency egress windows in sleeping rooms, typical wall section with beam/header sizes over new openings, elevations showing location and window size, Notice of Acceptance with FL# and coversheet",
+            "All new structural details must be SIGNED AND SEALED by Architect or Engineer — plans minimum 1/8 scale",
+
+            # CHANGEOUT
+            "FOR CHANGE-OUT of existing windows/doors: (1) Completed application, (2) One set of drawings showing: floor plan with all windows/doors to be replaced with existing opening sizes, new window/door sizes including emergency egress windows, Notice of Acceptance with FL# and coversheet",
+
+            # IMPACT PROTECTION
+            "GOTCHA: ALL new and replacement windows must meet FBC requirements for IMPACT PROTECTION — impact glass OR approved hurricane impact shutter system",
+            "Shutters must be installed under SEPARATE permit and must be in place for FINAL inspection",
+            "One panel per window to be installed and labeled for final inspection",
+            "Refer to Existing Building Code for exemptions to impact requirements",
+
+            # HISTORIC
+            "GOTCHA: All windows and doors in designated historic districts subject to review by historic preservation staff — may require Board appearance which will DELAY permit processing",
+            "Email pzhp@lakeworthbeachfl.gov BEFORE purchasing windows/doors for historic properties",
+
+            # PRODUCT APPROVAL
+            "FL Product Approval (FL# with coversheet) required — NOT Miami-Dade NOA",
+
+            "NOC required for job value over $5,000",
+            "Contractor must be registered with city",
+            "Application placed on HOLD until all required items submitted",
+        ],
+    },
+
+    # ==================== GENERATOR ====================
+    "generator": {
+        "name": "Optional Standby Generator Permit — Lake Worth Beach",
+        "items": [
+            "Submit via portal or in-person at 1900 2nd Ave N",
+            "City-specific Generator Checklist REQUIRED — available on Required Documents page",
+
+            # CHECKLIST (from PDF)
+            "(1) Completed permit application with all signatures + owner-builder affidavit if applicable",
+            "(2) Electrical riser diagram showing wire sizes, conduit sizes, grounding per NEC",
+            "(3) Electrical load calculation per NEC — list all selected loads to be served",
+            "(4) Plot plan or survey showing proposed generator location with dimensions from property lines and all structures",
+            "GOTCHA: Generator must be 10ft MINIMUM from structure openings per FBC Mech 501 and NFPA 37",
+            "(5) Generator pad specifications — slab to be 4\" min concrete. If pre-engineered slab detail, signatures must be valid",
+            "(6) Fuel supply specifications — fuel tank and lines shown on survey. SEPARATE PERMIT required for fuel lines/tank",
+            "(7) Generator/Transfer Switch/Panel manufacturer specifications",
+
+            "NOC required for job value over $5,000",
+            "Contractor must be registered with city",
+            "Application placed on HOLD until all required items submitted",
+        ],
+    },
+
+    # ==================== SHED ====================
+    "shed": {
+        "name": "Shed / Utility Building Permit — Lake Worth Beach",
+        "items": [
+            "Submit via portal or in-person at 1900 2nd Ave N",
+            "City-specific Sheds Checklist REQUIRED",
+
+            "(1) Completed permit application with all signatures + owner-builder affidavit if applicable",
+
+            # PRE-MANUFACTURED
+            "PRE-MANUFACTURED BUILDINGS: Product Approval/Notice of Acceptance (FL# and coversheet)",
+
+            # SITE-BUILT
+            "SITE-BUILT SHEDS: drawings at min 1/8-inch scale — floor plan with door/window location + wind pressures, foundation details, typical wall details + connections, roof framing + structural info per FBC Chapter 16, FL Product Approvals for door/window/roof covering, electrical/plumbing if applicable",
+            "All structural info signed and sealed by Architect or Engineer",
+
+            # GENERAL
+            "Site Plan/survey showing location of proposed shed and distances from property lines + overhead service",
+            "Provide lot coverage information",
+            "No equipment or structures in setbacks",
+
+            # HISTORIC
+            "ALL construction in designated historic districts subject to historic preservation review",
+
+            "NOC required for job value over $5,000",
+            "Contractor must be registered with city",
+        ],
+    },
+
+    # ==================== WATER HEATER ====================
+    "water_heater": {
+        "name": "Water Heater Change-Out Permit — Lake Worth Beach",
+        "items": [
+            "Submit via portal or in-person at 1900 2nd Ave N",
+            "City-specific Water Heater Change-Out form REQUIRED — this is a turn-around permit for EXACT water heater change-out",
+
+            # AFFIRMATION (from PDF)
+            "Contractor/applicant must affirm: representative or self has inspected existing conditions, no upgrade of electrical system or service wiring changes required, there IS an electrical disconnect within sight, water heater is NOT cord-receptacle connected (per NEC Article 422)",
+            "Electrical sub-permit may be required for any additional electrical work",
+
+            # FORM DETAILS
+            "Form requires: facility type (single-family, multi-family, commercial, industrial), job address",
+            "EXISTING unit info: make, total watts, gallons, heat recovery (yes/no)",
+            "PROPOSED NEW unit info: make, total watts, gallons, heat recovery (yes/no)",
+            "Location of water heater must be specified",
+            "Qualifier/authorized agent signature + license number + phone required",
+
+            "Contractor must be registered with city",
+            "NOC required for job value over $5,000",
+            "NOTE: Appliance replacement with cord-and-plug (excluding water heater) is exempt under $1,000",
+        ],
+    },
+
+    # ==================== WOOD DECK ====================
+    # ==================== CHANGE OF CONTRACTOR ====================
+    "change_of_contractor": {
+        "name": "Change of Contractor — Lake Worth Beach",
+        "items": [
+            "City-specific Change of Contractor form REQUIRED — available on Required Documents page",
+
+            # NEW CONTRACTOR
+            "New contractor section: contractor name, phone, address, qualifier name, license number, qualifier SIGNATURE + DATE",
+            "GOTCHA: New contractor qualifier signature must be NOTARIZED (sworn before notary public)",
+
+            # OWNER
+            "Owner section: owner assumes TOTAL responsibility for work completed to date upon removal of previous contractor, holds city harmless and without liability",
+            "GOTCHA: Owner signature must also be NOTARIZED",
+
+            # FEE & PROCESS
+            "Change of Contractor fee applies if permit has already been issued",
+            "GOTCHA: Any SUB-PERMITS that exist at time of change must be RE-APPLIED FOR to continue",
+
+            "Contractor must be registered with city before assuming permit",
+        ],
+    },
+
+    # ==================== REVISION ====================
+    # ==================== PLAN RESUBMITTAL ====================
+    # ==================== GAS PIPING ====================
+    # ==================== NEW COMMERCIAL ====================
+    # ==================== DOCK / MARINE ====================
+    "dock": {
+        "name": "Dock / Marine Construction Permit — Lake Worth Beach",
+        "items": [
+            "Lake Worth Beach has Atlantic Ocean, Intracoastal Waterway, Lake Worth Lagoon, AND Lake Osborne frontage — multiple waterway jurisdictions",
+            "Requires: City permit + PBC Environmental Resources Management (ERM) + SFWMD ERP + USACE Section 10/404 + FDEP CCCL (Coastal Construction Control Line)",
+            "Outside agency approvals typically required BEFORE city permit",
+            "Plans signed and sealed by FL PE",
+            "Survey required showing existing conditions",
+            "NOC required for job value over $5,000 — recorded at PBC Clerk of Court",
+            "Contractor must be registered with city",
+            "NOTE: City offers online BOAT RAMP PERMIT via portal",
+            "UNCERTAINTY (85%): Dock protrusion limits, setback requirements, and longshoreman insurance requirements specific to LWB not found in available PDFs — verify with building department (561) 586-1647 or PBC ERM",
+        ],
+    },
+
+    # ==================== BOARD-UP CERTIFICATE ====================
+    # ==================== CERTIFICATE OF APPROPRIATENESS ====================
+    # ==================== DRIVEWAY ====================
+    "driveway": {
+        "name": "Driveway Permit — Lake Worth Beach",
+        "items": [
+            "Building permit application required for driveway work",
+            "GOTCHA: Driveway approach in public right-of-way requires SEPARATE Right-of-Way Application — per the permit application form",
+            "Contractor must be registered with city",
+            "NOC required for job value over $5,000",
+            "UNCERTAINTY (85%): Specific zoning code dimensions (% of lot width, setbacks, materials) for driveways not found in a dedicated PDF checklist — verify with Planning & Zoning (561) 586-1687 or reference LDR Chapter 23",
+        ],
+    },
+}
+
+
+# ============================================================
+# 4. CITY_DIFFERENCES CORRECTIONS
+# ============================================================
+
+CITY_DIFFERENCES_CORRECTIONS = {
+    # NOC THRESHOLDS — LWB has MULTIPLE
+    # HISTORIC DISTRICTS — CRITICAL DIFFERENTIATOR
+    # SUBPERMIT FEE RULE
+    # PERMIT EXEMPTION
+    # INSPECTION CUTOFF
+    # SAME DAY INSPECTION
+    # MUNICIPAL UTILITY
+    # PLAN REVIEW
+    # APPLICATION NOTARIZATION
+    # FORMERLY LAKE WORTH
+    # BOAT RAMP
+    # WALK-IN HOURS
+    # DEMOLITION SEQUENCE
+    # FENCE SPECIAL
+    # AC/MECHANICAL SPECIAL
+    "lwb_ac_noc_15000": {
+        "lake_worth_beach": "AC: NOC threshold for existing systems is $15,000 (higher than standard $5,000)"
+    },
+    # CHANGE OF CONTRACTOR
+    # SIGN SPECIAL
+    # COMMERCIAL IMPACT FEE
+    # DRIVEWAY ROW
+    # WINDOW/DOOR
+    # FLOOD ZONE
+}
+
+
+# ============================================================
+# 5. UNCERTAINTY_FLAGS
+# ============================================================
+
+UNCERTAINTY_FLAGS = {
+    "lake_worth_beach": [
+        {
+            "item": "Insurance certificate holder EXACT VERBATIM wording",
+            "confidence": 85,
+            "known": "Contractor Registration PDF requires 'Certificate of Liability Insurance' but does NOT specify the exact cert holder name/address format",
+            "likely": "City of Lake Worth Beach, 1900 2nd Avenue North, Lake Worth Beach, FL 33461",
+            "why_uncertain": "The Contractor Registration PDF only says 'Certificate of Liability Insurance' without specifying the cert holder verbatim wording. No other city form provides this. Must verify by calling (561) 586-1647.",
+            "action": "Call building department to confirm exact cert holder name and address format before first contractor uses the system for LWB",
+        },
+        {
+            "item": "Fee schedule exact dollar amounts",
+            "confidence": 80,
+            "known": "FY2021 fee schedule found but FY2024/2025/2026 schedule is on Box.com (JS-only page, not fetchable). TOC confirms building division fees on pages 40-43 including: permit fees, plan filing & review fees, permit extension, expired permit renewals, refund of permit fees, re-inspection fees, CO fees, Board of Appeal, change contractor, unscheduled inspection, after-hours inspection, local product approval, fire admin fees.",
+            "why_uncertain": "The current fee schedule is hosted on Box.com which requires JavaScript rendering — could not extract actual dollar amounts. FY2021 schedule found but likely outdated.",
+            "action": "Request current fee schedule PDF from building department at (561) 586-1647 or email bpermits@lakeworthbeachfl.gov. Update all fee amounts from the actual current schedule.",
+        },
+        {
+            "item": "Work without permit penalty — exact multiplier",
+            "confidence": 85,
+            "known": "City website references code violation + penalty. One source says 'double the permit fee,' existing project data says 'permit fee PLUS 3x fee without surcharges'",
+            "why_uncertain": "Multiple sources give slightly different penalty descriptions. Need to verify from actual fee schedule or code of ordinances section.",
+            "action": "Verify exact penalty formula from current fee schedule or code of ordinances",
+        },
+        {
+            "item": "Dock/marine protrusion limits and setback requirements",
+            "confidence": 85,
+            "known": "City has Atlantic Ocean, Intracoastal, Lake Worth Lagoon, and Lake Osborne frontage. Multi-agency permits required.",
+            "why_uncertain": "No dedicated dock/marine checklist PDF found on Required Documents page. Requirements likely in LDR Chapter 23 but not extracted.",
+            "action": "Verify dock-specific dimensions and requirements with building department or PBC ERM",
+        },
+        {
+            "item": "Electrical service change/disconnect procedures for LWB municipal utility",
+            "confidence": 90,
+            "known": "LWB has municipal electric utility. Demolition package references LWB Utilities for electric disconnect.",
+            "why_uncertain": "No specific 'Service Procedure Form' found like some Broward cities have for FPL coordination. Process may be simpler since it's city-owned.",
+            "action": "Verify with LWB Utilities Customer Service (561) 533-7300",
+        },
+        {
+            "item": "Solar installation specific requirements",
+            "confidence": 80,
+            "known": "No solar-specific checklist PDF found on Required Documents page",
+            "why_uncertain": "City may use standard building/electrical permit process for solar without a dedicated form, or the form may exist but not be listed on the website",
+            "action": "Call building department (561) 586-1647 to verify if a solar-specific form or process exists",
+        },
+        {
+            "item": "ADU (Accessory Dwelling Unit) specific requirements",
+            "confidence": 80,
+            "known": "No ADU-specific checklist found. City is in PBC which has been actively addressing ADU regulations.",
+            "why_uncertain": "ADU requirements may be handled through standard 1-2 Family Dwelling checklist or may have recent zoning code changes not reflected on website",
+            "action": "Verify with Planning & Zoning (561) 586-1687",
+        },
+        {
+            "item": "Private Provider requirements",
+            "confidence": 85,
+            "known": "No private provider-specific form found on LWB forms page",
+            "why_uncertain": "Private provider is a state-level option (F.S. 553.791) that all FL cities must accept. City may not have a specific form but still must accept private provider inspections.",
+            "action": "Verify process for private provider submissions with building department",
+        },
+        {
+            "item": "NOC form content",
+            "confidence": 90,
+            "known": "City provides NOC form on Required Documents page, but PDF returned empty/scanned",
+            "why_uncertain": "Could not extract text from the NOC PDF — appears to be a scanned image or has no machine-readable text",
+            "action": "Download NOC form in-person or request readable version from building department",
+        },
+        {
+            "item": "Expired permit renewal process and fee",
+            "confidence": 80,
+            "known": "Fee schedule TOC lists 'Expired Permit Renewals' under Building Division fees (page 41)",
+            "why_uncertain": "Could not access current fee schedule to get actual dollar amount or process details",
+            "action": "Get current fee schedule and extract exact expired permit renewal fee and process",
+        },
+        {
+            "item": "Board-up Certificate specific requirements",
+            "confidence": 90,
+            "known": "Form exists on Required Documents page",
+            "why_uncertain": "PDF content not fully extractable — form details unclear",
+            "action": "Review physical copy of Board-Up Certificate form",
+        },
+    ],
+}
+
 CITY_SPECIFIC_PERMITS = {
     "pompano_beach": POMPANO_BEACH_PERMITS,
     "plantation": PLANTATION_PERMITS,
@@ -17038,6 +19025,9 @@ CITY_SPECIFIC_PERMITS = {
     "pembroke_pines": PEMBROKE_PINES_PERMITS,
     "west_palm_beach": WEST_PALM_BEACH_PERMITS,
     "margate": MARGATE_PERMITS,
+    "tamarac": TAMARAC_PERMITS,
+    "wellington": WELLINGTON_PERMITS,
+    "lake_worth_beach": LAKE_WORTH_BEACH_PERMITS,
 }
 
 
@@ -17246,7 +19236,8 @@ CITY_DIFFERENCES = {
 def get_detailed_checklist(city_key, permit_type):
     """Get the detailed checklist for a specific city and permit type.
     Returns None if no detailed checklist exists for this combination."""
-    city_data = DETAILED_CHECKLISTS.get(city_key, {})
+    dc = DETAILED_CHECKLISTS[0] if isinstance(DETAILED_CHECKLISTS, tuple) else DETAILED_CHECKLISTS
+    city_data = dc.get(city_key, {})
     # Map permit types to checklist keys
     type_map = {
         "roofing": "roofing",
