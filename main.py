@@ -179,7 +179,12 @@ if DATABASE_URL.startswith("postgres://"):
 if DATABASE_URL.startswith("sqlite"):
     engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 else:
-    engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+    engine = create_engine(
+        DATABASE_URL,
+        pool_pre_ping=True,
+        pool_recycle=300,
+        connect_args={"connect_timeout": 10},
+    )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
@@ -420,8 +425,23 @@ class AIUsageLog(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
 
-Base.metadata.create_all(bind=engine)
-print("✅ Database tables initialized")
+import time as _time
+
+_db_retries = 0
+_db_max_retries = 5
+while _db_retries < _db_max_retries:
+    try:
+        Base.metadata.create_all(bind=engine)
+        print("✅ Database tables initialized")
+        break
+    except Exception as _db_err:
+        _db_retries += 1
+        if _db_retries >= _db_max_retries:
+            print(f"❌ Database connection failed after {_db_max_retries} attempts: {_db_err}")
+            raise
+        print(f"⚠️ Database connection attempt {_db_retries}/{_db_max_retries} failed: {_db_err}")
+        print(f"   Retrying in {_db_retries * 3} seconds...")
+        _time.sleep(_db_retries * 3)
 
 
 # Migrate: Add Stripe columns if they don't exist
@@ -2251,15 +2271,16 @@ async def get_subscription(
 
         tier = user.subscription_tier or "free"
         tier_limit = TIER_LIMITS.get(tier, 3)
+        is_admin = user.email in ADMIN_EMAILS
 
         return {
-            "tier": tier,
+            "tier": "business" if is_admin else tier,
             "analyses_this_month": analyses_this_month,
-            "analyses_limit": tier_limit,
-            "analyses_remaining": max(0, tier_limit - analyses_this_month)
+            "analyses_limit": 999999 if is_admin else tier_limit,
+            "analyses_remaining": -1 if is_admin else (max(0, tier_limit - analyses_this_month)
             if tier_limit < 999999
-            else -1,
-            "has_subscription": bool(user.stripe_subscription_id),
+            else -1),
+            "has_subscription": True if is_admin else bool(user.stripe_subscription_id),
         }
     except HTTPException:
         raise
@@ -2570,7 +2591,9 @@ async def analyze_permit_folder(
         )
 
         tier_limit = TIER_LIMITS.get(user.subscription_tier, 3)
-        if analyses_this_month >= tier_limit:
+        if user.email in ADMIN_EMAILS:
+            pass  # Admins get unlimited analyses
+        elif analyses_this_month >= tier_limit:
             raise HTTPException(
                 status_code=403,
                 detail=f"Monthly limit reached ({tier_limit} analyses). Please upgrade your plan.",
