@@ -275,23 +275,78 @@ CITY_INFO = {
     },
     "coral_springs": {
         "name": "Coral Springs",
-        "department": "Building Department",
-        "address": "9500 W. Sample Road, Coral Springs, FL 33065",
-        "phone": "954-344-1050",
+        "county": "Broward",
+        "department": "City of Coral Springs Building Department",
+        "address": "9500 West Sample Road, Coral Springs, FL 33065",
+        "phone": "954-344-1025",
+        "phone_main": "954-344-1000",
+        "fax": "954-344-5948",
         "email": "buildingpermits@coralsprings.gov",
+        "building_official": "Alexander Hernandez",
         "portal": "eTrakit",
-        "portal_url": "etrakit.coralsprings.gov",
-        "submission": "Electronic preferred (7 days) vs Hard Copy (15 days)",
-        "plan_sets": 3,
-        "noc_threshold": 2500,
+        "portal_url": "https://etrakit.coralsprings.gov",
+        "website": "https://www.coralsprings.gov/Government/Departments/Building",
+        "forms_page": "https://www.coralsprings.gov/Government/Departments/Building/Building-Forms",
+        "submission": "Electronic preferred (7 business days review) vs Hard Copy (15 business days review)",
+        "format_lock": True,  # Once you choose electronic or hard copy, ALL subsequent submittals must remain same format
+        "plan_sets": 2,  # 2 required, 3 suggested by city
+        "plan_sets_suggested": 3,
+        "plan_sets_drc": 4,  # DRC projects need 4 sets of original stamped/signed plans
+        "noc_threshold": 2500,  # Per Alliance page — NOC Not Required if under $2,500
+        "noc_timing": "Required before first inspection (not at submittal)",
+        "noc_recording": "Record at Broward County Recording Office; 1 original submitted to Building Department",
+        "owner_signature_threshold": 2500,  # Owner signature required if construction over $2,500
         "hvhz": True,
-        "deposit_sfr": 100,
-        "deposit_other": 200,
-        "private_provider_discount": "30% plan review + inspection, 15% inspection only",
+        "code_edition": "FBC 8th Edition (2023)",
+        "deposit_sfr": 100,  # For residential alterations/additions over $12,500
+        "deposit_sfr_threshold": 12500,
+        "deposit_commercial": 200,  # For commercial/other over $25,000
+        "deposit_commercial_threshold": 25000,
+        "deposit_nonrefundable": True,  # Retained by city if permit not issued
+        "deposit_credited": True,  # Credited to permit cost if permit IS issued
+        "application_void_days": 60,  # Applications void after 60 calendar days if permit not issued
+        "permit_validity_start": 180,  # Expires if work not started / inspection not requested within 180 days
+        "permit_validity_inactive": 90,  # Expires if work suspended/abandoned for 90 days
+        "private_provider_discount_full": "30%",  # Plan review + inspection
+        "private_provider_discount_inspection": "15%",  # Inspection only
         "electronic_review_days": 7,
         "hardcopy_review_days": 15,
+        "misc_review_days": 7,  # Small miscellaneous permits
+        "hours_building": "Mon-Thu 7:30a-5:00p, Fri 7:30a-2:30p",
+        "hours_city_hall": "Mon-Thu 7:30a-5:30p, Fri 7:30a-3:00p",
+        "phone_scheduling": False,  # NO LONGER AVAILABLE as of February 2025
+        "inspection_scheduling": "eTrakit ONLY (phone scheduling eliminated Feb 2025)",
+        "inspection_cancel_deadline": "Before 8:00 AM day of inspection",
+        "no_cash": False,  # Not specified — flag for verification
+        "work_without_permit_penalty": "Double the permit fee",
+        "building_safety_inspection": True,  # Broward County milestone inspections apply
+        "insurance_cert_holder": "City of Coral Springs, 9500 West Sample Road, Coral Springs, FL 33065",
+        "insurance_cert_holder_confidence": 90,  # See UNCERTAINTY — online form doesn't specify exact wording
+        "contractor_registration_online": True,  # Now uses JotForm online submission
+        "contractor_registration_url": "https://forms.coralsprings.gov/211955692260964",
+        "broward_county_uniform_app": True,
+        "broward_app_revision": "11/14/2025",
+        "broward_app_effective": "12/1/2025",
+        "broward_epd_required": True,  # DPEP/DERD submittal/approval BEFORE Building Dept submittal
+        "asbestos_form_required": "Interior only or renovation/addition",
+        "elevator_broward": True,  # Broward County Elevator submittal before Building Dept
+        "elevator_review_time": "1 week",
+        "plan_sealing_threshold": 15000,  # Plans sealed on EACH sheet for jobs > $15,000
+        "plan_sealing_always": "Slab, masonry, or truss repairs regardless of cost",
+        "plan_sealing_remodel": 30000,  # Residential remodel: signed/sealed if over $30,000
+        "contract_required_threshold": 15000,  # Copy of contract if job > $15,000 (per FBC 109.3.1)
+        "early_start": True,  # Available with Building Official approval for emergencies (e.g., A/C replacement)
+        "chief_inspectors": {
+        "structural": {"name": "John Heller", "phone": "954-344-1061"},
+        "electrical": {"name": "Craig Stevens", "phone": "954-344-1056"},
+        "plumbing": {"name": "Tim Fallon", "phone": "954-344-1052"},
+        "mechanical": {"name": "Michael Egezeino", "phone": "954-344-1048"},
+        },
+        "inland_city": True,  # No waterways — no dock/seawall permits
+        "drc_required": True,  # Development Review Committee for new construction / major projects
+        "public_art_ordinance": True,  # Commercial projects — pay into trust fund OR place art on site
     },
-    "coconut_creek": {
+"coconut_creek": {
         "name": "Coconut Creek",
         "county": "Broward",
         "department": "Building Department (under Resilient Design and Development)",
@@ -1477,21 +1532,46 @@ KNOWN_GOTCHAS = {
     "GOTCHA: Asbestos form required for EPD if interior only OR if renovation/addition",
 ],
     "lighthouse_point": [
-        "FAXED applications will be REJECTED (distorts information)",
-        "Survey must be less than 1 year old OR submit Zoning Affidavit",
-        "Marine work requires Longshoreman Insurance - state workers' comp is NOT sufficient",
-        "Applications must be signed by BOTH owner AND contractor",
-        "Many applications require notarization",
-        "Values, SF, and quantities MUST be included on all applications",
-        "ALL electrical work must be done by licensed contractor - NO owner/builder",
-        "ALL roofing work must be done by licensed contractor - NO owner/builder",
-        "ALL piling work must be done by licensed contractor - NO owner/builder",
-        "Permits must be picked up IN PERSON",
-        "Be home for inspections (except final zoning, final exterior, final fire)",
-        "Buildings over 25 years AND over 3,500 SF require 40-year safety inspection",
-        "Work without permit = 200% of standard fee",
-        "Waterfront properties require 2 signed/sealed engineer letters regarding seawall condition",
-    ],
+    "GOTCHA: Insurance cert holder MUST read EXACTLY: 'City of Lighthouse Point / 3701 NE 22nd Avenue / Lighthouse Point, FL 33064' — the FAQ says '22 Avenue' but the PDF says '22nd Avenue'. USE THE PDF VERSION or registration will be rejected.",
+    "GOTCHA: Company name must match EXACTLY on ALL four registration documents AND on permit applications. DBA mismatches = rejection.",
+    "GOTCHA: FAXED applications will be REJECTED — distorts legal information. Online or in-person only.",
+    "GOTCHA: Survey must be less than 1 year (12 months) old — OR submit Zoning Affidavit signed by owner. No exceptions.",
+    "GOTCHA: Marine/dock work requires Longshoreman Insurance — FEDERAL requirement per Dept of Labor §932 Longshore Act. State Workers' Comp does NOT satisfy this. Most frequently missed document.",
+    "GOTCHA: Pool permits require SEPARATE building applications for pool AND pool deck — two applications, not one.",
+    "GOTCHA: ALL electrical work MUST be done by licensed contractor — NO owner/builder permitted.",
+    "GOTCHA: ALL roofing work MUST be done by licensed contractor — NO owner/builder permitted.",
+    "GOTCHA: ALL piling work MUST be done by licensed contractor — NO owner/builder permitted.",
+    "GOTCHA: Applications must be signed by BOTH owner AND contractor — missing either = rejection.",
+    "GOTCHA: Permit applications for new SFR must be signed AND NOTARIZED for each discipline (building, electrical, plumbing, mechanical).",
+    "GOTCHA: Values, SF, and quantities MUST be included on ALL applications — blank fields = rejection.",
+    "GOTCHA: Lot, Block, and Subdivision MUST be on every application — this is the LHP Addendum requirement.",
+    "GOTCHA: Permits must be picked up IN PERSON — no mailing, no digital delivery.",
+    "GOTCHA: Must be home for inspections — EXCEPT final zoning, final exterior, and final fire inspections.",
+    "GOTCHA: Buildings over 25 years AND over 3,500 SF require 40-year safety inspection ($350). Single-family, duplexes, and under 3,500 SF are exempt.",
+    "GOTCHA: Work without permit = 200% of standard fee (triple the cost) + Stop Work Order + Code Enforcement Notice of Violation.",
+    "GOTCHA: Waterfront properties require 2 signed/sealed engineer letters on seawall condition for new homes OR 50%+ remodel.",
+    "GOTCHA: Drainage plans require 3 sets AND a SEPARATE application — not combined with building plans.",
+    "GOTCHA: Addition of 30%+ property increase (per code section 42-374) may trigger drainage plan requirement.",
+    "GOTCHA: New SFR requires ALL trade applications (building + electrical + plumbing + mechanical) submitted at SAME TIME.",
+    "GOTCHA: Re-roofing SFR requires Single Family Re-Roofing Affidavit — if dwelling value > $300,000 AND permitted before 1994, must provide Roof-to-Wall Connections Certificate.",
+    "GOTCHA: Solar installations require NOTARIZED homeowner authorization AND a NAMED special inspector on the form.",
+    "GOTCHA: Service change (FPL disconnect/reconnect) — DO NOT disconnect without first speaking to inspector VOICE ONLY (not text, not email).",
+    "GOTCHA: AC Replacement Data Sheet is per-system — each system needs its own form. Must include AHRI Certificate.",
+    "GOTCHA: Senate Bill 612 (effective July 1, 2024) — HVAC contractors can now work on line-side electrical, but electrical inspection STILL required even without separate electrical permit.",
+    "GOTCHA: Horizontal wood fences, aluminum, decorative metal, and PVC fences ALL require product approvals with components/connections/anchorage highlighted — OR two sets of signed/sealed engineer plans.",
+    "GOTCHA: Demolition requires 14 separate items including warranty deed, Sunbiz articles for corps, licensed exterminator vermin statement, hose bib location on survey, and temp fence as SEPARATE application.",
+    "GOTCHA: Driveway max combined width = 40% of front property line. Must maintain 4-foot setback from adjacent properties. Must connect to 10'x20' solid surface on lot.",
+    "GOTCHA: Product Approvals (NOAs) must be stamped by architect AND a separate PA Review Form must be prepared.",
+    "GOTCHA: No starter checks accepted — only regular checks, cashier checks, cash, or credit card.",
+    "GOTCHA: Change of Contractor requires NOTARIZED signatures from BOTH property owner AND new contractor — fee is $100.",
+    "GOTCHA: 30-Day Electrical Testing Connection Application requires NOTARIZED signatures from BOTH electrical contractor AND owner/GC.",
+    "GOTCHA: Expired permit renewal within 180 days = 50% of original permit fee. After second 180-day period = 150% of original permit fee. FEE SCHEDULE overrides FAQ.",
+    "GOTCHA: Enclosing patio/balcony/Florida room/screen room requires energy calculations AND completed Product Approval Review Form.",
+    "GOTCHA: Synthetic turf requires compliance with Ordinance 2017-0957 — must be installed by FL-licensed GC or landscape architect, 8-year no-fade warranty, specific pile height/weight requirements.",
+    "GOTCHA: Rainwater harvesting — cistern max 250 gallons, first flush diverter required (1 gal per 100 SF collection surface), connections to sanitary sewer PROHIBITED.",
+    "GOTCHA: Demolition underground utilities form requires NOTARIZED owner signature — owner accepts responsibility for ALL underground utilities including gas tanks, septic, etc.",
+    "GOTCHA: Shutter Detail Information Form based on ASCE 7-16, 170 MPH wind load — must highlight all mounting details on product approval with opening numbers.",
+],
     "weston": [
     "GOTCHA: NOC threshold for A/C Change-Out is $15,000 — NOT $2,500 and NOT $7,500. Per Quick Permit Application Checklist (Rev 3/2025). Standard NOC threshold for all other work is $2,500.",
     "GOTCHA: Insurance cert holder wording is just 'City of Weston' — no address required on certificate. Per Contractor Registration Form Rev 7/2025.",
@@ -1543,21 +1623,70 @@ KNOWN_GOTCHAS = {
         "Digital signatures must comply with Davie's Signing and Sealing Plans Guidelines and Digital Signature Regulation & Affidavit — regular electronic signatures may be rejected",
     ],
     "coral_springs": [
-        "Electronic submittals reviewed in 7 days vs 15 days for hard copy - choose wisely",
-        "Once you choose format, ALL subsequent submittals must remain in same format",
-        "NEW Broward County form required as of December 1, 2025",
-        "Phone scheduling NO LONGER AVAILABLE as of February 2025 - use eTrakit only",
-        "Submit 3 sets of plans (city recommends though 2 required)",
-        "Truss drawings must be received BEFORE foundation inspection",
-        "Bearing capacity certification must be approved BEFORE foundation inspection",
-        "Window restrictors required on ALL second-story bedroom windows",
-        "Roof color must be on approved list - get Zoning approval BEFORE permit",
-        "DRC approval must be completed BEFORE Zoning approval",
-        "Public Art Ordinance: Pay into trust fund OR place art on site (escrow required)",
-        "Fire Dept re-inspection fee ($235.72) much higher than Building ($85.11)",
-        "Plans must be sealed and dated - EACH sheet sealed for jobs >$15,000",
-        "Product approvals must be reviewed by designer of record BEFORE submission",
-        "Shop drawings must be reviewed by designer BEFORE submission to city",
+        # === SUBMISSION / FORMAT ===
+        "GOTCHA: Electronic submittals reviewed in 7 business days vs 15 for hard copy — choose wisely because ONCE YOU CHOOSE, ALL subsequent submittals MUST remain in the same format (electronic OR paper) for the life of that permit",
+        "GOTCHA: Electronic corrections MUST re-submit COMPLETE set of plans with corrections CLEARLY MARKED — partial resubmissions rejected",
+        "GOTCHA: Paper corrections must indicate which disciplines need review by checking appropriate boxes — not checking all required boxes DELAYS review",
+        "GOTCHA: NEW Broward County Uniform Building Permit Application revised 11/14/2025 — NO previous version accepted after December 1, 2025",
+
+        # === SCHEDULING / INSPECTIONS ===
+        "GOTCHA: Phone scheduling NO LONGER AVAILABLE as of February 2025 — must use eTrakit ONLY to schedule inspections",
+        "GOTCHA: Cancel inspection before 8:00 AM day of or face reinspection fee ($85.11 Building, $235.72 Fire)",
+        "GOTCHA: Fire Dept reinspection fee ($235.72) is nearly 3x the Building reinspection fee ($85.11) — don't fail fire inspections",
+        "GOTCHA: Truss drawings must be received by Building Department BEFORE foundation inspection — missing = inspection not approved",
+        "GOTCHA: Bearing capacity certification (Form 017.0) must be approved BEFORE foundation inspection",
+
+        # === PLANS / SEALING ===
+        "GOTCHA: Plans must be sealed and dated — EACH SHEET individually sealed for jobs over $15,000 or ANY structural work (FBC 107.3.4.0.1)",
+        "GOTCHA: Product approvals must be reviewed and approved by the designer of record BEFORE submitting to building division (FBC 107.3.5.2) — submit with Product Approval Review Form",
+        "GOTCHA: Shop drawings must be reviewed by designer of record BEFORE submission to city — unreviewed shop drawings rejected",
+        "GOTCHA: Submit 3 sets of plans (city suggests) though 2 are required — 1 City Copy + 2 Field Copies",
+        "GOTCHA: DRC projects require 4 sets of original stamped/signed approved plans",
+
+        # === ROOFING ===
+        "GOTCHA: Roof color must be on Coral Springs APPROVED ROOF COLOR LIST — get Zoning approval BEFORE submitting roof permit application",
+        "GOTCHA: DRC approval must be completed BEFORE Zoning approval — wrong sequence = rejection",
+        "GOTCHA: Coral Springs requires Building Permit Application Zoning Addendum (Form 099.1) with ALL roof, fence, sign, and tree removal permits",
+        "GOTCHA: Tile uplift test required for ALL tile roofs BEFORE final inspection approval — Coral Springs specific",
+        "GOTCHA: Cap sheet in-progress inspections required for ALL deck types — not just modified bitumen",
+        "GOTCHA: Roofers Application Packet (Form 013.1) is a SEPARATE city-specific form on top of Broward County app — includes HVHZ forms, owner notification, tile calculations, and roof plan sketch",
+
+        # === WINDOWS / SAFETY ===
+        "GOTCHA: Window restrictors required on ALL second-story bedroom windows — Coral Springs specific requirement",
+
+        # === CONTRACTOR REGISTRATION ===
+        "GOTCHA: Contractor must be registered with Coral Springs Building Division specifically — state license alone is INSUFFICIENT",
+        "GOTCHA: Contractor registration is now ONLINE via JotForm — requires: State License OR County Certificate, GL Insurance, Workers Comp (or exemption), Business Tax Receipt (if Coral Springs-based)",
+
+        # === FEES / DEPOSITS ===
+        "GOTCHA: Deposit of $100 (SFR) or $200 (commercial) required at application — NONREFUNDABLE if permit not issued, credited if permit IS issued",
+        "GOTCHA: Residential deposit triggers at $12,500 job value; Commercial deposit triggers at $25,000",
+        "GOTCHA: Applications void after 60 calendar days if permit not issued — deposit forfeited",
+        "GOTCHA: Expired permit renewal = 50% of original master permit fee, minimum $128.80 — NOT a flat fee",
+        "GOTCHA: Work without permit = DOUBLE the permit fee",
+        "GOTCHA: Plan resubmittal fee kicks in at 3rd resubmittal ($68.24) — get it right the first two times",
+
+        # === NOC ===
+        "GOTCHA: NOC threshold discrepancy — Alliance page says $2,500, city checklists say $5,000 — VERIFY with Building Dept at 954-344-1025 before submitting",
+        "GOTCHA: NOC required BEFORE first inspection (not at submittal) — record at Broward County Recording Office, submit 1 original to Building Dept",
+
+        # === PERMITS / PROCESS ===
+        "GOTCHA: Permits expire if work not started and inspection not requested within 180 days of issuance",
+        "GOTCHA: After work starts, permit expires if work suspended/abandoned for 90 days",
+        "GOTCHA: NO work allowed before permit approval — exception: A/C emergency with Building Official Early Start approval only",
+        "GOTCHA: Owner/Builder must PERSONALLY APPEAR at Building Department — cannot be done remotely or by agent",
+        "GOTCHA: Signatures on permit application need to be NOTARIZED",
+        "GOTCHA: Values, SF, and Quantities MUST be included on application — incomplete apps rejected",
+        "GOTCHA: Issuance of building permit does NOT guarantee work is allowed by HOA — contractor responsible for separate HOA approval",
+
+        # === SPECIAL REQUIREMENTS ===
+        "GOTCHA: Public Art Ordinance applies to commercial projects — must pay into trust fund OR place art on site (escrow required)",
+        "GOTCHA: Missing ADA Disproportionate Cost documentation (Form 042.0) = automatic rejection for commercial alterations",
+        "GOTCHA: Broward County EPD/DPEP/DERD submittal and approval required BEFORE Building Dept submittal — submit asbestos form if interior only or renovation/addition",
+        "GOTCHA: Elevator work requires Broward County Elevator submittal/approval BEFORE Building Dept — allow 1 week review time",
+        "GOTCHA: Shed max 150 sq ft, cannot exceed height of main structure, must be compatible in color/material, and MUST be screened from view from street and adjacent properties",
+        "GOTCHA: All commercial/industrial projects must use city's franchise service provider (Coastal Waste & Recycling) for C&D debris",
+        "GOTCHA: Technology fee of $20 per permit for converting paper files to electronic + $2/sheet for docs larger than 11x17",
     ],
     "coconut_creek": [
         "Building Department is CLOSED ON FRIDAYS — open Mon–Thu 7AM–6PM only",
@@ -22511,6 +22640,1305 @@ MIAMI_PERMITS = {
     },
 }
 
+
+CORAL_SPRINGS_PERMITS = {
+
+    # ==================== BUILDING ====================
+    "building": {
+        "name": "Building Permit",
+        "items": [
+            # --- Application ---
+            "Broward County Uniform Building Permit Application (revised 11/14/2025 — NO previous version accepted after 12/1/2025)",
+            "Application signed by Contractor — signatures must be NOTARIZED",
+            "Owner signature required if construction value exceeds $2,500",
+            "Values, square footage, and quantities MUST be included on application",
+            "Submit via eTrakit portal (https://etrakit.coralsprings.gov) — electronic review 7 business days vs hard copy 15 business days",
+            "GOTCHA: Once you choose electronic or hard copy format, ALL subsequent submittals for that permit must remain in the SAME format",
+
+            # --- Plans ---
+            "Two (2) sets of plans required — city suggests submitting 3 sets (1 City Copy + 2 Field Copies)",
+            "Plans must be signed/sealed by FL licensed Architect/Engineer if job value over $30,000 (remodel) or over $15,000 (any structural work)",
+            "Plans ALWAYS signed/sealed regardless of cost for slab, masonry, or truss repairs",
+            "Each sheet must be individually sealed and dated for jobs over $15,000 (FBC 107.3.4.0.1)",
+            "Product approvals must be reviewed and approved by designer of record BEFORE submission to building division",
+
+            # --- Survey ---
+            "Two (2) copies of current signed/sealed survey or site plan required",
+            "Survey not required for interior-only alterations EXCEPT patio enclosures",
+            "Survey can be requested from city via records request",
+
+            # --- Engineering ---
+            "Energy calculations signed/sealed by engineer (not required for interiors only)",
+            "Structural calculations signed/sealed by engineer (not required for interiors only)",
+            "Special Building Inspector Form signed/sealed by engineer and signed by Owner (not required for interiors only)",
+
+            # --- Contractor ---
+            "Contractor must be registered with Coral Springs Building Division — state license alone is INSUFFICIENT",
+            "GOTCHA: Registration is now online via JotForm: State License or County Certificate + GL Insurance + Workers Comp (or exemption) + Business Tax Receipt (if CS-based)",
+            "Certificates of insurance listing 'City of Coral Springs, 9500 West Sample Road, Coral Springs, FL 33065' as certificate holder",
+            "UNCERTAINTY (90%): Insurance certificate holder exact verbatim wording — online registration form does not specify exact format; city attorney docs reference 'City of Coral Springs' as Additional Named Insured — call 954-344-1025 to verify exact wording before first registration",
+
+            # --- NOC ---
+            "Notice of Commencement (NOC) — recorded copy required before first inspection",
+            "NOC threshold: $2,500 per Alliance page; city checklists reference $5,000",
+            "UNCERTAINTY (85%): NOC threshold conflict — Alliance page (gflalliance.org) states NOC not required if under $2,500, but city's own checklists (Forms 060.0, 062.0, dated 2/29/2024) state 'if job value over $5,000' — VERIFY with Building Dept at 954-344-1025",
+            "Record NOC at Broward County Recording Office; submit 1 original to Building Department",
+
+            # --- Owner/Builder ---
+            "Owner/Builder: Property owner must PERSONALLY APPEAR at Building Department to sign application",
+            "Owner/Builder Affidavit Packet (Form 029.0) required — 7 pages including disclosure statement",
+            "Owner/Builder needs: warranty deed or quit claim deed, completed affidavit, 2 copies of survey",
+            "NOTE: Owner/Builder pre-submittal meetings available upon request — call 954-344-1025",
+
+            # --- Deposits & Fees ---
+            "Deposit: $100 for SFR (jobs over $12,500) or $200 for all other (jobs over $25,000) — nonrefundable if permit not issued, credited if issued",
+            "Permit fees: Structural 1.96% of construction value (alterations/additions), 0.79% (new construction)",
+            "Educational/technology fee: $0.61 per $1,000 of estimated cost",
+            "Copy of signed contract required if job value exceeds $15,000 (per FBC 109.3.1)",
+
+            # --- Special Requirements ---
+            "Broward County EPD (DPEP/DERD) submittal and approval required BEFORE Building Dept submittal",
+            "Submit asbestos form (SRRA) if interior only or renovation/addition",
+            "Elevator work: Broward County Elevator submittal/approval required BEFORE Building Dept — allow 1 week",
+            "HVHZ zone — all products must have Miami-Dade NOA (Notice of Acceptance)",
+            "NOAs must be stamped/approved by architect — city supplemental form required for windows, doors, louvers, shutters",
+
+            # --- DRC ---
+            "Development Review Committee (DRC) approval required for new construction and major exterior modifications",
+            "DRC projects: must submit 4 sets of stamped/original signed approved plans",
+            "GOTCHA: DRC approval must be completed BEFORE Zoning approval — sequence matters",
+
+            # --- Expiration ---
+            "Permits expire if work not started / inspection not requested within 180 days of issuance",
+            "After work starts, permit expires if work suspended or abandoned for 90 days",
+            "Expired permit renewal: 50% of original master permit fee, minimum $128.80",
+            "Work without permit: DOUBLE the permit fee",
+            "Applications void after 60 calendar days if permit not issued — deposit forfeited",
+
+            # --- Inspections ---
+            "GOTCHA: Phone scheduling NO LONGER AVAILABLE (Feb 2025) — use eTrakit ONLY",
+            "Cancel inspections before 8:00 AM day of or face reinspection fee",
+            "Reinspection fee: $85.11 (Building), $235.72 (Fire)",
+            "Truss drawings must be received BEFORE foundation inspection",
+            "Bearing capacity certification (Form 017.0) must be approved BEFORE foundation inspection",
+
+            # --- Private Provider ---
+            "Private Provider discount: 30% for plan review + inspection, 15% for inspection only",
+            "Private Provider Notice to Building Official (Form 098.A) required",
+
+            # --- Conditional ---
+            "Lot Coverage Calculation Worksheet required if adding square footage (Coral Springs-specific)",
+            "Fire Review Application required for condos/multi-family projects",
+            "ADA Disproportionate Cost form (042.0) required for commercial alterations — missing = rejection",
+            "Drainage District Approval Letter required for applicable projects",
+            "Blower Door Test (Envelope Leakage Test) form available for energy compliance",
+            "Window restrictors required on ALL second-story bedroom windows",
+
+            # --- Notes ---
+            "NOTE: Early Start available for emergencies (e.g., A/C replacement) with Building Official approval",
+            "NOTE: Building permit does NOT guarantee HOA approval — contractor responsible separately",
+            "NOTE: Expedited plan review available at $113.34/hour per trade (1-hour minimum)",
+            "NOTE: Chief Inspectors available for pre-project consultations — Structural: John Heller 954-344-1061, Electrical: Craig Stevens 954-344-1056, Plumbing: Tim Fallon 954-344-1052, Mechanical: Michael Egezeino 954-344-1048",
+        ],
+    },
+
+    # ==================== ELECTRICAL ====================
+    "electrical": {
+        "name": "Electrical Permit",
+        "items": [
+            "Broward County Uniform Permit Application with Electrical checked (revised 11/14/2025 — no previous version after 12/1/2025)",
+            "Application signed by Owner AND trade Contractor — values, SF, quantities required",
+            "Sub-trade permits do NOT require Owner signature",
+            "Two (2) copies survey/site plan/floor plan showing location and scope of work",
+            "Two (2) sets dedicated electrical plans signed/sealed by FL licensed Architect/Engineer (for service change)",
+            "GOTCHA: Electrical plans must be DEDICATED — not part of a general plan set",
+            "Job value must be listed on application — itemized cost breakdown may be required",
+            "Contractor must be registered with Coral Springs Building Division",
+            "Insurance certificates listing 'City of Coral Springs, 9500 West Sample Road, Coral Springs, FL 33065' as certificate holder",
+            "NOC required before first inspection (see building permit NOC threshold note)",
+            "Electric Service / Panel Change Form — two (2) copies, must be signed by QUALIFIER",
+            "Load calculations required for service changes",
+            "HVHZ: All electrical products must have valid Miami-Dade NOA",
+            "Broward County EPD approval required BEFORE Building Dept submittal",
+            "GOTCHA: Senate Bill 612 (July 2024) changed line-side electrical rules — verify current requirements for service changes",
+
+            # --- Fees ---
+            "Permit fee: 0.85% of construction value (alterations/additions), 0.34% (new construction)",
+            "A/C changeout electrical fee: $136.52",
+            "Service change fee: Residential $124.13, Commercial $155.15",
+            "Fire alarm: $217.23 (SFR/duplex/triplex; per floor for multi-family/commercial)",
+            "Burglar alarm: $55.00 (new/retrofit, per floor up to 6 units) + $8.55 each additional unit",
+            "Minimum permit fee (one inspection): $109.22",
+            "Reinspection: $85.11",
+
+            "NOTE: 30-day Temporary Electric Service requires Affidavit (Form 004.0) — fee $62.05",
+            "NOTE: Temporary electric permit fee: $124.13 (standard), $62.05 (30-day)",
+        ],
+    },
+
+    # ==================== PLUMBING ====================
+    "plumbing": {
+        "name": "Plumbing Permit",
+        "items": [
+            "Broward County Uniform Permit Application with Plumbing checked (revised 11/14/2025)",
+            "Application signed by Owner AND trade Contractor — values, SF, quantities required",
+            "Two (2) copies survey or site plan showing location and scope of work",
+            "Two (2) sets of plans signed/sealed by FL licensed Architect/Engineer",
+            "Job value must be listed on application",
+            "Contractor must be registered with Coral Springs Building Division",
+            "Insurance certificates listing 'City of Coral Springs, 9500 West Sample Road, Coral Springs, FL 33065' as certificate holder",
+            "NOC required before first inspection (see building permit NOC threshold note)",
+            "Gas System Checklist (Form 055.0) required for gas system work",
+
+            # --- Fees ---
+            "Permit fee: 1.18% of construction value (alterations/additions), 0.10% (new construction)",
+            "Water heater (domestic): $93.08",
+            "Solar pool heater/water heater: $124.13",
+            "Fire sprinkler system: $310.34",
+            "Backflow preventer: $124.13",
+            "Sewer hook-up: $93.08",
+            "Irrigation system: $186.20",
+            "LP Gas system: $93.08",
+            "Minimum permit fee (one inspection): $105.50",
+            "Site work/drainage/water mains/fire/sewer mains: 2.05% of contract price",
+            "Reinspection: $85.11",
+
+            "GOTCHA: Condensate system may be on plumbing permit (not mechanical) — verify permit assignment, contact Tim Fallon 954-344-1052",
+        ],
+    },
+
+    # ==================== MECHANICAL ====================
+    "mechanical": {
+        "name": "Mechanical/HVAC Permit",
+        "items": [
+            "Broward County Uniform Permit Application with Mechanical checked (revised 11/14/2025)",
+            "Application signed by Owner AND trade Contractor — values, SF, quantities required",
+            "Two (2) copies survey or site plan",
+            "Two (2) sets of HVAC plans signed/sealed by FL licensed Architect/Engineer",
+            "Load calculations (Manual J) required",
+            "AHRI certificate required for A/C replacement",
+            "Broward County A/C Replacement Data form (Form 032.1 — Broward County BORA Policy 19-02)",
+            "Job value must be listed on application",
+            "Contractor must be registered with Coral Springs Building Division",
+            "Insurance certificates listing 'City of Coral Springs, 9500 West Sample Road, Coral Springs, FL 33065' as certificate holder",
+            "NOC required before first inspection (see building permit NOC threshold note)",
+
+            "GOTCHA: A/C Replacement Data forms are PER-SYSTEM — one form per unit being replaced",
+            "GOTCHA: Senate Bill 612 (July 2024) may affect line-side electrical for A/C installations — verify with electrical inspector",
+            "GOTCHA: Test and balance reports required BEFORE final inspection — report must be reviewed/approved by designer of record before submitting",
+
+            # --- Fees ---
+            "Permit fee: 0.63% of construction value (alterations/additions), 0.12% (new construction)",
+            "A/C changeout: $136.52",
+            "Gas pool heater: $93.08",
+            "LP Gas system: $93.08",
+            "Radon mitigation: $93.08",
+            "Minimum permit fee (one inspection): $105.50",
+            "Reinspection: $85.11",
+
+            "NOTE: Early Start available for A/C emergency replacement with Building Official approval — work allowed up to first required inspection pending approval of Early Start Request Application",
+        ],
+    },
+
+    # ==================== ROOFING ====================
+    "roofing": {
+        "name": "Roofing Permit",
+        "items": [
+            "Broward County Uniform Building Permit Application (revised 11/14/2025 — no previous version after 12/1/2025)",
+            "Building Permit Application Zoning Addendum (Form 099.1) — CORAL SPRINGS-SPECIFIC supplemental form required with ALL roof permits",
+            "Roofers Application Packet (Form 013.1, revised 11/26/2024) — CORAL SPRINGS-SPECIFIC city packet including HVHZ forms, owner notification, tile calculations, roof plan sketch",
+            "Roof/Re-Roof Checklist (Form 013.0, revised 2/29/2024)",
+            "Two (2) sets of product approvals (NOAs) for ALL roofing materials — must be stamped by architect if part of full plan set",
+            "Roof plan sketch: illustrate all levels/sections, roof drains, scuppers, overflow drains; include dimensions of elevated pressure zones and parapet locations",
+            "Job value must be listed on permit application — itemized cost breakdown may be required",
+            "Statement of Responsibility Regarding Asbestos (SRRA) — Broward County form, must be obtained before submittal",
+            "Contractor must be registered with Coral Springs Building Division",
+            "Insurance certificates listing 'City of Coral Springs, 9500 West Sample Road, Coral Springs, FL 33065' as certificate holder",
+            "NOC (Recorded) required before first inspection (see building permit NOC threshold note)",
+
+            # --- HVHZ ---
+            "HVHZ zone: Roof calculations (HVC) — complete package with roof NOAs and roof plan",
+            "NOAs must be reviewed and approved by design professional",
+            "Roof truss shop drawings must be signed/sealed by engineer and include all calculations",
+            "GOTCHA: Truss drawings must be submitted BEFORE first permit application",
+
+            # --- Color/Zoning ---
+            "GOTCHA: Pre-approved roof colors and materials — city has specific approved list, MUST verify compliance BEFORE submittal",
+            "GOTCHA: Get ZONING approval for roof color BEFORE submitting roof permit application",
+            "GOTCHA: DRC approval must be completed BEFORE Zoning approval if applicable",
+            "Approved Roof Colors available at: coralsprings.gov > Community Development > Property Guidelines > Roofs",
+
+            # --- Inspections ---
+            "GOTCHA: Tile uplift test required for ALL tile roofs BEFORE final approval — Coral Springs-specific",
+            "Cap sheet in-progress inspections required for ALL deck types",
+            "Inspection sequence: (1) Tin-Cap/Renailing, (2) Cap Sheet In-Progress, (3) Tile/Shingle In Progress, (4) Final Structural",
+
+            # --- Conditional ---
+            "Rooftop Mounted Equipment Affidavit (Broward County form) required if rooftop equipment present",
+            "Owner/Builder Affidavit Packet if homeowner performing work",
+            "Lightweight Concrete Installation Packet if applicable",
+
+            # --- Fees ---
+            "Flat re-roof: $217.23 (first 50 squares) + $93.08 each additional 50 squares",
+            "Slope re-roof: $248.28",
+            "Slope AND flat: $465.54",
+            "Roof repair (2 squares and under): $93.08",
+            "Reinspection: $85.11",
+
+            # --- Commercial Differences ---
+            "NOTE: Commercial roofing may require additional fire review and plans review",
+            "NOTE: F.S. 553.844 roofing energy affidavit may apply for buildings with assessed value over $300,000",
+            "UNCERTAINTY (90%): Coral Springs-specific roofing energy affidavit threshold — standard FL requirement assumed but city-specific form not confirmed — call 954-344-1025",
+        ],
+    },
+
+    # ==================== POOL/SPA ====================
+    "pool_spa": {
+        "name": "Pool/Spa Permit",
+        "items": [
+            "Broward County Uniform Building Permit Application (revised 11/14/2025)",
+            "Building Permit Application Zoning Addendum (Form 099.1) if exterior work",
+            "Two (2) sets of pool/spa plans signed/sealed by FL licensed engineer",
+            "Two (2) copies survey/site plan showing pool location, setbacks, lot coverage",
+            "Pool Safety Act compliance form — barrier/fence requirements per FL statute",
+            "Product approvals (NOAs) for all pool equipment/materials in HVHZ",
+            "Job value on application",
+            "Contractor must be registered with Coral Springs Building Division",
+            "Insurance certificates listing City of Coral Springs as certificate holder",
+            "NOC required before first inspection",
+
+            "GOTCHA: Pool deck may require SEPARATE building permit application — verify with Building Dept",
+            "GOTCHA: Screen enclosure over pool requires SEPARATE structural permit ($229.66)",
+            "GOTCHA: Fence/gate permit application required if new pool barrier fence installed",
+            "GOTCHA: Lot Coverage Calculation Worksheet required — pool adds to lot coverage calculation",
+            "GOTCHA: Electrical permit required for pool pump, lighting, bonding — separate application",
+            "GOTCHA: Plumbing permit required for pool water connections",
+
+            # --- Fees ---
+            "Pool/spa/hot tub structural fee: $248.28",
+            "Pool/spa electrical fee: $248.28",
+            "Screen enclosure: $229.66",
+            "Reinspection: $85.11",
+
+            "NOTE: Coral Springs is inland — no saltwater/waterfront pool concerns",
+        ],
+    },
+
+    # ==================== DEMOLITION ====================
+    "demolition": {
+        "name": "Demolition Permit",
+        "items": [
+            "Broward County Uniform Building Permit Application (revised 11/14/2025)",
+            "Demolition requires SEPARATE permits for EACH discipline: Structural ($155.15), Electrical ($155.15), Plumbing ($155.15), Mechanical ($155.15)",
+            "Two (2) copies survey showing structure to be demolished",
+            "Contractor must be registered with Coral Springs Building Division",
+            "Insurance certificates listing City of Coral Springs as certificate holder",
+            "NOC required before first inspection",
+            "Broward County EPD approval required BEFORE Building Dept submittal",
+            "SRRA (Statement of Responsibility Regarding Asbestos) required",
+
+            "GOTCHA: Warranty deed or quit claim deed may be required",
+            "GOTCHA: Corporate-owned properties may need Sunbiz articles of incorporation",
+            "GOTCHA: Licensed exterminator vermin statement may be required — verify with Building Dept",
+            "UNCERTAINTY (85%): Coral Springs-specific demolition requirements beyond standard Broward — city does not have a dedicated demolition checklist PDF on forms page — call 954-344-1025 to confirm full requirements",
+
+            # --- Fees ---
+            "Demolition fee: $155.15 per discipline (structural, electrical, plumbing, mechanical each)",
+            "Reinspection: $85.11",
+
+            "NOTE: All commercial/industrial demolition projects must use Coastal Waste & Recycling for C&D debris disposal",
+        ],
+    },
+
+    # ==================== FENCE ====================
+    "fence": {
+        "name": "Fence Permit",
+        "items": [
+            "Broward County Uniform Building Permit Application (revised 11/14/2025)",
+            "Building Permit Application Zoning Addendum (Form 099.1) — REQUIRED for all fence permits",
+            "Fence Installation Permit Packet (Form 030.0) — complete Coral Springs-specific packet",
+            "Two (2) copies survey/site plan showing proposed fence location",
+            "Product approvals (NOAs) for fence materials in HVHZ — aluminum, PVC, AND horizontal wood fences need product approvals",
+            "Job value on application",
+            "Contractor must be registered with Coral Springs Building Division",
+            "Insurance certificates listing City of Coral Springs as certificate holder",
+            "NOC required before first inspection (see threshold note)",
+
+            "GOTCHA: Fences 4 feet or less require only 2 horizontal rails per Florida Building Code",
+            "GOTCHA: All fasteners must be corrosion resistant per FBC Section 2324.2",
+            "GOTCHA: CALL 811 (Sunshine) 48 hours before you dig — it's FL law",
+            "GOTCHA: Building permit does NOT guarantee HOA allows the fence — contractor responsible for separate HOA approval",
+            "GOTCHA: Coral Springs has specific chain-link fence fabric requirements (12-1/2 gauge minimum) and tension band specifications",
+            "GOTCHA: Fence must comply with Coral Springs zoning setback requirements — check with Zoning before submittal",
+
+            # --- Inspections ---
+            "Final inspection: reviews installation, completion of all elements, code compliance",
+
+            # --- Fees ---
+            "Fence base fee: $109.22 + $0.34 per lineal foot",
+            "Masonry wall base fee: $173.78 + $0.89 per lineal foot",
+            "Reinspection: $85.11",
+        ],
+    },
+
+    # ==================== SIGN ====================
+    "sign": {
+        "name": "Sign Permit",
+        "items": [
+            "Broward County Uniform Building Permit Application (revised 11/14/2025)",
+            "Building Permit Application Zoning Addendum (Form 099.1) — REQUIRED for all sign permits",
+            "Sign plans with specifications, dimensions, location",
+            "Product approvals (NOAs) for sign materials in HVHZ",
+            "Structural calculations if required for size/type",
+            "Contractor must be registered with Coral Springs Building Division",
+            "Insurance certificates listing City of Coral Springs as certificate holder",
+
+            "GOTCHA: Electric sign requires SEPARATE electrical permit ($155.15)",
+            "GOTCHA: Zoning sign review required ($104.31) for installation or alteration",
+
+            # --- Fees ---
+            "Unlighted/permanent/temporary sign: $155.15",
+            "Electric sign (electrical permit): $155.15",
+            "Zoning sign review: $104.31",
+            "Reinspection: $85.11",
+        ],
+    },
+
+    # ==================== WINDOWS/DOORS ====================
+    "windows_doors": {
+        "name": "Windows/Doors Permit",
+        "items": [
+            "Broward County Uniform Building Permit Application (revised 11/14/2025)",
+            "Two (2) sets of product approvals (NOAs) for all window/door products — HVHZ zone",
+            "NOAs must be stamped/approved by architect",
+            "City supplemental NOA form required for windows, doors, louvers, shutters",
+            "Copy of contract required (per Alliance page, in addition to NOA submissions)",
+            "Two (2) copies survey/site plan showing window/door locations",
+            "Job value on application",
+            "Contractor must be registered with Coral Springs Building Division",
+            "Insurance certificates listing City of Coral Springs as certificate holder",
+            "NOC required before first inspection",
+
+            "GOTCHA: Window restrictors required on ALL second-story bedroom windows — Coral Springs-specific requirement",
+            "GOTCHA: Impact vs non-impact windows have different NOA requirements — verify product approval classification",
+            "GOTCHA: Retrofit windows may have different installation requirements than full-frame replacement — plans must specify",
+
+            # --- Fees ---
+            "Window/door replacement base fee: $93.08 + $12.37 per unit",
+            "Hurricane shutters: $148.95 (1-3 shutters) + $12.37 each additional shutter (SFR/duplex/triplex; per floor for multi/commercial)",
+            "Garage door: $173.78",
+            "Reinspection: $85.11",
+        ],
+    },
+
+    # ==================== SOLAR ====================
+    "solar": {
+        "name": "Solar Installation Permit",
+        "items": [
+            "Broward County Uniform Building Permit Application (revised 11/14/2025)",
+            "Two (2) sets of solar installation plans signed/sealed by FL licensed engineer",
+            "Product approvals (NOAs) for all solar equipment in HVHZ",
+            "Structural analysis showing roof can support solar panel load",
+            "Electrical single-line diagram",
+            "Job value on application",
+            "Contractor must be registered with Coral Springs Building Division",
+            "Insurance certificates listing City of Coral Springs as certificate holder",
+            "NOC required before first inspection",
+
+            "GOTCHA: Solar installations may require notarized homeowner authorization — verify with Building Dept",
+            "GOTCHA: Special Inspector may be required for solar installations — check Form 075.2 requirements",
+            "UNCERTAINTY (85%): Coral Springs-specific solar installation form — city does not appear to have dedicated solar PDF on forms page — call 954-344-1025 to verify if city-specific solar form exists beyond standard Broward requirements",
+
+            # --- Fees ---
+            "Solar pool heater/water heater (plumbing): $124.13",
+            "Electrical permit for solar connection: based on job value percentage",
+            "Reinspection: $85.11",
+        ],
+    },
+
+    # ==================== SHED ====================
+    "shed": {
+        "name": "Shed Permit",
+        "items": [
+            "Broward County Uniform Building Permit Application (revised 11/14/2025)",
+            "Shed Permit Application Checklist (Form 059.0, revised 4/22/2024)",
+            "Two (2) copies survey/site plan showing proposed shed location",
+            "Product approvals (NOAs) for shed materials in HVHZ",
+            "Contractor Registration Requirements if not owner/builder",
+            "Owner/Builder Affidavit Packet if homeowner doing work",
+            "NOC if job value over threshold",
+            "Broward County EPD approval if applicable",
+
+            "GOTCHA: Maximum size 150 square feet — larger requires full building permit process",
+            "GOTCHA: Cannot exceed height of main structure",
+            "GOTCHA: Must be compatible in color and material with main structure",
+            "GOTCHA: Must be SCREENED FROM VIEW from street and adjacent properties — Coral Springs-specific requirement",
+
+            "NOTE: Drainage District approval may be required",
+        ],
+    },
+
+    # ==================== DRIVEWAY ====================
+    "driveway": {
+        "name": "Driveway/Paver Permit",
+        "items": [
+            "Driveway/Paver Permit Application (referenced in city checklists)",
+            "Two (2) copies survey/site plan showing proposed driveway location and dimensions",
+            "Product approvals for paver materials in HVHZ if applicable",
+            "Contractor must be registered with Coral Springs Building Division",
+            "Insurance certificates listing City of Coral Springs as certificate holder",
+
+            "GOTCHA: Driveway permits fall under Engineering — separate from building permits",
+            "GOTCHA: CALL 811 (Sunshine) 48 hours before digging — FL law requirement",
+            "GOTCHA: Driveway may have zoning code dimension restrictions (max width %, setbacks) — verify with Zoning",
+            "UNCERTAINTY (85%): Coral Springs-specific driveway zoning dimensions (e.g., 40% max lot width, setbacks) — check Land Development Code or call 954-344-1025",
+
+            # --- Fees ---
+            "Driveway engineering permit: $162.30",
+            "Engineering reinspection: $149.42",
+            "Excavation in right-of-way cash bond: $3,115.15",
+        ],
+    },
+
+    # ==================== EV CHARGER ====================
+    "ev_charger": {
+        "name": "EV Charger Permit",
+        "items": [
+            "Broward County Uniform Permit Application with Electrical checked",
+            "Electrical plans showing charger location, circuit, panel capacity",
+            "Load calculations to verify panel can support additional circuit",
+            "Product approvals for EV charger equipment",
+            "Contractor must be registered with Coral Springs Building Division",
+            "Insurance certificates listing City of Coral Springs as certificate holder",
+            "NOC required if over threshold",
+
+            "NOTE: EV charger installations are primarily electrical permits",
+            "UNCERTAINTY (90%): Coral Springs-specific EV charger requirements — no dedicated EV form found on forms page — likely follows standard electrical permit process — call 954-344-1025 to confirm",
+        ],
+    },
+
+    # ==================== FIRE SYSTEM ====================
+    "fire_system": {
+        "name": "Fire Sprinkler/Alarm Permit",
+        "items": [
+            "Fire sprinkler alarm drawings with hydraulic calculations and cut sheets of ALL devices and panels",
+            "Plans signed/sealed by FL licensed engineer",
+            "Fire Review Application required for condos/multi-family",
+            "Product approvals for fire system equipment",
+            "Contractor must be registered with Coral Springs Building Division",
+            "Insurance certificates listing City of Coral Springs as certificate holder",
+
+            # --- Fees ---
+            "Fire sprinkler system (plumbing): $310.34",
+            "Fire alarm (electrical): $217.23 (SFR/duplex/triplex; per floor for multi/commercial)",
+            "Fire plan review: $246.04 (under 2,500 sq ft), $246.04 + $0.06/sq ft (over 2,500 sq ft)",
+            "Single station smoke detector: $75.98 per residential unit",
+            "Fire minor plan revision: $30.89",
+            "Fire expedited plan review: $114.63/hour (1-hour minimum)",
+            "GOTCHA: Fire reinspection fee is $235.72 — nearly 3x the Building reinspection fee",
+        ],
+    },
+
+    # ==================== ADU ====================
+    "adu": {
+        "name": "Accessory Dwelling Unit (ADU) Permit",
+        "items": [
+            "ADUs fall under Section 250129 (Accessory Structures) of Coral Springs Land Development Code",
+            "Requires approval from THREE authorities: (1) City of Coral Springs Building Dept, (2) Coral Springs Improvement District (CSID), (3) Broward County EPD",
+            "Broward County DER approval MANDATORY before city building permit application",
+            "All ADUs must meet Broward County HVHZ standards (170+ mph wind load design)",
+            "Complete building permit package required (plans, survey, NOA, NOC, etc.)",
+            "CSID may require: $2,500 refundable cash bond + $50 permit fee for utility connections/drainage work",
+            "Contact Community Development at 954-344-1000 for exact size limits for your property's zoning district",
+
+            "GOTCHA: Broward DER approval must be obtained BEFORE submitting city building permit — applications without DER certificate are rejected immediately",
+            "GOTCHA: CSID permits required if project involves ANY utility connections",
+            "NOTE: F.S. 163.31771 encourages local ADU permitting for affordable housing",
+            "NOTE: Total permitting timeline typically 10-13 months from start to Certificate of Occupancy",
+            "NOTE: Total soft costs (design, engineering, permits, utility hookups) typically $8,000-$29,000",
+        ],
+    },
+
+    # ==================== CERTIFICATE OF OCCUPANCY ====================
+    "certificate_of_occupancy": {
+        "name": "Certificate of Occupancy",
+        "items": [
+            "Standard Certificate of Occupancy: NO CHARGE",
+            "All required inspections must be approved before CO issuance",
+            "Temporary CO (residential): $93.08 per unit per 30 days",
+            "Temporary CO (commercial/non-residential): $296.29 per 30 days",
+            "Building Safety Inspection fee (per building): $370.02",
+            "Business Tax Building Inspection fee (change of use only): $150.00",
+            "Vacation Rental Building Inspection fee: $75.00",
+
+            "NOTE: Check all inspections at coralsprings.org/trakit or call 954-344-1025",
+        ],
+    },
+
+    # ==================== PRIVATE PROVIDER ====================
+    "private_provider": {
+        "name": "Private Provider",
+        "items": [
+            "Private Provider Program Notice to Building Official (Form 098.A, revised 11/24/2025) required",
+            "Discount: 30% off fees for plan review AND inspection",
+            "Discount: 15% off fees for inspection only",
+            "Private provider must be licensed/certified per F.S. 553.791",
+            "Building Official retains authority to review plans and perform inspections",
+            "If private provider changes, must update notice within 1 business day or within 2 business days before next scheduled inspection",
+            "Property owner must indemnify and hold harmless the local government",
+
+            "GOTCHA: Building Official may require that if you use private provider for plans review, you must ALSO use private provider for inspections (per F.S. 553.791 and local policy)",
+        ],
+    },
+
+    # ==================== CHANGE OF CONTRACTOR ====================
+    "change_of_contractor": {
+        "name": "Change of Contractor",
+        "items": [
+            "Change of contractor form required",
+            "New contractor must be registered with Coral Springs Building Division",
+            "New contractor's insurance must list City of Coral Springs as certificate holder",
+            "New contractor must have valid state license or county certificate",
+
+            # --- Fees ---
+            "Change of contractor/subcontractor fee (Building): $49.64",
+            "Change of contractor fee (Engineering): $48.92",
+
+            "NOTE: All disciplines covered by single change of contractor fee",
+        ],
+    },
+
+    # ==================== SCREEN ENCLOSURE ====================
+    "screen_enclosure": {
+        "name": "Screen Enclosure Permit",
+        "items": [
+            "Broward County Uniform Building Permit Application (revised 11/14/2025)",
+            "Screen Enclosure Permit Application (referenced in checklists)",
+            "Two (2) sets of plans showing enclosure dimensions, attachment details",
+            "Product approvals (NOAs) for screen enclosure system — HVHZ",
+            "Two (2) copies survey showing proposed location",
+            "Contractor must be registered with Coral Springs Building Division",
+            "Insurance certificates listing City of Coral Springs as certificate holder",
+            "NOC required before first inspection",
+
+            # --- Fees ---
+            "Screen enclosure (pool): $229.66",
+            "Reinspection: $85.11",
+        ],
+    },
+
+    # ==================== HURRICANE SHUTTERS ====================
+# ==================== SLAB/PATIO ====================
+# ==================== IRRIGATION ====================
+# ==================== MARINE (N/A) ====================
+    "dock": {
+        "name": "Dock/Seawall Permit — NOT APPLICABLE",
+        "items": [
+            "NOTE: Coral Springs is a FULLY INLAND city with no navigable waterways",
+            "NO marine construction permits (docks/seawalls) are issued by Coral Springs",
+            "Longshoreman insurance: N/A",
+            "If your project requires marine permits, it is NOT in Coral Springs — verify the correct municipality",
+        ],
+    },
+
+    "seawall": {
+        "name": "Seawall Permit — NOT APPLICABLE",
+        "items": [
+            "NOTE: Coral Springs is a FULLY INLAND city — no seawall permits issued",
+            "See dock permit entry for details",
+        ],
+    },
+}
+
+LIGHTHOUSE_POINT_PERMITS = {
+
+    # =========================================================================
+    # BUILDING (General / New SFR / Additions)
+    # =========================================================================
+    "building": {
+        "name": "Building Permit — General / New SFR / Additions",
+        "items": [
+            # --- Portal & Submission ---
+            "Submit via SmartGov online portal (https://ci-lighthousepoint-fl.smartgovcommunity.com/Public/Home) or in person at 3701 NE 22nd Avenue",
+            "NO FAXED applications — will be rejected (distorts legal information)",
+            "Applications must be in ink — values, SF & quantities required on all applications",
+            "Applications must be signed by BOTH owner AND contractor",
+            "Lot, Block, Subdivision, and job value MUST be on every application (LHP Addendum)",
+            "A non-refundable deposit is required with every application package",
+
+            # --- Broward County Uniform App ---
+            "Use Broward County Uniform Building Permit Application",
+            "LHP Addendum required with Lot, Block, Subdivision, and job value",
+
+            # --- EPD ---
+            "Broward County DPEP approval required PRIOR to building department submittal",
+            "EPD scope: all new residential, additions for bedrooms/baths on sewer, additions to non-residential, all commercial/industrial alterations, demolitions",
+            "Apply online for Security Code & Application Number — walk-thru review — impact fees determined by DPEP",
+            "Submit Asbestos form if interior only or if renovation/addition",
+
+            # --- Elevator ---
+            "Broward County Elevator submittal/approval required prior to building dept submittal (if applicable) — plans only, no application needed, allow 1 week review",
+
+            # --- Plans & Surveys ---
+            "Two (2) sets of plans signed and sealed by professional engineer/architect",
+            "Three (3) sets of drainage plans for new SFR or homes adding/remodeling 50%+ — drainage plans are SEPARATE application from building plans",
+            "GOTCHA: Addition of 30%+ property increase (code section 42-374) may trigger drainage plan requirement — 3 sets signed/sealed, separate application",
+            "Two (2) recent surveys (less than 12 months old) — if older, submit Zoning Affidavit",
+            "Retaining walls require 3 sets of plans",
+
+            # --- Energy & Structural ---
+            "Two (2) sets of energy calculations including heating and cooling load calculations (signed/sealed by engineer) — not required for interiors only",
+            "Two (2) sets of structural calculations by professional engineer",
+            "Two (2) sets of truss plans for new houses or new roof structures (signed/sealed by engineer, include all calcs)",
+
+            # --- Product Approvals & HVHZ ---
+            "HVHZ: All exterior products require Miami-Dade NOA or FL Product Approval (HVHZ designation)",
+            "Two (2) sets of Product Approvals (PAs) for sheds, doors, all glass, roofs, PVC fences, all shutters",
+            "Product Approvals must be signed by Designer of Record — FBC 104.6.4.3 calculations prepared by DOR",
+            "GOTCHA: NOAs must be stamped by architect AND a separate Product Approval Review Form must be prepared",
+            "Roof calculations (HVC): complete package with roof NOAs and roof plan — not required for interiors only",
+            "Shutter Detail Information Form required — based on ASCE 7-16, 170 MPH wind load, Exposure C or D",
+
+            # --- Soil & DRC ---
+            "Two (2) sets of soil density tests for new SFR or additions of 50%+",
+            "Original DRC (Development Review Committee) approved plans required — stamped/original signed approved plans — not required for interiors only",
+
+            # --- Contractor Registration ---
+            "Contractor must be registered with City BEFORE applying for permit",
+            "Registration requires: (1) General Liability Insurance, (2) Workers' Comp or Exemption, (3) State License or Broward County Certificate of Competency, (4) Local Business Tax Receipt",
+            "Insurance certificate holder MUST read EXACTLY: City of Lighthouse Point / 3701 NE 22nd Avenue / Lighthouse Point, FL 33064",
+            "GOTCHA: FAQ says '22 Avenue' but PDF says '22nd Avenue' — USE THE PDF VERSION or registration rejected",
+            "GOTCHA: Company name must be EXACTLY the same on ALL four documents. DBA mismatches = rejection. Company name on applications must match registration EXACTLY.",
+
+            # --- NOC ---
+            "Notice of Commencement required prior to permit ISSUANCE (if job value > $2,500)",
+            "Record NOC at Broward County Recording office — secure 1 certified copy",
+            "NOTE: LHP will accept application without recorded NOC, but it must be recorded before issuance",
+
+            # --- Owner-Builder ---
+            "Owner/Builder Affidavit must be completed and notarized if owner is applying as builder",
+            "GOTCHA: NO owner/builder for electrical, roofing, or piling work — licensed contractor REQUIRED",
+            "Owner/builder assumes responsibility for knowing FBC, LHP Zoning Code, inspection order/types, and any injuries/accidents/corrections",
+
+            # --- Waterfront ---
+            "GOTCHA: Waterfront properties require 2 signed/sealed engineer letters regarding seawall condition and ability to support upland improvements — required for new SFR or 50%+ remodel",
+
+            # --- New SFR Specific ---
+            "GOTCHA: New SFR requires ALL trade applications submitted at SAME TIME — building + electrical + plumbing + mechanical",
+            "New SFR application fee: $1,000",
+            "New SFR permit applications must be signed AND NOTARIZED for each discipline",
+            "Addition Checklist: ALL these applications required at time of submission — addition, roof, high voltage electric, low voltage electric, 30-day temp, plumbing, mechanical A/C, mechanical vacuum (if applicable), plumbing gas (if applicable), fireplace (if applicable), drainage, shutters",
+
+            # --- Fire Sprinkler ---
+            "Fire sprinkler/alarm drawings: must submit prepared shop drawings by installing trade",
+
+            # --- Special Inspector ---
+            "Special Building Inspector Form: must be signed/sealed by engineer or architect — may be required for interiors depending on type/extent of work",
+
+            # --- Owner/Agent Letter ---
+            "Owner/Agent Letter required — must have owner's NOTARIZED signature",
+
+            # --- Inspections ---
+            "Must be home for inspections — EXCEPT: final zoning, final exterior, final fire",
+            "Construction project not complete until ALL required inspections pass",
+            "Failed inspection = 'red tag' issued stating corrections needed before re-inspection",
+
+            # --- Permit Validity ---
+            "Permits valid for 180 days (60 days for demolition)",
+            "Each completed inspection extends permit 180 days (60 for demolition)",
+
+            # --- Fees (from Fee Schedule PDF rev 9/12/22) ---
+            "Minimum permit fee: $125",
+            "Construction costs up to $5,000 (per trade): $125",
+            "Construction costs above $5,000 (per trade): 1.35% of cost",
+            "New construction application fee: $1,000",
+            "Remodel/addition application fee: $200",
+            "Permits requiring drainage: $300 application fee",
+            "All other permits: $100 application fee",
+            "Application fee applied against final permit cost",
+            "Plan review fee (rejected/revised/as-built/pre-submittal): $95/hour, 1/4 hour minimum, per discipline",
+            "Re-inspection fee: $95",
+            "Certificate of Occupancy/Completion: $125",
+            "Temporary Certificate of Occupancy (90 days): $1,000",
+            "Permit card replacement: $35",
+            "Plan replacement: $95",
+            "Plan storage digital (new construction): $35",
+            "Construction in right-of-way (including restoration): 3% of construction value",
+            "Overtime inspections/plan review: $142.50/hour, 3-hour minimum",
+            "Expired permit renewal within 180 days: 50% of original permit fee",
+            "Expired permit renewal after second 180-day period: 150% of original permit fee",
+            "GOTCHA: Expired permit renewal is 50%/150% of ORIGINAL fee per fee schedule — NOT the flat amount sometimes quoted in FAQ",
+            "Work without permit: 200% of standard permit fee",
+            "40-year inspection program: $350",
+            "Change of contractor: $100",
+
+            # --- State/County Fees ---
+            "Broward County BORA fee (current value) included",
+            "FL DBPR / FL Building Code Compliance Program fee per F.S. 553.721",
+            "Building Code Administrators and Inspectors Fund fee per F.S. 468.631",
+
+            # --- Payment ---
+            "Payment: cash, check (no starter checks), cashier check, or credit card",
+            "Checks payable to 'City of Lighthouse Point'",
+
+            # --- Revisions ---
+            "Revisions require: Revision Submittal Form + Architect's Narrative + clouds and deltas + signature + non-refundable deposit",
+
+            # --- Lot Coverage ---
+            "Lot Coverage Worksheet available on forms page — may be required for additions/new construction",
+
+            # --- Substantial Improvement ---
+            "UNCERTAINTY (90%): Substantial Improvement form available on forms page — PDF is scanned image, could not extract specific thresholds. Likely relates to FEMA flood zone 50% rule. Call 954-943-6509 to confirm requirements.",
+
+            # --- 40-Year Inspection ---
+            "Buildings over 25 years old AND over 3,500 SF require Building Safety Inspection per Broward County requirement",
+            "Single-family homes, duplexes, and all buildings under 3,500 SF are EXEMPT",
+
+            # --- Enclosures ---
+            "Enclosing patio/balcony/Florida room/screen room requires: energy calculations (insulation type, glass to be used) AND Product Approval Review Form (room name/use, NOA number & pressure, design pressure, egress, shutter requirement)",
+
+            # --- Chickee/Tiki ---
+            "NOTE: Chickee/Tiki Huts by Seminole/Miccosukee tribes DO require a City permit to ensure zoning compliance — tribe members are NOT exempt",
+
+            # --- Fire/Storm Damage ---
+            "NOTE: Fire or storm damage may require permits before repairs — call 954-943-6509 before starting work. Department will expedite.",
+
+            # --- Staging Plan ---
+            "Construction Staging Plan may be required — form and criteria available on forms page",
+        ],
+    },
+
+    # =========================================================================
+    # ELECTRICAL
+    # =========================================================================
+    "electrical": {
+        "name": "Electrical Permit",
+        "items": [
+            "Broward County Uniform Permit Application (Electrical checked) — in ink, values/SF/quantities, signed by Owner & Contractor",
+            "LHP Addendum — Lot, Block, Subdivision, job value",
+            "Copy of contract required with trade application",
+            "Two (2) sets of plans signed and sealed (for service change or complex work)",
+            "GOTCHA: ALL electrical work MUST be done by licensed contractor — NO owner/builder permitted",
+            "Contractor Registration + License & Insurance — copy required with application",
+            "Insurance certificate holder: City of Lighthouse Point / 3701 NE 22nd Avenue / Lighthouse Point, FL 33064",
+            "Notice of Commencement — recorded prior to permit issuance (if > $2,500)",
+            "NOC recording: Broward County Recording office",
+            "HVHZ: Design wind speed 170 mph — applicable product approvals required for exterior electrical",
+            "Submit via SmartGov portal or in person — NO faxed applications",
+            "Minimum permit fee: $125 (up to $5,000 job value) then 1.35% above $5,000",
+            "Application fee: $100",
+            "Re-inspection fee: $95",
+
+            # --- Service Change ---
+            "GOTCHA: Service change involving FPL disconnect/reconnect requires Service Procedure Form",
+            "Service Procedure Form details: (1) All documentation must be ONSITE before inspection — approved perforated drawings, load calcs, equipment specs, permit cards",
+            "Service Procedure Form details: (2) After receiving FPL disconnect/reconnect schedule, call LHP building department inspection line to schedule — align with FPL date",
+            "GOTCHA: On day of inspection — DO NOT proceed with disconnection without first speaking to inspector VOICE ONLY (not text, not email) to confirm inspection is scheduled",
+            "Upon successful inspection, inspector notifies FPL to restore connection",
+            "Contractor/agent must sign Service Procedure Form acknowledging understanding",
+
+            # --- 30-Day Testing ---
+            "30-Day Electrical Power for Testing Application available — for equipment testing only, NOT occupancy authorization",
+            "30-Day Testing requires NOTARIZED signatures from BOTH electrical contractor AND owner/general contractor",
+            "30-Day testing approval does not release property for permanent use or occupancy",
+
+            # --- Senate Bill 612 ---
+            "NOTE: Senate Bill 612 (effective July 1, 2024) — HVAC contractors may now work on line-side electrical per modified F.S. 489.105",
+            "GOTCHA: Even with SB 612, an electrical INSPECTION is still required when HVAC contractor does line-side work — electrical permit not required but electrical plan review and inspection by Electrical Inspector IS required (per Broward BORA memo 7/2/2024)",
+
+            # --- Smoke Alarms ---
+            "NOTE: Smoke alarm requirements per F.S. 553.883 may apply on service change plans",
+        ],
+    },
+
+    # =========================================================================
+    # PLUMBING
+    # =========================================================================
+    "plumbing": {
+        "name": "Plumbing Permit",
+        "items": [
+            "Broward County Uniform Permit Application (Plumbing checked) — in ink, signed by Owner & Contractor",
+            "LHP Addendum — Lot, Block, Subdivision, job value",
+            "Copy of contract required with trade application",
+            "Two (2) sets of plans signed/sealed when required by code",
+            "Contractor Registration + License & Insurance — copy required",
+            "Insurance certificate holder: City of Lighthouse Point / 3701 NE 22nd Avenue / Lighthouse Point, FL 33064",
+            "Notice of Commencement — recorded prior to permit issuance (if > $2,500)",
+            "Submit via SmartGov portal or in person — NO faxed applications",
+            "Minimum permit fee: $125",
+            "Application fee: $100",
+
+            # --- Water Heater ---
+            "Water Heater Replacement requires Broward County Uniform Data Form (BORA Board Policy #22-02, effective 9/8/22)",
+            "Water heater form requires: existing unit data AND new unit data (make, model, Kw/BTUHs, voltage, wire size, breaker size, gallons, pipe sizes)",
+            "AHRI Certificate REQUIRED to verify Uniform Energy Factor (UEF)",
+            "Manufacturer's electrical installation instructions must be provided with permit application",
+            "Water heater staying in same location vs being relocated — indicate on form",
+            "Electric water heaters: installed per manufacturer instructions, comply with current NEC",
+            "Gas water heaters: indicate natural gas vs LP gas, flue size and type, igniter circuit status",
+            "Residential water heater replacement permit fee: $75 (special reduced rate)",
+
+            # --- Reuse Water ---
+            "Reuse Water Permit Inspection Requirements form available on forms page",
+
+            # --- Utility Easement ---
+            "Utility Easement Contacts and Agreement form available for projects near utility easements",
+
+            # --- Water/Wastewater ---
+            "Water and Wastewater Services Indemnification Instructions form available on forms page",
+        ],
+    },
+
+    # =========================================================================
+    # MECHANICAL
+    # =========================================================================
+    "mechanical": {
+        "name": "Mechanical Permit",
+        "items": [
+            "Broward County Uniform Permit Application (Mechanical checked) — in ink, signed by Owner & Contractor",
+            "LHP Addendum — Lot, Block, Subdivision, job value",
+            "Copy of contract required with trade application",
+            "Two (2) sets of plans signed/sealed when required by code",
+            "Contractor Registration + License & Insurance — copy required",
+            "Insurance certificate holder: City of Lighthouse Point / 3701 NE 22nd Avenue / Lighthouse Point, FL 33064",
+            "Notice of Commencement — recorded prior to permit issuance (if > $2,500)",
+            "Submit via SmartGov portal or in person — NO faxed applications",
+            "Minimum permit fee: $125",
+            "Residential AC replacement permit fee: $75 (special reduced rate)",
+            "Application fee: $100",
+
+            # --- AC Replacement ---
+            "GOTCHA: AC Replacement Data Sheet is PER SYSTEM — each system requires its own form",
+            "AC Replacement Data Sheet (Broward County BORA Policy 19-02, rev 7/2/2024)",
+            "Form requires: existing unit data AND new unit data — manufacturer, size (tons), SEER/SEER2/EER, model numbers, strip heat KW, minimum circuit amps, max overcurrent protection, disconnect sizes",
+            "AHRI Certificate REQUIRED to verify efficiency ratings",
+            "Must indicate: new stand/curb/adapter? Duct smoke detector installed/reconnected? Connected to fire alarm panel? Same location? Flood replacement? Line-side electrical work needed?",
+            "GOTCHA: If line-side electrical work needed = YES, electrical inspection required per Senate Bill 612 even without separate electrical permit",
+            "Equipment sizing calculation required if existing unit data not available (ACCA Manual N, J, etc.)",
+            "Qualifier's signature required on form",
+            "NOTE: This form does not relieve applicant from compliance with all applicable FBC sections — additional local regulations may apply (zoning, flood, fire prevention)",
+        ],
+    },
+
+    # =========================================================================
+    # ROOFING
+    # =========================================================================
+    "roofing": {
+        "name": "Roofing Permit — New Roof & Re-Roof",
+        "items": [
+            # --- Application ---
+            "Building Application — must include scope of work, address, and job value",
+            "LHP Addendum — Lot, Block, Subdivision, job value",
+            "Copy of contract required (LHP-specific: copy of contract required with trade applications, not just cost estimate)",
+            "GOTCHA: ALL roofing work MUST be done by licensed roofing contractor — NO owner/builder permitted",
+            "Contractor Registration + License & Insurance — copy required",
+            "Insurance certificate holder: City of Lighthouse Point / 3701 NE 22nd Avenue / Lighthouse Point, FL 33064",
+            "Submit via SmartGov portal or in person — NO faxed applications",
+            "Notice of Commencement — recorded prior to permit issuance",
+
+            # --- HVHZ Package ---
+            "Two (2) identical sets of HVHZ roofing form (all applicable sections completed)",
+            "All required Product Approvals (NOAs) with applicable sections HIGHLIGHTED",
+            "GOTCHA: NOAs must be stamped by architect AND separate PA Review Form prepared",
+            "Complete HVHZ package with roof plan per FBC Section 1525",
+            "Two (2) sets of plans signed/sealed when required by code",
+
+            # --- Required Sections by Roof Type ---
+            "Low Slope: Sections A, B, C + Attachments 1-7",
+            "Prescriptive BUR-RAS 150: Sections A, B, C + Attachments 4-7",
+            "Asphalt Shingles: Sections A, B, D + Attachments 1,2,4-7",
+            "Concrete or Clay Tile: Sections A, B, D, E + Attachments 1-7",
+            "Metal Roofs: Sections A, B, D + Attachments 1-7",
+            "Wood Shingles/Shakes: Sections A, B, D + Attachments 1,2,4-7",
+
+            # --- Attachments Required ---
+            "Attachment 1: Fire Directory Listing Page",
+            "Attachment 2: Product Approval (front page, specific system description, limitations, detail drawings)",
+            "Attachment 3: Design Calculations per Chapter 16 or RAS 127/128 (if applicable)",
+            "Attachment 4: Other Component of Product Approval",
+            "Attachment 5: Municipal Permit Application",
+            "Attachment 6: Owner's Notification for Roofing Considerations (re-roofing only)",
+            "Attachment 7: Any Required Roof Testing/Calculation Documentation",
+
+            # --- Asbestos ---
+            "Approved Statement of Responsibilities regarding Asbestos form (from Broward County DPEP/EPD)",
+            "Re-roofing commercial/4+ units: Asbestos form must be approved by EPA",
+
+            # --- SFR Re-Roof Affidavit (F.S. 553.844) ---
+            "GOTCHA: Single Family Re-Roofing Affidavit required — Florida Statute 553.844, FBC 2023 8th Edition Section 708.8",
+            "Step 1: Was dwelling permitted before 1994? If NO — stop, submit application normally",
+            "Step 2: If YES (pre-1994) — is dwelling value more than $300,000?",
+            "If value ≤ $300,000: provide copy of Ad Valorem Taxation or insured value — proceed to submit",
+            "GOTCHA: If value > $300,000: Roof-to-Wall Connections Certificate REQUIRED — prepared by FL Registered Engineer/Architect OR Licensed GC/Building/Residential Contractor OR Certified Structural Inspector under F.S. 468",
+            "If connections comply with prescriptive sections 201.3.1 to 201.3.4 — proceed to submit",
+            "If connections do NOT comply — engineer/architect specifies repair work per Table 708.8.1, licensed contractor applies for separate repair permit",
+            "Repair permit accompanies roof permit application",
+            "Before Tin Tag inspection: Roof-to-Wall Connections Certificate and inspection must be completed",
+            "Before tile-in-progress inspection: Secondary water barrier inspection required from Building Department (shingle/metal) OR certificate of secondary water barrier",
+            "Priority for retrofit: exterior corners where spans are greatest; hip+gable = gable end connections prioritized unless hip width > 1.5x gable width",
+            "Retrofit cost cap: 15% of cost of roof replacement per FBC 708.8.1.1",
+            "Affidavit requires NOTARIZATION",
+
+            # --- Commercial/4+ Units ---
+            "Re-roofing commercial and 4+ units: BOTH Equipment Affidavit AND Insulation Affidavit must be completed",
+
+            # --- Tile Calculations ---
+            "Tile installations: moment-based (Method 1 per RAS 127) or simplified (Method 2 — Broward County Exposure C only) or uplift-based (Method 3)",
+            "All tile calculations must be submitted at time of permit application",
+
+            # --- Fees ---
+            "Minimum permit fee: $125",
+            "Application fee: $100",
+        ],
+    },
+
+    # =========================================================================
+    # POOL & SPA
+    # =========================================================================
+    "pool_spa": {
+        "name": "Pool / Spa / Hot Tub Permit",
+        "items": [
+            "GOTCHA: Pool permits require SEPARATE building applications — one for the pool AND one for the pool deck",
+            "Building Application for pool — must include Lot, Block, Subdivision, gallons of new pool, and job value",
+            "Building Application for pool deck — must include square footage of deck and job value",
+            "Electrical Application — must include job value",
+            "Plumbing Application — must include job value",
+            "Mechanical or Plumbing Application for pool heater (if shown on plans)",
+            "Fence permit application — OR indicate on survey existing fence location with permit number, height, and material",
+            "Two (2) sets of plans signed and sealed by Designer of Record for pool AND deck",
+            "Two (2) copies of the Pool Safety Act form indicating what type of safety device will be used",
+            "Survey of property — if survey more than 12 months old, Zoning Affidavit required",
+            "Plumbing and/or mechanical permit required for pool heater",
+            "Pool fence: self-closing/latching gates with latches minimum 54 inches from adjacent floor",
+            "Contractor Registration + License & Insurance — copy required",
+            "Insurance certificate holder: City of Lighthouse Point / 3701 NE 22nd Avenue / Lighthouse Point, FL 33064",
+            "Notice of Commencement — recorded prior to permit issuance",
+            "Submit via SmartGov portal or in person — NO faxed applications",
+            "Two (2) copies of survey showing pool and deck location with all setbacks and elevations",
+            "Application fee: $100 per application (pool + deck = $200 minimum)",
+
+            # --- Residential Swimming Pool Safety Act ---
+            "Residential Swimming Pool, Spa and Hot Tub Safety Act form available on forms page",
+            "Must indicate type of safety device (barrier, alarm, cover, etc.)",
+        ],
+    },
+
+    # =========================================================================
+    # DEMOLITION
+    # =========================================================================
+    "demolition": {
+        "name": "Demolition Permit",
+        "items": [
+            "GOTCHA: Demolition has 14 required items — many hidden requirements only appear in the PDF",
+            "1. Building Application for demolition — must include Lot, Block, Subdivision, SF of home to be demolished, and job value",
+            "2. Electrical Application — must include job value",
+            "3. Plumbing Application — must include job value",
+            "4. Mechanical Application — must include job value",
+            "5. Recorded Warranty Deed — if property owned by corporation, need Articles of Incorporation from Sunbiz",
+            "6. NOTARIZED signature from ALL owners / all persons listed on Articles of Incorporation approving the demolition",
+            "7. Statement of Responsibilities regarding Asbestos from DPEP",
+            "8. Statement for Vermin and Insects from Licensed Exterminator — and treatment if necessary",
+            "9. Statement of Responsibilities regarding Underground Utilities (NOTARIZED — owner accepts responsibility for gas tanks, septic, etc.)",
+            "10. Two (2) copies of survey",
+            "11. Indicate on survey location of hose bib",
+            "12. If PARTIAL demolition: two sets of plans must be submitted",
+            "13. Trash service discontinuation: if desired, City requires letter in writing AFTER Final Zoning Inspection approved",
+            "14. GOTCHA: Temporary fence is a SEPARATE permit application — 2 copies of survey showing location of 6' chain link fence with wind screening. Silt fencing also required along waterway.",
+            "Demolition permits valid for 60 days (NOT 180 like other permits)",
+            "Each completed inspection extends permit 60 days",
+            "EPD/DPEP approval required prior to building dept submittal for all demolitions",
+            "Contractor Registration + License & Insurance required",
+            "Insurance certificate holder: City of Lighthouse Point / 3701 NE 22nd Avenue / Lighthouse Point, FL 33064",
+            "Application fee: $100",
+        ],
+    },
+
+    # =========================================================================
+    # SIGN
+    # =========================================================================
+    "sign": {
+        "name": "Sign Permit",
+        "items": [
+            "CAB (Community Appearance Board) approval required — CAB Building Sign application",
+            "CAB Monument Sign application (for monument/ground signs)",
+            "CAB Window Sign application (for window signs)",
+            "Building Application — must include Lot, Block, Subdivision, job value",
+            "Two (2) sets of plans showing sign details",
+            "Product approvals for sign materials/mounting",
+            "Electrical Application if illuminated sign",
+            "Contractor Registration + License & Insurance required",
+            "Insurance certificate holder: City of Lighthouse Point / 3701 NE 22nd Avenue / Lighthouse Point, FL 33064",
+            "Submit via SmartGov portal or in person — NO faxed applications",
+            "Application fee: $100",
+        ],
+    },
+
+    # =========================================================================
+    # FENCE
+    # =========================================================================
+    "fence": {
+        "name": "Fence Permit",
+        "items": [
+            "Building Application — must include Lot, Block, Subdivision, and job value",
+            "Two (2) copies of survey showing footprint of property and indicating location and size of fence",
+            "Survey must be less than 12 months old — if older, Zoning Affidavit required (no changes since survey)",
+            "If work was completed on property that alters the survey, NEW survey required",
+            "GOTCHA: Horizontal wood, aluminum, decorative metal, and PVC fences — two copies of current product approvals with ALL components, connections, and method of anchorage HIGHLIGHTED — OR two sets of signed/sealed engineer plans",
+            "Must be SPECIFIC about fence type on application: shadowbox, board on board, horizontal wood, PVC, aluminum, etc.",
+            "Owner/Builder Affidavit required if homeowner applying (must be completed and notarized)",
+            "Pool/spa fence: self-closing/latching gates with latches minimum 54 inches from adjacent floor",
+            "CAB Fence application may be required — available on forms page",
+            "Contractor Registration + License & Insurance required",
+            "Insurance certificate holder: City of Lighthouse Point / 3701 NE 22nd Avenue / Lighthouse Point, FL 33064",
+            "Submit via SmartGov portal or in person — NO faxed applications",
+            "Application fee: $100",
+
+            # --- Fence Heights (Ordinance 2018-0958) ---
+            "Waterfront residential lots — rear/canal side: solid fence/wall max 3 feet; chain link (90% see-through) max 4 feet",
+            "Front setback to front lot line: max 5 feet",
+            "NOTE: If FEMA finished floor elevation exceeds 18 inches above crown of road by 12 additional inches, fence max height may increase by 6 inches (e.g., max 6'6\" instead of 6')",
+            "Fence inspections: at least one structural AND one zoning inspection required",
+        ],
+    },
+
+    # =========================================================================
+    # DOCK / SEAWALL
+    # =========================================================================
+    "dock": {
+        "name": "Dock & Seawall Permit",
+        "items": [
+            "Building Application and Addendum — must include Lot, Block, Subdivision, and job value",
+            "Electrical Application and Addendum — as applicable",
+            "Plumbing Application and Addendum — as applicable",
+            "Outside Agency Approvals — Broward County, DEP, or Army Corps of Engineers — must be obtained BEFORE permit submittal",
+            "Two (2) sets of signed and sealed plans (when replacing stringers or framing)",
+            "GOTCHA: Three (3) sets of signed and sealed plans for CONCRETE docks only",
+            "Zoning Affidavit — if survey greater than 1 year old",
+            "Notice of Commencement — required for permit",
+            "GOTCHA: Longshoreman Insurance Policy REQUIRED — per Dept of Labor §932 Longshore Act. This is a FEDERAL requirement for working over navigable waters. State Workers' Compensation is only a state requirement and does NOT satisfy the federal requirement.",
+            "Updated Contractor Registration including Longshoreman Insurance on file",
+            "GOTCHA: Before Final Building inspection — updated dock/seawall survey REQUIRED referencing height of seawall and length of dock",
+            "Contractor Registration + License & Insurance required",
+            "Insurance certificate holder: City of Lighthouse Point / 3701 NE 22nd Avenue / Lighthouse Point, FL 33064",
+            "Submit via SmartGov portal or in person — NO faxed applications",
+            "Application fee: $100",
+
+            # --- Seawall Specific ---
+            "Seawall height and raising/capping governed by Sec. 42-381",
+            "Rip-rap seawalls governed by Sec. 42-382",
+            "Docks, piers, and pilings on canals governed by Sec. 42-380",
+            "Boat slip prohibition per Sec. 42-389",
+
+            # --- Waterfront New Home ---
+            "New waterfront homes or 50%+ remodel: 2 signed/sealed engineer letters on seawall condition AND ability to support upland improvements",
+        ],
+    },
+
+    # =========================================================================
+    # SOLAR
+    # =========================================================================
+    "solar": {
+        "name": "Solar Roof Installation Permit",
+        "items": [
+            "Solar Roof Installation Form (LHP-specific form)",
+            "GOTCHA: Homeowner Authorization Form required — must be NOTARIZED",
+            "Homeowner acknowledges: solar installation creates holes/openings in roof, may void roof warranties",
+            "GOTCHA: A SPECIAL INSPECTOR must be named on the form — will oversee installation and perform inspections in conjunction with City inspections",
+            "Building Application — must include Lot, Block, Subdivision, job value",
+            "Electrical Application for inverter and panel connections",
+            "Two (2) sets of plans signed and sealed",
+            "Product approvals for solar panels/mounting system",
+            "Roof plan showing layout of panels",
+            "Structural calculations confirming roof can support added load",
+            "Contractor Registration + License & Insurance required",
+            "Insurance certificate holder: City of Lighthouse Point / 3701 NE 22nd Avenue / Lighthouse Point, FL 33064",
+            "Notice of Commencement — recorded prior to permit issuance (if > $2,500)",
+            "Submit via SmartGov portal or in person — NO faxed applications",
+            "Application fee: $100",
+        ],
+    },
+
+    # =========================================================================
+    # WINDOWS & DOORS
+    # =========================================================================
+    "windows_doors": {
+        "name": "Windows & Doors Permit",
+        "items": [
+            "Building Application — must include Lot, Block, Subdivision, job value",
+            "Product Approvals (NOAs) for all windows, doors, louvers, shutters",
+            "GOTCHA: NOAs must be stamped by architect AND separate Product Approval Review Form completed",
+            "PA Review Form: Room name/use, NOA number and pressure, Design pressure, Egress requirement, Shutter requirement",
+            "Shutter Detail Information Form required — per ASCE 7-16, 170 MPH wind load, Exposure C or D",
+            "Shutter form details: for each opening — shutter type (Panel/Accordion/Roll-up), NOA numbers, shutter length/span, tribulation area, corner/interior designation, design load, glass separation, anchor type/spacing, fastener edge distance",
+            "Must HIGHLIGHT all mounting details on product approval and indicate opening number next to each detail",
+            "Two (2) sets of plans showing window/door schedule",
+            "Contractor Registration + License & Insurance required",
+            "Insurance certificate holder: City of Lighthouse Point / 3701 NE 22nd Avenue / Lighthouse Point, FL 33064",
+            "Notice of Commencement — recorded prior to permit issuance (if > $2,500)",
+            "Submit via SmartGov portal or in person — NO faxed applications",
+            "Application fee: $100",
+            "UNCERTAINTY (90%): Windows and Doors Permit Requirements PDF is a scanned image — could not extract specific requirements list. Requirements above compiled from FAQ, New Residence page, and Shutter Detail form. Call 954-943-6509 to verify full checklist before submitting.",
+        ],
+    },
+
+    # =========================================================================
+    # DRIVEWAY
+    # =========================================================================
+    "driveway": {
+        "name": "Driveway Permit",
+        "items": [
+            "Building Application — must include Lot, Block, Subdivision, and job value",
+            "Two (2) copies of survey indicating area of proposed work",
+            "Indicate dimensions of driveway at property line AND street line",
+
+            # --- Circular Drive Dimensions ---
+            "Circular drive dimensions required: (1) distance from side lot line to first driveway, (2) first driveway width, (3) distance between two driveways, (4) second driveway width, (5) distance from side lot line",
+
+            # --- Straight Drive Dimensions ---
+            "Straight drive dimensions required at property line AND street line: (1) distance from side lot line to driveway, (2) driveway width, (3) distance from driveway to other side lot line",
+
+            # --- Zoning Code Sec. 42-383 ---
+            "GOTCHA: Driveway zoning code restrictions per Sec. 42-383:",
+            "Single-family/duplex lots fronting one street: max TWO driveways, combined width not exceeding 40% of front property line, minimum 20 feet between driveways",
+            "Lots fronting two streets: third driveway may be allowed on second street — max 18 feet width if 2-3 car garage/carport on second street; otherwise max 12 feet",
+            "ALL driveways must maintain 4-foot setback from adjacent properties",
+            "Driveway must connect to solid surface on lot measuring at least 10 feet x 20 feet for parking vehicle completely off right-of-way",
+            "Lots with less than 70 feet of street frontage: driveway up to 20 feet width permitted with 4-foot setback maintained",
+            "Construction in right-of-way fee: 3% of construction value",
+            "Contractor Registration + License & Insurance required",
+            "Insurance certificate holder: City of Lighthouse Point / 3701 NE 22nd Avenue / Lighthouse Point, FL 33064",
+            "Submit via SmartGov portal or in person — NO faxed applications",
+            "Application fee: $100",
+        ],
+    },
+
+    # =========================================================================
+    # SHED
+    # =========================================================================
+    "shed": {
+        "name": "Shed Permit",
+        "items": [
+            "Building Application — must include Lot, Block, Subdivision, job value",
+            "Survey showing footprint of property indicating location and size of shed",
+            "Two (2) copies of current product approvals — all components, connections, and method of anchorage must be HIGHLIGHTED",
+            "Approved tie-downs on engineering plans",
+            "Shed shall NOT be located in setbacks established by zoning regulations",
+            "Roof of shed: designed for live load not less than 15 PSF (718 Pa)",
+            "Deflection of any structural member shall not exceed L/80",
+            "Survey must be less than 12 months old — if older, Zoning Affidavit required",
+            "Contractor Registration + License & Insurance required (unless owner/builder with affidavit)",
+            "Insurance certificate holder: City of Lighthouse Point / 3701 NE 22nd Avenue / Lighthouse Point, FL 33064",
+            "Submit via SmartGov portal or in person — NO faxed applications",
+            "Application fee: $100",
+        ],
+    },
+
+    # =========================================================================
+    # CHANGE OF CONTRACTOR
+    # =========================================================================
+    "change_of_contractor": {
+        "name": "Change of Contractor",
+        "items": [
+            "Change of Contractor form per FBC Section 105.6.1.5",
+            "Required information: permit number, job site address, owner name, original contractor company name, new contractor company name, reason for change",
+            "GOTCHA: Requires NOTARIZED signatures from BOTH property owner AND new contractor (can be physical appearance or online notarization)",
+            "New contractor must be registered with City before change can be processed",
+            "Document applies to ALL active permits on the jobsite controlled by the listed contractors",
+            "Indemnification: new contractor agrees to indemnify and hold harmless Broward County and its agents",
+            "Building Department approval required — approved by Building Official with effective date",
+            "Fee: $100",
+        ],
+    },
+
+    # =========================================================================
+    # PRIVATE PROVIDER
+    # =========================================================================
+    "private_provider": {
+        "name": "Private Provider Package",
+        "items": [
+            "Private Provider Package form available on LHP forms page",
+            "UNCERTAINTY (85%): Private Provider Package PDF is a scanned image — could not extract specific requirements. Standard Broward County private provider rules likely apply per F.S. 553.791. Call 954-943-6509 to verify LHP-specific requirements before submitting.",
+            "Special Building Inspector Form also available on forms page — signed/sealed by engineer or architect",
+            "Private provider inspection results must be accepted by building department",
+        ],
+    },
+
+    # =========================================================================
+    # SYNTHETIC TURF
+    # =========================================================================
+# =========================================================================
+    # RAINWATER HARVESTING
+    # =========================================================================
+# =========================================================================
+    # EV CHARGER
+    # =========================================================================
+    "ev_charger": {
+        "name": "EV Charger Permit",
+        "items": [
+            "Electrical Application — must include job value",
+            "LHP Addendum — Lot, Block, Subdivision, job value",
+            "Two (2) sets of plans showing installation details, panel capacity, wire run",
+            "Product approvals for charging equipment",
+            "Load calculation showing panel can support additional circuit",
+            "Contractor Registration + License & Insurance required",
+            "Insurance certificate holder: City of Lighthouse Point / 3701 NE 22nd Avenue / Lighthouse Point, FL 33064",
+            "GOTCHA: ALL electrical work must be done by licensed electrical contractor — NO owner/builder",
+            "Notice of Commencement — recorded prior to permit issuance (if > $2,500)",
+            "Submit via SmartGov portal or in person — NO faxed applications",
+            "Application fee: $100",
+            "UNCERTAINTY (90%): No dedicated EV charger form found on LHP forms page — standard electrical permit process applies. Call 954-943-6509 to confirm if additional requirements exist.",
+        ],
+    },
+
+    # =========================================================================
+    # FIRE SYSTEM
+    # =========================================================================
+    "fire_system": {
+        "name": "Fire Sprinkler / Alarm System Permit",
+        "items": [
+            "Building Application — must include scope of work, job value",
+            "LHP Addendum — Lot, Block, Subdivision, job value",
+            "Fire sprinkler/alarm shop drawings — prepared by installing trade",
+            "Two (2) sets of plans signed and sealed",
+            "Contractor Registration + License & Insurance required",
+            "Insurance certificate holder: City of Lighthouse Point / 3701 NE 22nd Avenue / Lighthouse Point, FL 33064",
+            "Notice of Commencement — recorded prior to permit issuance (if > $2,500)",
+            "Submit via SmartGov portal or in person — NO faxed applications",
+            "Application fee: $100",
+        ],
+    },
+
+    # =========================================================================
+    # CERTIFICATE OF OCCUPANCY / COMPLETION
+    # =========================================================================
+    "certificate_of_occupancy": {
+        "name": "Certificate of Occupancy / Completion",
+        "items": [
+            "ALL required inspections must pass before CO/CC can be issued",
+            "Certificate of Occupancy/Completion fee: $125",
+            "Temporary Certificate of Occupancy (90 days): $1,000",
+            "Final zoning inspection does NOT require homeowner to be present",
+            "Final exterior inspection does NOT require homeowner to be present",
+            "Final fire inspection does NOT require homeowner to be present",
+            "All other final inspections: homeowner must be present",
+        ],
+    },
+
+    # =========================================================================
+    # ADU (Accessory Dwelling Unit)
+    # =========================================================================
+    "adu": {
+        "name": "Accessory Dwelling Unit (ADU) Permit",
+        "items": [
+            "UNCERTAINTY (85%): No dedicated ADU form found on LHP forms page. ADU requirements likely follow standard building permit process with additional zoning review. FL Live Local Act (2023) and HB 1379 (2024) expanded ADU allowances statewide. Call 954-943-6509 to verify LHP-specific ADU rules, setbacks, and zoning compliance before submitting.",
+            "Standard building permit application and requirements would apply",
+            "DRC approval likely required for exterior work",
+            "EPD/DPEP approval may be required",
+            "Impact fees may apply per DPEP determination",
+        ],
+    },
+}
+
 CITY_SPECIFIC_PERMITS = {
     "pompano_beach": POMPANO_BEACH_PERMITS,
     "plantation": PLANTATION_PERMITS,
@@ -22540,6 +23968,8 @@ CITY_SPECIFIC_PERMITS = {
     "kendall": KENDALL_PERMITS,
     "north_miami": NORTH_MIAMI_PERMITS,
     "miami": MIAMI_PERMITS,
+    "coral_springs": CORAL_SPRINGS_PERMITS,
+    "lighthouse_point": LIGHTHOUSE_POINT_PERMITS,
 }
 
 
