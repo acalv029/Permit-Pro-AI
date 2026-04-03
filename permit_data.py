@@ -1076,21 +1076,70 @@ CITY_INFO = {
     },
     "miami_gardens": {
         "name": "Miami Gardens",
-        "department": "Building Services",
-        "address": "18605 NW 27th Avenue, Miami Gardens, FL 33056",
-        "phone": "305-622-8000 x2648",
-        "email": "buildingpermitquestions@miamigardens-fl.gov",
-        "portal": "Tyler CSS",
-        "submission": "Two (2) sets of plans required, signed and sealed",
         "county": "Miami-Dade",
+        "department": "Development Services Department — Building Services Division",
+        "address": "18605 NW 27th Avenue, City Hall, 1st Floor, Miami Gardens, FL 33056",
+        "phone": "305-622-8027",
+        "phone_main": "305-622-8000",
+        "fax": "305-626-4220",
+        "email": "buildingpermitquestions@miamigardens-fl.gov",
+        "portal": "CSS (Citizens Self Service) — Tyler EnerGov",
+        "portal_url": "https://miamigardensfl-energovpub.tylerhost.net/apps/selfservice#/home",
+        "submission": "Online via CSS portal — all attachments uploaded digitally; payments online only",
+        "hours": "Monday–Thursday 7:00 AM – 6:00 PM; CLOSED FRIDAYS AND ALL MAJOR HOLIDAYS",
+        "sign_in_deadline": "Must be signed in before 5:00 PM for permit processing and issuance",
+        "early_morning_pickup": "Mon–Thu 7:30 AM – 8:30 AM (must sign in before 8:00 AM)",
+        "plan_sets": 2,
+        "plan_sets_note": "Two (2) sets required, drawn to scale, signed and sealed by FL PE or architect if applicable",
+        "insurance_holder_verbatim": "City of Miami Gardens, 18605 NW 27th AVE, Miami Gardens, FL 33056",
+        "insurance_holder_note": "CERTIFICATE OF INSURANCE MUST BE MADE OUT TO THE CITY OF MIAMI GARDENS — verbatim from 2026 Contractor Registration PDF",
         "noc_threshold": 2500,
         "noc_threshold_hvac": 7500,
+        "noc_threshold_checklists": 5000,
+        "noc_threshold_note": "DISCREPANCY: Permit application says $2,500; city checklists say $5,000 for non-mechanical. Use $2,500 to be safe.",
+        "noc_timing": "Must be recorded with MDC, submitted, and DISPLAYED at job site PRIOR TO FIRST INSPECTION",
+        "noc_recording": "Miami-Dade County Recorder, Courthouse East, 22 NW 1st Street, 1st Floor, Miami, FL 33128 — call (305) 275-1155",
         "hvhz": True,
-        "closed_fridays": True,
-        "derm_required": True,
-        "plan_sets": 2,
+        "code_edition": "FBC 8th Edition (2023) — referenced in HVHZ Roofing Package and checklists",
+        "code_reference_note": "Permit application forms still reference 2020 FBC; HVHZ roofing package updated to 8th Edition (2023)",
+        "fee_deposit": "30% up-front non-refundable processing fee on all permits",
+        "construction_hours": "7:00 AM to 8:00 PM weekdays only",
+        "permit_expiration": "180 days without inspection — permit becomes null and void",
+        "expired_permit_renewal": "50% of original permit fee (NOT a flat rate — from Fee Schedule §A.18)",
+        "expired_permit_renewal_condition": "Must reapply within 6 months of expiration; same plans; work in place must meet current code",
+        "work_without_permit_penalty": "Double (2x) the permit fee PLUS $126.00 base penalty; second offense $252.50; each offense thereafter $631.50 (Fee Schedule §A.8)",
+        "early_start_fee": "$500.00 per master permit — work at risk of applicant; cannot proceed past first required inspection (Fee Schedule §A.9)",
+        "reinspection_fee": "$78.55 per additional inspection beyond initial + one follow-up (Fee Schedule §A.12a); $75.50 per re-inspection for same code violation (§A.12c2)",
+        "plans_rework_fee": "$112.10 per review per trade after 3rd rejection for same violation (Fee Schedule §A.12c1)",
+        "lost_permit_card_fee": "$32.50 (Fee Schedule §A.14)",
+        "permit_cancellation_fee": "$75.40 (Fee Schedule §A.3)",
+        "change_of_contractor_fee": "$113.75 (Fee Schedule §A.4 — note: Change of Contractor Package PDF says $107.73 but fee schedule is more recent at 09/11/2024)",
+        "revisions_shop_drawings_fee": "$78.75 per trade per hour, 1-hour minimum (Fee Schedule §A.20)",
+        "building_permit_extension_fee": "$72.25 per extension (Fee Schedule §A.5)",
+        "technology_surcharge": "15% of total permit fee (Fee Schedule §A.6)",
+        "state_surcharge": "2.5% of total Building Services Division permit fee (Fee Schedule §K)",
+        "mdc_code_compliance_surcharge": "$0.0006 per $1.00 job value (Fee Schedule §G)",
+        "plan_review_time": "~15 business days if compliant (no corrections); 3–7 reviewers per project",
+        "review_disciplines": "Structural, Electrical, Mechanical, Plumbing, Zoning, Building, DERM, Fire, Public Works",
+        "derm_required": "DERM approval required BEFORE city permit for: new buildings, nonresidential additions, commercial interior alterations, commercial re-roofs, commercial pools, land clearing, demolition",
+        "owner_builder_restrictions": "Max 1 owner-builder SFR permit per 12 months; must personally supervise on-site; cannot sell/lease within 1 year; commercial limited to $75,000; all subcontractors must hold valid MDC Certificate of Competency or state certification",
+        "inspection_scheduling": "Before 3:00 PM = next business day; after 3:00 PM = 2 business days out; cancel before 9:00 AM via email to buildingpermitquestions@miamigardens-fl.gov",
+        "inspection_stop_work": "After 3 failed inspections, inspector MAY place Stop Work Order and require licensed contractor to complete work",
+        "expired_permit_block": "Contractors with expired permits at ANY Miami Gardens property may be BLOCKED from obtaining new permits for ANY project",
+        "recertification": "40-Year/10-Year program per MDC Code Chapter 8; $330.00 per application (Fee Schedule §A.17); parking lot guardrail and illumination recertification also required",
+        "amnesty_ordinance": "Legalization of Existing Structures Package available for unpermitted work",
+        "portable_toilet": "Separate permit required for construction site portable toilets",
+        "construction_trailers": "PROHIBITED on single-family residential sites; other construction requires separate permit",
+        "materials_storage": "Equipment and materials must be stored at least 10 feet from edge of right-of-way",
+        "swale_protection": "Swales must be protected from damage by equipment/vehicles",
+        "stormwater_discharge": "No discharge into right-of-way or storm drains without approval from Building/Planning/Zoning",
+        "erp_threshold": "2+ acres impervious area requires Environmental Resource Permit from MDC RER/DERM (305-372-6789); wetlands → SFWMD (800-432-2045)",
+        "npdes_threshold": "1+ acres disturbed requires Construction Generic Permit from FL DEP (866-336-6312)",
+        "condo_hoa_affidavit": "REQUIRED with every permit application — Affidavit of Awareness of Condo/Homeowners' Association Regulation",
+        "inland_city": "Miami Gardens is FULLY INLAND — no navigable waterways — NO marine/dock/seawall permits issued",
+        "payment_methods": "Online payments only via CSS portal",
     },
-    "kendall": {
+"kendall": {
         "name": "Kendall (Unincorporated Miami-Dade)",
         "department": "Miami-Dade County Permitting and Inspection Center",
         "address": "11805 SW 26th Street, Miami, FL 33175",
@@ -1110,22 +1159,57 @@ CITY_INFO = {
     },
     "homestead": {
         "name": "Homestead",
-        "department": "Development Services Department",
+        "department": "Development Services Department — Building Safety Division",
         "address": "100 Civic Court, Homestead, FL 33030",
-        "phone": "305-224-4590",
+        "phone": "(305) 224-4500",
+        "building_official_phone": "(305) 224-4520",
+        "dev_services_director_phone": "(305) 224-4529",
+        "business_licensing_phone": "(305) 224-4504",
+        "economic_development_phone": "(305) 281-2279",
+        "fax": "(305) 224-4539",
         "email": "permits@homesteadfl.gov",
-        "portal": "EPL-B.U.I.L.D (launched October 2025)",
-        "submission": "Strict file naming convention REQUIRED",
+        "epl_notifications_email": "eplnotifications@homesteadfl.gov",
+        "epermits_email": "epermits@homesteadfl.gov",
+        "risk_management_email": "askrisk@homesteadfl.gov",
+        "portal": "EPL-B.U.I.L.D. (Electronic Permitting & Licensing — Building, Utilities, Inspections, Land & Development)",
+        "portal_url": "https://www.homesteadfl.gov/746/",
+        "legacy_portal": "Community Plus (for projects started before Oct 1, 2025 ONLY)",
+        "legacy_status_url": "https://egov.cityofhomestead.com/eGovPlus91/permit/perm_status.aspx",
+        "submission": "Electronic only via EPL-B.U.I.L.D. — strict file naming convention REQUIRED",
         "county": "Miami-Dade",
+        "code_edition": "FBC 8th Edition (2023)",
         "noc_threshold": 2500,
-        "noc_threshold_hvac": 7500,
+        "noc_threshold_display": "$2,500 (per inspections page: NOC must be displayed for all work over $2,500)",
+        "noc_recording_location": "22 N.W. 1st Street, 1st Floor, Miami — (305) 275-1155 ext. 6",
         "hvhz": True,
         "derm_required": True,
         "file_naming_required": True,
         "review_time_days": 14,
-        "work_without_permit_penalty": "Double fee",
+        "review_time_general": "21 days or less (per building permits page, size-dependent)",
+        "permit_validity_days": 180,
+        "work_without_permit_penalty": "100% penalty — DOUBLE the usual permit fee (NOV required)",
+        "walk_in_hours": "8:00 AM – 12:00 PM, Monday – Friday",
+        "inspector_office_hours": "8:00 AM – 8:30 AM, Monday – Friday",
+        "zoning_walk_in_hours": "Mon / Wed / Fri, 8:00 AM – 10:00 AM",
+        "payment_methods": "Credit cards, checks/e-checks, money orders, cash; online payments via EPL portal (convenience fee applies)",
+        "online_payment_url": "https://www.homesteadfl.gov/payonline",
+        "payment_account_number": "8-digit process/permit number from permit invoice",
+        "inspection_scheduling": "Online via EPL-B.U.I.L.D. or phone: (305) 224-4590",
+        "epl_phase_1_launch": "October 1, 2025",
+        "epl_phase_2_launch": "December 2026",
+        "epl_implementation_cost": "$2,000,000 (CIP#2116)",
+        "plans_review_platform": "DigEplan (integrated with EPL-B.U.I.L.D.)",
+        "fee_schedule_ordinance": "Ordinance No. 2025-09-25 (adopted September 9, 2025)",
+        "40_year_recertification": True,
+        "recertification_rule": "MDC Section 8-11(f) — 40 years after CO, then every 10 years",
+        "recertification_exempt": "Single-family homes, duplexes, buildings with occupant load ≤10 AND ≤2,000 SF",
+        "recertification_thermography": "Required for electrical service 400A or greater",
+        "owner_builder_test_required": True,
+        "owner_builder_24_month_limit": True,
+        "digital_sign_seal_required": True,
+        "digital_seal_providers": "Three Certificate Authorities partnered with City (listed on Plan Submittal Requirements page)",
     },
-    "oakland_park": {
+"oakland_park": {
         "name": "Oakland Park",
         "department": "Building & Permitting Services Division",
         "address": "1100 Park Lane East, 1st Floor, Oakland Park, FL 33334",
@@ -2158,22 +2242,42 @@ KNOWN_GOTCHAS = {
 ],
 
     "miami_gardens": [
-        "CLOSED ON FRIDAYS - Mon-Thu 7:00 AM - 6:00 PM only",
-        "Two (2) sets of plans required, signed and sealed",
-        "DERM approval required BEFORE city permit - very common rejection!",
-        "DBPR approval required for restaurants",
-        "Miami-Dade County Health Dept approval for: ALFs, day cares, hospitals, schools",
-        "Miami-Dade Product Approval (NOA) required for all exterior products",
-        "NOC threshold: $2,500 general, $7,500 for HVAC",
-        "NOC must be present at job site for first inspection",
-        "Inspection requests before 3:00 PM = next business day",
-        "Inspection requests after 3:00 PM = two business days out",
-        "To cancel inspection: Email before 9:00 AM",
-        "Residential permits: Average 14 working days",
-        "Commercial permits: Average 28 working days",
-        "Review by 3-7 disciplines: Structural, Electrical, Mechanical, Plumbing, Zoning, Building, DERM, Fire, Public Works",
-        "Buildings 25-30 years require milestone inspections",
-        "Parking lot guardrail and illumination recertification required",
+        "GOTCHA: NOC THRESHOLD DISCREPANCY — Permit application form says $2,500; all city checklists (2024) say $5,000 for non-mechanical. FL Statute says $2,500/$7,500 HVAC. USE $2,500 TO BE SAFE — failing the first inspection costs far more than recording an unnecessary NOC.",
+        "GOTCHA: CLOSED FRIDAYS — Building Services is open Mon–Thu 7:00 AM – 6:00 PM ONLY. Contractors who show up on Friday lose a full day.",
+        "GOTCHA: Must sign in before 5:00 PM for permit processing. After 5 PM you WILL NOT be processed even if you're in the building.",
+        "GOTCHA: 30% UP-FRONT NON-REFUNDABLE processing fee on ALL permits — this is collected at application, not at issuance.",
+        "GOTCHA: EXPIRED PERMIT BLOCK — If a contractor has ANY expired permit at ANY Miami Gardens property, they may be BLOCKED from pulling permits for ANY new project. Check ALL your MG permits before applying.",
+        "GOTCHA: DERM APPROVAL BEFORE CITY PERMIT — New buildings, nonresidential additions, commercial interiors, commercial re-roofs, commercial pools, land clearing, demolition ALL require DERM first. Submitting without DERM = automatic rejection.",
+        "GOTCHA: Permit application form says 'ALL FIELDS MUST BE FILLED IN OR APPLICATION WILL BE DENIED PROCESS' — no blanks allowed, period.",
+        "GOTCHA: Insurance cert must be made out to 'City of Miami Gardens' — the Registration PDF says 'CERTIFICATE OF INSURANCE MUST BE MADE OUT TO THE CITY OF MIAMI GARDENS' — exact entity name matters.",
+        "GOTCHA: Contractor Registration requires qualifier's driver's license copy — not just license and insurance.",
+        "GOTCHA: County-licensed contractors need 6 documents (Certificate of Competency, FL State Registration, GL Insurance, WC/Exemption, MDC Occupational License, Driver's License) vs state-licensed contractors who need 5.",
+        "GOTCHA: Owner agents must have an affidavit on file OR submit one with the permit application — no exceptions.",
+        "GOTCHA: HOA/Condo Affidavit is REQUIRED on every single application — even if the property is NOT in an association (you check the 'am not' box).",
+        "GOTCHA: 3 failed inspections = potential Stop Work Order + requirement to hire licensed contractor to complete work.",
+        "GOTCHA: Work without permit = DOUBLE FEE + $126 penalty first offense; $252.50 second; $631.50 each after. AND the double fee requirement applies to ALL trades.",
+        "GOTCHA: Solar permits require BOTH Building AND Electrical applications — plus a SEPARATE electrical application if service is being upgraded.",
+        "GOTCHA: Solar permits require Special Inspector Form for connections and waterproofing — this is unique to Miami Gardens.",
+        "GOTCHA: Solar CVC contractor can install PV equipment EXCEPT the interconnection to FPL power source — that requires EC/ER electrical contractor with SEPARATE permit.",
+        "GOTCHA: AC replacement forms are PER SYSTEM — each unit gets its own form. AHRI certificate required for each.",
+        "GOTCHA: Fence permits — PVC and Metal fences require signed/sealed plans by FL architect/engineer. Wood and chain link can use prescriptive FBC method but STILL need fence details or requirements sheet.",
+        "GOTCHA: All fence types require Easement Encroachment Affidavit — even if there's no apparent easement. Property owner must execute this.",
+        "GOTCHA: Fence gate location — if the marked area on the survey for a gate does NOT have an existing driveway, a gate will NOT be permitted.",
+        "GOTCHA: Pool permits need ALL four trade applications: Building + Mechanical (if applicable) + Electrical + Plumbing — submitted as a package.",
+        "GOTCHA: Pool Safety Act form must be notarized by BOTH owner/agent AND prime contractor — two separate notarizations on one form.",
+        "GOTCHA: OSHA-approved ladder REQUIRED at all job sites for ALL inspections — $120.00 fine for non-compliant ladder at time of inspection.",
+        "GOTCHA: Roofing — NOA/Product Approval must be provided at time of permit application AND posted at jobsite for inspection. Missing either = rejection.",
+        "GOTCHA: Roofing — Tile roof re-roofs require pull test PRIOR to final inspection.",
+        "GOTCHA: Roofing — Roof-to-wall connection retrofit required for structures with insured value over $300,000 (F.S. 553.844). Must provide exemption affidavit if under $300K.",
+        "GOTCHA: Commercial re-roofing with system change requires signed/sealed structural calculations for supporting structure.",
+        "GOTCHA: Private Provider — if PP does plan review, they MUST also do inspections (Building Official's discretion per F.S. 553.791(2)(a)). Pre-construction meeting with Building Official REQUIRED before permit issuance.",
+        "GOTCHA: Demolition requires disconnect letters from ALL utilities: FPL, WASD water meter, cable, Florida City Gas/TECO if applicable — plus DOH permit for septic tank abandonment.",
+        "GOTCHA: Driveway/slab permits require Impervious Percentage Form — unique city form that must be calculated and submitted.",
+        "GOTCHA: New construction and additions BOTH require DERM approval AND Special Inspector Form — submitting without these = rejection.",
+        "GOTCHA: Shed maximum size is 120 SF with specific setbacks: 7.5' side, 5' rear, 10' from house. Exceeding = denied.",
+        "GOTCHA: The permit application form MUST be notarized — owner, lessee, AND qualifier sections all require notarization. Un-notarized = denied.",
+        "GOTCHA: Permit renewal requires expired permit not to be older than 6 months AND that no refund was previously issued. After 6 months = full new permit.",
+        "GOTCHA: $500 Early Start fee per master permit — work cannot proceed past first required inspection even with Building Official approval.",
     ],
     "kendall": [
         "Kendall is UNINCORPORATED Miami-Dade - permits through County PIC office",
@@ -2197,26 +2301,93 @@ KNOWN_GOTCHAS = {
         "Marine construction requires Class I Environmental Permit from DERM",
     ],
     "homestead": [
-        "NEW SYSTEM as of October 2025: EPL-B.U.I.L.D portal",
-        "Legacy projects (before Oct 2025) use Community Plus system - don't mix!",
-        "STRICT FILE NAMING CONVENTION: BD-YY-XXXXX-PT-R-DISCIPLINE",
-        "Files will be AUTO-REJECTED if naming convention not followed",
-        "No special characters allowed in filenames: # % & { } / \\ ? < > * $ ! ' : @ \" + ` | = ~ ( )",
-        'Leave upper-right corner blank for City seal: 2"x2" (letter) or 3"x3" (larger)',
-        "Application must be signed AND notarized",
-        "Remote Online Notary (RON) accepted",
-        "DERM, WASD, Impact Fee approvals required through MIAMI-DADE COUNTY portal",
-        "Must obtain M# number from Miami-Dade before City permit finalized",
-        "County fees paid SEPARATELY from City fees",
-        "Initial review: approximately 14 business days",
-        "Group plans by discipline - separate PDF per discipline",
-        "All pages of one NOA must be grouped together in single PDF",
-        "Owner-Builder: Must prove knowledge (test administered), one permit per 24 months",
-        "Owner-Builder must appear IN PERSON for document review",
-        "No permit if existing violation on property",
-        "Construction hours: 7:00 AM - 7:00 PM only",
-        "Construction debris must be removed by licensed hauler",
-    ],
+    # === INSURANCE & REGISTRATION ===
+    "GOTCHA: Insurance certificate holder MUST read EXACTLY: 'CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030' — this is from the official Contractor Licensing Registration PDF. Private Provider cert holder is slightly different: 'City of Homestead Building Department, 100 Civic Court, Homestead, FL 33030'",
+    "GOTCHA: Contractor must register with BOTH Miami-Dade County AND City of Homestead BEFORE submitting ANY permit application — dual registration is mandatory",
+    "GOTCHA: As of October 1, 2025, ALL contractor/utility owner registration must go through EPL-B.U.I.L.D. — the old paper/email registration process is dead",
+    "GOTCHA: Registration requires: (A) State of Florida Contractor License (DBPR), (B) Miami-Dade County Local Business Tax Receipt OR County of Origin LBT, (C) Liability & Workers Comp Insurance, (D) Driver's License (original or clear color copy), (E) Company info + EIN + email",
+    "GOTCHA: Owner-builder insurance minimums are DIFFERENT from contractor: $50,000 per person liability (per official registration page)",
+
+    # === EPL-B.U.I.L.D. FILE NAMING (THE #1 REJECTION TRIGGER) ===
+    "GOTCHA: File naming convention is STRICTLY ENFORCED — application will NOT be accepted if naming convention is not followed! Format: BD-YY-XXXXX-PT-R-DISCIPLINE (all UPPERCASE). If no permit number yet, use file contents as name",
+    "GOTCHA: NO special characters allowed in file names: no asterisks, parentheses, periods, question marks, shapes, double periods, # % & { } / \\ ? < > * $ ! ' — this alone causes more rejections than any other issue",
+    "GOTCHA: Plans must be ONE PDF PER DISCIPLINE — grouped by Architectural, Mechanical, Electrical, Plumbing, Civil. NOT one giant PDF, NOT one PDF per page",
+    "GOTCHA: All PDFs must be FLATTENED (single layer) with NO embedded objects — but do NOT flatten AFTER digital signature is applied",
+    "GOTCHA: All security settings must be UNRESTRICTED — files cannot be encrypted, password-protected, or disallow markups",
+    "GOTCHA: Drawings must be LANDSCAPE orientation only; documents can be landscape or portrait",
+    "GOTCHA: Upper-right corner of ALL plan pages must be left BLANK for city stamp: 2x2 inch (8.5x11), 3x3 inch (medium), 4.5x4.5 inch (large format). This does NOT apply to text documents like applications or letters",
+    "GOTCHA: If total file size exceeds 20 MB, a download link is required instead of direct upload",
+    "GOTCHA: All drawings' files must have the SAME X/Y axis at (0,0) to allow overlay for effective review",
+
+    # === DIGITAL SIGNING & SEALING ===
+    "GOTCHA: ALL plans must be DIGITALLY signed and sealed — physical stamp/signature on scanned PDFs will be rejected. Must use Certificate Authority approved by city",
+    "GOTCHA: If uploading multi-page PDF, design professional MUST digitally sign and seal EACH page — unless software limitation, then sign Cover Sheet with accurate Index of Drawings listing all sheets with revision dates",
+    "GOTCHA: Scanned notarized signatures ARE accepted for permit applications (not plans)",
+    "GOTCHA: Remote Online Notary (RON) and electronic signatures ARE accepted for permit applications",
+
+    # === MASTER/SUB-PERMIT RULE ===
+    "GOTCHA: A Master Permit Application MUST be issued BEFORE any sub-permit can be issued — electrical, plumbing, mechanical sub-permits cannot be pulled without master permit first",
+    "GOTCHA: Sub-permit applications must also be signed and notarized with 13-digit folio number",
+    "GOTCHA: Subcontractors must verify their qualification for the proposed scope before City issues sub-permit",
+
+    # === DEBRIS HAULER (UNIQUE TO HOMESTEAD) ===
+    "GOTCHA: ALL construction debris MUST be removed by a hauler LICENSED WITH THE CITY OF HOMESTEAD — using a hauler licensed elsewhere (even MDC) will result in violation. This is HOMESTEAD-SPECIFIC, not a standard MDC rule",
+
+    # === DUAL SUBMISSION WITH MDC ===
+    "GOTCHA: Projects requiring DERM, WASD (Water & Sewer), Fire, or Impact Fee review MUST be submitted to Miami-Dade County portal SEPARATELY — these are NOT handled through the City of Homestead portal",
+    "GOTCHA: County-approved plans must be uploaded to EPL-B.U.I.L.D. BEFORE City will issue the permit — you cannot skip this step",
+    "GOTCHA: Upfront fees for MDC external agencies (DERM, WASD, Impact Fees) are paid SEPARATELY from City fees — they are NOT included in City's upfront processing fee",
+    "GOTCHA: MDC Project Number (M#) must be issued before paying MDC agency upfront fees",
+
+    # === OWNER-BUILDER (HOMESTEAD-SPECIFIC TRAPS) ===
+    "GOTCHA: Owner-builders in Homestead MUST TAKE A TEST WITH THE BUILDING OFFICIAL — per Chapter 10 of Dade County Code of Ordinances. This is NOT a simple affidavit like other cities",
+    "GOTCHA: Owner-builder permits limited to ONE single-family or duplex residence in any 24-MONTH period (multiple permits for same residence OK within that period)",
+    "GOTCHA: If there is a code violation on the property, NO building permit will be issued to a homeowner to cover illegal work — must use licensed contractor for violation correction",
+    "GOTCHA: Owner-builder must come IN PERSON for review of permit documents and application",
+    "GOTCHA: Owner-builder must attach proof of ownership (warranty deed OR tax receipt) AND sign the Owner/Builder Permit Affidavit (notarized)",
+
+    # === CONSTRUCTION SITE RULES ===
+    "GOTCHA: Construction trailers require a SEPARATE permit — cannot just place one on site",
+    "GOTCHA: Portable toilets for construction site require a SEPARATE permit",
+    "GOTCHA: Equipment and materials must be stored WITHIN the property — not on public right-of-way",
+    "GOTCHA: Streets and neighboring properties must be kept free from dirt and debris",
+    "GOTCHA: Swales must be protected from damage by equipment or vehicles",
+    "GOTCHA: DO NOT discharge water into the right-of-way or storm drains",
+
+    # === NOC & INSPECTIONS ===
+    "GOTCHA: NOC must be POSTED AT THE JOB SITE per FL Statute 713.35 — and the recorded NOC + permit card must be displayed at site for ALL inspections",
+    "GOTCHA: Per Homestead inspections page, NOC must be displayed for 'all work over $2,500 in job value' — this is the MDC DISPLAY threshold. Verify recording threshold separately",
+    "GOTCHA: To avoid reinspection fee, ensure: site ready, all required documents including approved plans available, and access to inspection site provided",
+    "GOTCHA: All possible inspections are listed on the BACK of the permit card — contractor's responsibility to call for inspections",
+
+    # === PERMIT EXPIRATION ===
+    "GOTCHA: Permits valid for 180 days — construction must commence within that timeframe. If permit expires before final inspections, it becomes NULL AND VOID and the project is in code violation",
+
+    # === SAFETY INSPECTION PERMITS ===
+    "GOTCHA: ALL Safety Inspection Permits must be submitted with EITHER: (1) Electrical repair list, OR (2) Notarized letter from Contractor stating there are no necessary repairs",
+
+    # === PRIVATE PROVIDER ===
+    "GOTCHA: City of Homestead will NOT allow Plans Review Only by Private Provider — must be inspections only, or plans review AND inspections",
+    "GOTCHA: Private Provider must be pre-registered with Miami-Dade County — DAR & Firm must be pre-registered before submitting",
+    "GOTCHA: If Private Provider is terminated during review or inspections, City will NOT take over — owner/contractor must secure another Private Provider",
+    "GOTCHA: Private Provider fee reduction is only 10% for plans review + inspections, or 5% for inspections only — this is the BUILDING DEPARTMENT portion only",
+
+    # === LEGACY VS EPL ===
+    "GOTCHA: If permit application was submitted BEFORE October 1, 2025, it is a 'legacy project' and must continue through Community Plus — do NOT mix systems. Only EPL-B.U.I.L.D. for new applications",
+
+    # === ROOFING SPECIFIC ===
+    "GOTCHA: ALL nails must be ringshank meeting ASTM G85 corrosion resistance standards — no exceptions",
+    "GOTCHA: Gutters REQUIRED on all roofs with 6-inch or less overhang eave",
+    "GOTCHA: Tile roofs require uplift test BEFORE final inspection",
+    "GOTCHA: Re-installation of existing roof-mounted solar PV system requires SEPARATE permit — must be obtained to finalize roofing permit",
+
+    # === SEPTIC & SEWER ===
+    "GOTCHA: Florida Department of Health approval REQUIRED for ALL applications involving septic tanks — not just DERM",
+    "GOTCHA: DERM and/or MDWASD approval required for applications involving sewers and water — submitted to MDC portal separately",
+
+    # === 40-YEAR RECERTIFICATION ===
+    "GOTCHA: 40-year recertification per MDC Section 8-11(f) — applies to buildings 40+ years old. Exempt: SFH, duplexes, buildings ≤10 occupant load AND ≤2,000 SF. Electrical service 400A+ requires infrared thermography report",
+],
     "oakland_park": [
     "GOTCHA: Insurance certificate holder MUST read EXACTLY: 'City of Oakland Park, 1100 Park Lane East, First Floor, Oakland Park, FL 33334' — confirmed from CURRENT Contractor Registration Requirements PDF AND Pool/Spa Packet (both updated). Older permit packets (dock, seawall, driveway) still show outdated addresses. The current registration PDF is authoritative.",
     "GOTCHA: ALL applications MUST use the Broward County Uniform Building Permit Application (Rev 11/14/25) — no other form accepted. Old revisions rejected. Download current version from city website or Broward County.",
@@ -2250,6 +2421,25 @@ KNOWN_GOTCHAS = {
     "GOTCHA: Pool permits have up to EIGHT review stops (Electrical, Engineering, Flood, Mechanical, Plumbing, Structural, Zoning, Fire Marshall) — plan for extended review timeline on pool projects.",
 ],
 
+    "miami_beach": [
+        "GOTCHA: NOC THRESHOLD DISCREPANCY — The permit application form (legal document, updated 10/17/2025) states NOC required for work exceeding $2,500. The building permits webpage says $5,000. The PERMIT APPLICATION is the controlling document. Use $2,500 to be safe. If building dept director clarifies, update accordingly.",
+        "GOTCHA: SHA-1 AUTHENTICATION — Miami Beach is one of the ONLY cities requiring SHA-1 authentication codes on digitally signed/sealed plans. Plans without SHA-1 hash codes WILL BE REJECTED. Must include Signature Report with PHYSICAL WET SEAL uploaded alongside plans.",
+        "GOTCHA: MASTER PERMIT RULE — Any project involving 2 or more trades (mechanical + electrical + plumbing, etc.) REQUIRES a Master Building Permit pulled by a General Contractor. Sub-permits for individual trades can only be obtained AFTER the master permit is issued. Subs cannot pull permits independently on multi-trade jobs.",
+        "GOTCHA: MDC COUNTY APPROVAL SEQUENCE — Miami-Dade County approval is often required BEFORE Miami Beach plan review is complete. Applicant must FIRST apply for Miami Beach permit to get a process number, THEN submit to MDC with copy of Miami Beach permit application. Getting this sequence wrong causes weeks of delay.",
+        "GOTCHA: INSURANCE CERT HOLDER EXACT WORDING — Must read exactly: 'City of Miami Beach, Building Department, 1700 Convention Center Drive, 2nd Floor, Miami Beach, FL 33139'. Any variation (missing '2nd Floor', wrong address format) will delay contractor registration.",
+        "GOTCHA: MDC LICENSED CONTRACTORS — Need MCTR (Municipal Contractors Tax Receipt) specifically FOR MIAMI BEACH, not just the MDC Certificate of Competency. Two separate documents required. State-certified contractors do NOT need an MCTR — they need an LBTR instead.",
+        "GOTCHA: CONDO PERMITS — Condominium unit work requires board approval letter on board letterhead, signed AND notarized. Without this, permit application is incomplete.",
+        "GOTCHA: CPMP THRESHOLD — Construction Parking Management Plan required for ALL jobs valued at $250,000 or more. If not applicable, must submit the 'Affidavit in Lieu of CPMP' instead. Missing either one blocks permit issuance.",
+        "GOTCHA: WALKTHROUGH VS ELECTRONIC — Once a review starts via one method (walkthrough or electronic), you CANNOT switch methods mid-process. If you started electronically, you must stay electronic. Walkthrough plans must use physical wet seal/embossed seal, not digital.",
+        "GOTCHA: EXPIRED CONTRACTOR DOCS — If your license or insurance recorded in the CSS system has expired, ALL your permits get a HOLD. You cannot schedule inspections or pull new permits until updated docs are emailed to BuildingContractor@miamibeachfl.gov.",
+        "GOTCHA: HISTORIC DISTRICT — Miami Beach has extensive Art Deco Historic Districts. Properties in these districts may need additional Planning & Zoning / Historic Preservation Board review BEFORE building permit review begins. Check the property address first.",
+        "GOTCHA: FEE STRUCTURE 20/80 — Unlike most cities that charge full fees upfront, Miami Beach charges only 20% of the permit fee before review starts. The remaining 80% is due after all reviews pass. Contractors expecting to pay everything upfront may not realize they owe more at issuance.",
+        "GOTCHA: SPECIAL EVENTS — Field Electrical and Structural inspection approval forms MUST be emailed to ChiefElectrical@miamibeachfl.gov and ChiefStructural@miamibeachfl.gov BEFORE the special event. Failure = $500 fine per occurrence.",
+        "GOTCHA: THREE TIMES REVIEW — If plans fail review 3 times, a '3 Times Review Meeting' is required (dedicated form on forms page). This adds significant time — get it right by cycle 2.",
+        "GOTCHA: PERMIT APPLICATION MUST BE SIGNED BY BOTH — The permit application requires signatures from BOTH the property owner (or authorized rep) AND the contractor/qualifier. Missing either signature = incomplete application.",
+        "GOTCHA: LAND DISTURBING ACTIVITIES — Jobs >= $250,000 also require a Land Disturbing Activities Form with a $144 review fee. This is separate from the CPMP and often missed.",
+        "GOTCHA: OWNER NOT ON PERMIT — If you are NOT the contractor or owner, you need a notarized letter of consent to be added as a contact on the permit. Without this, you cannot view permit status, schedule inspections, or upload documents.",
+    ],
 }
 
 
@@ -5087,123 +5277,70 @@ DETAILED_CHECKLISTS = {
         },
     },
     "miami_beach": {
+        "name": "Miami Beach",
+        "department": "Building Department",
+        "address": "1700 Convention Center Drive, 2nd Floor, Miami Beach, FL 33139",
+        "address_north_beach": "962 Normandy Drive, Miami Beach, FL 33141",
+        "phone": "305-673-7610",
+        "email": "BuildingInfo@miamibeachfl.gov",
+        "contractor_email": "BuildingContractor@miamibeachfl.gov",
+        "admin_email": "buildingadmin@miamibeachfl.gov",
+        "homeowner_email": "homeownerbuild@miamibeachfl.gov",
+        "inspection_email": "BuildingInspection@miamibeachfl.gov",
+        "chief_electrical_email": "ChiefElectrical@miamibeachfl.gov",
+        "chief_structural_email": "ChiefStructural@miamibeachfl.gov",
+        "portal": "Civic Access (CSS) — Tyler EnerGov",
+        "portal_url": "https://energovcss.miamibeachfl.gov/energovprod/selfservice#/home",
+        "portal_alias": "www.mbselfservice.com",
+        "submission": "FULLY DIGITAL via CSS portal OR in-person walkthrough for eligible types",
         "county": "Miami-Dade",
-        "roofing": {
-            "subcategory": "Re-Roof (HVHZ)",
-            "total_required_docs": 16,
-            "noc_threshold": "$2,500",
-            "submittal_method": "Civic Access (CSS) Portal / Tyler Technologies",
-            "portal_url": "https://www.miamibeachfl.gov/business/civicaccess/",
-            "code_edition": "FBC 8th Ed (2023)",
-            "county": "Miami-Dade",
-            "source_document": "Miami Beach Building Permits page + Online Permitting Resource Center + Contractors page + Permit Application",
-            "last_verified": "2026-03-16",
-            "documents": [
-                {"name": "Miami Beach Permit Application (signed & notarized)", "required": "REQUIRED", "condition": "All re-roofs", "notes": "Signed and notarized by owner AND registered contractor; submit via Civic Access (CSS) portal; BOA and upfront processing fee due at submission"},
-                {"name": "HVHZ Uniform Roofing Permit Application", "required": "REQUIRED", "condition": "All re-roofs", "notes": "MDC HVHZ form based on FBC 8th Edition"},
-                {"name": "Miami-Dade NOA or FL Product Approval", "required": "REQUIRED", "condition": "All roofing materials", "notes": "All roofing materials must have MDC NOA or FL Product Approval; NOAs for all components including vents"},
-                {"name": "Single Multi-Page PDF per Specialty", "required": "REQUIRED", "condition": "Electronic submissions", "notes": "MIAMI BEACH SPECIFIC: Create single multi-page PDF per specialty (Architectural, Electrical, Plumbing, etc.)"},
-                {"name": "Digital Signature with SHA-1 Authentication", "required": "REQUIRED", "condition": "Plans by licensed professionals", "notes": "MIAMI BEACH UNIQUE: SHA-1 authentication codes required; must include Signature Report with PHYSICAL WET SEAL then uploaded with plans; HashMyFiles software can verify SHA-1 codes"},
-                {"name": "City of Miami Beach Contractor Registration", "required": "REQUIRED", "condition": "Before any work", "notes": "Email valid updated licenses/insurance to BuildingContractor@miamibeachfl.gov; create CSS account; insurance cert must name: City of Miami Beach Building Department, 1700 Convention Center Drive, 2nd Floor, Miami Beach FL 33139"},
-                {"name": "MDC Contractor Registration", "required": "REQUIRED", "condition": "All permits", "notes": "Must also be registered with Miami-Dade County"},
-                {"name": "Notice of Commencement", "required": "REQUIRED", "condition": "Job value > $2,500", "notes": "MIAMI BEACH: NOC threshold is $2,500 — LOWER than MDC standard of $5,000; can be recorded by Miami Beach Records Management OR at MDC County Recorder"},
-            ],
-            "conditional_documents": [
-                {"name": "Construction Cost Affidavit", "condition": "Job value > $5,000", "notes": "MIAMI BEACH: Required when job value exceeds $5,000"},
-                {"name": "Construction Parking Management Plan (CPMP)", "condition": "Job value >= $250,000", "notes": "MIAMI BEACH SPECIFIC: Required for jobs $250,000 and greater"},
-                {"name": "Land Disturbing Activities Form", "condition": "Job value >= $250,000", "notes": "Review fee of $144 assessed"},
-                {"name": "Combustion Flue Vent Certification", "condition": "Re-roofing over combustion appliances", "notes": "MDC form"},
-                {"name": "MDC County Approval (DERM/WASD/Fire/Impact)", "condition": "When county review required", "notes": "CRITICAL: MDC approval often required BEFORE Miami Beach plan review completes"},
-            ],
-            "plan_review_time": "~7 business days per cycle; avg 2-3 cycles to complete",
-            "expedited_review": "Available Sat/Sun only; request Mon-Thu by 2pm to buildingadmin@miamibeachfl.gov; must have completed at least one review cycle",
-            "pre_submittal_meeting": "Available if plans 75% complete and design professional present — reduces time to get permit",
-        },
-        "electrical": {
-            "subcategory": "Panel / Service / Trade",
-            "total_required_docs": 10,
-            "noc_threshold": "$2,500 ($7,500 AC)",
-            "submittal_method": "Civic Access (CSS) Portal",
-            "portal_url": "https://www.miamibeachfl.gov/business/civicaccess/",
-            "code_edition": "FBC 8th Ed (2023)",
-            "county": "Miami-Dade",
-            "source_document": "Miami Beach Building Permits page",
-            "last_verified": "2026-03-16",
-            "documents": [
-                {"name": "Miami Beach Permit Application (via CSS)", "required": "REQUIRED", "condition": "All electrical", "notes": "Signed & notarized; 2+ trades require Master Building permit with General Contractor; sub-permits after master issued"},
-                {"name": "MDC Electrical Fee Sheet", "required": "REQUIRED", "condition": "All electrical", "notes": "Per MDC fee schedule"},
-                {"name": "City + MDC Contractor Registration", "required": "REQUIRED", "condition": "All electrical", "notes": "Both required"},
-                {"name": "NOC", "required": "REQUIRED", "condition": "Job value > $2,500; $7,500 AC", "notes": "Miami Beach $2,500 threshold"},
-            ],
-            "conditional_documents": [
-                {"name": "Plans (digitally signed & sealed with SHA-1)", "condition": "When plan review required", "notes": "Single multi-page PDF per specialty; SHA-1 + Signature Report with wet seal"},
-            ],
-            "master_permit_rule": "2+ trades require Master Building permit (needs GC); sub-permits obtained after master issued",
-        },
-        "plumbing": {
-            "subcategory": "General / Trade",
-            "total_required_docs": 10,
-            "noc_threshold": "$2,500",
-            "submittal_method": "Civic Access (CSS) Portal",
-            "code_edition": "FBC 8th Ed (2023)",
-            "county": "Miami-Dade",
-            "source_document": "Miami Beach Building Permits page",
-            "last_verified": "2026-03-16",
-            "documents": [
-                {"name": "Miami Beach Permit Application (via CSS)", "required": "REQUIRED", "condition": "All plumbing", "notes": "Signed & notarized"},
-                {"name": "MDC Plumbing & Gas Fee Sheet", "required": "REQUIRED", "condition": "All plumbing", "notes": "Per MDC fee schedule"},
-                {"name": "City + MDC Contractor Registration", "required": "REQUIRED", "condition": "All plumbing", "notes": "Both required"},
-                {"name": "NOC", "required": "REQUIRED", "condition": "Job value > $2,500", "notes": "Miami Beach threshold"},
-            ],
-            "conditional_documents": [
-                {"name": "DERM/WASD County Approval", "condition": "Sewer/water", "notes": "Submit to MDC separately"},
-            ],
-        },
-        "building": {
-            "subcategory": "New Construction / Additions / Alterations",
-            "total_required_docs": 18,
-            "noc_threshold": "$2,500 ($7,500 AC)",
-            "submittal_method": "Civic Access (CSS) Portal",
-            "portal_url": "https://www.miamibeachfl.gov/business/civicaccess/",
-            "code_edition": "FBC 8th Ed (2023)",
-            "county": "Miami-Dade",
-            "source_document": "Miami Beach Building Permits + Building Department + Online Permitting Resource Center",
-            "last_verified": "2026-03-16",
-            "documents": [
-                {"name": "Miami Beach Permit Application (via CSS)", "required": "REQUIRED", "condition": "All building", "notes": "Signed & notarized by owner/rep AND registered contractor; BOA + upfront processing fee"},
-                {"name": "Plans (digitally signed & sealed with SHA-1)", "required": "REQUIRED", "condition": "All requiring plan review", "notes": "Single multi-page PDF per specialty; SHA-1 authentication + Signature Report with physical wet seal; projects <$25K may allow contractor-prepared drawings"},
-                {"name": "Construction Cost Affidavit", "required": "REQUIRED", "condition": "Job value > $5,000", "notes": "Miami Beach specific form"},
-                {"name": "City + MDC Contractor Registration", "required": "REQUIRED", "condition": "All building", "notes": "Both required; CSS account needed"},
-                {"name": "NOC", "required": "REQUIRED", "condition": "Job value > $2,500; $7,500 AC", "notes": "Miami Beach $2,500 threshold"},
-            ],
-            "conditional_documents": [
-                {"name": "CPMP", "condition": "Job value >= $250,000", "notes": "Construction Parking Management Plan"},
-                {"name": "Planning & Zoning Review", "condition": "When applicable", "notes": "Miami Beach has extensive zoning/historic preservation ordinances (Art Deco Historic Districts)"},
-                {"name": "MDC County Approval", "condition": "When required", "notes": "Often required BEFORE Miami Beach plan review complete"},
-                {"name": "Pre-Submittal Meeting", "condition": "Optional — reduces review time", "notes": "Plans 75% complete; design professional must attend"},
-                {"name": "Expedited Plan Review", "condition": "After at least one review cycle", "notes": "Sat/Sun only; request Mon-Thu by 2pm"},
-            ],
-            "historic_preservation": "Miami Beach has extensive Art Deco Historic Districts that may impose additional review requirements",
-            "homeowner_help": "homeownerbuild@miamibeachfl.gov",
-        },
-        "marine": {
-            "subcategory": "Docks / Seawalls — SIGNIFICANT Waterfront",
-            "noc_threshold": "$2,500 (city) + DERM fees",
-            "notes": "Miami Beach is a BARRIER ISLAND with extensive waterfront (Atlantic Ocean + Biscayne Bay + Indian Creek). Requires: (1) City building permit via CSS; (2) MDC DERM Class I for coastal work; (3) SFWMD ERP + USACE as applicable; (4) FDEP Environmental Division may be needed.",
-            "dock_documents": [
-                {"name": "Miami Beach Permit Application (via CSS)", "required": "REQUIRED", "condition": "All marine structural", "notes": "City building permit required for structural components"},
-                {"name": "MDC DERM Class I Permit Application", "required": "REQUIRED", "condition": "All dock/seawall/mangrove work in tidal waters", "notes": "Submittable online as of Dec 1, 2025"},
-                {"name": "Signed & Sealed Engineering Plans", "required": "REQUIRED", "condition": "Docks / seawalls", "notes": "By licensed FL PE"},
-                {"name": "Survey (current)", "required": "REQUIRED", "condition": "All marine construction", "notes": "Must show existing conditions, water boundaries"},
-            ],
-            "dock_conditional": [
-                {"name": "SFWMD Environmental Resource Permit", "condition": "When required", "notes": "DEP General Permit for docks <= 1,000 sq ft"},
-                {"name": "USACE Section 10/404 Permit", "condition": "Navigable waters / wetlands", "notes": "Army Corps permit"},
-                {"name": "FDEP Environmental Division Approval", "condition": "When applicable", "notes": "May be required for coastal work"},
-            ],
-        },
+        "noc_threshold": 2500,  # Per the actual permit application form — see GOTCHA
+        "noc_threshold_display": "$2,500 (per permit application form) — NOTE: website text says $5,000",
+        "noc_threshold_hvac": 7500,
+        "hvhz": True,
+        "hours": "Mon-Fri 8:00 AM - 4:00 PM, CLOSED for lunch 12:00 PM - 1:00 PM",
+        "homeowner_assistance_hours": "Mon-Fri 8:00 AM - 3:00 PM",
+        "permit_services_hours": "Mon-Thu 8:00 AM - 3:00 PM",
+        "trade_chief_consult": "Tue 1:00 PM - 3:00 PM, Thu 8:30 AM - 11:30 AM",
+        "records_hours": "Mon-Fri 8:00 AM - 3:00 PM",
+        "inspection_hours": "Mon-Fri 8:30 AM - 3:30 PM",
+        "inspection_route_url": "https://apps.miamibeachfl.gov/inspectionroutes",
+        "plan_review_cycle": "7 business days typical, 15 business days maximum per cycle",
+        "avg_review_cycles": "2 cycles average to permit issuance",
+        "fee_structure": "20% upfront before review begins, 80% after all reviews pass",
+        "work_without_permit_penalty": "$500 + double permit fee (1st offense); $1,000 + double (2nd); $2,000 + double (subsequent)",
+        "digital_signing": "SHA-1 authentication required; Signature Report with physical wet seal uploaded with plans",
+        "hash_software": "HashMyFiles (32bit or 64bit) — free, not endorsed by city",
+        "remote_online_notary": True,
+        "historic_districts": True,
+        "art_deco_district": True,
+        "barrier_island": True,
+        "waterfront": True,
+        "fema_50_rule": True,
+        "building_recertification": True,
+        "green_permits": True,
+        "amnesty_program": True,
+        "phased_permits": True,
+        "iso_certified": True,
+        "two_offices": True,
+        "master_permit_rule": "2+ trades require Master Building Permit with General Contractor; sub-permits after master issued",
+        "contractor_drawn_plans_limit": "$25,000 max job value for contractor-prepared drawings (signed & notarized)",
+        "insurance_cert_holder": "City of Miami Beach\nBuilding Department\n1700 Convention Center Drive, 2nd Floor\nMiami Beach, FL 33139",
+        "state_certified_requirements": [
+        "Local Business Tax Receipt (LBTR) for FL place of business",
+        "Certificate of Insurance — Workers' Compensation",
+        "Certificate of Insurance — General Liability per FL Admin Rule 61G4-15.003",
+        ],
+        "mdc_licensed_requirements": [
+        "Certificate of Competency from Construction Trades Qualifying Board (CTQB)",
+        "Municipal Contractors Tax Receipt (MCTR) for Miami Beach",
+        "Certificate of Insurance — Workers' Compensation",
+        "Certificate of Insurance — GL ($300,000/occurrence bodily injury, $50,000/accident property damage)",
+        ],
+        "registration_process": "Email docs to BuildingContractor@miamibeachfl.gov → Create CSS account → Email CSS account created confirmation with docs attached",
+        "css_account_naming": "Company name followed by contractor license number; qualifier first/last name in corresponding box",
     },
-    "miami_gardens": {
+"miami_gardens": {
         "county": "Miami-Dade",
         "roofing": {
             "subcategory": "Re-Roof (HVHZ)",
@@ -19005,6 +19142,1618 @@ UNCERTAINTY_FLAGS = {
     ],
 }
 
+
+MIAMI_BEACH_PERMITS = {
+    "building": {
+        "name": "Building Permit — New Construction / Additions / Alterations",
+        "items": [
+            # === PORTAL & SUBMISSION ===
+            "Submit via Civic Access (CSS) portal at www.mbselfservice.com OR in-person walkthrough for eligible types",
+            "Contractor must be registered with City of Miami Beach AND Miami-Dade County before any permit application",
+            "CSS account required — company name + license number format; qualifier name in separate field",
+            "GOTCHA: Two submission methods exist (walkthrough in-person vs electronic) — once started with one method, CANNOT switch to the other mid-process",
+            "In-person walkthrough: physical wet seal or embossed seal required; contractor-drawn plans signed/notarized, max $25K job value",
+            "Electronic: plans must be digitally signed/sealed with SHA-1 authentication codes; Signature Report with physical wet seal uploaded alongside",
+            "Plans must be single multi-page PDF per specialty discipline",
+
+            # === APPLICATION ===
+            "Miami Beach Permit Application required — signed by BOTH property owner (or authorized rep) AND contractor/qualifier",
+            "Application includes BOA (Building Official Acknowledgment) + upfront processing fee (20% of total permit fee)",
+            "Cost Affidavit required for jobs over $5,000 (Miami Beach specific form, updated 10/17/2025)",
+            "GOTCHA: NOC required for work exceeding $2,500 per the permit application form — BUT website text says $5,000. Recommend using $2,500 threshold to avoid rejection",
+            "NOC can be recorded by Miami Beach Records Management section OR at MDC County Recorder's office",
+            "Construction Parking Management Plan (CPMP) required for jobs >= $250,000 — OR Affidavit in Lieu of CPMP",
+            "Land Disturbing Activities Form required for jobs >= $250,000 ($144 review fee assessed)",
+            "Sediment and Erosion Control Affidavit required for jobs proposing land disturbing activities",
+
+            # === CONTRACTOR REGISTRATION ===
+            "Contractor registration via email to BuildingContractor@miamibeachfl.gov with all documents attached",
+            "State-certified contractors: LBTR (FL place of business) + WC + GL insurance per FL Admin Rule 61G4-15.003",
+            "MDC-licensed contractors: Certificate of Competency (CTQB) + MCTR for Miami Beach + WC + GL ($300K/$50K)",
+            "Insurance certificate holder MUST read: City of Miami Beach, Building Department, 1700 Convention Center Drive, 2nd Floor, Miami Beach, FL 33139",
+            "GOTCHA: Expired license/insurance in CSS system places HOLD on ALL permits — no inspections or new permits until updated",
+            "Workers' Comp exemption: Notice to Owner form (Workers' Compensation Insurance Exemption) required",
+
+            # === PLANS & DOCUMENTS ===
+            "Plans signed & sealed by licensed FL professional (architect/engineer) with SHA-1 digital authentication",
+            "HVHZ: All products must have valid Miami-Dade County NOAs (Notices of Acceptance)",
+            "Product approvals required for roofing, windows, doors, shutters, skylights, awnings, etc.",
+            "FBC 8th Edition (2023) applicable code",
+            "Condominium work: board approval letter on board letterhead, signed AND notarized",
+            "Owner's Affidavit for Tenant Permit required when tenant is doing the work",
+            "Owner-Builder Affidavit (Disclosure Statement per F.S. 489.103(c)) required for owner-builders",
+            "Owner-builder: may build/improve 1-2 family residence or commercial up to $75K; must provide direct onsite supervision",
+
+            # === PLAN REVIEW ===
+            "Plan review cycle: 7 business days typical, 15 business days maximum per cycle",
+            "Average 2 review cycles to permit issuance",
+            "All disciplines reviewed simultaneously",
+            "Pre-Submittal Meeting available: plans 75% complete + design professional must attend — reduces review time",
+            "Expedited Plan Review: after at least 1 completed review cycle; request Mon-Thu by 2pm to buildingadmin@miamibeachfl.gov; reviews conducted Sat/Sun only",
+            "3 Times Review Meeting required if plans fail review 3 times (dedicated form available)",
+            "Plan Routing Request Form for routing plans to additional review disciplines",
+
+            # === MDC COUNTY ===
+            "GOTCHA: MDC County approval often required BEFORE Miami Beach plan review is complete",
+            "Sequence: Apply for MB permit first → get process number → submit to MDC with copy of MB permit app",
+            "MDC DERM, WASD, Fire, Health, Impact fees may apply depending on project scope",
+            "MDC fee sheets required for electrical, plumbing, mechanical trades",
+
+            # === HISTORIC / ZONING ===
+            "GOTCHA: Art Deco Historic District — properties may require Historic Preservation Board review before building permit",
+            "Planning & Zoning review may be required for alterations, additions, or changes affecting zoning compliance",
+            "FEMA 50% Rule applies — substantial improvement threshold for flood zone properties",
+
+            # === INSPECTIONS ===
+            "Inspections Mon-Fri 8:30 AM - 3:30 PM; request/cancel/reschedule via CSS portal",
+            "Required at inspection site: approved plans + revisions (PRINTED), permit card, recorded NOC, visible address, OSHA ladder if needed",
+            "Inspection routes viewable at apps.miamibeachfl.gov/inspectionroutes",
+            "Inspector may wait 5-8 minutes; otherwise reschedule",
+            "Permit card MUST be posted outside — it's the law",
+
+            # === FEES & PENALTIES ===
+            "Fee structure: 20% of permit fee charged upfront; remaining 80% charged after all reviews pass",
+            "Work without permit: $500 + double permit fee (1st offense); $1,000 + double (2nd); $2,000 + double (subsequent)",
+            "Fee schedule PDF: https://www.miamibeachfl.gov/wp-content/uploads/2025/10/Building-Department-Fee-Guide-2025.pdf",
+
+            # === SPECIAL PROGRAMS ===
+            "Phased Permits available per FBC Section 105.13 — requires pre-construction meeting with Building Official",
+            "Green Permits program available for qualifying projects",
+            "Building Code Violation Amnesty Program available",
+            "Permit Refunds: payable to property owner of record only",
+
+            # === FORMS UNIQUE TO MIAMI BEACH ===
+            "NOTE: Key Miami Beach forms include: Permit Application (w/ Cost Affidavit), CPMP, Affidavit in Lieu of CPMP, Construction Cost Affidavit, Owner-Builder Affidavit, Flooring Permit Affidavit, CO/CC Request Form, TCO/TCC Request and Extension Forms, Phased Permit Hold Harmless, Change of Architect/Engineer Form, Opinion of Title, Unity of Title (Corporate & Individual), Covenant in Lieu of Unity of Title, Sewer Allocation Letter, Plan Routing Request, Permit Review Waiver, Permit Cancellation Request, As-Built Signature Form, GC/Owner Pre-Construction Occupancy Agreements",
+
+            # === CONTACT ===
+            "General: BuildingInfo@miamibeachfl.gov or 305-673-7610",
+            "Homeowner help: homeownerbuild@miamibeachfl.gov",
+            "Contractor registration: BuildingContractor@miamibeachfl.gov",
+            "Admin/expedited review: buildingadmin@miamibeachfl.gov",
+            "Appointments: https://wb-miamibeachfl.qmatic.cloud/",
+        ],
+    },
+
+    "electrical": {
+        "name": "Electrical Permit — Panel / Service / Trade",
+        "items": [
+            "Submit via Civic Access (CSS) portal",
+            "Miami Beach Permit Application required — signed & notarized",
+            "MDC Electrical Fee Sheet required per MDC fee schedule",
+            "City + MDC Contractor Registration required (both mandatory)",
+            "NOC required for job value exceeding $2,500 (per permit application form)",
+            "GOTCHA: 2+ trades require Master Building Permit with General Contractor — standalone electrical permit only for single-trade jobs",
+            "Plans (digitally signed & sealed with SHA-1) required when plan review needed",
+            "Single multi-page PDF per specialty discipline",
+            "HVHZ: All electrical products must have valid MDC NOAs where applicable",
+            "Electrical Panel Replacement form available for MF-SFR (updated Jan 2026)",
+            "Field Electrical Inspection Approval form required for special events",
+            "Selective Coordination Requirements for Plans Review — form on forms page",
+            "Wind Resistance Design and Installation of Mechanical Equipment form — per MDC requirements",
+            "NOTE: Same-day service available for certain electrical replacements (same for same)",
+            "Insurance cert holder: City of Miami Beach, Building Department, 1700 Convention Center Drive, 2nd Floor, Miami Beach, FL 33139",
+            "UNCERTAINTY (90%): Service change procedures with FPL — no specific Service Procedure Form found on Miami Beach forms page; may follow standard MDC/FPL procedures",
+        ],
+    },
+
+    "plumbing": {
+        "name": "Plumbing Permit — General / Trade",
+        "items": [
+            "Submit via Civic Access (CSS) portal",
+            "Miami Beach Permit Application required — signed & notarized",
+            "MDC Plumbing & Gas Fee Sheet required per MDC fee schedule",
+            "City + MDC Contractor Registration required (both mandatory)",
+            "NOC required for job value exceeding $2,500",
+            "GOTCHA: 2+ trades require Master Building Permit with GC — standalone plumbing permit only for single-trade",
+            "DERM/WASD County Approval required for sewer/water work — submit to MDC separately",
+            "Fats, Oil and Grease (FOG) Permit Application required for food service establishments — uses MDC DERM form",
+            "FOG Plan Review Checklist available on forms page",
+            "FOG Fee Schedule per MDC Environmental schedule",
+            "Same-day service: water heater replacement (same for same), replacement of 2+ fixtures/appliances, water/drainage pump replacement, water treatment equipment replacement, water service replacement (same locations)",
+            "NOTE: When cutting any concrete or other finishes, a building permit is needed first",
+            "Insurance cert holder: City of Miami Beach, Building Department, 1700 Convention Center Drive, 2nd Floor, Miami Beach, FL 33139",
+        ],
+    },
+
+    "mechanical": {
+        "name": "Mechanical Permit — HVAC / AC Replacement",
+        "items": [
+            "Submit via Civic Access (CSS) portal",
+            "Miami Beach Permit Application required — signed & notarized",
+            "MDC Mechanical Fee Sheet required per MDC fee schedule",
+            "City + MDC Contractor Registration required (both mandatory)",
+            "NOC required for job value exceeding $2,500; $7,500 threshold for AC-only replacement",
+            "Air Conditioning Change Out Data Form required (updated 8/19/2025) — city-specific form",
+            "AHRI Certificate required for AC equipment matching",
+            "Wind Resistance Design and Installation of Mechanical Equipment form — per MDC requirements for rooftop/exterior units",
+            "Rooftop Equipment Affidavit required for rooftop-mounted mechanical equipment (updated 12/9/2025)",
+            "HVHZ: All mechanical equipment must have valid MDC NOAs where applicable",
+            "GOTCHA: 2+ trades require Master Building Permit with GC",
+            "NOTE: Certified AC contractor scope — refer to F.S. section 489 for allowed work",
+            "NOTE: Certified mechanical contractor scope — refer to F.S. section 489 for allowed work",
+            "NOTE: Certified sheet metal contractor CAN apply for kitchen hood permits",
+            "Insurance cert holder: City of Miami Beach, Building Department, 1700 Convention Center Drive, 2nd Floor, Miami Beach, FL 33139",
+            "UNCERTAINTY (85%): Senate Bill 612 (July 2024) line-side electrical implications — no specific SB612 reference found on Miami Beach forms page; standard MDC/FL provisions likely apply. Call 305-673-7610 to confirm.",
+        ],
+    },
+
+    "roofing": {
+        "name": "Roofing Permit — Re-Roof / New Roof (HVHZ)",
+        "items": [
+            "Submit via Civic Access (CSS) portal",
+            "Miami Beach Permit Application required",
+            "Roofing Permit Package (updated 12/24/2025) — comprehensive city-specific package",
+            "HVHZ: This is HVHZ territory — Miami-Dade County NOAs required for ALL roofing products",
+            "HVHZ Section A-B Pages required (updated 2023)",
+            "HVHZ roofing system-specific pages required depending on roof type:",
+            "  - Built-Up Roofing (BUR): Section C System Page + all BUR detail pages (coping, drip edge, gutter, parapet wall, plumbing vent, scupper)",
+            "  - Single Ply Membrane (SPM): Section C System Page + all SPM detail pages (edge metal, gutter, laminated edge, parapet wall, scupper)",
+            "  - Spray Polyurethane Foam (SPF): Section C System Page + all SPF detail pages (drip edge, parapet wall, plumbing vent, roof drain, support flashing)",
+            "  - Tile: A-B, D, E Pages + Tile Calcs",
+            "  - Shingle: A-B, D Pages",
+            "  - Metal: A-B, D Pages",
+            "  - Wood Shake/Shingle: D Page",
+            "  - Section C2 System Page (for certain systems)",
+            "  - Liquid Applied Roofing (LAR): Section A-B Page (waterproof form) + Section C Page",
+            "Certification of Flue Vents present during Re-roofing required (Combustion Flue Vent Certification — MDC form)",
+            "Roof-to-Wall Connection Compliance Affidavit required",
+            "Sheathing Nailing Affidavit required",
+            "Roofing Inspection Report (RIR) Form required",
+            "HVHZ Commercial Re-roof Statement required for commercial properties",
+            "Hurricane Mitigation Affidavit available on forms page",
+            "NOC required for job value exceeding $2,500",
+            "Product approvals (MDC NOAs) required for ALL roofing materials, underlayment, fasteners, edge metals",
+            "Insurance cert holder: City of Miami Beach, Building Department, 1700 Convention Center Drive, 2nd Floor, Miami Beach, FL 33139",
+            "GOTCHA: Miami Beach has an EXTENSIVE set of HVHZ roofing forms — over 30 individual form PDFs for different roofing systems and details. Missing ANY required form for the specific roof system will fail plan review.",
+            "UNCERTAINTY (90%): SFR affidavit threshold ($300K / F.S. 553.844) — not explicitly found on Miami Beach roofing forms. Standard FL HVHZ requirement likely applies but city-specific form not confirmed.",
+        ],
+    },
+
+    "pool_spa": {
+        "name": "Pool / Spa Permit",
+        "items": [
+            "Submit via Civic Access (CSS) portal",
+            "Miami Beach Permit Application required",
+            "Plans signed & sealed by licensed FL engineer required",
+            "HVHZ product approvals (MDC NOAs) required for pool barriers, fencing, equipment",
+            "Public Pool Resurfacing-Modifications Affidavit available (city-specific form)",
+            "Pool safety barrier requirements per FL Residential Swimming Pool Safety Act",
+            "NOC required for job value exceeding $2,500",
+            "City + MDC Contractor Registration required",
+            "Insurance cert holder: City of Miami Beach, Building Department, 1700 Convention Center Drive, 2nd Floor, Miami Beach, FL 33139",
+            "Same-day service: replacement of swimming pool equipment (same for same)",
+            "UNCERTAINTY (85%): Separate building application for pool deck — not explicitly confirmed on Miami Beach website. Standard MDC practice may apply. Call 305-673-7610 to confirm.",
+        ],
+    },
+
+    "fence": {
+        "name": "Fence Permit",
+        "items": [
+            "Submit via Civic Access (CSS) portal",
+            "Miami Beach Permit Application required",
+            "Standard Masonry Fence Wall details available (revised 10/28/2021) — city-provided standard drawing",
+            "Standard Chain Link Fence details available (May 2018) — city-provided standard drawing",
+            "Standard Wood Fence details available (revised 10/28/2021) — city-provided standard drawing",
+            "HVHZ: Product approvals (MDC NOAs) required for fence products in HVHZ",
+            "Planning & Zoning review may be required for fence height, location, material compliance",
+            "Historic District properties: additional review may be required for fence design/materials",
+            "NOC required for job value exceeding $2,500",
+            "Insurance cert holder: City of Miami Beach, Building Department, 1700 Convention Center Drive, 2nd Floor, Miami Beach, FL 33139",
+        ],
+    },
+
+    "windows_doors": {
+        "name": "Windows & Doors Permit",
+        "items": [
+            "Submit via Civic Access (CSS) portal",
+            "Miami Beach Permit Application required",
+            "Window Door Notice (12/08/2022) — informational notice with city-specific requirements",
+            "HVHZ: ALL windows and doors MUST have valid MDC NOAs (Notices of Acceptance)",
+            "Product approvals for impact windows, doors, shutters, and skylights required",
+            "Plans may be required depending on scope (structural modifications, enlarging openings)",
+            "Manufacturer Authorization Letter (2 copies) required for shutters",
+            "NOC required for job value exceeding $2,500",
+            "City + MDC Contractor Registration required",
+            "Insurance cert holder: City of Miami Beach, Building Department, 1700 Convention Center Drive, 2nd Floor, Miami Beach, FL 33139",
+            "NOTE: Retrofit vs non-retrofit distinction important — structural changes to openings require structural engineer review",
+        ],
+    },
+
+    "sign": {
+        "name": "Sign Permit",
+        "items": [
+            "Submit via Civic Access (CSS) portal",
+            "Miami Beach Permit Application required",
+            "Plans signed & sealed by licensed professional as required",
+            "HVHZ: Product approvals for sign materials and mounting systems",
+            "Planning & Zoning review required for sign size, location, illumination compliance",
+            "Historic District: additional design review for signs in Art Deco districts",
+            "NOC required for job value exceeding $2,500",
+            "Electrical sub-permit required for illuminated signs",
+            "Insurance cert holder: City of Miami Beach, Building Department, 1700 Convention Center Drive, 2nd Floor, Miami Beach, FL 33139",
+        ],
+    },
+
+    "demolition": {
+        "name": "Demolition Permit",
+        "items": [
+            "Submit via Civic Access (CSS) portal",
+            "Miami Beach Permit Application required",
+            "GOTCHA: Exterior demolition within a Historic District is NOT eligible for phased permits",
+            "GOTCHA: Demolition that violates a condition of a development board order is NOT eligible for phased permits",
+            "Total demolition may be processed as same-day/over-the-counter in some cases",
+            "NPDES (National Pollutant Discharge Elimination System) permit may be required",
+            "Sediment and Erosion Control Affidavit required",
+            "Asbestos survey may be required for buildings constructed before certain dates",
+            "NOC required for job value exceeding $2,500",
+            "City + MDC Contractor Registration required",
+            "Insurance cert holder: City of Miami Beach, Building Department, 1700 Convention Center Drive, 2nd Floor, Miami Beach, FL 33139",
+            "UNCERTAINTY (85%): Specific demolition-unique docs (warranty deed, exterminator vermin statement, hose bib location, temp fence as separate permit) — not found on Miami Beach forms page specifically. Standard MDC requirements may apply. Call 305-673-7610 to confirm.",
+        ],
+    },
+
+    "dock": {
+        "name": "Dock / Seawall / Marine Construction Permit",
+        "items": [
+            "BARRIER ISLAND — Miami Beach has extensive waterfront on Atlantic Ocean, Biscayne Bay, and Indian Creek",
+            "Submit via Civic Access (CSS) portal for city building permit component",
+            "Miami Beach Permit Application required for structural components",
+            "MDC DERM Class I Permit Application required for ALL dock/seawall/mangrove work in tidal waters (submittable online as of Dec 1, 2025)",
+            "Signed & sealed engineering plans by licensed FL PE required",
+            "Current survey required showing existing conditions and water boundaries",
+            "SFWMD Environmental Resource Permit may be required (DEP General Permit for docks <= 1,000 sq ft)",
+            "USACE Section 10/404 Permit required for navigable waters / wetlands",
+            "FDEP Environmental Division Approval may be required for coastal work",
+            "GOTCHA: Multi-agency approval sequence: County EPD → FL DEP → Army Corps → Local permit",
+            "NOC required for job value exceeding $2,500 (city) plus DERM fees",
+            "Insurance cert holder: City of Miami Beach, Building Department, 1700 Convention Center Drive, 2nd Floor, Miami Beach, FL 33139",
+            "UNCERTAINTY (85%): Longshoreman insurance requirement — not explicitly found for Miami Beach marine permits. May apply for commercial waterfront. Call 305-673-7610.",
+        ],
+    },
+
+    "solar": {
+        "name": "Solar Installation Permit",
+        "items": [
+            "Submit via Civic Access (CSS) portal",
+            "Miami Beach Permit Application required",
+            "Plans signed & sealed showing solar panel layout, mounting details, electrical specifications",
+            "HVHZ: Product approvals (MDC NOAs) required for solar panels and mounting systems",
+            "Electrical sub-permit required for solar electrical connections",
+            "Structural review required for roof-mounted systems",
+            "NOC required for job value exceeding $2,500",
+            "City + MDC Contractor Registration required",
+            "Insurance cert holder: City of Miami Beach, Building Department, 1700 Convention Center Drive, 2nd Floor, Miami Beach, FL 33139",
+            "UNCERTAINTY (85%): Notarized homeowner authorization and named special inspector for solar — not explicitly found on Miami Beach forms page. Standard FL/MDC requirements may apply. Call 305-673-7610.",
+        ],
+    },
+
+    "fire_system": {
+        "name": "Fire System / Fire Alarm Permit",
+        "items": [
+            "Submit via Civic Access (CSS) portal",
+            "Miami Beach Permit Application required",
+            "Fire Department Plan Review required — contact Tom Armstrong (TomArmstrong@miamibeachfl.gov)",
+            "Fire Department Inspections — contact Joseph Bacallao (JosephBacallao@miamibeachfl.gov)",
+            "Fire Penetration Affidavit (Fire-Stopping Affidavit, updated 6/26/2024) required",
+            "Uniform Notice of a Low-Voltage Alarm System Project available for low-voltage alarm work",
+            "Expedited Fire Department Plan Review and Inspections available — contact fire dept directly",
+            "HVHZ product approvals for fire system components as applicable",
+            "NOC required for job value exceeding $2,500",
+            "Insurance cert holder: City of Miami Beach, Building Department, 1700 Convention Center Drive, 2nd Floor, Miami Beach, FL 33139",
+        ],
+    },
+
+    "certificate_of_occupancy": {
+        "name": "Certificate of Occupancy / Certificate of Completion",
+        "items": [
+            "CO/CC Request Form (updated 7/25/2025) must be submitted",
+            "TCO/TCC (Temporary CO/CC) Request Form (updated 7/22/2025) available for phased occupancy",
+            "TCO/TCC Extension Request Form (updated 7/22/2025) available for extensions",
+            "Final inspections from ALL disciplines must be approved before CO issuance",
+            "All permit conditions must be satisfied",
+            "All violations must be cleared",
+            "NOTE: Building Dept does NOT process Certificate of Use for new businesses — that's the Planning Department",
+            "NOTE: Change of Occupancy per FBC Chapter 3 IS handled by Building Dept",
+            "Change of Occupancy for Short-Term Rentals (STR) Guidelines available (updated Sept 2025)",
+            "Checklist for Short Rental Conversion from R2 to R1 available",
+        ],
+    },
+
+    "private_provider": {
+        "name": "Private Provider Package",
+        "items": [
+            "Private Provider Packet available (updated 4/04/2025) — comprehensive package",
+            "Private Provider Submittal Checklist (updated 4/4/2025) — required documents list",
+            "Private Provider Acknowledgement form (updated 10/02/2023)",
+            "Private Provider Notice to Building Official (updated 7/31/2025)",
+            "Private Provider Plan Review Affidavit (updated 8/11/2025)",
+            "Private Provider Compliance Form (updated 8/31/2023)",
+            "Private Provider Inspections List (updated April 2025)",
+            "Private Provider Statement of Inspection form",
+            "Private Provider Pre-Construction Meeting form (updated 2/27/2025)",
+            "Private Provider Fee Owners Authorization Form (updated July 2025)",
+            "Private Provider Residential Pre-construction Occupancy Agreement (updated 7/17/2024)",
+            "NOTE: Private provider still requires city building permit — private provider performs plan review and/or inspections in lieu of city review",
+        ],
+    },
+
+    "change_of_contractor": {
+        "name": "Change of Contractor",
+        "items": [
+            "New permit application required — select 'Change of Contractor' box in 'Permit Request' section",
+            "New Construction Cost Affidavit required with change of contractor application",
+            "New contractor must be registered with City of Miami Beach AND MDC",
+            "New contractor's insurance must be current in CSS system",
+            "NOTE: Change of Architect/Engineer Form also available (Hold Harmless, updated 4/7/2020)",
+        ],
+    },
+
+    "special_event": {
+        "name": "Special Event Permit",
+        "items": [
+            "Special Event Permit Package (updated 2/12/2024) — comprehensive package",
+            "Temporary Structure Form (updated 10/2023) for tents, stages, etc.",
+            "Special Inspector Form (updated 1/08/2024) required",
+            "Special Inspector Notice for Special Events (updated 5/08/2023)",
+            "GOTCHA: Field Electrical and Structural inspection approval forms MUST be emailed to ChiefElectrical@miamibeachfl.gov and ChiefStructural@miamibeachfl.gov BEFORE the event takes place — failure = $500 fine",
+            "Special events must be requested WEEKS IN ADVANCE",
+        ],
+    },
+
+"flooring": {
+        "name": "Flooring Permit (Condo Interior)",
+        "items": [
+            "Same-day/over-the-counter permit available for interior condo unit flooring only (including bathroom EXCEPT shower/tub)",
+            "Flooring Permit Affidavit required (updated 2/28/2023) — city-specific form",
+            "Condominium board approval letter required — on board letterhead, signed AND notarized",
+            "NOTE: Excludes balcony flooring — balcony work requires full plan review",
+            "Contractor registration with city required",
+        ],
+    },
+
+    "ev_charger": {
+        "name": "EV Charger Permit",
+        "items": [
+            "Submit via Civic Access (CSS) portal",
+            "Miami Beach Permit Application required",
+            "Electrical sub-permit required",
+            "Product approvals for EVSE equipment",
+            "Load calculations may be required",
+            "NOC required for job value exceeding $2,500",
+            "UNCERTAINTY (90%): No specific EV charger form found on Miami Beach forms page. Standard electrical permit process likely applies.",
+        ],
+    },
+}
+
+MIAMI_GARDENS_PERMITS = {
+
+    # ────────────────────────────────────────────────────────────────
+    # BUILDING (General / New Construction / Additions / Alterations)
+    # ────────────────────────────────────────────────────────────────
+    "building": {
+        "name": "Building Permit — Miami Gardens",
+        "items": [
+            "Miami Gardens General Permit Application (updated 2023) — ALL fields must be completed or application DENIED; must be notarized",
+            "Submit via CSS Portal (Tyler EnerGov): https://miamigardensfl-energovpub.tylerhost.net/apps/selfservice#/home",
+            "Two (2) sets of signed and sealed plans (by FL PE or architect if applicable), drawn to scale",
+            "Product Approvals / Miami-Dade County NOAs for all applicable products (roofs, sheds, windows, doors, awnings, shutters, skylights, etc.)",
+            "Contractor Registration (City + MDC) — both required; see contractor registration section",
+            "Certificate of Insurance naming 'City of Miami Gardens, 18605 NW 27th AVE, Miami Gardens, FL 33056' as certificate holder",
+            "Certificate of Workers' Compensation or WC Exemption Card",
+            "Notice of Commencement (NOC) — required when job value exceeds $2,500 (general) or $7,500 (A/C); must be recorded with MDC, submitted, and POSTED at job site before FIRST INSPECTION",
+            "Homeowners Association Affidavit of Awareness — REQUIRED on every application (even if not in HOA — check 'am not' box)",
+            "Property Survey showing flood zone info, existing FFE, elevations, and setbacks",
+            "Proof of Ownership — Recorded Warranty Deed, Special Warranty Deed, Quit Claim Deed, or MDC Tax Receipt; commercial properties may use lease",
+            "DERM Approval — REQUIRED BEFORE city permit for: new buildings, nonresidential additions, commercial interior alterations, commercial re-roofs, commercial pools, land clearing, demolition",
+            "Special Inspector Form (updated 2015) — required for new construction and additions",
+            "Sub-permits required for separate trades (electrical, plumbing, mechanical, roofing, etc.)",
+            "Shop drawings required for applicable work",
+            "GOTCHA: 30% non-refundable up-front processing fee collected at application",
+            "GOTCHA: ALL FIELDS must be filled in or application WILL BE DENIED — no blanks",
+            "GOTCHA: Application must be notarized — owner, lessee, AND qualifier sections",
+            "GOTCHA: Expired permits at any MG property = contractor BLOCKED from new permits",
+            "GOTCHA: DERM approval must be obtained BEFORE submitting city permit application",
+            "GOTCHA: Review by 3–7 disciplines (Structural, Electrical, Mechanical, Plumbing, Zoning, Building, DERM, Fire, Public Works) — ~15 business days if compliant",
+            "NOTE: Permit expires after 180 days without inspection",
+            "NOTE: Renewal = 50% of original permit fee (must reapply within 6 months of expiration)",
+            "NOTE: Work without permit = Double fee + $126 penalty (first offense); $252.50 (second); $631.50 (each after)",
+            "NOTE: Early Start available for $500/master permit — cannot proceed past first required inspection",
+            "NOTE: Construction hours: 7:00 AM – 8:00 PM weekdays only",
+            "NOTE: Equipment/materials stored at least 10' from right-of-way edge",
+            "NOTE: Portable toilets require separate permit",
+            "NOTE: Construction trailers PROHIBITED on SFR sites",
+        ],
+        "conditional_items": [
+            "Ownership Affidavit for Corporation (city form) — when property owned by corporation",
+            "Ownership Affidavit for Individual (city form) — when applicable",
+            "Tree Impact Applicant Affidavit — when project impacts trees",
+            "FEMA Elevation Certificate — for properties in flood zones",
+            "MDC County Approvals (DERM/Fire/Health/Impact) — when applicable per project type",
+            "MDC Health Department approval — required for ALFs, day cares, hospitals, schools (potable water)",
+            "DBPR approval — required for restaurants",
+            "Site Erosion & Sedimentation Control Affidavit — when applicable",
+            "Covenant Letter — when applicable",
+            "Impervious Percentage Form — when increasing impervious area",
+            "Project Data Sheet — when applicable",
+            "Declaration of Use Form — when applicable for zoning",
+        ],
+        "fees": {
+            "minimum_residential": "$78.55",
+            "maximum_residential": "$1,650.00",
+            "minimum_commercial": "$220.00",
+            "residential_alteration": "$0.06 per $1.00 job value",
+            "commercial_alteration": "$0.03 per $1.00 job value (min $220; based on $1.25/SF if SF provided)",
+            "new_construction_residential_0_300sf": "$537.30",
+            "new_construction_residential_301_650sf": "$673.50",
+            "new_construction_residential_651_plus": "$1.10 per SF",
+            "new_construction_commercial": "$0.03 per $1.00 job value",
+            "upfront_processing": "30% non-refundable",
+            "technology_surcharge": "15% of permit fee",
+            "state_surcharge": "2.5% of total fee",
+        },
+    },
+
+    # ────────────────────────────────────────────────────────────────
+    # NEW CONSTRUCTION (separate checklist from city)
+    # ────────────────────────────────────────────────────────────────
+# ────────────────────────────────────────────────────────────────
+    # ADDITIONS
+    # ────────────────────────────────────────────────────────────────
+# ────────────────────────────────────────────────────────────────
+    # ELECTRICAL (Service / Panel Change / General)
+    # ────────────────────────────────────────────────────────────────
+    "electrical": {
+        "name": "Electrical Permit — Miami Gardens",
+        "items": [
+            "Electrical Application (part of Miami Gardens General Permit Application)",
+            "Submit via CSS Portal",
+            "Service Riser Diagram — required for service/panel changes",
+            "Load calculations — if applicable",
+            "NOC — when job value exceeds $2,500 (per permit application form); recorded/displayed before first inspection",
+            "Contractor Registration (City + MDC) — both required",
+            "Insurance certificate naming City of Miami Gardens as holder",
+            "Product Approvals / MDC NOAs for applicable products",
+            "GOTCHA: Commercial service/panel changes require AIC (Available Interrupting Current) Letter from FPL",
+            "GOTCHA: Electrical is a SEPARATE sub-permit — even on projects with a master building permit",
+            "NOTE: 30 Day Temp Electric Service form available (updated 2020) for temporary power",
+        ],
+        "fees": {
+            "minimum_residential": "$78.55",
+            "maximum_residential": "$1,650.00",
+            "minimum_commercial": "$220.00",
+            "residential_alteration": "$0.06 per $1.00 job value",
+            "commercial_alteration": "$0.03 per $1.00 job value",
+            "new_construction": "No charge (included in master permit fee)",
+            "upfront_processing": "30% non-refundable",
+        },
+    },
+
+    # ────────────────────────────────────────────────────────────────
+    # PLUMBING
+    # ────────────────────────────────────────────────────────────────
+    "plumbing": {
+        "name": "Plumbing Permit — Miami Gardens",
+        "items": [
+            "Plumbing Application (part of Miami Gardens General Permit Application)",
+            "Submit via CSS Portal",
+            "NOC — when job value exceeds $2,500; recorded/displayed before first inspection",
+            "Contractor Registration (City + MDC) — both required",
+            "Insurance certificate naming City of Miami Gardens as holder",
+            "GOTCHA: MDC Health Dept approval required for potable water work at ALFs, day cares, hospitals, schools",
+            "GOTCHA: HRS/DOH approval required for septic tank work; DERM/MDWASD approval required for sewer connections",
+            "NOTE: Separate from building permit — always a sub-permit",
+        ],
+        "fees": {
+            "minimum_residential": "$78.55",
+            "minimum_commercial": "$220.00",
+            "residential_alteration": "$0.06 per $1.00 job value",
+            "commercial_alteration": "$0.03 per $1.00 job value",
+            "new_construction": "No charge (included in master permit)",
+            "sewer_capping_demolition_residential": "$78.55",
+        },
+    },
+
+    # ────────────────────────────────────────────────────────────────
+    # MECHANICAL (A/C Replacement / HVAC)
+    # ────────────────────────────────────────────────────────────────
+    "mechanical": {
+        "name": "Mechanical / A/C Permit — Miami Gardens",
+        "items": [
+            "Mechanical Application (part of Miami Gardens General Permit Application)",
+            "Residential and Light Commercial Air Conditioning Replacements Data Sheet (effective Sept 1, 2023) — ONE FORM PER SYSTEM",
+            "AHRI Certificate — REQUIRED for each system",
+            "Signed and sealed tie-down specifications / NOA for equipment",
+            "NOC — when A/C change-out job value exceeds $7,500; general mechanical exceeds $2,500",
+            "Contractor Registration (City + MDC) — both required",
+            "Insurance certificate naming City of Miami Gardens as holder",
+            "Submit via CSS Portal",
+            "GOTCHA: Each system requires its own AC Replacement Data Sheet — multi-system jobs need multiple forms",
+            "GOTCHA: Must provide existing unit data OR equipment sizing calculations (ACCA Manual N, J, etc.) if existing data unavailable",
+            "GOTCHA: Must indicate if duct smoke detector will be installed/reconnected and if connected to fire alarm panel",
+            "GOTCHA: Cooling towers, chillers, refrigeration units are NOT covered by the simple data sheet — full plans required",
+            "NOTE: Emergency A/C replacement may proceed to first inspection with Building Official approval, but permit still required",
+            "NOTE: Senate Bill 612 (July 2024) changed line-side electrical rules — verify current requirements with building dept",
+        ],
+        "fees": {
+            "minimum_residential": "$78.55",
+            "maximum_residential": "$1,650.00",
+            "minimum_commercial": "$220.00",
+            "residential": "$0.06 per $1.00 job value",
+            "commercial": "$0.03 per $1.00 job value",
+        },
+    },
+
+    # ────────────────────────────────────────────────────────────────
+    # ROOFING (Residential + Commercial)
+    # ────────────────────────────────────────────────────────────────
+    "roofing": {
+        "name": "Roofing Permit — Miami Gardens (HVHZ)",
+        "items": [
+            "Miami Gardens General Permit Application — notarized",
+            "Roofing Permit Fee Sheet (updated 2020) — fill in SF for correct roof type",
+            "Homeowners Association Affidavit of Awareness",
+            "Workers' Compensation Exemption Notice to Owner (2021) — NOTARIZED by both owner and contractor",
+            "CMG Roof-to-Wall Connection Exemption Affidavit — if insured value ≤ $300,000 per F.S. 553.844",
+            "HVHZ Owner's Notification for Roofing Considerations (revised 2021) — 7 items must be initialed by owner (re-roofs only)",
+            "HVHZ Roofing Package (2023 — FBC 8th Edition) — complete applicable sections (A through E depending on roof type)",
+            "MDC Prescriptive Anchor/Base Sheet Attachment Table (2023) OR site-specific engineering calculations",
+            "Product Approvals / MDC NOAs — front page, specific system description, limitations, detail drawings — posted at jobsite",
+            "Fire Directory Listing Page",
+            "Design calculations per Chapter 16, or RAS 127 (steep slope) or RAS 128 (low slope) as applicable",
+            "OSHA Ladder Information Sheet (updated 2023) — OSHA-approved ladder REQUIRED at jobsite",
+            "NOC — recorded/displayed before first inspection ($2,500 threshold per application form)",
+            "Contractor Registration (City + MDC)",
+            "Insurance certificate naming City of Miami Gardens",
+            "Submit via CSS Portal",
+            "GOTCHA: $120.00 FINE for non-compliant ladder at any inspection — no exceptions",
+            "GOTCHA: NOA/Product Approval must be provided at application AND posted at jobsite — missing either = rejection",
+            "GOTCHA: Tile (mortar set) roof requires pull test PRIOR to final inspection",
+            "GOTCHA: Roof-to-wall connection retrofit required for insured value OVER $300,000 — must provide exemption affidavit if under $300K with proof (insurance dec page or property appraiser assessment)",
+            "GOTCHA: Ponding water conditions may require structural engineer review — flag on re-roofs",
+            "GOTCHA: Re-nailing existing wood deck may be required per current HVHZ Chapter 16 provisions",
+            "GOTCHA: Common roofs (townhouses, condos) — contractor AND/OR owner should notify adjacent unit occupants",
+            "NOTE: Commercial re-roofing with system change requires signed/sealed structural calculations for supporting structure (Re-Roofing Commercial Affidavit)",
+            "NOTE: Commercial re-roofing exact replacement requires attestation that existing overflow drains/scuppers prevent >5\" water accumulation",
+            "NOTE: Method 2 Simplified Tile Calculations is ONLY applicable in Broward County — NOT valid in Miami Gardens (MDC)",
+        ],
+        "required_inspections": {
+            "low_slope_flat": ["135 — Tin Cap", "137 — Mop in Progress", "199 — Final"],
+            "shingle": ["135 — Tin Cap", "138 — Shingle/Tile in Progress", "199 — Final"],
+            "tile": ["135 — Tin Cap", "137 — Mop in Progress", "138 — Shingle/Tile in Progress", "199 — Final"],
+            "tile_mortar_set": ["134 — Sheathing", "135 — Tin Cap", "138 — Shingle/Tile in Progress", "199 — Final"],
+            "metal": ["138 — Shingle/Tile in Progress", "199 — Final"],
+        },
+        "fees": {
+            "flat_shingle": "$0.14 per SF of roof coverage",
+            "tile_metal": "$0.17 per SF of roof coverage",
+            "lightweight_concrete": "$126.75 flat fee",
+            "minimum_fee": "$138.25",
+        },
+    },
+
+    # ────────────────────────────────────────────────────────────────
+    # POOL / SPA
+    # ────────────────────────────────────────────────────────────────
+    "pool_spa": {
+        "name": "Swimming Pool & Spa Permit — Miami Gardens",
+        "items": [
+            "Swimming Pool and Spa Package — submitted as a package including:",
+            "  — Building Application",
+            "  — Mechanical Application (if applicable)",
+            "  — Electrical Application",
+            "  — Plumbing Application",
+            "Homeowners Association Affidavit of Awareness",
+            "Residential Swimming Pool, Spa or Hot Tub Safety Act Form (revised 09/19/2024) — NOTARIZED by both owner/agent AND prime contractor",
+            "Property Survey showing setbacks and proposed pool location",
+            "Signed and sealed drawings (by FL PE or architect)",
+            "Product Approvals / MDC NOAs for applicable equipment",
+            "NOC — recorded/displayed before first inspection",
+            "Contractor Registration (City + MDC)",
+            "Insurance certificate naming City of Miami Gardens",
+            "GOTCHA: Safety Act form requires TWO separate notarizations — one for owner, one for contractor. Missing either = rejection.",
+            "GOTCHA: Must select ONE of five safety barrier methods per F.S. 515 and FBC §454.2.17 — specify in application",
+            "GOTCHA: Final inspection WILL NOT be approved without compliance with Private Swimming Pool Safety Requirements",
+            "GOTCHA: Upon permit expiration, pool is PRESUMED UNSAFE per FBC",
+            "GOTCHA: ALL four trade applications (Building, Mechanical, Electrical, Plumbing) submitted as one package",
+            "NOTE: Violation of F.S. 515 = misdemeanor of the second degree",
+            "NOTE: Commercial pools require DERM approval BEFORE city permit",
+        ],
+        "safety_barrier_options": [
+            "Approved safety pool cover (ASTM F1346-91) — submit manufacturer specs",
+            "Removable child barrier compliant with FBC §454.2.17 — submit manufacturer specs",
+            "Non-dwelling walls (fences, screen enclosures) protecting perimeter — plans must specify type/location",
+            "Dwelling walls with openings + self-close/self-latch devices installed min 54\" above threshold — submit specs",
+            "Dwelling walls with openings + exit alarms complying with UL 2017 — submit manufacturer specs",
+        ],
+        "fees": {
+            "pool_spa_and_deck": "$750.00 (includes all trade fees)",
+            "spa_hot_tub_only": "$750.00",
+            "zoning_review": "$51.50",
+        },
+    },
+
+    # ────────────────────────────────────────────────────────────────
+    # DEMOLITION
+    # ────────────────────────────────────────────────────────────────
+    "demolition": {
+        "name": "Demolition Permit — Miami Gardens",
+        "items": [
+            "Building Application",
+            "Plumbing Application (for sewer capping)",
+            "DERM Approval — REQUIRED before city demolition permit",
+            "Property Survey",
+            "Signed and sealed drawings",
+            "FPL Disconnect Letter — required",
+            "WASD Water Meter Disconnect Letter — required",
+            "Cable Disconnect Letter — if applicable",
+            "Florida City Gas / TECO Gas Disconnect Letter — if applicable",
+            "Proof of Ownership (Warranty Deed, Special Warranty Deed, Quit Claim Deed, or MDC Tax Receipt)",
+            "NOC — recorded/displayed before first inspection ($2,500 threshold)",
+            "Contractor Registration (City + MDC)",
+            "Insurance certificate naming City of Miami Gardens",
+            "GOTCHA: Must disconnect ALL utilities BEFORE commencing demolition — this means FPL, water, sewer, septic, gas, telephone, cable TV, etc.",
+            "GOTCHA: DOH permit required for septic tank abandonment",
+            "GOTCHA: DERM approval is a prerequisite — cannot submit without it",
+            "NOTE: Sewer capping requires separate plumbing permit/application",
+        ],
+        "fees": {
+            "demolition": "$230.40 per building",
+        },
+    },
+
+    # ────────────────────────────────────────────────────────────────
+    # FENCE
+    # ────────────────────────────────────────────────────────────────
+    "fence": {
+        "name": "Fence Permit — Miami Gardens",
+        "items": [
+            "Building Application (Miami Gardens General Permit Application)",
+            "Homeowners Association Affidavit of Awareness",
+            "Affidavit for Encroachment of Easement (updated 2017) — executed by property owner, REQUIRED on all fence permits",
+            "Property Survey showing setbacks and location — mark fence and gate locations with highlighter",
+            "Site Plan",
+            "For PVC or Metal (Panel) Fence: Plans/drawings signed and sealed by FL licensed Architect or Engineer + Two prints of Product Approvals or NOA",
+            "For Wood Fence: Two prints of fence details (can use prescriptive FBC 8th Edition method if not designed by architect/engineer)",
+            "For Chain Link Fence: Can use prescriptive FBC 8th Edition method; commercial chain link has separate requirements sheet",
+            "NOC — recorded/displayed before first inspection ($5,000 threshold per checklists; $2,500 per application form — use $2,500 to be safe)",
+            "Contractor Registration (City + MDC)",
+            "Insurance certificate naming City of Miami Gardens",
+            "GOTCHA: PVC and Metal fences REQUIRE signed/sealed engineering drawings — prescriptive method NOT allowed for these types",
+            "GOTCHA: Easement Encroachment Affidavit required on ALL fence permits — even if no apparent easement",
+            "GOTCHA: Gate cannot be permitted if the marked location does NOT have an existing driveway",
+            "GOTCHA: Wood fence details must be submitted even when using prescriptive method — not just 'wood fence' on application",
+            "NOTE: Commercial chain link has separate requirements document",
+        ],
+        "fees": {
+            "residential_cbs_brick_metal_pvc_wood": "$1.00 per LF",
+            "residential_chain_link": "No charge",
+            "residential_masonry_ornamental_iron": "$1.35 per LF",
+            "residential_minimum": "$78.55",
+            "commercial": "$0.03 per $1.00 job value (min $220)",
+            "commercial_minimum": "$220.00",
+            "zoning_chain_link_wood_0_500lf": "$51.50",
+            "zoning_chain_link_wood_additional_500lf": "$51.50",
+            "zoning_masonry_wall": "$0.35 per LF",
+        },
+    },
+
+    # ────────────────────────────────────────────────────────────────
+    # WINDOWS & DOORS
+    # ────────────────────────────────────────────────────────────────
+    "windows_doors": {
+        "name": "Windows & Doors Permit — Miami Gardens (HVHZ)",
+        "items": [
+            "Permit Application (Miami Gardens General Permit Application)",
+            "Homeowners Association Affidavit of Awareness",
+            "Window-Door Inspection Procedure Form (city-specific form)",
+            "Uniform Window-Door Schedule (city-specific form — MDC format)",
+            "MDC Wind Load Chart (city-specific form)",
+            "Floor Plan showing window/door locations",
+            "FL Product Approval and/or MDC NOA for each product",
+            "NOC — recorded/displayed before first inspection ($2,500/$5,000 threshold — use $2,500)",
+            "Contractor Registration (City + MDC)",
+            "Insurance certificate naming City of Miami Gardens",
+            "GOTCHA: THREE city-specific forms required (Inspection Procedure, Window-Door Schedule, Wind Load Chart) — missing any = rejection",
+            "GOTCHA: Must have both FL Product Approval search AND MDC NOA search — not just one or the other in HVHZ",
+            "NOTE: Shutters, ornamental iron bars, and safety bars are covered under this permit type",
+        ],
+        "fees": {
+            "first_installation": "$50.50",
+            "each_additional": "$5.75",
+            "rework_fee": "$112.10 per rework",
+        },
+    },
+
+    # ────────────────────────────────────────────────────────────────
+    # SOLAR
+    # ────────────────────────────────────────────────────────────────
+    "solar": {
+        "name": "Solar Panel / Photovoltaic Permit — Miami Gardens",
+        "items": [
+            "TWO Application Forms — one for Building, one for Electrical",
+            "Additional Electrical Application for EC if service is being upgraded",
+            "Miami Gardens Solar Roof Warranty Affidavit (Owner Notice)",
+            "Miami Gardens Special Inspector Form — REQUIRED for connections and waterproofing",
+            "Homeowners Association Affidavit of Awareness",
+            "Signed and sealed drawings with engineer certification (structural AND electrical)",
+            "Complete NOAs / Product Approvals for all proposed products (panels, racking, microinverters, combiner box)",
+            "NOC — recorded/displayed before first inspection",
+            "Contractor Registration (City + MDC)",
+            "Insurance certificate naming City of Miami Gardens",
+            "GOTCHA: Special Inspector Form is REQUIRED — unique to Miami Gardens for solar",
+            "GOTCHA: TWO separate applications required (Building + Electrical) — not one combined form",
+            "GOTCHA: CVC licensed contractor can install PV and associated equipment EXCEPT the interconnection to existing FPL power source — line-side, load-side, or back-fed breaker injection requires EC or ER electrical contractor with SEPARATE permit",
+            "GOTCHA: Service upgrades (downsizing main breaker for 20% rule compliance) require EC/ER contractor with separate permit",
+            "GOTCHA: Drawings must include fall protection statement per OSHA Standard 1926.502(D)(15)",
+        ],
+        "required_plan_elements": [
+            "Sheet Index (enumerated pages with sheet numbers and descriptions)",
+            "House Aerial Photo + Vicinity Map",
+            "Project Description + Codes & Standards reference",
+            "Symbols and Abbreviations legends",
+            "System Description + Fall Protection Statement (OSHA)",
+            "Design pressures (PSF) — down pressure and uplift",
+            "Roof plan with fire setbacks + ground approach clear pathway + property line",
+            "Module layout with type, dimensions, weight + array area & roof area calculations",
+            "Truss size, spacing, wind zones (non-exposed/edge exposed)",
+            "Rails attachment details (to trusses, expanded view, truss spanner)",
+            "Wind load calculations for modules on roofs <60' height",
+            "Design calculations for 1 and 2 stories (pressures, array factors, adjusted pressures)",
+            "Rails span tables for non-exposed and exposed",
+            "Electrical riser diagram (line diagram) — PV + existing/new service, microinverters, conductors, combiner box, interconnection details",
+            "Conductor ampacity calculations with temperature, conduit fill, voltage drop derating",
+            "NEC labels per 705.10, 690.58(c)(1)(a), 690.13(B), 705.12(B)(2)(3)(b), 690.54, 690.52, 690.56(C)(3), NFPA-1 11.12.2.1.5",
+            "Elevation view with flood zone — electrical equipment above BFE",
+            "Panel and module catalog specs + rail mechanical load testing specs",
+            "Microinverter and combiner box catalog specs + solar racking specs",
+            "Bonding connections and ground path installation detail",
+            "Rail base attachment detail + penetration sealant application instructions",
+        ],
+    },
+
+    # ────────────────────────────────────────────────────────────────
+    # SHED
+    # ────────────────────────────────────────────────────────────────
+    "shed": {
+        "name": "Shed / Accessory Structure Permit — Miami Gardens",
+        "items": [
+            "Building Application",
+            "Homeowners Association Affidavit of Awareness",
+            "Property Survey showing setbacks and location",
+            "Signed and sealed drawings OR Product Approvals/NOAs",
+            "NOC — recorded/displayed before first inspection ($2,500/$5,000 threshold — use $2,500)",
+            "Contractor Registration (City + MDC)",
+            "Insurance certificate naming City of Miami Gardens",
+            "GOTCHA: Maximum shed size is 120 SF floor area",
+            "GOTCHA: Required setbacks — 7.5' minimum side, 5' minimum rear, 10' minimum distance from house",
+            "GOTCHA: Exceeding setbacks or size = denied",
+        ],
+        "fees": {
+            "prefab_utility_shed_with_slab_max_100sf": "$25.00 (zoning only)",
+            "building_minimum": "$78.55 residential",
+        },
+    },
+
+    # ────────────────────────────────────────────────────────────────
+    # DRIVEWAY / SLAB
+    # ────────────────────────────────────────────────────────────────
+    "driveway": {
+        "name": "Driveway / Slab Permit — Miami Gardens",
+        "items": [
+            "Building Application",
+            "Homeowners Association Affidavit of Awareness",
+            "Impervious Percentage Form (city-specific form) — REQUIRED",
+            "Property Survey showing setbacks and location",
+            "Design Criteria (Detail) — specifications for concrete/materials",
+            "NOC — recorded/displayed before first inspection",
+            "Contractor Registration (City + MDC)",
+            "Insurance certificate naming City of Miami Gardens",
+            "GOTCHA: Impervious Percentage Form is UNIQUE to Miami Gardens — must calculate and submit",
+            "GOTCHA: If project increases impervious area on lot, zoning review is triggered",
+            "NOTE: Sidewalk & Approach has separate checklist",
+        ],
+        "fees": {
+            "residential": "$0.06 per $1.00 job value (minimum $78.55)",
+            "commercial": "$0.03 per $1.00 job value (minimum $220)",
+            "zoning_review": "$51.50 per installation",
+        },
+    },
+
+    # ────────────────────────────────────────────────────────────────
+    # SIGN
+    # ────────────────────────────────────────────────────────────────
+    "sign": {
+        "name": "Sign Permit — Miami Gardens",
+        "items": [
+            "Electrical Application — required for illuminated signs",
+            "Building Application — required for monument signs",
+            "Signed and sealed construction drawings",
+            "NOC — recorded/displayed before first inspection ($2,500/$5,000 threshold)",
+            "Contractor Registration (City + MDC)",
+            "Insurance certificate naming City of Miami Gardens",
+            "Product Approvals / NOAs if applicable",
+            "NOTE: Zoning review required — $51.50 per sign",
+            "NOTE: Monument signs require both building AND electrical applications",
+        ],
+        "fees": {
+            "residential": "$0.06 per $1.00 job value (min $78.55)",
+            "commercial": "$0.03 per $1.00 job value (min $220)",
+            "zoning_per_sign": "$51.50",
+        },
+    },
+
+    # ────────────────────────────────────────────────────────────────
+    # WATER HEATER
+    # ────────────────────────────────────────────────────────────────
+    "water_heater": {
+        "name": "Water Heater Replacement Permit — Miami Gardens",
+        "items": [
+            "Plumbing Application",
+            "Water Heater Replacement Form (2021-03-22 revision) — city-specific form",
+            "NOC — recorded/displayed before first inspection ($2,500 threshold)",
+            "Contractor Registration (City + MDC)",
+            "Insurance certificate naming City of Miami Gardens",
+            "NOTE: Simple permit — only 2 forms required beyond standard items",
+        ],
+    },
+
+    # ────────────────────────────────────────────────────────────────
+    # SCREEN ENCLOSURE
+    # ────────────────────────────────────────────────────────────────
+    "screen_enclosure": {
+        "name": "Screen Enclosure Permit — Miami Gardens",
+        "items": [
+            "Building Application",
+            "Homeowners Association Affidavit of Awareness",
+            "Signed and sealed drawings or Product Approvals / NOAs",
+            "Property Survey showing setbacks",
+            "NOC — recorded/displayed before first inspection",
+            "Contractor Registration (City + MDC)",
+            "Insurance certificate naming City of Miami Gardens",
+        ],
+        "fees": {
+            "residential": "$0.06 per $1.00 job value (min $78.55)",
+            "commercial": "$230.40",
+        },
+    },
+
+    # ────────────────────────────────────────────────────────────────
+    # GENERATOR
+    # ────────────────────────────────────────────────────────────────
+    "generator": {
+        "name": "Generator Permit — Miami Gardens",
+        "items": [
+            "Electrical Application",
+            "Mechanical Application (if applicable)",
+            "Plumbing Application (if gas-powered)",
+            "Signed and sealed drawings",
+            "Product Approvals / NOAs",
+            "NOC — recorded/displayed before first inspection",
+            "Contractor Registration (City + MDC)",
+            "Insurance certificate naming City of Miami Gardens",
+            "GOTCHA: Gas-powered generators may need plumbing permit for gas line",
+            "NOTE: Separate checklist exists on city forms page",
+        ],
+    },
+
+    # ────────────────────────────────────────────────────────────────
+    # GARAGE / CARPORT CONVERSION
+    # ────────────────────────────────────────────────────────────────
+# ────────────────────────────────────────────────────────────────
+    # CARPORT
+    # ────────────────────────────────────────────────────────────────
+# ────────────────────────────────────────────────────────────────
+    # IRRIGATION SYSTEM
+    # ────────────────────────────────────────────────────────────────
+# ────────────────────────────────────────────────────────────────
+    # CERTIFICATE OF OCCUPANCY
+    # ────────────────────────────────────────────────────────────────
+    "certificate_of_occupancy": {
+        "name": "Certificate of Occupancy — Miami Gardens",
+        "items": [
+            "CO and TCO Application Form (updated 2021)",
+            "TCO-TCC Application Requirements document",
+            "All permits must have final inspections approved",
+            "All applicable fees must be paid",
+            "All special requirements must have received city approval",
+            "FEMA Elevation Certificate — for properties in flood zones",
+            "GOTCHA: TCO fee = 100% of final CO fee (not a reduced fee)",
+            "GOTCHA: TCO extension = 50% of final CO fees for a 90-day extension",
+            "GOTCHA: Occupancy without CO = $550.00 violation (Fee Schedule §C.7)",
+        ],
+        "fees": {
+            "sfr_townhouse_duplex": "$69.15 per unit",
+            "apartments_2_50_units": "$115.25",
+            "apartments_51_100_units": "$175.95",
+            "apartments_101_plus": "$230.45",
+            "commercial_industrial": "$0.07 per SF (min $192.00, max $2,200.00)",
+            "building_shell_commercial": "$125.70",
+            "tco": "100% of final CO fee",
+            "tco_extension_90_days": "50% of final CO fee",
+            "occupancy_without_co_violation": "$550.00",
+        },
+    },
+
+    # ────────────────────────────────────────────────────────────────
+    # CHANGE OF CONTRACTOR
+    # ────────────────────────────────────────────────────────────────
+    "change_of_contractor": {
+        "name": "Change of Contractor — Miami Gardens",
+        "items": [
+            "Change of Contractor Package (updated 2025) — includes instruction sheet, Hold Harmless form, and new Permit Application",
+            "Hold Harmless Letter — must be signed by property owner AND notarized; for subsidiary permits, general contractor must also sign",
+            "New Permit Application from the new contractor",
+            "Original contractor must send letter to Building Department with: permit number, jobsite address, explanation for surrender",
+            "GOTCHA: 10-DAY WAITING PERIOD after submission before change of contractor becomes effective",
+            "GOTCHA: New contractor assumes responsibility for the ENTIRE scope of permitted work — both completed and remaining work",
+            "GOTCHA: New contractor also assumes responsibility for corrections of work performed under the original permit",
+            "GOTCHA: Both Hold Harmless signatures (owner + new contractor qualifier) must be NOTARIZED",
+            "NOTE: Administrative fee: $113.75 per fee schedule (package PDF says $107.73 — use fee schedule amount)",
+        ],
+        "fees": {
+            "change_of_contractor": "$113.75 per change (Fee Schedule §A.4)",
+            "change_of_architect_engineer": "$113.75 per change",
+        },
+    },
+
+    # ────────────────────────────────────────────────────────────────
+    # PRIVATE PROVIDER
+    # ────────────────────────────────────────────────────────────────
+    "private_provider": {
+        "name": "Private Provider — Miami Gardens",
+        "items": [
+            "Private Provider Application (updated 8/5/2025 — latest 2024 guidance documents)",
+            "Notice to Building Official of Use of Private Provider (Form 61G20-2.005, effective Jan 1, 2025)",
+            "Fee Owner's Authorization Form (if fee owner doesn't sign Notice to BO)",
+            "Private Provider Certificate of Compliance (for each discipline upon completion)",
+            "Private Provider Plan Compliance Affidavit (for plan review)",
+            "Private Provider Job Site Directory — posted at jobsite at all times",
+            "Pre-Construction Agreements — separate forms for General Contractor AND Private Provider",
+            "Special Inspector Forms — Notice of Employment (for threshold buildings)",
+            "Threshold Building Affidavit (for threshold buildings)",
+            "Certificate of Insurance — must include City of Miami Gardens as certificate holder",
+            "Qualification statements/resumes of PP and all Duly Authorized Representatives",
+            "GOTCHA: If PP does plan review, they MUST also do inspections — Building Official requires both per F.S. 553.791(2)(a)",
+            "GOTCHA: PRE-CONSTRUCTION MEETING with Building Official REQUIRED before permit issuance — email odiaz@miamigardens-fl.gov to schedule",
+            "GOTCHA: No building permit submitted until site plan review is approved — 30-business-day clock doesn't start until ALL outside agency approvals received",
+            "GOTCHA: PP must call in each inspection on City inspection line (305) 622-8029 or via CSS by 3:00 PM prior business day",
+            "GOTCHA: PP inspection reports must be posted on site AND submitted to Building Services within 2 business days",
+            "GOTCHA: Duly Authorized Representatives must be W-2 employees (not 1099 contractors)",
+            "NOTE: Insurance minimums: $1M per occurrence / $2M aggregate for projects ≤$5M construction cost; $2M per occurrence / $4M aggregate for projects >$5M",
+            "NOTE: Building Official retains right to perform random audit inspections — up to 4x/month per F.S. 553.791(19)",
+            "NOTE: TCO/TCC — Building Official WILL visit site for TCO/TCC and Building Final inspections regardless of PP",
+        ],
+    },
+
+    # ────────────────────────────────────────────────────────────────
+    # TREE REMOVAL
+    # ────────────────────────────────────────────────────────────────
+# ────────────────────────────────────────────────────────────────
+    # LANDSCAPING
+    # ────────────────────────────────────────────────────────────────
+# ────────────────────────────────────────────────────────────────
+    # TERRACE
+    # ────────────────────────────────────────────────────────────────
+# ────────────────────────────────────────────────────────────────
+    # ELECTRICAL SAFETY CHECK
+    # ────────────────────────────────────────────────────────────────
+# ────────────────────────────────────────────────────────────────
+    # UNSAFE STRUCTURE
+    # ────────────────────────────────────────────────────────────────
+# ────────────────────────────────────────────────────────────────
+    # RECERTIFICATION (40-Year / 10-Year Milestone)
+    # ────────────────────────────────────────────────────────────────
+# ────────────────────────────────────────────────────────────────
+    # CONTRACTOR REGISTRATION
+    # ────────────────────────────────────────────────────────────────
+}
+
+HOMESTEAD_PERMITS = {
+    # ==================================================================
+    # BUILDING — The Master Permit
+    # ==================================================================
+    "building": {
+        "name": "Building Permit (Master) — New SFR / Additions / Alterations / Interior Remodel",
+        "items": [
+            # --- Portal & Submission ---
+            "Submit via EPL-B.U.I.L.D. portal (launched October 1, 2025) — legacy projects before Oct 2025 use Community Plus ONLY, do NOT mix systems",
+            "EPL-B.U.I.L.D. is integrated with DigEplan for electronic plans review — simultaneous multi-department review",
+            "GOTCHA: ALL files MUST follow strict naming convention: BD-YY-XXXXX-PT-R-DISCIPLINE (UPPERCASE) — application AUTO-REJECTED if not followed",
+            "GOTCHA: No special characters in filenames: # % & { } / \\ ? < > * $ ! ' ( ) .. — causes instant rejection",
+            "Plans must be ONE PDF per discipline (Architectural, Mechanical, Electrical, Plumbing, Civil) — grouped by discipline, NOT one giant PDF",
+            "All PDFs must be flattened (single layer), no embedded objects, unrestricted security, allow markups",
+            "Drawings in LANDSCAPE orientation only; documents can be landscape or portrait",
+            "Upper-right corner of all plan pages BLANK for city stamp: 2x2 inch (8.5x11), 3x3 (medium), 4.5x4.5 (large format)",
+            "If total file size exceeds 20 MB, download link required",
+            "All drawing files must have same X/Y axis at (0,0) for overlay review",
+
+            # --- Application ---
+            "Homestead/MDC Municipal Permit Application — signed & notarized (include 13-digit property folio from tax statement or Property Appraiser)",
+            "Remote Online Notary (RON) and electronic signatures accepted for application",
+            "Scanned notarized signatures accepted for application documents (not plans)",
+            "GOTCHA: Application must include property folio number (13-digit) — found on property tax statement, online, or at MDC Property Appraiser (111 NW First Street, 7th Floor)",
+
+            # --- Plans ---
+            "Plans: site plan, survey, floor plan with plumbing/electrical fixture locations, mechanical details, elevations, electrical service panel, cross sections of structural walls with material/fastener details, roof framing plan",
+            "ALL plans must be DIGITALLY signed and sealed using approved Certificate Authority — physical stamps on scanned PDFs will be rejected",
+            "Multi-page PDFs: design professional must digitally sign/seal EACH page (or Cover Sheet with complete Index of Drawings if software limitation)",
+            "Energy calculations required for new structures or additions with AC — submitted as individual PDF",
+            "Structural calculations when applicable — saved and uploaded as individual PDF",
+            "All drawings must contain a scale",
+            "Plans must be submitted as one set per discipline, each page showing stamp",
+
+            # --- Contractor Registration ---
+            "Contractor must be registered with BOTH Miami-Dade County AND City of Homestead — dual registration required BEFORE submitting",
+            "As of Oct 1, 2025, all registration via EPL-B.U.I.L.D. 'Register as a Contractor/Utility Owner' application",
+            "Registration requires: (A) FL State Contractor License (DBPR), (B) MDC Local Business Tax Receipt or County of Origin LBT, (C) Liability & Workers Comp Insurance, (D) Driver's License (original or clear color copy), (E) Company info + EIN + Qualifier info + Specialty License",
+            "GOTCHA: Insurance certificate holder MUST read EXACTLY: 'CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030' — from the official Contractor Licensing Registration PDF",
+            "Authorized Representatives for permit pickup must be listed on registration form",
+
+            # --- NOA/HVHZ ---
+            "HVHZ: All exterior products require Miami-Dade County NOA (Notice of Acceptance)",
+            "All NOA pages for one product grouped in ONE PDF — cover, details, all components properly marked, NO isolated pages",
+
+            # --- NOC ---
+            "Notice of Commencement required — must be recorded at 22 NW 1st Street, 1st Floor, Miami — (305) 275-1155 ext. 6",
+            "NOC MUST be POSTED at job site per FL Statute 713.35",
+            "GOTCHA: NOC must be displayed for all work over $2,500 in job value (per inspections page)",
+            "NOC must be signed by OWNER (not agent)",
+
+            # --- Fees ---
+            "Upfront processing fee required BEFORE review begins — new construction and interior remodels require upfront fee at time of submittal",
+            "Fee schedule updated September 9, 2025 via Ordinance No. 2025-09-25",
+            "Payment methods: credit cards, checks/e-checks, money orders, cash; online via EPL portal (convenience fee applies)",
+            "GOTCHA: Work without permit = 100% penalty (DOUBLE the usual fee) — strictly enforced via Notice of Violation",
+
+            # --- MDC County Approvals ---
+            "GOTCHA: Projects requiring DERM, WASD, Fire, or Impact Fee review must be submitted to MDC portal SEPARATELY — NOT through City portal",
+            "GOTCHA: County-approved plans must be uploaded to EPL-B.U.I.L.D. before City will issue permit",
+            "GOTCHA: MDC agency upfront fees paid SEPARATELY after MDC Project Number (M#) issued",
+            "FL Dept of Health approval required for ALL applications involving septic tanks",
+            "DERM and/or MDWASD approval required for sewer and water applications",
+
+            # --- Debris Hauler ---
+            "GOTCHA: ALL construction debris must be removed by a hauler LICENSED WITH THE CITY OF HOMESTEAD — not just any licensed hauler, this is Homestead-specific",
+
+            # --- Site Rules ---
+            "Construction trailers require SEPARATE permit",
+            "Portable toilets require SEPARATE permit",
+            "Equipment/materials stored within property only — NOT on public right-of-way",
+            "Streets and neighboring properties must be kept free from dirt and debris",
+            "Swales must be protected from damage by equipment/vehicles",
+            "Do NOT discharge water into right-of-way or storm drains",
+
+            # --- Owner-Builder ---
+            "NOTE: Owner-builder must take TEST with the Building Official (per Ch. 10 Dade County Code)",
+            "NOTE: Owner-builder limited to one SFR/duplex in any 24-month period",
+            "NOTE: Owner-builder must come IN PERSON for document review",
+            "NOTE: Owner-builder must attach proof of ownership (warranty deed or tax receipt) + signed/notarized Owner/Builder Permit Affidavit",
+            "NOTE: If code violation on property, NO permit will be issued to homeowner to cover illegal work — must use licensed contractor",
+            "NOTE: Owner-builder insurance minimums: $50,000 per person liability",
+
+            # --- Master/Sub Permit ---
+            "GOTCHA: Master Permit Application MUST be issued BEFORE any sub-permit (electrical, plumbing, mechanical) can be issued",
+
+            # --- Permit Validity ---
+            "Permits valid for 180 days — construction must commence within this timeframe",
+            "If permit expires before final inspections, it becomes NULL AND VOID and project is in code violation",
+            "NOTE: Contact building department if permit expires — they will help activate or apply for completion permit",
+
+            # --- Inspections ---
+            "Inspections: online via EPL-B.U.I.L.D. or phone (305) 224-4590",
+            "All possible inspections listed on BACK of permit card — contractor's responsibility to call",
+            "To avoid reinspection fee: site must be ready, all documents + approved plans available, access to inspection area provided",
+            "Approved plans + NOC + permit card must be present at ALL inspections",
+
+            # --- CO/CC ---
+            "Certificate of Occupancy (CO) issued for new construction or change of use",
+            "Certificate of Completion (CC) issued for renovations/alterations",
+            "NOTE: CO/CC Checklist available on Forms page",
+
+            # --- Review Info ---
+            "Plan review: 14 business days for first cycle (building permits page says 21 days for some projects)",
+            "Corrections: email from eplnotifications@homesteadfl.gov with Changemark instructions",
+            "Re-submittals: must update ENTIRE PDF discipline set that received Changemarks",
+            "Re-submittals may occur multiple times",
+
+            # --- Private Provider ---
+            "NOTE: Private Provider option available per FL Statute 553.791",
+            "NOTE: Homestead does NOT allow Plans Review Only — must be inspections only, or plans review AND inspections",
+            "NOTE: Private Provider fee reduction: 10% for plans review + inspections, 5% for inspections only (building dept portion only)",
+            "NOTE: Private Provider must be pre-registered with Miami-Dade County",
+            "NOTE: If Private Provider terminated, City will NOT take over — must secure another Private Provider",
+            "NOTE: Private Provider COI cert holder: 'City of Homestead Building Department, 100 Civic Court, Homestead, FL 33030'",
+
+            # --- 40-Year Recertification ---
+            "NOTE: 40-year building recertification per MDC Section 8-11(f) — then every 10 years",
+            "NOTE: Exempt from recertification: SFH, duplexes, buildings ≤10 occupant load AND ≤2,000 SF",
+            "NOTE: Electrical service 400A+ requires infrared thermography inspection report by certified thermographer",
+            "NOTE: 90 days to complete and submit inspection report from date of notice",
+            "NOTE: Failure to submit = Civil Violation Notice + referral to Unsafe Structures Unit",
+            "NOTE: === CARPORT ===",
+            "Homestead/MDC Municipal Permit Application — signed & notarized",
+            "Carports Checklist (Homestead-specific form on Forms page)",
+            "Product Approvals / NOAs for carport materials (HVHZ)",
+            "Engineering calculations",
+            "Site plan showing location, dimensions, setbacks",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "NOTE: === GARAGE ===",
+            "Homestead/MDC Municipal Permit Application — signed & notarized",
+            "Garage Checklist (Homestead-specific form on Forms page)",
+            "Construction plans signed/sealed by FL design professional",
+            "Product Approvals / NOAs for all exterior materials (HVHZ)",
+            "Site plan showing setbacks, dimensions",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "Notice of Commencement — job value ≥$2,500",
+            "NOTE: === AWNING ===",
+            "Homestead/MDC Municipal Permit Application — signed & notarized",
+            "Awnings and Canopies Checklist (Homestead-specific form on Forms page)",
+            "Product Approvals / NOAs for awning/canopy materials (HVHZ)",
+            "Engineering calculations for wind load",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "NOTE: === MOBILE HOME ===",
+            "Homestead/MDC Municipal Permit Application — signed & notarized",
+            "Mobile Homes Checklist (Homestead-specific form on Forms page)",
+            "GOTCHA: Moving a mobile home onto property BEFORE obtaining a permit = 100% penalty (double fee) per FBC 109.4",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "NOTE: === COMMERCIAL ADDITION ===",
+            "Homestead/MDC Municipal Permit Application — signed & notarized",
+            "Commercial Additions Checklist (Homestead-specific form on Forms page)",
+            "Full construction plans signed/sealed by FL architect and/or engineer",
+            "Product Approvals / NOAs for all exterior materials (HVHZ)",
+            "Energy calculations",
+            "Structural calculations",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "Notice of Commencement — job value ≥$2,500",
+            "GOTCHA: MDC agency reviews (DERM, WASD, Fire, Impact Fees) submitted SEPARATELY",
+            "NOTE: === MULTIFAMILY ===",
+            "Homestead/MDC Municipal Permit Application — signed & notarized",
+            "Multi-family Apartment Checklist (Homestead-specific form on Forms page)",
+            "Full construction plans signed/sealed by FL architect and engineer",
+            "All product approvals / NOAs (HVHZ)",
+            "Energy calculations, structural calculations",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "GOTCHA: MDC agency reviews submitted SEPARATELY",
+            "NOTE: May trigger 40-year recertification requirements for existing buildings",
+            "NOTE: === CHINESE DRYWALL ===",
+            "Homestead/MDC Municipal Permit Application — signed & notarized",
+            "Chinese Drywall Checklist (Homestead-specific form on Forms page)",
+            "Remediation plan signed/sealed by FL engineer",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+        ],
+    },
+
+    # ==================================================================
+    # ELECTRICAL
+    # ==================================================================
+    "electrical": {
+        "name": "Electrical Permit (Sub-Permit / Service Change / Panel Upgrade)",
+        "items": [
+            "Submit via EPL-B.U.I.L.D. portal",
+            "GOTCHA: Master Permit must be issued BEFORE electrical sub-permit can be issued",
+            "Homestead/MDC Municipal Permit Application (Electrical) — signed & notarized with 13-digit folio",
+            "MDC-standard Electrical Fee Sheet",
+            "Electrical calculations + drawings grouped in ONE PDF per discipline — numbered pages",
+            "Product Approvals / NOAs for windows, doors, shutters, panels (all pages for one NOA in one PDF)",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "Notice of Commencement — job value ≥$2,500 display requirement",
+            "GOTCHA: Strict file naming convention: BD-YY-XXXXX-PT-R-ELECTRICAL (UPPERCASE)",
+            "GOTCHA: ALL safety inspection permits must include EITHER electrical repair list OR notarized letter from contractor stating no repairs needed",
+            "NOTE: Service change permits may require FPL coordination — verify disconnect procedure with inspector before work",
+            "NOTE: Senate Bill 612 (July 2024) changed line-side electrical rules for AC replacement — check current requirements",
+            "NOTE: === LIGHT POLES ===",
+            "Homestead/MDC Municipal Permit Application — signed & notarized",
+            "Light Poles Checklist (Homestead-specific form on Forms page)",
+            "Product Approvals / NOAs for poles and fixtures (HVHZ)",
+            "Engineering calculations for wind load",
+            "Electrical plans",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+        ],
+    },
+
+    # ==================================================================
+    # PLUMBING
+    # ==================================================================
+    "plumbing": {
+        "name": "Plumbing Permit (Sub-Permit / Water Heater / Sewer)",
+        "items": [
+            "Submit via EPL-B.U.I.L.D. portal",
+            "GOTCHA: Master Permit must be issued BEFORE plumbing sub-permit can be issued",
+            "Homestead/MDC Municipal Permit Application (Plumbing) — signed & notarized with 13-digit folio",
+            "MDC Plumbing and Gas Fee Sheet",
+            "Plumbing calculations + drawings in ONE PDF per discipline — numbered pages",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "Notice of Commencement — job value ≥$2,500 display requirement",
+            "GOTCHA: DERM/WASD approval required for sewer/water connections — submit to MDC portal SEPARATELY",
+            "GOTCHA: FL Dept of Health approval required for ALL septic tank work",
+            "GOTCHA: Strict file naming convention required (UPPERCASE)",
+        ],
+    },
+
+    # ==================================================================
+    # MECHANICAL / HVAC
+    # ==================================================================
+    "mechanical": {
+        "name": "Mechanical/HVAC Permit (AC Changeout / New Install)",
+        "items": [
+            "Submit via EPL-B.U.I.L.D. portal",
+            "GOTCHA: Master Permit must be issued BEFORE mechanical sub-permit can be issued",
+            "Homestead/MDC Municipal Permit Application (Mechanical) — signed & notarized with 13-digit folio",
+            "MDC Mechanical Fee Sheet",
+            "Mechanical Permit Checklist (Homestead-specific form available on Forms page)",
+            "Mechanical calculations + drawings in ONE PDF per discipline — numbered pages",
+            "AHRI Certificate for each system — verifies matched equipment",
+            "Manual J load calculations (required if changing equipment size — cannot just 'match existing')",
+            "Product Approvals / NOAs for equipment",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "Notice of Commencement — $2,500 general display threshold",
+            "NOTE: Senate Bill 612 (July 2024) changed line-side electrical connection rules for AC replacement",
+            "NOTE: AC forms may be required PER SYSTEM if multiple systems being replaced",
+            "GOTCHA: Separate electrical permit typically required for AC replacement",
+            "GOTCHA: Strict file naming convention required (UPPERCASE)",
+        ],
+    },
+
+    # ==================================================================
+    # ROOFING
+    # ==================================================================
+    "roofing": {
+        "name": "Roofing Permit — Re-Roof (HVHZ) Residential & Commercial",
+        "items": [
+            "Submit via EPL-B.U.I.L.D. portal",
+            "Homestead/MDC Municipal Permit Application — signed & notarized with 13-digit folio",
+            "HVHZ Uniform Roofing Permit Application (MDC form, FBC 8th Edition) — separate Residential and Commercial packages available",
+            "Owner Notification for Roofing Considerations (FBC HVHZ) — contractor must provide form and explain content; owner initials required",
+            "Notices of Acceptance (NOAs) and Roof Application Standards (R.A.S.) — all pages for one NOA in ONE PDF",
+            "NOAs for ALL other components (roof vents, flashings, etc.) — all components must have NOAs at time of permit",
+            "Roof Plan Sketch — illustrate all levels/sections",
+            "Manufacturer Installation Specifications — specific to the job; kept on site for inspector verification",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "Licensed Debris Hauler — MUST be licensed with CITY OF HOMESTEAD specifically",
+            "Notice of Commencement — job value ≥$2,500 display requirement",
+            "Cost Affidavit — signed and notarized when applicable",
+            "GOTCHA: ALL nails must be RINGSHANK meeting ASTM G85 corrosion resistance — no exceptions",
+            "GOTCHA: Gutters REQUIRED on all roofs with 6-inch or less overhang eave",
+            "GOTCHA: Tile roofs require UPLIFT TEST before final inspection",
+            "GOTCHA: Re-installation of existing roof-mounted solar PV system requires SEPARATE permit — must be obtained to finalize roofing permit",
+            "GOTCHA: Strict file naming convention: BD-YY-XXXXX-PT-R-ROOFING (UPPERCASE)",
+            "GOTCHA: Upper-right corner BLANK for city stamp on all plan pages",
+            "NOTE: Separate Residential and Commercial roofing packages available — use the correct one",
+            "NOTE: At inspection: OSHA-approved ladder, approved plans + NOC + permit card + NOA + manufacturer install instructions ALL must be on site",
+            "NOTE: Roofing Affidavit required at final inspection — contractor certifies compliance with FBC",
+            "NOTE: Plan review 14 business days for first cycle",
+        ],
+    },
+
+    # ==================================================================
+    # POOL & SPA
+    # ==================================================================
+    "pool_spa": {
+        "name": "Pool / Spa / Hot Tub Permit",
+        "items": [
+            "Submit via EPL-B.U.I.L.D. portal",
+            "Homestead/MDC Municipal Permit Application — signed & notarized with 13-digit folio",
+            "Swimming Pool Barrier Certification form (Homestead-specific form on Forms page)",
+            "FL Residential Swimming Pool and Hot Tub Safety Act compliance — MANDATORY",
+            "Pool plans showing location, dimensions, setbacks, equipment, plumbing, electrical",
+            "Barrier and safety compliance details — fence/enclosure meeting FBC requirements",
+            "Product Approvals / NOAs for pool barrier materials",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "Notice of Commencement — job value ≥$2,500",
+            "GOTCHA: Separate Electrical and Plumbing sub-permits required for pool",
+            "GOTCHA: Pool deck may require SEPARATE building permit — check with plan reviewer",
+            "GOTCHA: Pool fence/barrier must have no opening >1/2 inch within 18 inches of release mechanism (FBC)",
+            "NOTE: DERM review may be required depending on project scope",
+        ],
+    },
+
+    # ==================================================================
+    # DEMOLITION
+    # ==================================================================
+    "demolition": {
+        "name": "Demolition Permit",
+        "items": [
+            "Submit via EPL-B.U.I.L.D. portal",
+            "Homestead/MDC Municipal Permit Application — signed & notarized",
+            "Demolition Checklist (Homestead-specific form on Forms page)",
+            "Survey showing existing structure, property lines, hose bib location",
+            "Utility disconnection confirmations (FPL, gas, water/sewer, telecom)",
+            "Asbestos survey and notification (per MDC/EPA requirements)",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "Licensed debris hauler — MUST be licensed with City of Homestead",
+            "GOTCHA: Warranty deed or corporate documents (Sunbiz articles of incorporation) may be required to verify ownership",
+            "GOTCHA: Licensed exterminator vermin statement may be required",
+            "GOTCHA: Temporary fencing around demolition site may require SEPARATE permit",
+            "Notice of Commencement if job value ≥$2,500",
+            "NOTE: Demolition permits may have different validity period — verify with department",
+        ],
+    },
+
+    # ==================================================================
+    # FENCE
+    # ==================================================================
+    "fence": {
+        "name": "Fence Permit",
+        "items": [
+            "Submit via EPL-B.U.I.L.D. portal",
+            "Homestead/MDC Municipal Permit Application — signed & notarized",
+            "Fence Checklist (Homestead-specific form on Forms page)",
+            "Site plan showing fence location, height, linear footage, setback dimensions",
+            "Survey showing property lines, easements",
+            "Product Approvals / NOAs for fence materials in HVHZ",
+            "GOTCHA: Horizontal wood fences need product approvals too — not just aluminum/PVC/chain link",
+            "Swimming Pool Barrier Certification form if fence serves as pool barrier",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "NOTE: Max height typically 6 feet from grade (residential) — verify with zoning",
+            "NOTE: Pool barrier fence: no opening >1/2 inch within 18 inches of release mechanism",
+        ],
+    },
+
+    # ==================================================================
+    # WINDOWS / DOORS / SHUTTERS
+    # ==================================================================
+    "windows_doors": {
+        "name": "Windows / Doors / Shutters Permit",
+        "items": [
+            "Submit via EPL-B.U.I.L.D. portal",
+            "Homestead/MDC Municipal Permit Application — signed & notarized",
+            "Window Door Shutter Affidavit (Homestead-specific form on Forms page)",
+            "Product Approvals / NOAs for ALL windows, doors, shutters — all pages in ONE PDF per NOA",
+            "Plans showing window/door locations, sizes, and specifications",
+            "Wind load calculations if applicable",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "Notice of Commencement — job value ≥$2,500",
+            "GOTCHA: NOAs must match the SPECIFIC product being installed — generic NOAs rejected",
+            "GOTCHA: HVHZ requires MDC NOA (not just Florida Product Approval)",
+            "NOTE: Retrofit vs. non-retrofit installation — different requirements",
+        ],
+    },
+
+    # ==================================================================
+    # DRIVEWAY
+    # ==================================================================
+    "driveway": {
+        "name": "Driveway / Walkway / Patio Permit",
+        "items": [
+            "Submit via EPL-B.U.I.L.D. portal",
+            "Homestead/MDC Municipal Permit Application — signed & notarized",
+            "Driveways Checklist (Homestead-specific form on Forms page)",
+            "Site plan with driveway dimensions, property lines, setbacks",
+            "Survey showing existing conditions",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "GOTCHA: Zoning code specifies maximum driveway width (typically 40% of lot frontage), minimum 4-foot setbacks — check city's specific zoning district requirements",
+            "NOTE: Paving and Drainage Checklist also available on Forms page — may be required for larger projects",
+            "NOTE: Swale Acknowledgment may be required if near drainage",
+            "NOTE: === PAVING DRAINAGE ===",
+            "Homestead/MDC Municipal Permit Application — signed & notarized",
+            "Paving and Drainage Checklist (Homestead-specific form on Forms page)",
+            "Engineering plans for drainage — signed/sealed by FL PE",
+            "Site plan with existing and proposed grades",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "NOTE: DERM review may be required for drainage impacts",
+        ],
+    },
+
+    # ==================================================================
+    # SIGN
+    # ==================================================================
+    "sign": {
+        "name": "Sign Permit",
+        "items": [
+            "Submit via EPL-B.U.I.L.D. portal",
+            "Homestead/MDC Municipal Permit Application — signed & notarized",
+            "Sign plans showing dimensions, height, illumination, location on building/property",
+            "Product Approvals / NOAs for sign materials (HVHZ)",
+            "Engineering/structural analysis if freestanding sign",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "NOTE: Planning & Zoning review required for sign compliance with city code",
+            "NOTE: Light Poles Checklist available on Forms page if sign includes poles",
+        ],
+    },
+
+    # ==================================================================
+    # SOLAR
+    # ==================================================================
+    "solar": {
+        "name": "Solar PV Installation Permit",
+        "items": [
+            "Submit via EPL-B.U.I.L.D. portal",
+            "Homestead/MDC Municipal Permit Application — signed & notarized",
+            "Structural analysis/engineering letter confirming roof can support PV system load",
+            "Electrical plans for PV system — interconnection diagram, panel specs, inverter specs",
+            "Product Approvals / NOAs for PV panels, racking, mounting hardware (HVHZ)",
+            "Manufacturer installation specifications",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "GOTCHA: Notarized homeowner authorization may be required",
+            "GOTCHA: Named special inspector may be required — check Special Inspector form on Forms page",
+            "NOTE: Separate electrical permit typically required",
+            "NOTE: Per FL Statute 489.103(a)(3), owner-builder solar projects may have relaxed notarization requirements if submitted electronically",
+            "UNCERTAINTY (90%): Specific Homestead solar form not confirmed on forms page — may use standard MDC solar application. Call (305) 224-4500 to verify.",
+        ],
+    },
+
+    # ==================================================================
+    # GENERATOR
+    # ==================================================================
+    "generator": {
+        "name": "Generator Permit",
+        "items": [
+            "Submit via EPL-B.U.I.L.D. portal",
+            "Homestead/MDC Municipal Permit Application — signed & notarized",
+            "Requirements for Generator Permit form (Homestead-specific form on Forms page)",
+            "Generator specifications and product approvals",
+            "Site plan showing generator location, setbacks",
+            "Electrical plans for transfer switch and interconnection",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "NOTE: Separate electrical permit required for transfer switch",
+            "NOTE: May require zoning review for noise/setback compliance",
+        ],
+    },
+
+    # ==================================================================
+    # ALUMINUM PATIO COVER / COVERED TERRACE
+    # ==================================================================
+    # ==================================================================
+    # CARPORT
+    # ==================================================================
+    # ==================================================================
+    # GARAGE
+    # ==================================================================
+    # ==================================================================
+    # AWNING / CANOPY
+    # ==================================================================
+    # ==================================================================
+    # MOBILE HOME
+    # ==================================================================
+    # ==================================================================
+    # CERTIFICATE OF OCCUPANCY
+    # ==================================================================
+    "certificate_of_occupancy": {
+        "name": "Certificate of Occupancy / Certificate of Completion",
+        "items": [
+            "Certificate of Occupancy Checklist (Homestead-specific form on Forms page)",
+            "CO issued for new construction or change of use",
+            "CC issued for renovation/alteration projects",
+            "ALL trade permit inspections must be approved before final building inspection",
+            "ALL sub-permits must be finalized",
+            "All fees paid in full",
+            "All required documents uploaded",
+            "NOTE: Request via EPL-B.U.I.L.D. portal or contact building department",
+        ],
+    },
+
+    # ==================================================================
+    # PRIVATE PROVIDER
+    # ==================================================================
+    "private_provider": {
+        "name": "Private Provider Package",
+        "items": [
+            "Per FL Statute 553.791 — Alternative Plans Review and Inspection",
+            "Private Provider Notice to Building Official (NTBO) — must use official City of Homestead forms",
+            "Private Provider Procedures form (Homestead-specific)",
+            "Private Provider Procedures (Inspections) Request for Information form",
+            "Duly Authorized Representative (DAR) resumes, DBPR state licenses, driver's licenses for all working on project",
+            "Certificate of Liability & Workers Comp — cert holder: 'City of Homestead Building Department, 100 Civic Court, Homestead, FL 33030'",
+            "GOTCHA: DAR & Firm must be pre-registered with Miami-Dade County",
+            "GOTCHA: Homestead does NOT allow Plans Review Only — must be inspections only, or plans review AND inspections",
+            "GOTCHA: If Private Provider terminated during review or inspections, City will NOT take over — must secure another PP",
+            "Fee reduction: 10% for plans review + inspections, 5% for inspections only (building department portion)",
+            "NOTE: Owner may elect PP at any time before first required inspection — but PP recognized only after City reviews/accepts NTBO",
+            "NOTE: Inspection reports may show PP letterhead; all other docs must use City forms",
+            "NOTE: Survey must be approved by Zoning and Engineering prior to pouring slab",
+            "NOTE: Per F.S. 553.791(9), job must pause for local jurisdiction audit after PP inspection",
+        ],
+    },
+
+    # ==================================================================
+    # CHANGE OF CONTRACTOR
+    # ==================================================================
+    "change_of_contractor": {
+        "name": "Change of Contractor",
+        "items": [
+            "Submit via EPL-B.U.I.L.D. portal — 'Adding/Updating Contractor' step during permit finalization",
+            "New contractor must be registered with BOTH MDC AND City of Homestead",
+            "New contractor must verify qualification for the proposed scope of work",
+            "New signed and notarized permit application may be required",
+            "Updated insurance certificate with cert holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "Applicable fees must be paid",
+            "UNCERTAINTY (85%): Specific change of contractor fee not confirmed in current fee schedule — may be included in Ordinance 2025-09-25. Call (305) 224-4500 to verify exact fee.",
+        ],
+    },
+
+    # ==================================================================
+    # PAVING & DRAINAGE
+    # ==================================================================
+    # ==================================================================
+    # COMMERCIAL ADDITIONS
+    # ==================================================================
+    # ==================================================================
+    # MULTI-FAMILY APARTMENT
+    # ==================================================================
+    # ==================================================================
+    # CHINESE DRYWALL
+    # ==================================================================
+    # ==================================================================
+    # LIGHT POLES
+    # ==================================================================
+}
+
+
+# ============================================================================
+# 4. CITY_DIFFERENCES CORRECTIONS
+# ============================================================================
+CITY_DIFFERENCES_HOMESTEAD = {
+    "owner_builder_24_month_limit": {
+        "homestead": "Owner-builder permits limited to ONE SFR/duplex in any 24-month period"
+    },
+    "40_year_recertification": {
+        "homestead": "MDC Section 8-11(f); 40 years + every 10; exempt: SFH/duplex/≤10 occ & ≤2000SF; 400A+ needs thermography"
+    },
+    "screen_enclosure": {
+        "name": "Screen / Patio Enclosure Permit",
+        "items": [
+            "Homestead/MDC Municipal Permit Application — signed & notarized",
+            "Alum Patio Cover and Cov Terrace Checklist (Homestead-specific form on Forms page)",
+            "Product Approvals / NOAs for aluminum cover materials (HVHZ)",
+            "Engineering calculations for wind load compliance",
+            "Site plan showing location, dimensions, setbacks",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "Notice of Commencement if job value ≥$2,500",
+            "NOTE: === PATIO COVER ===",
+            "Homestead/MDC Municipal Permit Application — signed & notarized",
+            "Alum Patio Cover and Cov Terrace Checklist (Homestead-specific form on Forms page)",
+            "Product Approvals / NOAs for aluminum cover materials (HVHZ)",
+            "Engineering calculations for wind load compliance",
+            "Site plan showing location, dimensions, setbacks",
+            "Contractor registered with BOTH MDC AND City of Homestead",
+            "Insurance certificate holder: CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030",
+            "Notice of Commencement if job value ≥$2,500",
+        ],
+    },
+}
+
 CITY_SPECIFIC_PERMITS = {
     "pompano_beach": POMPANO_BEACH_PERMITS,
     "plantation": PLANTATION_PERMITS,
@@ -19028,6 +20777,9 @@ CITY_SPECIFIC_PERMITS = {
     "tamarac": TAMARAC_PERMITS,
     "wellington": WELLINGTON_PERMITS,
     "lake_worth_beach": LAKE_WORTH_BEACH_PERMITS,
+    "miami_beach": MIAMI_BEACH_PERMITS,
+    "miami_gardens": MIAMI_GARDENS_PERMITS,
+    "homestead": HOMESTEAD_PERMITS,
 }
 
 
