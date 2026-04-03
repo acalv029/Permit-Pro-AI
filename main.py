@@ -65,7 +65,7 @@ from sqlalchemy.orm import sessionmaker, relationship, Session
 load_dotenv()
 
 from reader import get_document_text
-from permit_data import get_permit_requirements, get_city_key, get_permit_types
+from permit_data import get_permit_requirements, get_city_key, get_permit_types, CITY_INFO, KNOWN_GOTCHAS
 from analyzer import analyze_document_with_claude
 from gemini_provider import analyze_with_gemini, get_google_key, parse_analysis_json
 
@@ -2292,6 +2292,44 @@ async def get_subscription(
         raise HTTPException(status_code=500, detail=f"Subscription error: {str(e)}")
 
 
+@app.get("/api/checklist-preview")
+async def checklist_preview(city: str, permit_type: str):
+    """Return checklist items + city info for a city+permit type combo (pre-upload preview)"""
+    city_key = get_city_key(city)
+    if not city_key:
+        return {"items": [], "city_info": {}}
+
+    requirements = get_permit_requirements(city_key, permit_type)
+    if not requirements:
+        requirements = get_permit_requirements(city_key, "building")
+    if not requirements:
+        return {"items": [], "city_info": {}}
+
+    city_info = CITY_INFO.get(city_key, {})
+
+    # Filter items — remove GOTCHA: prefixed items (those go in gotchas)
+    items = [i for i in requirements.get("items", []) if not i.startswith("GOTCHA:")]
+
+    return {
+        "items": items[:25],  # Cap at 25 for preview
+        "total_items": len(items),
+        "permit_name": requirements.get("name", permit_type),
+        "city_info": {
+            "name": city_info.get("name", city),
+            "phone": city_info.get("phone", ""),
+            "address": city_info.get("address", ""),
+            "hours": city_info.get("hours", ""),
+            "portal_url": city_info.get("portal_url", ""),
+            "submission": city_info.get("submission", ""),
+            "insurance_holder": city_info.get("insurance_holder", ""),
+            "noc_threshold": city_info.get("noc_threshold", ""),
+            "plan_sets": city_info.get("plan_sets", ""),
+            "hvhz": city_info.get("hvhz", False),
+        },
+        "gotchas_count": len(KNOWN_GOTCHAS.get(city_key, [])),
+    }
+
+
 @app.get("/api/cities")
 async def get_cities():
     cities = {
@@ -2711,6 +2749,7 @@ async def analyze_permit_folder(
 
         shutil.rmtree(temp_dir)
 
+        city_info_data = CITY_INFO.get(city_key, {})
         return {
             "success": True,
             "analysis_id": analysis_id,
@@ -2720,6 +2759,16 @@ async def analyze_permit_folder(
             "city": city,
             "permit_type": requirements["name"],
             "gotchas": requirements.get("gotchas", [])[:10],
+            "city_info": {
+                "phone": city_info_data.get("phone", ""),
+                "address": city_info_data.get("address", ""),
+                "hours": city_info_data.get("hours", ""),
+                "portal_url": city_info_data.get("portal_url", ""),
+                "submission": city_info_data.get("submission", ""),
+                "insurance_holder": city_info_data.get("insurance_holder", ""),
+                "noc_threshold": city_info_data.get("noc_threshold", ""),
+                "plan_sets": city_info_data.get("plan_sets", ""),
+            },
         }
 
     except HTTPException:
@@ -4367,6 +4416,12 @@ Be SPECIFIC about the permit type. Read the documents carefully to identify exac
                                 "critical_issues"
                             ]
                             # Keep objects intact for frontend hover tooltips
+                            print(f"🔍 Critical issues: OBJECTS ({len(parsed['critical_issues'])} items)", flush=True)
+                        elif parsed.get("critical_issues"):
+                            print(f"🔍 Critical issues: STRINGS ({len(parsed['critical_issues'])} items): {parsed['critical_issues'][0][:80]}", flush=True)
+                        if parsed.get("missing_documents"):
+                            first = parsed["missing_documents"][0]
+                            print(f"🔍 Missing docs type: {'OBJECT' if isinstance(first, dict) else 'STRING'} ({len(parsed['missing_documents'])} items)", flush=True)
                         return parsed
                 except Exception as parse_err:
                     print(f"⚠️ JSON parse attempt failed: {parse_err}", flush=True)

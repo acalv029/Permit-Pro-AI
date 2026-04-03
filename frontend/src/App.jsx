@@ -63,7 +63,8 @@ export default function App() {
   const [adminReviews, setAdminReviews] = useState([])
   const [adminPurchases, setAdminPurchases] = useState([])
   const [publicReviews, setPublicReviews] = useState([])
-
+  const [checklistPreview, setChecklistPreview] = useState(null)
+  const [copiedInsurance, setCopiedInsurance] = useState(false)
   // Default testimonials (shown when no user reviews yet)
   const defaultTestimonials = [
     { name: 'ADC Builders', role: 'General Contractor', city: 'Coconut Creek', stars: 5, review_text: 'We run everything through this before we go to the building dept now. Way less back and forth, way less headaches.' },
@@ -111,6 +112,15 @@ export default function App() {
     script.onload = () => setRecaptchaLoaded(true)
     document.head.appendChild(script)
   }, [])
+
+  // Fetch checklist preview when city + permit type selected
+  useEffect(() => {
+    if (!city || !permitType) { setChecklistPreview(null); return }
+    fetch(`${API_BASE_URL}/api/checklist-preview?city=${encodeURIComponent(city)}&permit_type=${encodeURIComponent(permitType)}`)
+      .then(res => res.json())
+      .then(data => setChecklistPreview(data))
+      .catch(() => setChecklistPreview(null))
+  }, [city, permitType])
 
   // Helper to get reCAPTCHA token
   const getRecaptchaToken = async (action) => {
@@ -2081,6 +2091,83 @@ export default function App() {
                   </div>
                 )}
                 
+                {/* City Info Panel */}
+                {results.city_info && (results.city_info.phone || results.city_info.portal_url || results.city_info.insurance_holder) && (
+                  <div className="p-4 bg-gray-800/30 border border-gray-700/50 rounded-xl">
+                    <h3 className="font-bold text-gray-300 mb-3 flex items-center gap-2 text-sm">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                      {results.city} Building Department
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                      {results.city_info.phone && (
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-500">📞</span>
+                          <a href={`tel:${results.city_info.phone}`} className="text-cyan-400 hover:text-cyan-300">{results.city_info.phone}</a>
+                        </div>
+                      )}
+                      {results.city_info.address && (
+                        <div className="flex items-start gap-2">
+                          <span className="text-gray-500 mt-0.5">📍</span>
+                          <span className="text-gray-400">{results.city_info.address}</span>
+                        </div>
+                      )}
+                      {results.city_info.hours && (
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-500">🕐</span>
+                          <span className="text-gray-400">{results.city_info.hours}</span>
+                        </div>
+                      )}
+                      {results.city_info.submission && (
+                        <div className="flex items-start gap-2">
+                          <span className="text-gray-500 mt-0.5">📋</span>
+                          <span className="text-gray-400">{results.city_info.submission}</span>
+                        </div>
+                      )}
+                      {results.city_info.noc_threshold && (
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-500">💰</span>
+                          <span className="text-gray-400">NOC required if job value exceeds <span className="text-white font-semibold">${results.city_info.noc_threshold.toLocaleString?.() || results.city_info.noc_threshold}</span></span>
+                        </div>
+                      )}
+                      {results.city_info.plan_sets && (
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-500">📐</span>
+                          <span className="text-gray-400">Plan sets required: <span className="text-white font-semibold">{results.city_info.plan_sets}</span></span>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Insurance Certificate Holder - Copy Button */}
+                    {results.city_info.insurance_holder && (
+                      <div className="mt-3 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Insurance Certificate Holder — Copy Exactly</span>
+                          <button 
+                            onClick={() => { navigator.clipboard.writeText(results.city_info.insurance_holder); setCopiedInsurance(true); setTimeout(() => setCopiedInsurance(false), 2000) }}
+                            className="px-2 py-1 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 rounded text-emerald-400 text-xs font-semibold transition-all"
+                          >
+                            {copiedInsurance ? '✓ Copied!' : '📋 Copy'}
+                          </button>
+                        </div>
+                        <p className="text-white text-sm font-mono">{results.city_info.insurance_holder}</p>
+                      </div>
+                    )}
+
+                    {/* Portal Link Button */}
+                    {results.city_info.portal_url && (
+                      <a 
+                        href={results.city_info.portal_url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/30 rounded-lg text-cyan-400 font-semibold text-sm transition-all"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                        Submit to {results.city} Permit Portal →
+                      </a>
+                    )}
+                  </div>
+                )}
+                
                 {/* Add More Files Section */}
                 {missingDocs.length > 0 && (
                   <div className="mt-6 p-6 bg-gradient-to-r from-cyan-500/10 to-emerald-500/10 border border-cyan-500/30 rounded-xl">
@@ -3139,6 +3226,33 @@ export default function App() {
                   </div>
                 </div>
               </div>
+
+              {/* Pre-Upload Checklist Preview */}
+              {checklistPreview && checklistPreview.items?.length > 0 && (
+                <div className="mb-6 p-4 bg-gradient-to-r from-cyan-500/5 to-emerald-500/5 border border-cyan-500/20 rounded-xl">
+                  <h4 className="font-bold text-cyan-400 text-sm mb-3 flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                    What You'll Need — {checklistPreview.permit_name}
+                  </h4>
+                  <ul className="space-y-1.5 mb-3">
+                    {checklistPreview.items.slice(0, 8).map((item, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm">
+                        <span className="text-gray-600 mt-0.5">○</span>
+                        <span className="text-gray-400">{item.replace(/^GOTCHA: /, '')}</span>
+                      </li>
+                    ))}
+                    {checklistPreview.total_items > 8 && (
+                      <li className="text-xs text-gray-500 pl-5">+ {checklistPreview.total_items - 8} more items checked during analysis</li>
+                    )}
+                  </ul>
+                  {checklistPreview.city_info?.phone && (
+                    <div className="flex items-center gap-4 text-xs text-gray-500 border-t border-gray-800 pt-2 mt-2">
+                      <span>📞 {checklistPreview.city_info.phone}</span>
+                      {checklistPreview.city_info.portal_url && <a href={checklistPreview.city_info.portal_url} target="_blank" rel="noopener noreferrer" className="text-cyan-500 hover:text-cyan-400">🌐 City Portal →</a>}
+                    </div>
+                  )}
+                </div>
+              )}
 
               <div className="mb-6">
                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Upload Documents</label>
