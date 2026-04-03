@@ -2673,7 +2673,11 @@ async def analyze_permit_folder(
 
         # Determine AI tier based on subscription
         ai_tier = "standard"  # default: Gemini Flash (cheap)
-        if user and user.subscription_tier in ("pro", "business"):
+        is_admin = user and user.email.lower().strip() in [e.lower().strip() for e in ADMIN_EMAILS]
+        if is_admin:
+            ai_tier = "premium"  # Admins always get Claude
+            print(f"✅ Admin {user.email} using premium (Claude)", flush=True)
+        elif user and user.subscription_tier in ("pro", "business"):
             ai_tier = "premium"  # Claude Sonnet (better quality)
 
         analysis = analyze_folder_with_claude(
@@ -4386,7 +4390,7 @@ Be SPECIFIC about the permit type. Read the documents carefully to identify exac
 
 @app.on_event("startup")
 async def startup():
-    print("🚀 Flo Permit v1.4.0 Started")
+    print("🚀 Flo Permit v1.5.0 Started — Admin bypass + Claude debug")
     print(f"   API Key: {'✅' if get_api_key() else '❌'}")
     print(f"   JWT Key: {'✅' if os.getenv('JWT_SECRET_KEY') else '❌'}")
     print(f"   Resend Key: {'✅' if os.getenv('RESEND_API_KEY') else '❌'}")
