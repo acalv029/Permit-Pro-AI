@@ -1037,19 +1037,104 @@ CITY_INFO = {
         "department": "Building Department",
         "address": "444 SW 2nd Ave, 4th Floor, Miami, FL 33130",
         "phone": "305-416-1100",
+        "phone_help_desk": "305-416-1180",
+        "fax": "305-416-2158",
         "email": "building@miamigov.com",
-        "portal": "iBuild / ePlan (ProjectDox)",
-        "submission": "FULLY DIGITAL - All plans must be digitally signed and sealed",
+        "email_eplan": "eplanbuilding@miamigov.com",
+        "portal": "iBuild (applications) + ePlan/ProjectDox (plan uploads)",
+        "portal_url": "https://www.miami.gov/Permits-Construction/iBuild-Portal-Link",
+        "eplan_url": "https://www.miami.gov/redirects/ePlan-Portal",
+        "submission": "FULLY DIGITAL — ALL applications via iBuild; plans via ProjectDox/ePlan. NO PAPER APPLICATIONS.",
         "county": "Miami-Dade",
-        "noc_threshold": 2500,
-        "noc_threshold_hvac": 7500,
+        "noc_threshold": 5000,
+        "noc_threshold_hvac": 15000,
         "hvhz": True,
         "digital_only": True,
         "derm_required": True,
         "homeowner_assistance": True,
         "concierge_program": True,
+        "concierge_phone": "305-416-2000",
+        "concierge_payment": "Credit card ONLY",
+        "plan_sets": 2,
+        "survey_max_age_days": 180,
+        "code_edition": "FBC 8th Edition (2023)",
+        "zoning_code": "Miami 21 (form-based code)",
+        "insurance_cert_holder": "City of Miami Building Department",
+        "insurance_delivery": "Certificates of insurance must be sent DIRECTLY from the insurance provider to eplanbuilding@miamigov.com",
+        "contractor_registration_fee": "FREE",
+        "contractor_registration_time": "2-3 business days",
+        "contractor_registration_ordinance": "Ordinance 14279",
+        "contractor_registration_email": "eplanbuilding@miamigov.com",
+        "dual_registration": True,
+        "dual_registration_note": "Must register with BOTH City of Miami (Ordinance 14279) AND Miami-Dade County",
+        "dual_submission_derm": True,
+        "dual_submission_note": "Projects requiring DERM/WASD/Fire/Impact Fee review must submit to MDC portal SEPARATELY from iBuild",
+        # Fee Schedule (from Ordinance 14279, Sec. 10-18)
+        "fee_residential": "0.50% of estimated construction cost (incl. labor and materials); min $45 if under $2,500",
+        "fee_commercial": "1% up to $30M; 0.5% over $30M",
+        "fee_minimum": 110,
+        "fee_application": 40,
+        "fee_work_without_permit_homestead": "2x permit fee + $110",
+        "fee_work_without_permit_non_homestead": "4x permit fee + $110 (COMMERCIAL/NON-HOMESTEAD)",
+        "fee_reinspection": 57,
+        "fee_change_contractor": 100,
+        "fee_change_architect": 100,
+        "fee_permit_extension": 100,
+        "fee_completion_permit": "First $1,000 remaining = $32; each additional $1,000 = $16",
+        "fee_dry_run_upfront": "$2.80 per $1,000 of estimated value; 80% credited to permit fee if issued",
+        "fee_revision_after_2nd_review": 56,
+        "fee_joint_plan_review": "276 per discipline (max 2 hrs each)",
+        "fee_co_residential": "$105 per unit",
+        "fee_co_commercial": "$0.10 per sq ft (min $250)",
+        "fee_cc_commercial_min": 150,
+        "fee_tco_extension_first": "$0.10/sqft per 90 days (commercial) or $105 per 90 days (residential)",
+        "fee_legalization_pre_2002": "$250 + enforcement fee + permit fee",
+        "fee_legalization_post_2002": "Double permit fee + fine",
+        "fee_expired_app_extension_residential": 100,
+        "fee_expired_app_extension_commercial": 500,
+        "fee_inactive_nac_reactivation": 1500,
+        "fee_phased_permit": 1500,
+        "fee_plan_recertification": "30% of original fee (min $100)",
+        "fee_revised_plans_per_sheet": 20,
+        "fee_revised_plans_min": 100,
+        "fee_revised_plans_max": 5000,
+        "fee_permit_card_replacement": 17,
+        "fee_unsafe_structures_initiation": 500,
+        "fee_folio_change": 26,
+        "fee_solar_waived": True,
+        "fee_solar_processing": "Within 3 business days",
+        "fee_recertification_review": 276,
+        "fee_recertification_extension": "500 per 3 months (max 2 extensions)",
+        "fee_energy_conservation_surcharge": "$0.11 per sq ft new construction/additions",
+        "fee_solid_waste_residential": "$0.22 per $100 construction cost (min $26, max $600)",
+        "fee_solid_waste_commercial": "2.5% of construction cost (min $57, max $10,500)",
+        "fee_expedited_in_house": "350 per discipline (max 4 hrs)",
+        "fee_expedited_outside": "Actual cost + 10%",
+        "private_provider_credit": "1/3 of permit fee (both plan review + inspections); 1/6 if only one service",
+        # Hours
+        "hours_permit_counter": "7:45 AM - 12:30 PM and 1:30 PM - 3:30 PM",
+        "hours_inspections_counter": "7:45 AM - 12:30 PM and 1:30 PM - 3:30 PM",
+        "hours_microfilm_records": "7:45 AM - 12:30 PM and 1:30 PM - 2:30 PM",
+        "hours_lunch_closure": "ALL sections CLOSED daily 12:30 PM - 1:30 PM for lunch",
+        "hours_section_chief_appointments": "From 2:00 PM",
+        # Walk-thru reviews
+        "walk_thru_permits": "Fences, canopies, shutters, windows, pools, trusses, trellises, antennas, garage doors, driveways — structural review done same day (walk-thru visit)",
+        "permit_completion_online_limit": 100000,
+        "permit_completion_online_note": "Permits up to $100,000 approved immediately online",
+        # Building recertification
+        "building_recertification": "25-year milestone inspection per Florida SB 4-D (was 40-year); 10-year recurring",
+        "recertification_2026_deadline": "April 7, 2026 for properties notified Jan 7, 2026",
+        # Historic districts
+        "historic_districts": True,
+        "historic_board": "Historic & Environmental Preservation Board (HEPB)",
+        "coa_required": "Certificate of Appropriateness required for designated historic properties",
+        # Payment
+        "payment_methods": "Credit card, checking account via iBuild 'Pay Now'; in person at permit counter",
+        "payment_online": True,
+        # Non-homestead violation block
+        "non_homestead_violation_block": "NO new permits for non-homestead properties with outstanding code enforcement violations, building violations, or any city lien",
     },
-    "hialeah": {
+"hialeah": {
         "name": "Hialeah",
         "department": "Building Department",
         "address": "501 Palm Avenue, 2nd Floor, Hialeah, FL 33010",
@@ -2183,20 +2268,84 @@ KNOWN_GOTCHAS = {
     ],
     # Miami-Dade County
     "miami": [
-        "FULLY DIGITAL system - All plans must be digitally signed and sealed",
-        "DERM approval required BEFORE city permit for commercial projects",
-        "Contractor registration takes 2-3 business days",
-        "Permit expediters must also register per City Ordinance 14279",
-        "NOC threshold: $2,500 general, $7,500 for HVAC",
-        "NOC must be recorded at Miami-Dade County Recorder's Office",
-        "Miami-Dade Product Approval (NOA) required - NOT just Florida Product Approval",
-        "All of Miami-Dade is HVHZ - minimum 175 mph wind load design",
-        "Historic properties require Certificate of Appropriateness (COA)",
-        "Hours: Mon-Fri 7:30 AM - 4:30 PM (closes to public at 3:30 PM)",
-        "Permits valid for 180 days from issuance",
-        "Track inspector route in real-time via City website",
-        "Homeowner Assistance Program available - call (305) 710-0605",
-        "Concierge Program for large commercial: concierge@miamigov.com",
+        # Portal & Submission
+        "ALL permit applications are 100% DIGITAL via iBuild — NO paper applications accepted",
+        "Plans must be uploaded through ePlan/ProjectDox — NOT submitted through iBuild directly",
+        "GOTCHA: Plans must be digitally signed and sealed — printed copies are NOT considered signed and sealed",
+        "GOTCHA: Standard naming convention REQUIRED for drawings and documents uploaded to ProjectDox",
+        # Insurance & Registration
+        "GOTCHA: Insurance certificates must be sent DIRECTLY from the insurance provider to eplanbuilding@miamigov.com — contractor cannot forward them",
+        "GOTCHA: Insurance certificate must name 'City of Miami Building Department' as certificate holder — NOT just 'City of Miami'",
+        "GOTCHA: DUAL REGISTRATION REQUIRED — must register with BOTH City of Miami (Ordinance 14279, FREE, 2-3 days) AND Miami-Dade County",
+        "Contractor registration requires: State License (DBPR), Business Tax Receipt/Local Business Tax Receipt (LBT), Driver's License, EIN, Company info + Liability COI + Workers Comp COI",
+        "Workers Comp COI that is part of Liability packet MUST ALSO come directly from insurance provider — not from contractor",
+        # Fees
+        "GOTCHA: Work without permit penalty is 2x for Homestead properties but 4x for non-Homestead/commercial properties PLUS $110",
+        "Application fee is $40 non-refundable on ALL permits",
+        "Minimum permit fee is $110 regardless of construction cost or category",
+        "Dry Run/Up-Front fee: $2.80 per $1,000 of estimated value — 80% credited only if permit is actually issued within 180 days",
+        "Solar panel permit fees are WAIVED for both residential and commercial — but surcharges still apply",
+        "GOTCHA: NO new permits issued for non-homestead properties with ANY outstanding code violations, building violations, or city liens",
+        # Hours & Operations
+        "GOTCHA: Permit Counter and ALL Building Department sections CLOSE DAILY 12:30 PM - 1:30 PM for lunch — plan accordingly",
+        "Permit counter hours: 7:45 AM - 12:30 PM and 1:30 PM - 3:30 PM only",
+        "Section Chief appointments available starting at 2:00 PM — schedule through receptionist in Corridor B",
+        # NOC
+        "NOC threshold: $5,000 general; $15,000 for A/C — higher than some other MDC cities",
+        "NOC must be recorded at Miami-Dade County Clerk of Court and posted at job site",
+        # Survey
+        "GOTCHA: Survey must be less than 180 DAYS old (6 months) — stricter than most cities that allow 1 year",
+        # Walk-thru & Expedited
+        "Walk-thru same-day reviews available for: fences, canopies, shutters, windows, pools, trusses, trellises, antennas, garage doors, driveways",
+        "Permit completion requests up to $100,000 are now approved IMMEDIATELY online",
+        "Concierge Permit Processor visits homeowner for qualifying residential permits — credit card ONLY — call 305-416-2000",
+        "Homeowner's Express Review available — separate expedited residential program",
+        "Joint Plan Review: $276 per discipline, max 2 hours each — commercial projects over 20,000 sq ft only",
+        "Expedited overnight review: After 4:30 PM Mon-Fri; $350/discipline in-house or actual cost + 10% for outside source — commercial over 20,000 sq ft only",
+        # DERM & County
+        "GOTCHA: DERM/WASD/Fire/Impact Fee reviews must be submitted to Miami-Dade County portal SEPARATELY — NOT through iBuild",
+        "County-approved plans required before City can finalize certain permits",
+        "MDC DERM Class I Permit required for ALL marine/coastal construction (dual permit situation)",
+        "MDC DERM Class I applications submittable online as of December 1, 2025",
+        # HVHZ
+        "ALL of Miami-Dade is HVHZ — 175 mph minimum wind load",
+        "Miami-Dade NOA (Notice of Acceptance) required for ALL exterior products — FL Product Approval alone is NOT sufficient",
+        "HVHZ Uniform Roofing Application required for ALL re-roofs — FBC Chapter 15",
+        # Historic & Zoning
+        "Historic districts require Certificate of Appropriateness (COA) from HEPB before building permit",
+        "Archaeological Conservation Areas may require Certificate to Dig",
+        "Miami 21 form-based zoning code — check property's transect zone before applying",
+        # Building Recertification
+        "25-year milestone inspection required per Florida SB 4-D (reduced from 40 years) — 10-year recurring after that",
+        "2026 recertification notices sent January 7 — deadline April 7, 2026",
+        # Roofing specific
+        "Affidavit of Compliance for Roof Decking required for all re-roofs",
+        "Affidavit of Compliance for Roof-to-Wall connection required for all re-roofs",
+        "Re-Nailing Affidavit required when re-nailing existing roof decking",
+        "Roofing Owners Notification Considerations form available — inform homeowners of roofing considerations",
+        # Fence specific
+        "City provides Standard Detail drawings for Masonry, Metal, and Wood fences — use these to streamline review",
+        "Fence permits can be done as walk-thru same-day review at the Building Department",
+        # Inspections
+        "Re-inspection fee: $57 for ANY failed inspection including missing NOC at site, wrong address, incomplete work, missing plans, or no access",
+        "Inspector routes are trackable online in real-time — enter permit number into Inspector Route tool",
+        "Inspections can be scheduled via iBuild or by calling 305-416-1100 the day before",
+        # Private Provider
+        "Private Provider option: 1/3 credit on permit fee when using both plan review and inspections; 1/6 credit for only one service",
+        # Legalization
+        "Legalization of unpermitted structures built BEFORE 2002: $250 + enforcement fee",
+        "Legalization of unpermitted structures built AFTER 2002: DOUBLE permit fee + fine",
+        # Tree permits
+        "Tree permit may be required — standalone tree permit (no construction) or tree permit with new construction — check before applying",
+        # Permit expiration
+        "Expired applications (180+ days from original date): $100 extension fee (residential) or $500 (commercial)",
+        "Inactive applications (NAC): $1,500 reactivation fee for 6 additional months",
+        "Permit extension: $100 one-time extension before expiration date",
+        "Phased permits valid only 6 months — NO extensions — $1,500 fee",
+        # Revision fees
+        "After 2nd plan review: $56 per discipline for each additional revision",
+        # Change of contractor
+        "Change of Architect, Engineer, or Contractor: $100 per change",
     ],
     "hialeah": [
     "ALL applications MUST be NOTARIZED — strictly enforced, automatic rejection without it",
@@ -2280,26 +2429,48 @@ KNOWN_GOTCHAS = {
         "GOTCHA: $500 Early Start fee per master permit — work cannot proceed past first required inspection even with Building Official approval.",
     ],
     "kendall": [
-        "Kendall is UNINCORPORATED Miami-Dade - permits through County PIC office",
-        "Property folio numbers start with '30' for unincorporated MDC",
-        "Application must be signed AND notarized (Yellow Form)",
-        "DERM approval required BEFORE building permit for most projects",
-        "Miami-Dade NOA required - NOT just Florida Product Approval!",
-        "Work without permit = 100% penalty (DOUBLE the permit fee) - strictly enforced",
-        "E-permitting available 7 days/week from 2 AM to 5 PM for trade permits",
-        "NOC threshold: $2,500 general, $7,500 for HVAC",
-        "NOC must be recorded at Miami-Dade County Recorder's Office before first inspection",
-        "SEER ratings must meet current energy code minimums (SEER2 15 for split systems)",
-        "Load calculations required if changing equipment size - can't just 'match existing'",
-        "Pool bonding strictly enforced - ALL metal within 5 feet must be bonded",
-        "AFCI required in bedrooms, living rooms, hallways; GFCI in bathrooms, kitchens, garages",
-        "Peel-and-stick underlayment required in HVHZ for shingle roofs",
-        "Max 2 roof layers - often must tear off existing",
-        "15% refund available for permits not requiring rework (request within 180 days)",
-        "Private Provider option: 65% fee reduction for their portion",
-        "Check for existing violations on property before applying - may block new permits",
-        "Marine construction requires Class I Environmental Permit from DERM",
-    ],
+    "CRITICAL: Kendall is UNINCORPORATED Miami-Dade — permits through County PIC office, NOT a city building department",
+    "Property folio numbers MUST start with '30' — if not, property is in an incorporated municipality with its own building dept",
+    "Insurance certificate holder: 'Miami-Dade County' — there is NO separate city to name as cert holder",
+    "Yellow Form (Building Permit Application) MUST be signed AND notarized — unnotarized applications rejected",
+    "Applicant must certify they are NOT a named violator with unpaid penalties or liens — false certification = criminal offense",
+    "OUTDATED FORMS REJECTED: Must use latest version of official application forms — check miamidade.gov before submitting",
+    "Miami-Dade NOA required for ALL exterior products — Florida Product Approval alone is NOT sufficient in HVHZ",
+    "DERM approval required BEFORE building permit for: new buildings, commercial additions, commercial interior alterations, commercial re-roofs, commercial pools, land clearing, demolition",
+    "Work without permit = 100% penalty (DOUBLE the original fee) — strictly enforced with no exceptions",
+    "Plans NOT reviewed until upfront fees are PAID — submitting plans without payment = processing delay",
+    "Paper plan submissions = conversion fee + extra processing time — digital via Portal strongly preferred",
+    "NOC threshold: $5,000 general / $15,000 for AC — must be signed by OWNER (not agent), recorded at Clerk of Court, posted at job site",
+    "E-Permitting (no plan review trade permits) available 2 AM – 5 PM ONLY, 7 days/week — system offline outside these hours",
+    "Separate permits required for EACH trade (electrical, plumbing, mechanical, roofing, windows, shutters) — not bundled under master permit until issued",
+    "All MEP subsidiary permits applied for AFTER master permit issuance — not simultaneously",
+    "Fee schedule revised October 1, 2025 — first increase in 17+ years — old fee calculations will be WRONG",
+    "Permit fee sheets (electrical, mechanical, plumbing) MUST be submitted as part of application — missing fee sheet = rejection",
+    "Residential fee: 0.5% of projected construction cost; Commercial: 1% up to $30M then 0.5% above; Trade permits start at $166.63",
+    "Permits expire after 180 days without an approved inspection — no automatic extensions",
+    "Expired permit cancellation fee: $72 + 7.5% surcharge — and must have adult present for inspection",
+    "Change of contractor requires notarized Hold Harmless Letter + 10-day waiting period",
+    "Refunds NOT granted on: permits $130 or less, expired permits, permits where work commenced, revoked permits, or change of contractor situations",
+    "Building recertification: 25 years after CO (milestone inspection), then every 10 years — non-compliance = code enforcement action",
+    "Structural glazing recertification: 5 years from year built, then every 5 years for threshold buildings",
+    "Water submeter amendment (Sept 2023): required for ALL multi-family dwelling units with master meter — new construction and alterations replacing >50% of supply lines",
+    "Private Provider standardized forms effective Aug 5, 2024 — proprietary forms NO LONGER accepted for new applications in unincorporated MDC",
+    "Pre-approved fence detail since May 2024 — MUST agree to abide by MDC standard detail for streamlined residential fence permits",
+    "ADU requires renewable Certificate of Use (CU) — only the property OWNER can obtain it; must be renewed annually",
+    "Asbestos survey REQUIRED for ALL demolition projects — Notice of Demolition must be submitted 10 working days (14 calendar days) BEFORE start",
+    "DERM Flood Elevation Certificate must be submitted IN PERSON at DERM Counter — original, in color — processed within 48 hours",
+    "Noise ordinance: No construction noise near residences 8 PM – 7 AM — violation = citation; Temporary Waiver requires active building permit",
+    "Pool permit cannot be issued without SIMULTANEOUS safety barrier permit (or written owner certification that pool won't be filled until barrier approved)",
+    "Pool safety barrier minimum 48 inches (4 feet) high — gates must be self-closing, self-latching, spring-lock type",
+    "Public/commercial pools require FL DOH Operating Permit BEFORE Certificate of Occupancy — DOH at 1725 NW 167th St, Miami 33056, 305-623-3500",
+    "MeetQ system: DERM appointments for consultations can only be made on WEDNESDAY for the following day",
+    "Fire Engineering MeetQ appointments: only made on Wednesday for next day",
+    "Single agency advantage: For unincorporated MDC, all reviews (DERM, WASD, Fire, Impact Fees) at county level — NO dual submission — BUT incorporated cities must submit to both city AND county separately",
+    "Roofing E-Permits: qualifying roofing contractors in unincorporated MDC (folio '30') can obtain residential roofing permits online — but must follow E-Permitting guidelines exactly",
+    "Solar PV on roofs: separate re-installation affidavit required if existing solar present during re-roof",
+    "Class I permits (docks/seawalls/mangrove): submittable online since Dec 1, 2025 — DERM permit, not building permit",
+    "Green Building Expedited Review: LEED/FGBC projects $50K+ — 15% refund available for permits not requiring rework (request within 180 days)",
+],
     "homestead": [
     # === INSURANCE & REGISTRATION ===
     "GOTCHA: Insurance certificate holder MUST read EXACTLY: 'CITY OF HOMESTEAD, 100 CIVIC COURT, HOMESTEAD, FL 33030' — this is from the official Contractor Licensing Registration PDF. Private Provider cert holder is slightly different: 'City of Homestead Building Department, 100 Civic Court, Homestead, FL 33030'",
@@ -2440,6 +2611,99 @@ KNOWN_GOTCHAS = {
         "GOTCHA: LAND DISTURBING ACTIVITIES — Jobs >= $250,000 also require a Land Disturbing Activities Form with a $144 review fee. This is separate from the CPMP and often missed.",
         "GOTCHA: OWNER NOT ON PERMIT — If you are NOT the contractor or owner, you need a notarized letter of consent to be added as a contact on the permit. Without this, you cannot view permit status, schedule inspections, or upload documents.",
     ],
+    "north_miami": [
+        # Portal & Submission
+        "GOTCHA: Online portal ONLY accepts: stand-alone electrical, stand-alone plumbing, windows/doors, commercial roofs, residential roofs, small interior renovations. ALL other scopes require IN-PERSON at 12340 NE 8th Ave",
+        "GOTCHA: Additions and new construction are NOT eligible for digital submittal — must apply IN-PERSON",
+        "GOTCHA: Owner-builder is NOT eligible for digital submittal — must appear in person",
+        "GOTCHA: Upon receipt of online application, a LINK is sent via email to upload documents — city will NOT accept documents from any other links",
+        "GOTCHA: All documents must be PDF format and clearly labeled (permit applications, plans, special inspector form, state license, liability insurance, survey, elevation certificate, etc.)",
+        
+        # Application Requirements
+        "GOTCHA: Building Permit Application must be signed AND NOTARIZED by BOTH property owner AND contractor qualifier — incomplete notarization = rejection",
+        "GOTCHA: EACH trade contractor (electrical, plumbing, mechanical) has its own separate notarization section on the application — ALL must be notarized",
+        "GOTCHA: Estimated Construction Value must be based on ACTUAL COST including profit and overhead — Building Official may use R.S. Means to verify and will reject low estimates",
+        "GOTCHA: All required plans, data, AND fees must be submitted TOGETHER — incomplete applications are NOT processed",
+        "GOTCHA: Cannot have ANY outstanding building violations on the property — application will NOT be approved until violations cleared",
+        "GOTCHA: Separate permits required for EACH trade: Electrical, Plumbing, Signs, Pools, Boilers, Tanks, A/C, Roofing, Shutters, Windows, Doors — each needs its own application and sign-off",
+        
+        # Fees & Penalties
+        "GOTCHA: Work without permit = $110 penalty fee + DOUBLE the base permit fee (100% penalty) — strictly enforced; also triggers Code Enforcement fines on top",
+        "GOTCHA: Misrepresentation on application = additional 0.2% of construction cost assessed (min $250) on top of penalty/double fees",
+        "GOTCHA: Rework fee of $137 charged every TWO denials per discipline — corrections must be made properly the first time",
+        "GOTCHA: Re-inspection fee $89 per trade per occurrence — charged if corrections not made, work not ready, approved docs not on-site, or no access to area",
+        "GOTCHA: Payment of re-inspection fee required BEFORE any future inspection can be scheduled",
+        "GOTCHA: Expired permit renewal: $89 per trade PLUS 50% of original base permit fee if permit expired >6 months — this can be very expensive",
+        "GOTCHA: If payment is returned (bounced check), a HOLD is placed on the permit and finals are re-opened until balance paid in full",
+        "GOTCHA: NO REFUND on upfront fees, early start, dry-run review, expedite review, plan review fees, or surcharges — once paid, gone",
+        
+        # Survey Requirements
+        "GOTCHA: Survey must be CURRENT — if survey is older than 1 year, a Survey Affidavit is REQUIRED in addition to the survey",
+        "GOTCHA: Most permit types require 2 copies of signed and sealed survey — not 1",
+        
+        # Proof of Ownership
+        "GOTCHA: Proof of ownership = RECORDED WARRANTY DEED — not just a title or contract; required for ALL permit types",
+        
+        # Demolition Traps
+        "GOTCHA: Demolition requires disconnect letters from ALL utilities: FPL, NM Water and Sewer, AND gas supplier — even if NOT served by gas, you MUST get a letter from the gas company confirming no service",
+        "GOTCHA: Demolition requires SEPARATE temporary construction fence permit (chain link with green screen barrier)",
+        "GOTCHA: PARTIAL DEMOLITION will NOT be accepted without simultaneous submittal of COMPLETE plans for rehabilitative work",
+        "GOTCHA: COMMERCIAL DEMOLITION: Plans must FIRST go to City for a process number, THEN to MDC DERM for review, THEN back to City — wrong order = rejection",
+        
+        # Pool Traps
+        "GOTCHA: Pool Safety Act form requires NOTARIZATION for BOTH owner/agent AND prime contractor — two separate notarizations on one form",
+        "GOTCHA: Final pool inspection will NOT be approved without pool safety barrier compliance — pool will be deemed 'unsafe' if permit expires without compliance",
+        "GOTCHA: Pool permit requires DERM approval — submit to Miami-Dade separately",
+        
+        # Window/Door/Shutter Traps
+        "GOTCHA: Shutters are REQUIRED if more than 25% of openings are being replaced on SFR/duplex — must provide product approval for shutters",
+        "GOTCHA: Impact resistance required on ALL commercial window/door retrofits regardless of size or amount replaced",
+        "GOTCHA: Wind pressures must be calculated per ASCE-7-22 for buildings 2 stories or more",
+        "GOTCHA: Condo Association Board approval must be obtained BEFORE commencing window/door/shutter work — permit holder's responsibility",
+        
+        # Generator Traps
+        "GOTCHA: Generator permit requires THREE separate permits: Building, Electrical, AND Plumbing/Mechanical — each signed and notarized separately",
+        "GOTCHA: Generator/fuel equipment MUST be at Base Flood Elevation or higher — Elevation Certificate REQUIRED attached to plans",
+        "GOTCHA: Transfer switch must be SAME SIZE as service capacity — undersized = rejection",
+        
+        # Fence Traps
+        "GOTCHA: No barbed wire, spikes, spears, broken glass, electrical elements, exposed sharp objects, or other hazardous materials on fences — will be rejected",
+        "GOTCHA: If survey shows existing fencing, plans MUST include statement that existing fencing will be removed (or sections removed) before new installation",
+        "GOTCHA: CBS walls and masonry walls require plans signed and sealed by architect or engineer",
+        "GOTCHA: Commercial fence permits require Miami-Dade Fire approval",
+        
+        # Driveway Traps
+        "GOTCHA: Per City Code Section 17-97, impervious percentage CANNOT exceed 40% in the right-of-way",
+        "GOTCHA: Driveway minimum 5' setback from property lines",
+        "GOTCHA: If existing sidewalk crossing driveway is NOT 6 inches thick, it must be replaced",
+        "GOTCHA: Any sidewalk damaged during construction or not meeting ADA requirements MUST be replaced",
+        "GOTCHA: If approaches are not built to minimal city standards, a SEPARATE Engineering Permit for work within Public Right-of-Way is required",
+        
+        # Sign Traps
+        "GOTCHA: Sign permits require 2 FULL COLOR renderings with ALL dimensions and total square footage",
+        "GOTCHA: Wall signs require 2 copies of Addendum #2 (city-specific form)",
+        "GOTCHA: Sign plans must show wind load calculations for BOTH positive AND negative wind pressures",
+        
+        # Recertification
+        "GOTCHA: North Miami enforces 30-YEAR recertification (per MDC Code Section 8-11) — $395 per building, PLUS $388 late penalty if submitted late",
+        
+        # General MDC/HVHZ
+        "GOTCHA: This is HVHZ — all products must have Miami-Dade County NOA (Notice of Acceptance) or Florida Product Approval",
+        "GOTCHA: Both City of North Miami AND Miami-Dade County contractor registration required — double registration",
+        "GOTCHA: DERM approval required before City will review for: additions, pools, boat docks, carport conversions, commercial demolition",
+        "GOTCHA: NOC must be POSTED at job site per Florida Statute 713.135 — missing posting = violation",
+        
+        # Private Provider
+        "GOTCHA: Private Provider discount is only 10% for plan review OR inspection; 15% for BOTH — NOT the 65% some other cities offer",
+        
+        # Hours
+        "GOTCHA: Construction hours: No loud noise 8 PM to 7 AM — violations result in code enforcement action",
+        "GOTCHA: Construction Hours Waiver available (online form) for work outside standard hours — must be approved BEFORE work begins",
+        
+        # Expiration
+        "GOTCHA: If new permit not obtained within 180 days of expiration, Building Official may require ALL completed work to be removed from the site",
+    ],
+
 }
 
 
@@ -5441,127 +5705,56 @@ DETAILED_CHECKLISTS = {
         },
     },
     "north_miami": {
+        "name": "City of North Miami",
         "county": "Miami-Dade",
-        "roofing": {
-            "subcategory": "Re-Roof (HVHZ)",
-            "total_required_docs": 14,
-            "noc_threshold": "$5,000 ($15,000 AC)",
-            "submittal_method": "E-Services Portal (limited online) + In-Person",
-            "portal_url": "https://eportal.northmiamifl.gov/",
-            "code_edition": "FBC 8th Ed (2023)",
-            "county": "Miami-Dade",
-            "source_document": "North Miami Forms & Permits page + Online Permitting Guidelines + Building Dept page + Permit Application",
-            "last_verified": "2026-03-16",
-            "documents": [
-                {"name": "North Miami Building Permit Application (signed & notarized)", "required": "REQUIRED", "condition": "All re-roofs", "notes": "Complete, legible, notarized; estimated job cost, contact info, work description, contractor name/contact MUST be filled out; separate application/sign-off for each trade"},
-                {"name": "2023 Roof Packet", "required": "REQUIRED", "condition": "All re-roofs", "notes": "NORTH MIAMI SPECIFIC: City has its own 2023 Roof Packet — includes HVHZ roofing application forms"},
-                {"name": "Hurricane Mitigation Affidavit", "required": "REQUIRED", "condition": "All re-roofs", "notes": "Part of the 2023 Roof Packet; per FL Statute 553.844"},
-                {"name": "Roof Owners Notification", "required": "REQUIRED", "condition": "All re-roofs", "notes": "City-specific form; contractor responsible for providing to owner and explaining content"},
-                {"name": "Roofing Permit Affidavit", "required": "REQUIRED", "condition": "All re-roofs", "notes": "City-specific form included in 2023 Roof Packet"},
-                {"name": "Building Cost Affidavit", "required": "REQUIRED", "condition": "All re-roofs", "notes": "NORTH MIAMI: Estimated value must be based on actual cost including profit and overhead; Building Official may use R.S. Means if supplied estimate deemed low"},
-                {"name": "Miami-Dade NOA or FL Product Approval", "required": "REQUIRED", "condition": "All roofing materials", "notes": "All roofing system components must have MDC NOA or FL Product Approval; NOAs for roof vents and all components"},
-                {"name": "Contractor Registration with City of North Miami", "required": "REQUIRED", "condition": "All permits", "notes": "Must be registered; state license + liability insurance + WC required"},
-                {"name": "MDC Contractor Registration", "required": "REQUIRED", "condition": "All permits", "notes": "Must also be registered with Miami-Dade County"},
-                {"name": "Notice of Commencement", "required": "REQUIRED", "condition": "Job value >= $5,000; $15,000 AC", "notes": "MDC standard; city has own NOC form on Forms & Permits page; recorded at MDC Clerk of Court; posted at job site"},
-            ],
-            "conditional_documents": [
-                {"name": "Online Submittal via E-Services Portal", "condition": "Roofing IS eligible for online", "notes": "All documents must be PDF; clearly labeled; link sent via email to upload after application receipt"},
-                {"name": "Early Start Request Application", "condition": "Emergency / urgent work", "notes": "NORTH MIAMI UNIQUE: Allows work to begin before full permit issuance in qualifying circumstances"},
-            ],
-            "online_eligibility": "Roofing permits ARE eligible for digital submittal; owner-builder NOT eligible for digital",
+        "hvhz": True,
+        "population": 64000,
+        "building_dept_address": "12340 NE 8th Avenue, North Miami, FL 33161",
+        "mailing_address": "776 NE 125 Street, North Miami, FL 33161",
+        "phone": "305-895-9820",
+        "fax": "305-895-9822",
+        "extensions": {
+        "chief_building_official": "Ext. 18001",
+        "assistant_director": "Ext. 18002",
         },
-        "electrical": {
-            "subcategory": "Service Change / Panel",
-            "total_required_docs": 10,
-            "noc_threshold": "$5,000 ($15,000 AC)",
-            "submittal_method": "E-Services Portal (service change only) + In-Person",
-            "portal_url": "https://eportal.northmiamifl.gov/",
-            "code_edition": "FBC 8th Ed (2023)",
-            "county": "Miami-Dade",
-            "source_document": "North Miami Forms & Permits page",
-            "last_verified": "2026-03-16",
-            "documents": [
-                {"name": "North Miami Building Permit Application (Electrical)", "required": "REQUIRED", "condition": "All electrical", "notes": "Signed & notarized; complete; estimated job cost required; separate permit for each trade"},
-                {"name": "Electrical Residential Service Change Form", "required": "REQUIRED", "condition": "Service change work", "notes": "NORTH MIAMI SPECIFIC: City has its own Electrical Residential Service Change form"},
-                {"name": "Electrical Service Affidavit", "required": "REQUIRED", "condition": "Service-related work", "notes": "NORTH MIAMI SPECIFIC: City-specific Electrical Service Affidavit required"},
-                {"name": "Building Cost Affidavit", "required": "REQUIRED", "condition": "All electrical", "notes": "Based on actual cost; R.S. Means may be used if estimate low"},
-                {"name": "City + MDC Contractor Registration", "required": "REQUIRED", "condition": "All electrical", "notes": "Both required"},
-                {"name": "Notice of Commencement", "required": "REQUIRED", "condition": "Job value >= $5,000; $15,000 AC", "notes": "MDC standard"},
-            ],
-            "online_eligibility": "Electrical service change IS eligible for online submittal; other electrical work may require in-person",
-        },
-        "plumbing": {
-            "subcategory": "General / Trade",
-            "total_required_docs": 10,
-            "noc_threshold": "$5,000",
-            "submittal_method": "In-Person (not listed for online submittal)",
-            "portal_url": "https://eportal.northmiamifl.gov/",
-            "code_edition": "FBC 8th Ed (2023)",
-            "county": "Miami-Dade",
-            "source_document": "North Miami Permit Application + MDC",
-            "last_verified": "2026-03-16",
-            "documents": [
-                {"name": "North Miami Building Permit Application (Plumbing)", "required": "REQUIRED", "condition": "All plumbing", "notes": "Signed & notarized; plumbing not specifically listed for online submittal — may require in-person"},
-                {"name": "Building Cost Affidavit", "required": "REQUIRED", "condition": "All plumbing", "notes": "Based on actual cost"},
-                {"name": "City + MDC Contractor Registration", "required": "REQUIRED", "condition": "All plumbing", "notes": "Both required"},
-                {"name": "NOC", "required": "REQUIRED", "condition": "Job value >= $5,000", "notes": "MDC standard"},
-            ],
-            "conditional_documents": [
-                {"name": "MDC DERM/WASD Approval", "condition": "Sewer/water connections", "notes": "Submit to MDC portal separately"},
-            ],
-        },
-        "building": {
-            "subcategory": "New Construction / Additions / Alterations",
-            "total_required_docs": 16,
-            "noc_threshold": "$5,000 ($15,000 AC)",
-            "submittal_method": "IN-PERSON ONLY (additions/new construction not eligible for digital)",
-            "portal_url": "In-person at 776 NE 125th St, North Miami FL 33161",
-            "code_edition": "FBC 8th Ed (2023)",
-            "county": "Miami-Dade",
-            "source_document": "North Miami Forms & Permits page + Online Permitting Guidelines + Permit Application",
-            "last_verified": "2026-03-16",
-            "documents": [
-                {"name": "North Miami Building Permit Application (signed & notarized)", "required": "REQUIRED", "condition": "All building", "notes": "CRITICAL: Additions and new construction NOT eligible for digital submittal — must apply IN-PERSON; owner-builder also NOT eligible for digital"},
-                {"name": "Plans (signed & sealed)", "required": "REQUIRED", "condition": "All requiring plan review", "notes": "Digitally signed & sealed for electronic upload; PDF format; clearly labeled by discipline"},
-                {"name": "Building Cost Affidavit", "required": "REQUIRED", "condition": "All building", "notes": "Estimated value based on actual cost incl. profit/overhead; Building Official may use R.S. Means to verify"},
-                {"name": "City + MDC Contractor Registration", "required": "REQUIRED", "condition": "All building", "notes": "Both required"},
-                {"name": "NOC", "required": "REQUIRED", "condition": "Job value >= $5,000; $15,000 AC", "notes": "MDC standard; city NOC form on Forms page"},
-            ],
-            "conditional_documents": [
-                {"name": "Addition Checklist", "condition": "Additions", "notes": "NORTH MIAMI: City-specific Addition Checklist (PDF)"},
-                {"name": "NM Threshold Building Affidavit", "condition": "Threshold buildings", "notes": "NORTH MIAMI SPECIFIC: City has its own Threshold Building Affidavit form"},
-                {"name": "Special Inspector Form", "condition": "When required by code", "notes": "City-specific; inspections IN ADDITION to mandatory city inspections"},
-                {"name": "Fire-Rated Joint Penetration Affidavit", "condition": "Fire-rated assemblies", "notes": "NORTH MIAMI SPECIFIC: Required when work involves penetrations through fire-rated assemblies"},
-                {"name": "Change of Architect/Engineer Hold Harmless", "condition": "When changing design professional", "notes": "City-specific form"},
-                {"name": "Early Start Request Application", "condition": "Emergency/urgent", "notes": "NORTH MIAMI UNIQUE: Allows work to begin before full permit issuance"},
-                {"name": "Construction Hours Waiver", "condition": "Work outside standard hours", "notes": "Available via online form on city website"},
-                {"name": "MDC County Approvals (DERM/WASD/Fire/Impact)", "condition": "When applicable", "notes": "Submit to MDC portal separately"},
-            ],
-            "in_person_required": "Additions and new construction are NOT eligible for digital submittal — must apply IN-PERSON at 776 NE 125th St",
-            "recertification": "30-year recertification enforced (2025 guidelines for electrical and structural) — different from MDC 25-year program",
-        },
-        "marine": {
-            "subcategory": "Boat Docks — Biscayne Bay Waterfront",
-            "noc_threshold": "$5,000 (city) + DERM fees",
-            "submittal_method": "In-Person (city) + MDC DERM Portal (Class I)",
-            "notes": "North Miami lies on BISCAYNE BAY — marine construction IS available. Requires: (1) City building permit (in-person); (2) MDC DERM Class I Permit; (3) SFWMD ERP + USACE as applicable. Home to Oleta River State Park and FIU Biscayne Bay Campus waterfront.",
-            "dock_documents": [
-                {"name": "North Miami Building Permit Application", "required": "REQUIRED", "condition": "All dock/marine structural work", "notes": "In-person at Building Dept; must follow Boat Dock Checklist"},
-                {"name": "Boat Dock Checklist (city-specific)", "required": "REQUIRED", "condition": "All boat dock permits", "notes": "NORTH MIAMI SPECIFIC: City has a dedicated Boat Dock Checklist (PDF) on Forms & Permits page"},
-                {"name": "Plans (signed & sealed)", "required": "REQUIRED", "condition": "All dock construction", "notes": "By licensed FL PE; structural details, dimensions, materials, property lines, water boundaries"},
-                {"name": "Survey (current)", "required": "REQUIRED", "condition": "All dock/marine", "notes": "Must show existing conditions, water boundaries, setbacks"},
-                {"name": "Building Cost Affidavit", "required": "REQUIRED", "condition": "All dock permits", "notes": "Actual cost basis; R.S. Means if estimate low"},
-                {"name": "MDC DERM Class I Permit", "required": "REQUIRED", "condition": "All work in tidal waters/coastal wetlands", "notes": "Submittable online via DERM portal as of Dec 1, 2025; North Miami borders Biscayne Bay"},
-                {"name": "NOC", "required": "REQUIRED", "condition": "Job value >= $5,000", "notes": "MDC standard; posted at job site"},
-            ],
-            "dock_conditional": [
-                {"name": "SFWMD Environmental Resource Permit", "condition": "When required by scope", "notes": "DEP General Permit for docks <= 1,000 sq ft"},
-                {"name": "USACE Section 10/404 Permit", "condition": "Navigable waters/wetlands", "notes": "Army Corps permit"},
-            ],
-            "contact": "North Miami Building Dept: 776 NE 125th St, 305-895-9820 Ext 18001; DERM Coastal Resources: 305-372-6575",
-        },
+        "chief_building_official": "Mashaer Ismail",
+        "assistant_director": "Vicky Santos",
+        "inspection_email": "inspect@northmiamifl.gov",
+        "hours": "Monday - Friday, 7:30 AM to 3:30 PM",
+        "portal_name": "E-Services Portal",
+        "portal_url": "https://eportal.northmiamifl.gov/",
+        "website": "https://www.northmiamifl.gov/155/Building",
+        "forms_page": "https://www.northmiamifl.gov/158/Forms-Permits",
+        "online_permitting_page": "https://www.northmiamifl.gov/1236/Online-Permitting-Guidelines",
+        "zoning_code_url": "https://codehub.gridics.com/us/fl/north-miami",
+        "code_edition": "FBC 8th Edition (2023) — effective December 31, 2023",
+        "application_form": "City of North Miami Building Permit Application (NOT Broward County form; NOT Miami-Dade County form — city-specific)",
+        "noc_threshold": "$2,500 general; $15,000 AC (per city application warning — VERIFY with building dept)",
+        "noc_recording": "Miami-Dade County Clerk of Court, 44 West Flagler St, 8th Floor, Miami, FL 33130",
+        "noc_timing": "Before first inspection; must be posted at job site per F.S. 713.135",
+        "permit_validity": "180 days — expires if work not commenced or if suspended/abandoned for 180 days",
+        "application_abandonment": "180 days after approved and not picked up — must reapply, no refund",
+        "waterfront": True,
+        "waterfront_body": "Biscayne Bay — Oleta River State Park + FIU Biscayne Bay Campus waterfront",
+        "flood_info_page": "https://www.northmiamifl.gov/288/Flood-Hazard-Information",
+        "planning_dept_phone": "305-893-6511",
+        "drc_meetings": "2nd and 4th Thursday, 2:00 PM",
+        "drc_note": "Pre-application meeting REQUIRED; applications by appointment only, 1 week before DRC",
+        "recertification": "30-year recertification enforced (2025 guidelines — structural and electrical)",
+        "online_eligible_scopes": [
+        "Stand-alone Electrical",
+        "Stand-alone Plumbing",
+        "Stand-alone Windows and Doors",
+        "Commercial Roofs",
+        "Residential Roofs",
+        "Small interior renovations (kitchens, bathrooms, etc.)",
+        ],
+        "online_ineligible": "Additions, new construction, owner-builder — must apply IN-PERSON",
+        "payment_methods": "Check, credit card (at counter); online payment available through E-Services portal",
+        "source_document": "North Miami Building Dept website + all PDFs fetched April 2026",
+        "last_verified": "2026-04-02",
     },
-    "boca_raton": {
+"boca_raton": {
         "county": "Palm Beach",
         "hvhz": False,
         "wind_zone": "Wind-Borne Debris Region (NOT HVHZ)",
@@ -20754,6 +20947,1570 @@ CITY_DIFFERENCES_HOMESTEAD = {
     },
 }
 
+
+KENDALL_PERMITS = {
+
+    # ==================== BUILDING (MASTER) ====================
+    "building": {
+        "name": "Building Permit (Master) — Unincorporated Miami-Dade County",
+        "items": [
+            # --- Jurisdiction ---
+            "CRITICAL: Kendall is UNINCORPORATED Miami-Dade County — all permits through MDC Permitting and Inspection Center (PIC), 11805 SW 26th Street, Miami, FL 33175",
+            "Property folio MUST start with '30' — verify at Property Appraiser before applying; if folio does not start with '30', property is in an incorporated municipality",
+            "Portal: EPS Portal — https://www.miamidade.gov/Apps/RER/EPSPortal",
+            "Phone: 786-315-2100 (Permit Records) | 786-315-2000 (General) | Email: permitrecords@miamidade.gov",
+            "Building Official: Edward A. Rojas",
+
+            # --- Application ---
+            "Miami-Dade County Building Permit Application (Yellow Form) — must use latest version; outdated forms NOT accepted",
+            "Application MUST be signed AND notarized — unnotarized = automatic rejection",
+            "Applicant must certify they are NOT a named violator with unpaid penalties or liens",
+            "GOTCHA: Separate permits required for each trade (electrical, plumbing, mechanical, roofing, windows, shutters) — all MEP subsidiary permits applied for AFTER master permit issuance",
+            "'Dry Run' hold applied if no contractor named at submittal — plans reviewed but permit NOT issued until contractor assigned via updated application",
+
+            # --- Plans ---
+            "Plans must be digitally signed and sealed by Florida-licensed PE or architect",
+            "Submit via EPS Portal (GoldKey) — paper submissions incur conversion fee + extra processing time",
+            "GOTCHA: Plans NOT reviewed until upfront processing fees are PAID — don't submit plans without paying first",
+            "Plan review: 24 hours to 10 business days for initial review; same timeframe for reworks",
+            "Check plan reviewer comments by entering process number in Portal → click 'D' or 'P' under Current Disposition",
+
+            # --- Contractor Registration ---
+            "MDC Contractor Registration required — state-certified contractors undergo voluntary registration process (license verification, driver's license copy, GL + WC insurance)",
+            "Miami-Dade County Certificate of Competency required for county-licensed contractors",
+            "Insurance certificate holder: Miami-Dade County (UNINCORPORATED — no separate city name needed)",
+            "GL insurance minimum: $300,000 per occurrence for bodily injury, $50,000 per occurrence for property damage",
+            "Workers' Compensation insurance or FL WC Exemption Card required",
+            "GOTCHA: If state license, MDC county license NOT required — state supersedes county; but must still register",
+            "16 hours continuing education required for license renewal",
+
+            # --- NOC ---
+            "Notice of Commencement required for job value ≥ $5,000 (≥ $15,000 for AC/HVAC)",
+            "NOC must be signed by OWNER (not agent) — recorded at Miami-Dade County Recorder's Office, 22 NW 1st Street",
+            "NOC must be recorded within 90 days before starting work and posted at job site",
+            "GOTCHA: If you have a lender, lender may handle NOC recording — verify with lender or attorney",
+
+            # --- HVHZ / Product Approval ---
+            "HVHZ (High Velocity Hurricane Zone): ALL of Miami-Dade County is HVHZ — strictest wind-load requirements in continental US",
+            "Miami-Dade Product Approval (NOA) required for ALL exterior products — Florida Product Approval alone is NOT sufficient",
+            "Verify NOA at: Product Control Search on miamidade.gov — must cover specific wind zone AND building height",
+            "Code edition: Florida Building Code 8th Edition (2023)",
+
+            # --- Fees ---
+            "Fee schedule revised effective October 1, 2025 (first increase in 17+ years)",
+            "Residential permits: 0.5% of projected construction cost",
+            "Commercial permits: 1% of cost up to $30M, then 0.5% above $30M; minimum $110",
+            "Trade permits (electrical, mechanical, plumbing): start at $166.63 each",
+            "Projects under $2,500: flat fee of $45",
+            "Certificate of Occupancy: $105 per unit",
+            "Energy conservation surcharge: 11 cents per square foot",
+            "Radon surcharge (F.S. 468.631): 3% added to building, MEP permits",
+            "GOTCHA: Work without permit = 100% penalty — DOUBLE the original fee, strictly enforced",
+
+            # --- Reviews ---
+            "Multi-agency review: Building, Structural, Electrical, Mechanical, Plumbing, Zoning, DERM, Fire Rescue, Impact Fees, Public Works, WASD, DOH",
+            "NOTE: For unincorporated MDC, ALL reviews at county level (same agency) — NO dual submission required",
+            "DERM approval required BEFORE building permit for: new buildings, commercial additions, commercial interior alterations, commercial re-roofs, commercial pools, land clearing, demolition",
+            "DERM Flood Elevation Certificate: submit IN PERSON at DERM Counter — original, in color — processed within 48 hours",
+            "Impact Fees: Road, Fire/EMS, Police, Parks, Educational Facilities — reviewed by Development Services Division",
+
+            # --- Expiration / Renewal ---
+            "Permits expire after 180 days without an approved inspection",
+            "Extended by each approved inspection (resets the 180-day clock)",
+            "Extension request can be submitted via Portal",
+            "Expired permit: email permitrecords@miamidade.gov; may need renewal, new permit, or expired permit check ($72 + 7.5% surcharge)",
+            "Pre-1998 expired permits require expired permit check inspection to verify scope for that year's FBC/NEC",
+
+            # --- Change of Contractor ---
+            "Hold Harmless Letter required — signed by property owner, notarized",
+            "If change is for subsidiary permit, general contractor must also sign",
+            "10-day waiting period before change becomes effective",
+            "Original contractor must submit surrender letter with permit number, address, and explanation",
+
+            # --- Inspections ---
+            "Schedule/cancel/track inspections via E-Permitting Menu online",
+            "Track inspection day-of via Routes & Results page using permit number",
+            "MeetQ: register online to discuss inspection results or resolve issues with Inspection Supervisors",
+            "GOTCHA: Plumbing and electrical covered without inspection approval = must be exposed for re-inspection at contractor's cost",
+
+            # --- Private Provider ---
+            "Private Provider option available per FL Statute 553.791(6)",
+            "Standardized Private Provider forms effective August 5, 2024 for unincorporated MDC",
+            "65% fee reduction for Private Provider portion",
+            "NOTE: Already-issued permits may continue using proprietary forms",
+
+            # --- Owner-Builder ---
+            "Owner-builder must reside at property with valid FL driver's license matching property address",
+            "Additional form required for owner-builder permits (all permit categories)",
+            "Warranty deed and homestead exemption may be required",
+            "GOTCHA: Owner-builder cannot sell or rent property within 1 year of completion without disclosure",
+
+            # --- Flood Zone ---
+            "Properties in flood zones: DERM Flood Elevation Certificate required — IN PERSON at DERM Counter, original, in color",
+            "Flood review and inspections available via MeetQ (DERM queue)",
+            "Substantial improvement threshold: 50% of market value triggers full flood compliance",
+
+            # --- Building Recertification ---
+            "Milestone inspection (formerly 40-year recertification): 25 years after CO, then every 10 years",
+            "Submit recertification via Building Recertification portal in EPS",
+            "Must be performed by Florida-registered engineer or architect",
+            "Non-compliance = code enforcement action",
+
+            # --- Miscellaneous ---
+            "Noise ordinance: No construction noise near residences 8 PM – 7 AM; Temporary Waiver available with active permit",
+            "Permit exemptions: painting/wallpaper interior, ceiling fan in existing outlet, portable playground equipment, floor resurfacing",
+            "NOTE: Consultation available via MeetQ for: Roofing, MEP, DERM, WASD, Zoning, Fire Rescue",
+            "NOTE: Free Homeowner & Small Business Permitting Assistance — 786-315-2388 or CHAT@miamidade.gov",
+        ],
+    },
+
+    # ==================== ELECTRICAL ====================
+    "electrical": {
+        "name": "Electrical Permit — Unincorporated Miami-Dade County",
+        "items": [
+            "Portal: EPS Portal or E-Permitting (for trade permits without plan review)",
+            "MDC Building Permit Application (Electrical) — latest version, signed and notarized",
+            "Electrical Fee Sheet — REQUIRED as part of application; breaks down cost by category",
+            "MDC Contractor Registration — licensed electrical contractor registered with MDC",
+            "Plans (digitally signed & sealed) — required when plan review needed; NOT required for simple trade permits via E-Permitting",
+            "Notice of Commencement — job value ≥ $5,000",
+            "Miami-Dade NOA required for exterior electrical products (panels, disconnect boxes exposed to weather)",
+            "E-Permitting available for electrical permits WITHOUT plan review in unincorporated MDC — 2 AM to 5 PM, 7 days/week",
+            "GOTCHA: Service change (panel upgrade, meter relocation) may require FPL coordination — contact FPL BEFORE starting work",
+            "GOTCHA: Pool bonding strictly enforced — ALL metal within 5 feet of pool must be bonded per NEC 680",
+            "AFCI protection required: bedrooms, living rooms, hallways, closets, laundry areas (per FBC 8th Ed / NEC 2023)",
+            "GFCI protection required: bathrooms, kitchens, garages, outdoors, within 6 feet of sinks, laundry, unfinished basements",
+            "Smoke detectors: interconnected, hardwired with battery backup required",
+            "GOTCHA: Covering electrical work before inspection = must be exposed for re-inspection at contractor's cost",
+            "NOTE: Senate Bill 612 (July 2024) — changed line-side electrical rules; verify current requirements for service changes",
+            "Solar PV electrical: separate PV Electrical Inspectors Checklist form required",
+        ],
+    },
+
+    # ==================== PLUMBING ====================
+    "plumbing": {
+        "name": "Plumbing Permit — Unincorporated Miami-Dade County",
+        "items": [
+            "Portal: EPS Portal or E-Permitting (for trade permits without plan review)",
+            "MDC Building Permit Application (Plumbing) — latest version, signed and notarized",
+            "Plumbing and Gas Fee Sheet — REQUIRED as part of application",
+            "MDC Contractor Registration — licensed plumbing contractor registered with MDC",
+            "Plans (digitally signed & sealed) — when plan review required",
+            "Notice of Commencement — job value ≥ $5,000",
+            "E-Permitting available for plumbing permits WITHOUT plan review — 2 AM to 5 PM, 7 days/week",
+            "Water heater replacement requires plumbing permit — includes gas appliance replacement",
+            "GOTCHA: Water submeter amendment (Sept 18, 2023) — submeters required for ALL dwelling units in multi-family with master meter (new construction and Level 2/3 alterations replacing >50% supply lines)",
+            "GOTCHA: Covering plumbing work before inspection = must be exposed for re-inspection at contractor's cost",
+            "Septic systems regulated by FL DOH — call 786-654-6620; applications to flhealth-miamidade@flhealth.gov",
+            "NOTE: Grease trap reviews and OSTDS review now handled at PIC (moved from Overtown Transit Village)",
+        ],
+    },
+
+    # ==================== MECHANICAL ====================
+    "mechanical": {
+        "name": "Mechanical (HVAC) Permit — Unincorporated Miami-Dade County",
+        "items": [
+            "Portal: EPS Portal or E-Permitting (for trade permits without plan review)",
+            "MDC Building Permit Application (Mechanical) — latest version, signed and notarized",
+            "Mechanical Fee Sheet — REQUIRED as part of application",
+            "MDC Contractor Registration — licensed mechanical contractor registered with MDC",
+            "Plans (digitally signed & sealed) — when plan review required",
+            "Notice of Commencement — job value ≥ $15,000 for AC/HVAC (higher threshold than general $5,000)",
+            "E-Permitting available for mechanical permits WITHOUT plan review — 2 AM to 5 PM, 7 days/week",
+            "AHRI Certificate required — verifying matched system components (indoor/outdoor units)",
+            "GOTCHA: AC replacement forms are PER-SYSTEM — one form per system being replaced",
+            "Load calculations REQUIRED if changing equipment size — cannot just 'match existing'",
+            "SEER ratings must meet current minimums (SEER2 15 for split systems per current DOE standards)",
+            "Condensate drain must be visible and accessible",
+            "Miami-Dade NOA required for outdoor condensing units and all exterior HVAC components",
+            "GOTCHA: Senate Bill 612 (July 2024) — changed line-side electrical rules for AC installations; separate electrical permit may be needed for line-side work",
+            "NOTE: Raised Existing Roof Mount permits (Mechanical 50) — rough inspections apply",
+        ],
+    },
+
+    # ==================== ROOFING ====================
+    "roofing": {
+        "name": "Roofing Permit (HVHZ) — Unincorporated Miami-Dade County",
+        "items": [
+            "Portal: EPS Portal + E-Permitting available for qualifying residential roofing in unincorporated MDC (folio '30')",
+            "MDC Building Permit Application — latest version, signed and notarized",
+            "HVHZ Uniform Roofing Permit Application — FBC 8th Edition (2023); fillable PDF — enter N/A in non-applicable fields",
+            "HVHZ Roofing Permit Forms Package — includes instruction page + all required sections",
+            "Roofing Fee Sheet (per sq ft) — REQUIRED; fee schedule revised Oct 1, 2025",
+            "GOTCHA: Upfront fees must be PAID before plan review begins — unpaid = no review",
+
+            # HVHZ Forms by Roof Type
+            "Section A & B: General information, roof category, roof type, roof system info, and roof plan sketch (all roof types)",
+            "Section C: Built-up roof systems OR single-ply membrane roof systems (select applicable)",
+            "Section C2: Additional component details as applicable",
+            "Section D: Shingle roof system OR wood shingle/shake OR metal roof OR tile roof (select applicable)",
+            "Section E: Tile calculations (for tile roofs — Method 1 moment-based, Method 2 uplift, or Method 3 per RAS 127)",
+            "Roof Deck Attachment form — required for all re-roofs",
+
+            # Product Approvals
+            "Product Control NOAs (Miami-Dade) — REQUIRED for ALL roofing system components including roof vents",
+            "GOTCHA: NOA must cover SPECIFIC system assembly, not just individual products — AND must cover your wind zone and building height",
+            "UL listing indicating system to be used — required",
+            "Verify NOAs at: Product Control Search on miamidade.gov",
+
+            # Plans & Contractor
+            "Digitally signed & sealed plans — for Portal submissions; paper = conversion fee + extra time",
+            "MDC Contractor Registration — licensed roofing contractor registered with MDC",
+            "Notice of Commencement — job value ≥ $5,000",
+
+            # Owner Notifications
+            "Owner's Notification for Roofing Considerations (Form 1524) — contractor must explain content to owner, owner initials each item",
+            "Owner's Affidavit of Exemption — if applicable",
+            "GOTCHA: Additional form required for Owner-Builder permits",
+
+            # Conditional
+            "Certification of Combustion Appliance Flue Vents — required when re-roofing over combustion appliances",
+            "Ridge Ventilation Calculations Form — when balanced ventilation needed (under-eave/soffit must equal or exceed ridge ventilation)",
+            "Roof Decking Attachment & Secondary Water Barrier Compliance — per FL Statute 553.844 for SFR hurricane mitigation retrofit",
+            "Solar System Reinstallation Affidavit — if existing solar on roof being replaced; separate permit needed for reinstallation",
+            "HOA Attestation for Permanent Residential Storm Shutters — MDC form for SFR, duplex, townhome",
+
+            # Key Rules
+            "GOTCHA: Peel-and-stick underlayment REQUIRED for shingle roofs in HVHZ",
+            "GOTCHA: Maximum 2 roof layers — often must tear off existing before installing new",
+            "E-Permitting roofing guidelines: follow procedures exactly for online residential roofing permits",
+            "Separate E-Permitting guidelines for metal roof panels",
+            "Waterproofing/Liquid Applied Roof Systems: must comply with HVHZ section of FBC; separate Section A & B form",
+            "Permit expiration: 180 days; extended by each approved inspection",
+            "NOTE: FBC 8th Edition Code Changes for Roofing — webinar recording available on MDC website",
+        ],
+    },
+
+    # ==================== POOL / SPA ====================
+    "pool_spa": {
+        "name": "Swimming Pool / Spa Permit — Unincorporated Miami-Dade County",
+        "items": [
+            "Portal: EPS Portal",
+            "MDC Building Permit Application — latest version, signed and notarized",
+            "Pool plans — digitally signed & sealed by FL PE or architect",
+            "MDC Contractor Registration — licensed pool/spa contractor (Certified or Registered per FL Statute 489.105)",
+            "Notice of Commencement — job value ≥ $5,000",
+            "Miami-Dade NOA required for pool barrier/fence products in HVHZ",
+
+            # Safety Barrier
+            "GOTCHA: Pool permit CANNOT be issued without simultaneous safety barrier permit — OR written owner certification that pool won't be filled until barrier approved and inspected",
+            "Safety barrier minimum 48 inches (4 feet) high — per Miami-Dade County Code Section 33-12 and FBC R4501.17",
+            "Gates: spring-lock type, self-closing, self-latching — must automatically close and fasten at all times",
+            "No gaps/openings allowing child passage; chain-link mesh max 1.25 inches (without slats)",
+            "Barrier types: screened patio, wooden fence, wire fence, rock wall, concrete block, or other approved materials",
+            "Pool on enclosed structure or rooftop: barrier NOT required",
+            "GOTCHA: Pet doors opening directly into pool area are NOT permitted as part of a compliant barrier",
+
+            # Residential Pool Safety Act
+            "Florida Residential Swimming Pool Safety Act (Chapter 515, F.S.) — pools built after Oct 1, 2000 must include at least one approved safety feature",
+            "Safety features: compliant fence, safety cover, exit alarms on doors/windows providing direct pool access",
+            "Virginia Graeme Baker Act: compliant drain covers required to prevent entrapment",
+
+            # Inspections
+            "Mandatory inspection sequence: pre-pour, rough plumbing, bonding/grounding, final",
+            "GOTCHA: Plumbing and electrical covered without inspection = must be exposed at contractor's cost",
+            "First plumbing inspection: after excavation, reinforcing steel installation, bonding, and main drain — BEFORE placing concrete",
+            "Water supply system must be tested and proved tight under working pressure or per applicable code",
+
+            # Commercial/Public Pools
+            "Public/semi-public/commercial pools: FL DOH Operating Permit REQUIRED before Certificate of Occupancy",
+            "DOH Miami-Dade: 1725 NW 167th Street, Miami, FL 33056 — Phone: 305-623-3500 — Email: flhealth-miamidade@flhealth.gov",
+            "Submit DOH Operating Permit proof to Building Department Inspections Supervisor (Mon–Fri 8 AM – noon at PIC) or email inspections@miamidade.gov",
+
+            # Pool Deck / Enclosure
+            "GOTCHA: Pool deck may require separate building permit application depending on scope",
+            "Screen enclosures over pools: separate structural permit required — must meet HVHZ wind-load per FBC Section 3201",
+
+            # DERM
+            "DERM approval required BEFORE pool permit for commercial pools",
+            "NOTE: Additional form required for Owner-Builder permits",
+        ],
+    },
+
+    # ==================== DEMOLITION ====================
+    "demolition": {
+        "name": "Demolition Permit — Unincorporated Miami-Dade County",
+        "items": [
+            "Portal: EPS Portal",
+            "MDC Building Permit Application (Yellow Form) — signed and notarized",
+            "GOTCHA: ALL items below are REQUIRED — incomplete or illegible documents NOT accepted",
+            "Additional form required for Owner-Builder demolition permits",
+
+            # Asbestos
+            "GOTCHA: Asbestos survey REQUIRED for ALL demolition projects — no exceptions",
+            "Notice of Demolition or Asbestos Renovation form — must be submitted to RER at least 10 WORKING DAYS (14 calendar days) BEFORE start",
+            "10-day count begins from day form is deemed COMPLETE — not date submitted",
+            "Affidavit for asbestos survey available if waiting for survey completion — but does NOT replace the actual survey",
+            "At least one on-site representative trained in 40 CFR Part 61, Subpart M must be present during demolition",
+            "Asbestos survey must be available for RER staff during project",
+
+            # DERM
+            "DERM approval required BEFORE demolition permit",
+
+            # Residential vs Commercial
+            "Residential requirements vary: structure attached to home vs. detached may have different requirements",
+            "Appropriate fee sheet required depending on project type",
+
+            # Stormwater
+            "NOTE: If you legally remove ALL impervious surfaces under a County-approved closed permit, you may be eligible for Miami-Dade Stormwater Utility bill reduction — email SWUD@miamidade.gov with closed demo permit copy (unincorporated MDC only, folio '30')",
+
+            # Additional Requirements (from Lighthouse Point lessons)
+            "GOTCHA: Warranty deed may be required for property ownership verification",
+            "GOTCHA: For corporate-owned properties: Sunbiz articles of incorporation may be required",
+            "GOTCHA: Licensed exterminator vermin/pest statement may be required",
+            "GOTCHA: Hose bib location must be shown on survey for demolition water source",
+            "GOTCHA: Temporary fencing around demolition site may require separate permit",
+            "NOC required if demolition value ≥ $5,000",
+        ],
+    },
+
+    # ==================== FENCE ====================
+    "fence": {
+        "name": "Fence Permit — Unincorporated Miami-Dade County",
+        "items": [
+            "Portal: EPS Portal",
+            "MDC Building Permit Application — signed and notarized",
+            "Pre-approved MDC standard fence detail available since May 13, 2024 — STREAMLINED process for stand-alone residential fence permits",
+            "GOTCHA: Must agree to abide by pre-approved standard fence detail for streamlined permit",
+            "Include: site plan, survey, and supporting documents with application",
+            "Pre-approved details available in forms bin at Permit Records Section",
+
+            # Fence Types & Product Approvals
+            "Masonry fence: pre-approved MDC detail drawings for masonry fence and standard masonry pier",
+            "Wood fence: vertical AND horizontal — pre-approved MDC detail drawings available",
+            "GOTCHA: Horizontal wood fences ALSO need product approvals — not just aluminum/PVC",
+            "Wire/chain-link fence: 2-inch chain link or diamond weave non-climbable type with top rail; heavy galvanized material",
+
+            # Pool Barriers
+            "Pool safety barrier fences: minimum 48 inches (4 feet) high per MDC Code 33-12",
+            "Pool fence gates: spring-lock type, self-closing, self-latching",
+            "Building Official may refuse approval of any barrier deemed insufficient for child safety",
+
+            # HVHZ
+            "Miami-Dade NOA required for exterior fence products in HVHZ — verify at Product Control Search",
+            "GOTCHA: Miami-Dade wind-rated products required for all fence installations in HVHZ",
+
+            # Zoning
+            "Setback requirements per zoning code — verify via Miami-Dade Land Management tool",
+            "Height restrictions vary by zoning district — front yard typically 4 feet, side/rear typically 6 feet in residential",
+            "Contact Permit Records Section at 786-315-2100 for fence permit questions",
+        ],
+    },
+
+    # ==================== WINDOWS / DOORS ====================
+    "windows_doors": {
+        "name": "Windows, Doors, Shutters & Security Bars Permit — Unincorporated Miami-Dade County",
+        "items": [
+            "Portal: EPS Portal",
+            "MDC Building Permit Application — signed and notarized",
+            "MDC Contractor Registration — licensed contractor",
+            "Miami-Dade NOA REQUIRED for ALL window, door, shutter, and impact-resistant products in HVHZ",
+            "GOTCHA: Florida Product Approval alone is NOT sufficient — must have MDC NOA",
+            "Digitally signed & sealed plans when plan review required",
+            "Notice of Commencement — job value ≥ $5,000",
+
+            # Shutters
+            "Storm shutters: HOA Attestation form required for permanent residential storm shutters (SFR, duplex, townhome)",
+            "Attestation form: MDC Attestation of Homeowners' Association Approval",
+
+            # Security Bars
+            "Security bars, grilles, and grates at windows: must comply with MDC drawing guidelines",
+            "GOTCHA: Security bars must have quick-release mechanism from inside for emergency egress",
+
+            # Retrofit vs Non-Retrofit
+            "Retrofit windows: NOA must specifically approve retrofit installation method",
+            "Non-retrofit (new construction): standard NOA requirements apply",
+            "Impact-resistant windows: NOA must verify large missile impact testing per HVHZ standards",
+
+            # Inspections
+            "GOTCHA: All window/door installations inspected — inspector verifies both product certification AND installation method",
+            "Permit for window/door replacement is SEPARATE from master building permit",
+        ],
+    },
+
+    # ==================== SOLAR ====================
+    "solar": {
+        "name": "Solar PV System Permit — Unincorporated Miami-Dade County",
+        "items": [
+            "Portal: EPS Portal",
+            "MDC Building Permit Application — signed and notarized",
+            "Solar System Guidelines for Permitting — specific MDC guidelines for rooftop solar in HVHZ",
+            "Solar PV Electrical Inspectors Checklist — required form with electrical inspection details",
+            "Miami-Dade NOA required for all solar mounting/racking systems — HVHZ wind-load compliance",
+            "Digitally signed & sealed plans showing solar array layout, mounting details, electrical single-line diagram",
+
+            # Existing Solar
+            "Affidavit of Reinstallation of an Existing Solar System — REQUIRED when reinstalling solar after roof replacement",
+            "GOTCHA: Existing solar on roof being replaced = separate solar reinstallation permit needed in addition to roofing permit",
+
+            # Electrical
+            "Separate electrical permit may be required for solar electrical work",
+            "Solar PV electrical: separate from roofing permit — both needed",
+
+            # GOTCHA from research
+            "GOTCHA: Solar installations may require notarized homeowner authorization",
+            "GOTCHA: Named special inspector may be required for certain solar installations",
+            "UNCERTAINTY (90%): Whether MDC requires specific solar special inspector for all installations or only threshold/commercial — verify with 786-315-2100",
+        ],
+    },
+
+    # ==================== SIGN ====================
+    "sign": {
+        "name": "Sign Permit — Unincorporated Miami-Dade County",
+        "items": [
+            "Portal: EPS Portal",
+            "MDC Building Permit Application — signed and notarized",
+            "Detail drawing of sign: location site plan, structure dimensions, electrical elements, proper calculations",
+            "Permit categories: Electrical 27 (exterior/interior outline lighting and illuminated signs) OR Building 51 (exterior non-illuminated, copy changes)",
+            "Additional form required for Owner-Builder sign permits",
+            "GOTCHA: Prohibited signs exist in unincorporated MDC — check Sign Regulation on miamidade.gov BEFORE applying",
+            "Zoning review required — sign must comply with MDC zoning code for size, height, setback, and illumination",
+            "NOTE: Sign regulation enforcement handled by Neighborhood Compliance Division",
+        ],
+    },
+
+    # ==================== DOCK / SEAWALL ====================
+    "dock": {
+        "name": "Dock / Seawall / Marine Construction — Via MDC DERM Class I Permit",
+        "items": [
+            "CRITICAL: Dock/seawall work requires MDC DERM Class I Permit — this is an ENVIRONMENTAL permit, not just a building permit",
+            "Class I Permit applications submittable ONLINE as of December 1, 2025",
+            "Required for: any work in, on, over, or upon tidal waters or coastal wetlands of Miami-Dade County",
+            "Also required for: most mangrove trimming, alteration, or removal",
+            "Portal: EPS Portal (DERM section) — separate from building permit Portal queue",
+
+            # Multiple Agency Approvals
+            "GOTCHA: Marine construction may require BOTH DERM Class I Permit AND Building Permit for structural components",
+            "Approval sequence: County DERM → FL DEP → Army Corps of Engineers → Local permit",
+            "GOTCHA: Multiple agency approvals can take 6–12 months total — start early",
+
+            # Kendall-Specific
+            "NOTE: Kendall has LIMITED canal/waterway frontage — verify if property is waterfront before applying",
+            "Seawall cap must be minimum 6 inches above adjacent grade",
+            "GOTCHA: Unencapsulated polystyrene (Styrofoam) is PROHIBITED in marine construction",
+            "Longshoreman insurance may be required for waterfront construction work",
+
+            # Expedited
+            "Expedited Administrative Authorization (EAA) available for specific low-impact activities if no adverse environmental impacts and no unencapsulated polystyrene used",
+
+            # Contact
+            "DERM Contact: 305-372-6600 | miamidade.gov/permits",
+        ],
+    },
+
+    # ==================== EV CHARGER ====================
+    "ev_charger": {
+        "name": "EV Charger Installation Permit — Unincorporated Miami-Dade County",
+        "items": [
+            "Portal: EPS Portal or E-Permitting (electrical permit without plan review if qualifying)",
+            "Electrical permit required — MDC Building Permit Application (Electrical)",
+            "Electrical Fee Sheet required",
+            "Licensed electrical contractor registered with MDC",
+            "Plans showing: panel capacity, circuit sizing, charger location, wiring route",
+            "GOTCHA: Panel upgrade may be needed if insufficient capacity — requires separate service change permit",
+            "Miami-Dade NOA required for outdoor-mounted charger enclosures if applicable",
+            "Notice of Commencement — if job value ≥ $5,000",
+            "UNCERTAINTY (85%): Whether MDC has a specific EV charger streamlined process or uses standard electrical permit path — verify with 786-315-2100",
+        ],
+    },
+
+    # ==================== SHED ====================
+    "shed": {
+        "name": "Shed / Utility & Storage Structure Permit — Unincorporated Miami-Dade County",
+        "items": [
+            "Portal: EPS Portal",
+            "MDC Building Permit Application — signed and notarized",
+            "Attestation for Utility and Storage Structures (SFR, Duplex, Townhome) — MDC homeowner form",
+            "Site plan showing shed location, setbacks, and property boundaries",
+            "Survey may be required",
+            "Miami-Dade NOA required for prefabricated shed if exterior product (HVHZ requirement)",
+            "Zoning review: setback compliance, lot coverage limits, height restrictions",
+            "GOTCHA: Sheds over certain size threshold require building permit with plan review — check with Permit Records",
+            "UNCERTAINTY (90%): Specific size threshold for plan review exemption in unincorporated MDC — call 786-315-2100 to confirm",
+        ],
+    },
+
+    # ==================== ADU ====================
+    "adu": {
+        "name": "Accessory Dwelling Unit (ADU) Permit — Unincorporated Miami-Dade County",
+        "items": [
+            "Portal: EPS Portal",
+            "MDC Building Permit Application — signed and notarized",
+
+            # ADU Blueprint Program
+            "MDC Pre-Approved ADU Blueprint Program — browse gallery of pre-approved designs for expedited permitting",
+            "Pre-approved plans may NOT be changed (orientation can be rotated); any changes = re-approval required = extended timeline",
+            "Pre-approved designs remain valid until next code edition cycle",
+
+            # Requirements
+            "ADU allowed in zoning districts: AU, EU, RU (and GU if trended to AU/EU/RU) — inside Urban Development Boundary only",
+            "Minimum lot size: 7,500 sq ft",
+            "ADU size: 400–800 sq ft in RU-1 districts; cannot exceed 50% of primary dwelling size (max 1,200 sq ft per some sources)",
+            "One ADU per lot maximum",
+            "ADU must be ancillary to principal single-family dwelling",
+            "Can be attached, detached, or garage conversion",
+            "Separate kitchen, bathroom, and sleeping area required",
+            "Separate address, entrance, and/or utilities from principal structure permitted",
+
+            # CU Requirement
+            "GOTCHA: Certificate of Use (CU) REQUIRED after completion and BEFORE occupying ADU",
+            "CU must be renewed annually",
+            "Only the property OWNER can obtain CU for ADU",
+            "ADU Owner Disclosure Statement required for all ADU applications",
+            "Pre-Approved ADU Construction Plans Hold Harmless Form required",
+
+            # Parking
+            "One additional parking space required — not more than two vehicles; parking within property or adjacent swale",
+
+            # Reviews
+            "Multi-discipline review: Building (Plumbing, Mechanical/Energy, Building, Electrical, Structural), Zoning",
+            "DERM review if in environmentally sensitive area or flood zone",
+            "Tree protection review if property has protected trees",
+
+            # HVHZ
+            "All ADU construction must meet HVHZ wind-load requirements",
+            "Miami-Dade NOA required for all exterior products (windows, doors, roofing, etc.)",
+
+            # Legalization
+            "Existing unpermitted ADU: legalization process = same as new project; submit plans to scale, all disciplines reviewed",
+            "Setback violations or second non-conforming residence: Zoning approval required BEFORE permitting",
+
+            # Contact
+            "Free Homeowner Permitting Assistance: 786-315-2388 or CHAT@miamidade.gov",
+        ],
+    },
+
+    # ==================== CERTIFICATE OF OCCUPANCY / COMPLETION ====================
+    "certificate_of_occupancy": {
+        "name": "Certificate of Occupancy / Certificate of Completion — Unincorporated Miami-Dade County",
+        "items": [
+            "CO fee: $105 per unit",
+            "Issued after ALL final inspections are approved by the Department",
+            "GOTCHA: Before making final payment to contractor, demand proof that all final inspections passed",
+            "Contractor should provide CO or Certificate of Completion issued by Department",
+            "Inspection statuses viewable via Building Permit Selection Menu online",
+            "Permanent CO remains valid unlimited time unless revoked, abandoned, or change of occupancy",
+            "NOTE: For ADUs, Certificate of Use (CU) required IN ADDITION to CO — CU must be renewed annually",
+            "NOTE: Short-term vacation rentals require separate Certificate of Use BEFORE listing on any platform",
+        ],
+    },
+
+    # ==================== PRIVATE PROVIDER ====================
+    "private_provider": {
+        "name": "Private Provider — Unincorporated Miami-Dade County",
+        "items": [
+            "Private Provider option available per FL Statute 553.791(6)",
+            "GOTCHA: Standardized Private Provider forms REQUIRED for all new applications in unincorporated MDC since August 5, 2024",
+            "Already-issued permits may continue using proprietary forms or switch to standardized forms",
+            "65% fee reduction for the Private Provider's portion of work",
+            "Private Provider firms must be registered via EPS Portal — qualified by one or more Licensed Engineer, Architect, or Building Code Administrator",
+            "Private Provider Representatives (PE, RA, BCA, Plans Examiner, Inspector) must register under a Private Provider Firm",
+            "Minimum insurance requirements must be met for firm registration",
+            "Special Inspector Employment Notice required for threshold buildings / LWIC",
+            "Special Inspector inspections are IN ADDITION to mandatory department inspections — not a replacement",
+            "NOTE: Private Provider info page: miamidade.gov Plan Review Information section",
+        ],
+    },
+
+    # ==================== CHANGE OF CONTRACTOR ====================
+    "change_of_contractor": {
+        "name": "Change of Contractor — Unincorporated Miami-Dade County",
+        "items": [
+            "Hold Harmless Letter Form — MDC official form",
+            "Must be signed by property OWNER — notarized",
+            "For subsidiary permits: general contractor must ALSO sign the Hold Harmless Letter",
+            "GOTCHA: 10-day waiting period before change becomes effective",
+            "New contractor must submit updated application to Department",
+            "Original contractor must submit surrender letter: permit number, job address, explanation",
+            "If qualifying agent separates from contractor: must provide copy of change of affiliation request to CTQB or FCILB + list of all active permits",
+            "Hold placed on permit to prevent inspections until Hold Harmless process complete",
+            "Both original permit holder AND property owner receive written notification of change requirements",
+            "Fees per Department fee schedule — check current IO-04-63 fee schedule",
+            "GOTCHA: No refunds granted when change of contractor is involved",
+        ],
+    },
+
+    # ==================== DRIVEWAY ====================
+    "driveway": {
+        "name": "Driveway Permit — Unincorporated Miami-Dade County",
+        "items": [
+            "Portal: EPS Portal",
+            "MDC Building Permit Application — signed and notarized",
+            "Site plan showing: driveway dimensions, setbacks, lot width, property boundaries",
+            "Survey required",
+            "Public Works review may be required for right-of-way connections",
+            "Public Works permits: apply via Public Works Online Permit System (separate from building Portal)",
+            "GOTCHA: Effective March 1, 2025, ALL Public Works inspection requests processed online ONLY",
+            "GOTCHA: Driveway zoning code dimensions — maximum width restrictions, minimum setbacks from property lines (verify specific zoning district requirements via Miami-Dade Land Management)",
+            "UNCERTAINTY (85%): Specific MDC zoning code percentages for driveway width-to-lot-width ratio — call 786-315-2100 or check zoning code Section 33",
+            "NOTE: Swale/right-of-way work requires separate tree planting and right-of-way permits",
+        ],
+    },
+
+    # ==================== FIRE SYSTEM ====================
+    "fire_system": {
+        "name": "Fire System Permit — Unincorporated Miami-Dade County",
+        "items": [
+            "Portal: EPS Portal",
+            "MDC Building Permit Application — signed and notarized",
+            "Fire Rescue Permit Forms & Checklists — specific forms on MDC Fire Rescue page",
+            "Fire Prevention Fee Schedule (IO-04-123) — separate from building fee schedule",
+            "Fire sprinkler systems: shop drawings must be accompanied by MDC Fire Rescue approved life safety shop drawing + architectural and structural drawings",
+            "Shop drawings reviewed and stamp-approved by Engineer of Record per FL Statutes",
+            "Fire alarm systems: included in fire detection system permit category",
+            "Hydrant Water Meter Request Form — specify fixed or floating meter",
+            "Hydrant Flow Test Request — include site plan on 8.5x11 paper or sketch in provided space",
+            "GOTCHA: Fire Engineering MeetQ appointments can only be made on WEDNESDAY for the following day",
+            "NOTE: Burn permit required for all open fires in MDC except cooking fires (land clearing, agricultural operations)",
+        ],
+    },
+
+    # ==================== CERTIFICATE OF USE ====================
+# ==================== ELEVATOR ====================
+}
+
+NORTH_MIAMI_PERMITS = {
+    "building": {
+        "name": "Building Permit (New Construction / Additions / Alterations)",
+        "items": [
+            # ---- Application & Portal ----
+            "City of North Miami Building Permit Application — signed AND notarized by BOTH property owner AND contractor qualifier",
+            "GOTCHA: Application is CITY-SPECIFIC — NOT Broward County Uniform App, NOT Miami-Dade County form",
+            "Submit via E-Services Portal (https://eportal.northmiamifl.gov/) for eligible scopes only: stand-alone electrical, stand-alone plumbing, windows/doors, residential/commercial roofs, small interior renovations",
+            "GOTCHA: Additions and new construction are NOT eligible for digital submittal — must apply IN-PERSON at 12340 NE 8th Ave, North Miami FL 33161",
+            "GOTCHA: Owner-builder is NOT eligible for digital submittal",
+            "Upon receipt of online application, a LINK is sent via email to upload documents — city will NOT accept documents from any other links",
+            "All uploaded documents must be in PDF format and clearly labeled",
+            
+            # ---- Core Documents ----
+            "Building Cost Affidavit — estimated value based on actual cost including profit and overhead",
+            "GOTCHA: Building Official may use R.S. Means to verify if estimate deemed low — will require detailed itemized estimate",
+            "Proof of Ownership: Recorded warranty deed",
+            "Contractor's State of Florida License",
+            "Business Tax Receipt (Miami-Dade County issued)",
+            "Certificate of Liability Insurance — must be valid for minimum of 6 months",
+            "UNCERTAINTY (85%): Insurance certificate holder wording — likely 'City of North Miami, 12340 NE 8th Avenue, North Miami, FL 33161' — could not verify exact verbatim from Contractor Registration PDF (no standalone registration form found online). Call 305-895-9820 ext. 18001 to confirm exact wording before submitting",
+            "Workers' Compensation Insurance or valid Florida exemption",
+            "City of North Miami Contractor Registration — must be registered with city",
+            "Miami-Dade County Contractor Registration — ALSO required (double registration)",
+            
+            # ---- Plans & Survey ----
+            "2 sets of signed and sealed Plans and Specifications by FL licensed architect or engineer",
+            "Plans must include: site plan, floor plan, elevation drawings, finished floor elevations, wall sections, structural design, electrical, plumbing, mechanical, fire protection, and roof framing",
+            "GOTCHA: If ANY specialty plan is missing from original submittal, a building permit will NOT be issued (per Addition Checklist)",
+            "NAME OF ARCHITECT OR ENGINEER AND PHONE NUMBER must appear on plans",
+            "2 copies of all applicable product approvals (Miami-Dade NOA in HVHZ)",
+            "Current signed and sealed Survey — 2 copies",
+            "GOTCHA: Survey Affidavit required if survey is older than 1 year",
+            
+            # ---- County Approvals ----
+            "Miami-Dade DERM approval required for additions, pools, docks, sewer/water connections",
+            "Miami-Dade WASD approval required for sewer work",
+            "Miami-Dade Impact Fee approval when applicable",
+            "Florida Department of Health approval for septic tank work",
+            
+            # ---- NOC ----
+            "Notice of Commencement (NOC) — required for job value >= $2,500 (general) or if obtaining financing",
+            "UNCERTAINTY (80%): NOC threshold — city application says record NOC but doesn't specify dollar threshold; main.py context says $2,500; CITY_DIFFERENCES says $5,000 per MDC standard. Call 305-895-9820 to confirm exact threshold",
+            "NOC recorded at Miami-Dade County Clerk of Court, 44 West Flagler St, 8th Floor, Miami FL 33130",
+            "NOC must be posted at job site per Florida Statute 713.135",
+            "City has its own NOC form on Forms & Permits page",
+            
+            # ---- Owner-Builder ----
+            "Owner Builder Affidavit and Disclosure Statement Form — if owner doing work without contractor",
+            "NOTE: Owner-builder must appear IN-PERSON — not eligible for digital submittal",
+            
+            # ---- Fees ----
+            "Upfront Fee: 0.5% of Estimated Construction Cost (min $40 per discipline) — credited toward permit fee at issuance",
+            "Base Permit Fee: Residential existing building — 2.5% (Tier 1: $0-$999K), 2.0% (Tier 2: $1M-$5M), 1.75% (Tier 3: >$5M)",
+            "Base Permit Fee: Commercial — 2.75% (Tier 1: $0-$9.99M), 2.5% (Tier 2: $10M-$39.99M), 2.25% (Tier 3: $40M-$99.99M), 2.0% (Tier 4: >$100M)",
+            "Minimum Base Permit Fee: $102",
+            "GOTCHA: Work without permit = $110 penalty + DOUBLE the base permit fee + Code Enforcement fines",
+            "Surcharges: MDC BCCO ($0.60 per $1,000 ECC) + DBPR 1.5% + BCAI 1.5% + NM Training & Technology Fee ($6 for ECC $0-$10K; 0.06% over $10K)",
+            
+            # ---- Special Services ----
+            "Early Start Request Application available — $200 fee — allows preliminary work before full permit issuance in qualifying circumstances",
+            "Dry-Run Review: $800 residential / $1,000 commercial — one-time plan review cycle before county approvals (optional, NOT credited toward permit fee)",
+            "Expedited Review: $800 residential / $1,000 commercial + $107/hr — subject to reviewer availability",
+            "Private Provider: 10% discount (plan review OR inspection only); 15% discount (both plan review AND inspection)",
+            
+            # ---- Expiration & Renewal ----
+            "Permit valid 180 days — expires if work not commenced or if suspended/abandoned for 180 days",
+            "Renewal of Expired Permit: $89 per trade; PLUS 50% of original base permit fee if expired >6 months, whichever is greater",
+            "Permit Extension (prior to expiration): $89 — must submit written request to Building Official for 90-day extension",
+            "GOTCHA: If application approved but not picked up within 180 days, application cancelled — must reapply with new application, NO refund",
+            
+            # ---- Inspections ----
+            "Inspection requests via: inspect@northmiamifl.gov or online form",
+            "Re-inspection fee: $89 per trade per occurrence (if work not ready, corrections not made, no docs on-site, no access)",
+            "GOTCHA: Payment of re-inspection fee required BEFORE any future inspection can be scheduled",
+            "Overtime/after-hours/weekend inspections: $107/hr, 4-hour minimum — must be paid at least 1 business day in advance",
+            
+            # ---- Violations & Existing Conditions ----
+            "GOTCHA: Cannot have ANY outstanding building violations on property — application will NOT be approved",
+            "GOTCHA: Permit does NOT relieve property owner from obtaining HOA approval — must obtain prior to starting work",
+            "Construction hours: No loud noise 8 PM to 7 AM; no special equipment 5 PM to 7 AM weekdays or 5 PM to 9 AM Sundays",
+            "Construction Hours Waiver available via online form on city website",
+            
+            # ---- HVHZ ----
+            "NOTE: North Miami is in the High Velocity Hurricane Zone (HVHZ) — ALL products must have Miami-Dade County NOA or Florida Product Approval",
+            "All roofing, windows, doors, shutters, impact products must carry valid NOA",
+            
+            # ---- Recertification ----
+            "30-year recertification enforced (2025 guidelines — structural AND electrical separate reports)",
+            "Recertification fee: $395 per building + $388 late penalty if submitted late",
+            "Reports must be by FL-licensed engineer or architect",
+            "Also: Parking lot guardrails and illumination recertification for commercial",
+            
+            # ---- Conditional Documents ----
+            "NM Threshold Building Affidavit — city-specific form for threshold buildings (>3 stories or >50 ft, or assembly >5,000 sqft with >500 occupants)",
+            "Special Inspector Form — required for threshold buildings; inspections IN ADDITION to mandatory city inspections",
+            "Fire-Rated Joint Penetration Affidavit — required when work involves penetrations through fire-rated assemblies",
+            "Change of Architect/Engineer Hold Harmless — city-specific form when changing design professional",
+            "Application for Temporary Certificates of Completion or Occupancy — city-specific form",
+            
+            # ---- Planning & Zoning ----
+            "NOTE: Community Planning & Development: 305-893-6511",
+            "NOTE: DRC meetings: 2nd and 4th Thursday, 2:00 PM",
+            "NOTE: Pre-application meeting REQUIRED for DRC items; applications by appointment only, 1 week before DRC",
+            "Shadow Study required if project adjacent to R-1/R-2 properties",
+            "View Study required if project adjacent to R-1/R-2 properties",
+            "Boundary survey with contours at max 2-foot intervals for planning submissions",
+        ],
+    },
+    
+    "roofing": {
+        "name": "Roofing Permit (Re-Roof — HVHZ)",
+        "items": [
+            "City of North Miami Building Permit Application — signed and notarized",
+            "2023 Roof Packet — NORTH MIAMI SPECIFIC comprehensive roofing package (includes HVHZ roofing application forms)",
+            "Hurricane Mitigation Affidavit — per F.S. 553.844 (part of 2023 Roof Packet)",
+            "Roof Owners Notification — city-specific form; contractor responsible for providing to owner and explaining content",
+            "Roofing Permit Affidavit — city-specific form (part of 2023 Roof Packet)",
+            "Building Cost Affidavit — actual cost including profit/overhead",
+            "Proof of Ownership: Recorded warranty deed",
+            "Contractor's State License + Business Tax Receipt (MDC)",
+            "Certificate of Liability Insurance — valid min 6 months",
+            "Workers' Comp Insurance or exemption",
+            "City + MDC Contractor Registration — both required",
+            "Miami-Dade NOA or FL Product Approval for ALL roofing materials — every system component",
+            "NOA required for: roofing membrane, underlayment, fasteners, roof vents, ridge vents, all accessories",
+            "Roof calculations signed and sealed by FL engineer",
+            "Truss shop drawings signed and sealed by FL engineer (if applicable)",
+            "Roof sketch showing all sections, drains, scuppers, dimensions",
+            "NOC for job value >= $2,500 (or per MDC standard)",
+            "GOTCHA: Peel-and-stick underlayment required in HVHZ for shingle roofs",
+            "GOTCHA: Maximum 2 roof layers — existing roof often must be torn off",
+            "NOTE: Roofing permits ARE eligible for online submittal via E-Services Portal",
+            "NOTE: Owner-builder NOT eligible for digital roofing submittal",
+            "Early Start Request Application available for emergency/urgent roof work",
+            "Fee: Shingles/Flat/Metal = $0.13/sqft; Tile = $0.18/sqft; Waterproofing = $0.13/sqft (min $115)",
+        ],
+    },
+    
+    "electrical": {
+        "name": "Electrical Permit (Service Change / Panel / General)",
+        "items": [
+            "City of North Miami Building Permit Application (Electrical) — signed and notarized",
+            "Electrical Residential Service Change Form — NORTH MIAMI SPECIFIC city form for service change work",
+            "Electrical Service Affidavit — NORTH MIAMI SPECIFIC city form for service-related work",
+            "Building Cost Affidavit — actual cost including profit/overhead",
+            "Proof of Ownership: Recorded warranty deed",
+            "Licensed Electrical Contractor's State License + BTR",
+            "Certificate of Liability Insurance — valid min 6 months",
+            "Workers' Comp Insurance or exemption",
+            "City + MDC Contractor Registration — both required",
+            "NOC for job value >= $2,500 (general) / $15,000 (AC-related electrical)",
+            "Plans and specifications (load calculations for panel upgrades or new service)",
+            "GOTCHA: Separate application/sign-off required — electrical permit is its own notarized application",
+            "NOTE: Stand-alone electrical and electrical service change ARE eligible for online submittal",
+            "GOTCHA: AFCI required in bedrooms, living rooms, hallways; GFCI in bathrooms, kitchens, garages",
+            "NOTE: Senate Bill 612 (July 2024) changed line-side electrical rules — verify current requirements",
+            "Fee: 2.5% of Estimated Construction Cost; $102 minimum (stand-alone)",
+        ],
+    },
+    
+    "plumbing": {
+        "name": "Plumbing Permit (General / Water Heater)",
+        "items": [
+            "City of North Miami Building Permit Application (Plumbing) — signed and notarized",
+            "Building Cost Affidavit — actual cost including profit/overhead",
+            "Proof of Ownership: Recorded warranty deed",
+            "Licensed Plumbing Contractor's State License + BTR",
+            "Certificate of Liability Insurance — valid min 6 months",
+            "Workers' Comp Insurance or exemption",
+            "City + MDC Contractor Registration — both required",
+            "NOC for job value >= $2,500",
+            "GOTCHA: Separate application/sign-off required — plumbing permit is its own notarized application",
+            "NOTE: Stand-alone plumbing IS eligible for online submittal",
+            "MDC DERM/WASD approval required for sewer/water connections — submit to MDC portal separately",
+            "FL Department of Health approval required for septic tank work",
+            "Fee: 2.5% of Estimated Construction Cost; $102 minimum (stand-alone)",
+        ],
+    },
+    
+    "mechanical": {
+        "name": "Mechanical / HVAC Permit (A/C Replacement)",
+        "items": [
+            "City of North Miami Building Permit Application (Mechanical) — signed and notarized",
+            "Air Conditioning Replacement Sheet — NORTH MIAMI SPECIFIC city form for A/C changeouts",
+            "Building Cost Affidavit — actual cost including profit/overhead",
+            "Proof of Ownership: Recorded warranty deed",
+            "Licensed Mechanical Contractor's State License + BTR",
+            "Certificate of Liability Insurance — valid min 6 months",
+            "Workers' Comp Insurance or exemption",
+            "City + MDC Contractor Registration — both required",
+            "NOC for job value >= $15,000 (AC-specific threshold per MDC)",
+            "AHRI Certificate — matching indoor and outdoor unit ratings",
+            "Manual J load calculations (required if changing equipment size — cannot just 'match existing')",
+            "Manual S equipment selection (when required)",
+            "Manual D duct design (when applicable)",
+            "Equipment product approvals / specifications",
+            "GOTCHA: A/C Replacement Sheet is required PER SYSTEM — multiple systems = multiple forms",
+            "GOTCHA: SEER ratings must meet current energy code minimums (SEER2 15 for split systems)",
+            "GOTCHA: Load calculations REQUIRED if changing equipment size — cannot just match existing tonnage",
+            "NOTE: A/C replacement may be eligible for online submittal as 'small interior renovation' scope — verify with building dept",
+            "Fee: 2.5% of Estimated Construction Cost; $102 minimum (stand-alone)",
+        ],
+    },
+    
+    "pool_spa": {
+        "name": "Swimming Pool / Spa / Hot Tub Permit",
+        "items": [
+            "City of North Miami Building Permit Application — signed and notarized",
+            "Pool-Spa Checklist — city-specific intake checklist (2025 edition)",
+            "Pool Safety Form — MANDATORY per FL Residential Swimming Pool and Hot Tub Safety Act (Chapter 515 F.S.)",
+            "GOTCHA: Pool Safety Form requires NOTARIZATION for BOTH owner/agent AND prime contractor — two separate notarizations on one form",
+            "Pool Safety Form must indicate which barrier method will be used (choose one or more of 5 options): ASTM F1346-91 safety cover, removable child barrier per FBC 424.17, non-dwelling walls (fences/screens), dwelling walls with self-close/self-lock devices (min 54\" above threshold), or dwelling walls with exit alarms per UL 2017",
+            "Building Cost Affidavit — actual cost including profit/overhead",
+            "Proof of Ownership: Recorded warranty deed",
+            "Contractor's State License + BTR",
+            "Certificate of Liability Insurance — valid min 6 months",
+            "Workers' Comp Insurance or exemption",
+            "City + MDC Contractor Registration — both required",
+            "Current signed and sealed Survey — 2 copies",
+            "Survey Affidavit (if survey older than 1 year)",
+            "2 sets signed and sealed Plans and Specifications — showing pool location, dimensions, setbacks, barriers, equipment, plumbing, electrical",
+            "Product Approvals for pool barrier, safety equipment, and all pool components (MDC NOA in HVHZ)",
+            "Approval by Miami-Dade DERM — submit to MDC portal separately",
+            "NOC for job value >= $2,500",
+            "GOTCHA: Separate electrical and plumbing trade permits REQUIRED — each with own notarized application",
+            "GOTCHA: Final pool inspection will NOT be approved without pool safety barrier compliance — pool deemed 'unsafe' if permit expires without compliance",
+            "GOTCHA: Pool bonding strictly enforced — ALL metal within 5 feet must be bonded",
+            "Disciplines required to review: Zoning, Structural, Building, Electrical",
+            "Fee: 2.5% of Estimated Construction Cost",
+        ],
+    },
+    
+    "fence": {
+        "name": "Fence / Fence Wall / Dumpster Enclosure Permit",
+        "items": [
+            "City of North Miami Building Permit Application — signed and notarized",
+            "FENCE Checklist — city-specific intake checklist (2025 edition)",
+            "MUST use the MATCHING city fence detail packet for your fence type:",
+            "  — Aluminum/Iron/Steel Fence detail packet",
+            "  — Chain Link Fence Construction Standards and Details",
+            "  — Standard Horizontal Aluminum Fence detail",
+            "  — Wood Fence detail",
+            "  — OR submit your own specific fence detail if different from above types",
+            "Residential Fence Requirements form — city-specific form",
+            "Dumpster Enclosures Permit Instructions — if for dumpster enclosure",
+            "Pool Safety Form — if fence serves as pool barrier (must be notarized)",
+            "Building Cost Affidavit — actual cost",
+            "Proof of Ownership: Recorded warranty deed",
+            "Contractor's State License + BTR",
+            "Certificate of Liability Insurance — valid min 6 months",
+            "Workers' Comp Insurance or exemption",
+            "Current signed and sealed Survey — 2 copies",
+            "Survey Affidavit (if survey older than 1 year)",
+            "GOTCHA: No barbed wire, spikes, spears, broken glass, electrical elements, exposed sharp objects, or hazardous materials on fences",
+            "GOTCHA: If survey shows EXISTING fencing, plans MUST include statement that existing fencing will be removed (or sections removed) before new installation",
+            "GOTCHA: CBS walls and masonry walls REQUIRE plans signed and sealed by architect or engineer",
+            "GOTCHA: Commercial properties require Miami-Dade Fire approval",
+            "NOC for job value >= $2,500",
+            "Disciplines: Zoning, Building, Structural (when applicable), Electrical (when applicable)",
+            "Zoning requirements: https://codehub.gridics.com/us/fl/north-miami",
+            "Fee: Metal/Wood/Chain-Link/PVC/Dumpster = $0.90/linear ft; Concrete Wall/Column = $1.60/linear ft; Temp Construction Fence = $0.45/linear ft; $102 minimum",
+        ],
+    },
+    
+    "demolition": {
+        "name": "Demolition Permit",
+        "items": [
+            "City of North Miami Building Permit Application — signed and notarized",
+            "Demolition Permit Checklist — city-specific intake checklist (2025 edition)",
+            "Building Cost Affidavit",
+            "Proof of Ownership: Recorded warranty deed",
+            "Contractor's State License",
+            "Certificate of Liability Insurance — valid min 6 months",
+            "Workers' Comp Insurance or exemption",
+            "Current signed and sealed Survey — 1 copy (note: only 1 required for demolition, not 2)",
+            "Survey Affidavit (if survey older than 1 year)",
+            "Demolition Plans and Specifications — 2 complete sets",
+            "GOTCHA: Disconnect letters from ALL utilities: FPL, North Miami Water and Sewer, AND gas supplier",
+            "GOTCHA: Even if property is NOT served by gas — you MUST submit a letter from the gas company certifying that there is no gas service or connection at the address",
+            "Chain link construction fence with green screen barrier — REQUIRED; must apply SEPARATELY (separate permit for temp construction fence)",
+            "GOTCHA: PARTIAL DEMOLITION will NOT be accepted without simultaneous submittal of COMPLETE plans for rehabilitative work",
+            "FOR COMMERCIAL DEMOLITION — special routing procedure:",
+            "  1. Plans must FIRST be submitted to City of North Miami Building Dept with all requisite info",
+            "  2. City will stamp plan sets and issue a PROCESS NUMBER",
+            "  3. Plans MUST then be taken immediately to Miami-Dade County DERM",
+            "  4. Once DERM has reviewed and approved, re-submit to City for plan review",
+            "  GOTCHA: City will NOT begin plan review until DERM approval is received — wrong order = delays",
+            "Miami-Dade County: Asbestos survey report required for commercial demolition",
+            "Notice of Demolition/Asbestos Abatement to Miami-Dade — 10 working days BEFORE start",
+            "Disciplines: Electrical, Plumbing, Landscaping, Building",
+            "Fee: $309 per structure (plus separate temp construction fence permit fee)",
+        ],
+    },
+    
+    "windows_doors": {
+        "name": "Windows / Doors / Shutters Permit",
+        "items": [
+            "City of North Miami Building Permit Application — signed and notarized",
+            "Window, Door, and Shutter Checklist — city-specific intake checklist (2025 edition)",
+            "Window, Door, and Shutters application/detail form — city-specific form",
+            "Building Cost Affidavit — actual cost",
+            "Proof of Ownership: Recorded warranty deed",
+            "Contractor's State License + BTR",
+            "Certificate of Liability Insurance — valid min 6 months",
+            "Workers' Comp Insurance or exemption",
+            "2 sets signed and sealed Plans and Specifications:",
+            "  — Floor plan with scope of work, schedule, and location of means of egress",
+            "  — For EACH opening shown: indicate the Product Control NOA number for proposed window/door/shutter/mullion",
+            "  — For EACH opening shown: indicate calculated negative AND positive wind pressures per ASCE-7-22 (required for 2+ stories)",
+            "2 copies of Product Control NOA for EACH proposed window/door/shutter/mullion",
+            "Manufacturer's installation instructions",
+            "Miami-Dade Fire approval for commercial and multifamily properties",
+            "GOTCHA: Shutters are REQUIRED if more than 25% of the openings of the building are being replaced on SFR or duplex — must provide Product Approval for shutters",
+            "GOTCHA: Impact resistance is required on ALL commercial retrofits regardless of size or amount replaced",
+            "Emergency escape windows: min 20\" wide and 24\" high, net clear opening 5.7 sqft (5.0 sqft at grade), sill max 44\" above finished floor",
+            "GOTCHA: Escape windows must be operable from inside and cannot be obstructed by bars, grills, or other coverings",
+            "GOTCHA: Condo Association Board approval must be obtained BEFORE commencing work — permit holder's responsibility",
+            "Disciplines: Structural, Building",
+            "NOTE: Stand-alone windows/doors IS eligible for online submittal via E-Services Portal",
+            "Fee: 2.5% of Estimated Construction Cost",
+        ],
+    },
+    
+    "driveway": {
+        "name": "Driveway / Paving Permit",
+        "items": [
+            "City of North Miami Building Permit Application — signed and notarized",
+            "Driveway Permit Checklist — city-specific intake checklist (2025 edition)",
+            "Driveway Packet — city-specific detail packet (MUST be used along with application)",
+            "Building Cost Affidavit",
+            "Proof of Ownership: Recorded warranty deed",
+            "Contractor's State License",
+            "Certificate of Liability Insurance — valid min 6 months",
+            "Workers' Comp Insurance or exemption",
+            "Current signed and sealed Survey — 2 copies",
+            "Survey Affidavit (if survey older than 1 year)",
+            "Application for Engineering Permit for work within Public Right-of-Way — if approaches not built to minimal city standards",
+            "All drawings MUST include dimensions and indicate BOTH side-yard setbacks",
+            "All markings/shadings per city provided packet details",
+            "Application must clearly indicate type of material: concrete, asphalt, pavers, etc.",
+            "GOTCHA: Per City Code Section 17-97 — impervious percentage CANNOT exceed 40% in the right-of-way",
+            "GOTCHA: Per City Code Section 17-48 — back of sidewalk elevations shall not be less than street center elevations",
+            "GOTCHA: 5' minimum setback from property lines",
+            "GOTCHA: 4\" minimum driveway thickness; 8' for circular driveways",
+            "GOTCHA: No wire or fiber mesh in the right-of-way approaches",
+            "GOTCHA: If existing sidewalk crossing driveway is NOT 6\" thick, it MUST be replaced",
+            "GOTCHA: Any sidewalk damaged during construction or not meeting ADA requirements MUST be replaced",
+            "GOTCHA: Concrete sidewalk must be 3,000 PSI",
+            "Disciplines: Zoning, Engineering, Building",
+            "Fee: $0.25/sqft; $102 minimum; ROW work charged separately per Engineering Plan Review fee ($59/location + $350 new construction review)",
+        ],
+    },
+    
+    "dock": {
+        "name": "Boat Dock / Seawall / Boat Lift Permit",
+        "items": [
+            "City of North Miami Building Permit Application — signed and notarized",
+            "Boat Dock Checklist — city-specific intake checklist (2025 edition)",
+            "Building Cost Affidavit",
+            "Proof of Ownership: Recorded warranty deed",
+            "Contractor's State License + BTR (Marine Contractor or General Contractor registered with City)",
+            "Certificate of Liability Insurance — valid min 6 months",
+            "Workers' Comp Insurance or exemption",
+            "Current signed and sealed Survey — 2 copies",
+            "Survey Affidavit (if survey older than 1 year)",
+            "Survey must show: waterfront property lines, existing structures, mean high water line, water depths",
+            "2 sets signed and sealed Plans and Specifications — by FL licensed engineer showing dock design, dimensions, anchoring",
+            "Cross-section diagram of dock construction",
+            "Product approvals for dock materials (FL Product Approval or MDC NOA)",
+            "Approval by Miami-Dade DERM — Class I Environmental Permit for coastal/tidal work on Biscayne Bay",
+            "SFWMD Environmental Resource Permit (ERP) as applicable",
+            "U.S. Army Corps of Engineers permit if applicable",
+            "Florida DEP General Permit or Individual Permit depending on dock size",
+            "NOC for job value >= $2,500 (city) + DERM fees separately",
+            "NOTE: North Miami lies on BISCAYNE BAY — marine construction IS available",
+            "NOTE: Home to Oleta River State Park and FIU Biscayne Bay Campus waterfront",
+            "Disciplines: Zoning, Structural, Building, Electrical",
+            "Fee: 2.5% of Estimated Construction Cost; $298 minimum",
+        ],
+    },
+    
+    "sign": {
+        "name": "Sign Permit",
+        "items": [
+            "City of North Miami Building Permit Application — signed and notarized",
+            "Sign Requirements Checklist — city-specific intake checklist (2026 edition)",
+            "Sign Addendum — city-specific supplemental form",
+            "2 copies of Addendum #2 — required for ALL wall signs",
+            "Building Cost Affidavit",
+            "Proof of Ownership: Recorded warranty deed",
+            "Contractor's State License + BTR",
+            "Certificate of Liability Insurance — valid min 6 months",
+            "Workers' Comp Insurance or exemption",
+            "2 sets of plans signed and sealed by FL engineer and/or architect",
+            "Load calculations for ALL signs — must show BOTH negative and positive wind load pressures",
+            "Structural calculations for all footings, poles, slabs, and connectors",
+            "2 full color renderings of EACH sign proposed — including all dimensions and total square footage",
+            "Rendering of building elevations OR digital photos showing location of ALL proposed signs AND any existing signs",
+            "GOTCHA: Electrical permit required separately for illuminated signs",
+            "Zoning compliance verification required",
+            "Disciplines: Zoning, Building, Structural (when applicable), Electrical (when applicable)",
+            "Zoning requirements: https://codehub.gridics.com/us/fl/north-miami",
+        ],
+    },
+    
+    "shed": {
+        "name": "Shed / Accessory Structure Permit",
+        "items": [
+            "City of North Miami Building Permit Application — signed and notarized",
+            "Shed Checklist — city-specific intake checklist (2026 edition)",
+            "Building Cost Affidavit",
+            "Proof of Ownership: Recorded warranty deed",
+            "Contractor's State License + BTR",
+            "Certificate of Liability Insurance — valid min 6 months",
+            "Workers' Comp Insurance or exemption",
+            "Current signed and sealed Survey — 2 copies",
+            "Survey must indicate: where shed will be located AND distance from closest property lines",
+            "Survey Affidavit (if survey older than 1 year)",
+            "Approval from State (Florida Product Approval for prefab shed)",
+            "Disciplines: Zoning, Building, Structural, Electrical (when applicable)",
+            "Zoning requirements: https://codehub.gridics.com/us/fl/north-miami",
+            "Fee: Pre-fabricated shed = $110; $140 with concrete foundation slab",
+        ],
+    },
+    
+    "generator": {
+        "name": "Generator Permit",
+        "items": [
+            "GOTCHA: Generator permit requires THREE separate permits: Building, Electrical, AND Plumbing/Mechanical — each must be signed and notarized SEPARATELY",
+            "Generator Permitting Requirements Checklist — NORTH MIAMI SPECIFIC comprehensive checklist (2025 edition)",
+            "Building Permit Application — signed and notarized (for building component)",
+            "Electrical Permit Application and Fee Sheet — signed and notarized (for electrical component)",
+            "Plumbing/Mechanical Permit Application and Cost Affidavit — signed and notarized (for gas/mechanical component)",
+            "Current property survey",
+            "SITE PLAN REQUIREMENTS — must indicate:",
+            "  — Location of existing building footprint",
+            "  — Location of on-demand generator(s) with setback distances from ALL property lines",
+            "  — Fuel tank location with setback distances from ALL property lines; fuel tank capacity",
+            "  — Proposed screening or landscaping surrounding generator",
+            "  — Location of electrical panel",
+            "  — Location of meter can and disconnect switch",
+            "ELECTRICAL INFORMATION REQUIRED:",
+            "  — Complete load calculations, riser diagram including conduit and wire sizes",
+            "  — Value of overcurrent devices",
+            "  — Location and rating of transfer switch (automatic or manual?)",
+            "  — GOTCHA: Transfer switch must be SAME SIZE as service capacity",
+            "  — Listing for transfer switches as 'suitable for service equipment' (if applicable)",
+            "  — Connection and wire size between generator frame and ground rod",
+            "  — Gas pipe bonding per NEC 250.104(B)",
+            "  — Identify system as 'separately derived' OR 'not separately derived'",
+            "MECHANICAL/PLUMBING REQUIREMENTS:",
+            "  — Type of fuel to be used on plans",
+            "  — Distances from ignition sources per NFPA 58",
+            "  — Distances to air intake appliances, crawl space, eave openings, adjacent windows and doors",
+            "  — Location of engine exhaust",
+            "  — Gas line isometric (including pipe size, distance, regulator application)",
+            "  — Pipe and gas line specifications",
+            "  — Clearance for service",
+            "  — Sound level of generator when on",
+            "GENERAL REQUIREMENTS:",
+            "  — Slab/structure details, cross section, and anchoring system",
+            "  — Generator manufacturer's specifications",
+            "FLOOD REQUIREMENT — VERY IMPORTANT:",
+            "  — Equipment MUST be placed at Base Flood Elevation or higher",
+            "  — Elevation Certificate REQUIRED and attached to plans",
+            "  — Base flood elevation AND crown of road elevation must be noted on plans",
+            "GOTCHA: Underground fuel tanks/pads min 5 feet from property line and principal structure",
+            "GOTCHA: In flood districts: min elevation = finish floor of building",
+            "GOTCHA: No generator/fuel tank forward of front or corner side",
+        ],
+    },
+    
+    "solar": {
+        "name": "Solar Panel / PV System Permit",
+        "items": [
+            "City of North Miami Building Permit Application — signed and notarized",
+            "Building Cost Affidavit",
+            "Proof of Ownership: Recorded warranty deed",
+            "Contractor's State License + BTR",
+            "Certificate of Liability Insurance — valid min 6 months",
+            "Workers' Comp Insurance or exemption",
+            "Structural analysis/engineering letter confirming roof can support solar load",
+            "Signed and sealed plans showing solar panel layout, mounting details, electrical diagrams",
+            "Product approvals / NOA for solar panels and mounting system",
+            "Electrical permit ALSO required (separate application)",
+            "MDC NOA required for all components in HVHZ",
+            "UNCERTAINTY (85%): North Miami does not have a standalone Solar Form PDF on their forms page — may use standard building permit application. Call 305-895-9820 to confirm if additional solar-specific forms are required",
+            "NOTE: Senate Bill 612 (July 2024) may affect line-side electrical connections for solar — verify current requirements",
+        ],
+    },
+    
+    "ev_charger": {
+        "name": "EV Charger Permit",
+        "items": [
+            "Electrical Permit Application — signed and notarized",
+            "Building Cost Affidavit",
+            "Proof of Ownership: Recorded warranty deed",
+            "Licensed Electrical Contractor's State License + BTR",
+            "Certificate of Liability Insurance — valid min 6 months",
+            "Workers' Comp Insurance or exemption",
+            "Load calculations showing existing panel capacity and proposed EV charger load",
+            "Product approvals for EV charging equipment",
+            "NOTE: Typically processed as stand-alone electrical permit — eligible for online submittal",
+            "Fee: 2.5% of Estimated Construction Cost; $102 minimum",
+        ],
+    },
+    
+"change_of_contractor": {
+        "name": "Change of Contractor",
+        "items": [
+            "Change of Contractor Affidavit — city-specific form",
+            "Change of Contractor Form/Checklist — city-specific intake checklist (2025 edition)",
+            "GOTCHA: Change of Contractor Affidavit must be NOTARIZED (sworn before notary public by property owner)",
+            "Application signed by BOTH owner AND new contractor",
+            "GOTCHA: Only property owner may request change of contractor for master permit — contractor cannot initiate",
+            "Copy of CERTIFIED LETTER of change sent to previous contractor — not just a regular letter",
+            "New Contractor's State License",
+            "New Contractor's Certificate of Insurance — liability (valid min 6 months)",
+            "Workers' Comp Insurance or exemption for new contractor",
+            "Owner assumes responsibility for correction of work performed under transferred permit",
+            "Owner holds North Miami harmless from any liability resulting from the transfer",
+            "Disciplines required to review: Applicable Chief Inspector, Building Official",
+            "Fee: $89 per trade, in addition to any plan revisions needed",
+        ],
+    },
+    
+    "certificate_of_occupancy": {
+        "name": "Certificate of Occupancy / Certificate of Completion",
+        "items": [
+            "Certificate of Occupancy Checklist — city-specific (2024 edition)",
+            "Copy of permit card — front AND back",
+            "Final Survey — 1 copy",
+            "Final Elevation Certificate — 2 ORIGINALS with photos and backup ventilation product detail",
+            "Report(s) and/or letter(s) from engineer (if applicable)",
+            "Private Provider Report/Log(s) (if private provider was used)",
+            "TCO Application — commercial only (Application for Temporary Certificates of Completion or Occupancy — city form)",
+            "Disciplines: Zoning, Certificate of Use (when applicable), Sustainability, Flood, Building",
+            "CO Fee — SFR/Duplex/Triplex: $42; Commercial/Multi-Family: $179",
+            "TCO — Commercial: $119 for 90-day period only; Renewal: $60",
+            "Certificate of Completion — SFR/Duplex/Triplex: $10 per discipline; Commercial: $25 per permit",
+            "NOTE: TCO is NOT applicable for single family, duplex, or triplex — only commercial/multi-family",
+        ],
+    },
+    
+"private_provider": {
+        "name": "Private Provider Program",
+        "items": [
+            "Private Provider may perform plan review and/or inspections per F.S. 553.791",
+            "Plan Review only: 10% discount of Base Permit Fee",
+            "Inspection only: 10% discount of Base Permit Fee",
+            "Plan Review AND Inspection: 15% discount of Base Permit Fee",
+            "GOTCHA: North Miami's Private Provider discount is lower than some other cities (e.g., some offer 65%) — only 10-15%",
+            "Special Inspector Form — city-specific form required when private provider/special inspector used",
+            "Private Provider inspections are IN ADDITION to mandatory city inspections — not a replacement",
+            "Private Provider Report/Logs required at time of CO/CC issuance",
+        ],
+    },
+    
+}
+
+MIAMI_PERMITS = {
+    "building": {
+        "name": "Building Permit (New Construction / Additions / Alterations)",
+        "items": [
+            "ALL applications via iBuild portal — 100% digital, no paper applications accepted",
+            "Plans uploaded through ePlan/ProjectDox — NOT through iBuild",
+            "Plans must be digitally signed and sealed by registered architect/engineer",
+            "Two (2) sets of plans required — site/plot plan, floor plan, elevations, cross sections, roof framing, energy calcs",
+            "Survey less than 180 days old required",
+            "MDC Municipal Permit Application + Contact Sheet required for all municipal permits",
+            "City of Miami Contractor Registration required per Ordinance 14279 — FREE, 2-3 business days, BTR required",
+            "MDC Contractor Registration ALSO required — dual registration mandatory",
+            "GOTCHA: Insurance certificate must name 'City of Miami Building Department' as certificate holder",
+            "GOTCHA: Certificates of insurance must be sent DIRECTLY from insurance provider to eplanbuilding@miamigov.com",
+            "Contractor registration documents: State License (DBPR), Business Tax Receipt (LBT), Driver's License, EIN, Company info",
+            "Workers' Comp COI required — if part of Liability COI packet, must ALSO come directly from provider",
+            "$40 non-refundable application fee + plan review deposits (Dry Run: $2.80 per $1,000 estimated value)",
+            "Minimum permit fee: $110 regardless of construction cost",
+            "Residential fee: 0.50% of estimated construction cost",
+            "Commercial fee: 1% up to $30M, 0.5% over $30M",
+            "Notice of Commencement required if job value >= $5,000; $15,000 for A/C",
+            "NOC must be recorded at MDC Clerk of Court and posted at job site",
+            "Miami-Dade NOA (Notice of Acceptance) required for ALL exterior products — HVHZ requirement",
+            "All of Miami-Dade is HVHZ — minimum 175 mph wind load",
+            "FBC 8th Edition (2023) applies — check for local amendments",
+            "Property folio number MUST be included on application",
+            "GOTCHA: DERM/WASD/Fire/Impact Fee review must submit to MDC portal SEPARATELY from iBuild",
+            "GOTCHA: County-approved plans required before City can finalize certain permits",
+            "Expedited commercial permits need signed/notarized application + 2 copies of all required documents",
+            "Concierge Permit Processor visits homeowner for qualifying residential permits — credit card ONLY, call 305-416-2000",
+            "Permit completion requests up to $100,000 approved immediately online",
+            "Walk-thru same-day reviews for fences, canopies, shutters, windows, pools, trusses, trellises, antennas, garage doors, driveways",
+            "GOTCHA: Permit Counter CLOSES DAILY 12:30-1:30 PM for lunch",
+            "GOTCHA: NO permits issued for non-homestead properties with ANY outstanding code violations, building violations, or city liens",
+            "GOTCHA: Work without permit = 2x fee (Homestead) or 4x fee (non-Homestead/commercial) + $110",
+            "Historic properties require Certificate of Appropriateness (COA) from HEPB before building permit",
+            "Archaeological Conservation Areas may require Certificate to Dig",
+            "Miami 21 zoning code — check property's transect zone before applying",
+            "Tree permit may be required for new construction — standalone or with construction permit",
+            "25-year milestone building recertification (per FL SB 4-D) — 10-year recurring",
+            "NOTE: Permit expiration — $100 extension fee (residential) or $500 (commercial); $1,500 NAC reactivation",
+            "NOTE: Phased permits valid 6 months only, NO extensions, $1,500 fee",
+            "NOTE: After 2nd review, revision fee is $56 per discipline",
+            "NOTE: Change of Contractor/Architect/Engineer: $100 per change",
+            "NOTE: Private Provider: 1/3 credit on permit fee (both services); 1/6 credit (one service only)",
+        ],
+    },
+    "electrical": {
+        "name": "Electrical Permit (Panel / Service / Trade)",
+        "items": [
+            "ALL applications via iBuild portal — 100% digital",
+            "MDC Electrical Fee Sheet required with application",
+            "City + MDC Contractor Registration required (dual registration)",
+            "GOTCHA: Insurance certificate must name 'City of Miami Building Department' as certificate holder",
+            "Notice of Commencement required if job value >= $5,000; $15,000 for A/C",
+            "$40 non-refundable application fee",
+            "Plans (digitally signed & sealed) required when plan review needed",
+            "Miami-Dade NOA required for all exterior electrical products (HVHZ)",
+            "GOTCHA: DERM/WASD/Fire review may be required — submit to MDC portal SEPARATELY",
+            "GOTCHA: Senate Bill 612 (July 2024) changed line-side electrical rules — check for current requirements",
+            "Service change procedures require coordination with FPL",
+            "AFCI required in bedrooms, living rooms, hallways; GFCI in bathrooms, kitchens, garages, exteriors",
+            "Affidavit 30 Day Electric form available for temporary electrical connections",
+            "NOTE: Stand-alone trade permit vs sub-permit — stand-alone does not need Master Permit",
+        ],
+    },
+    "plumbing": {
+        "name": "Plumbing Permit (General / Trade)",
+        "items": [
+            "ALL applications via iBuild portal — 100% digital",
+            "MDC Plumbing and Gas Fee Sheet required with application",
+            "City + MDC Contractor Registration required (dual registration)",
+            "GOTCHA: Insurance certificate must name 'City of Miami Building Department' as certificate holder",
+            "Notice of Commencement required if job value >= $5,000",
+            "$40 non-refundable application fee",
+            "DERM/WASD County Approval required for sewer/water connections — submit to MDC portal separately",
+            "Water heater replacement may require permit with equipment specifications",
+            "GOTCHA: MDC local amendment (Sept 18, 2023): Water submeters required for ALL dwelling units in multi-family with master meter",
+        ],
+    },
+    "mechanical": {
+        "name": "Mechanical/HVAC Permit (A/C Replacement / Trade)",
+        "items": [
+            "ALL applications via iBuild portal — 100% digital",
+            "MDC Mechanical Fee Sheet required with application",
+            "City + MDC Contractor Registration required (dual registration)",
+            "GOTCHA: Insurance certificate must name 'City of Miami Building Department' as certificate holder",
+            "Notice of Commencement required if job value >= $15,000 for A/C replacements (HIGHER threshold)",
+            "$40 non-refundable application fee",
+            "AHRI Certificate required for equipment matching (verify condenser + air handler compatibility)",
+            "Manual J load calculations required if changing equipment size — cannot just 'match existing'",
+            "SEER2 ratings must meet current energy code minimums (SEER2 15 for split systems)",
+            "GOTCHA: AC replacement forms may be per-system — submit separate form for each system",
+            "GOTCHA: Senate Bill 612 (July 2024) changed line-side electrical rules for A/C installations",
+            "Combustion Flue Vent Certification required if re-roofing over combustion appliances (cross-reference with roofing)",
+            "Ridge Ventilation Calculations may be required (cross-reference with roofing)",
+            "Energy calculations required when adding or modifying HVAC systems",
+        ],
+    },
+    "roofing": {
+        "name": "Roofing Permit (Re-Roof — HVHZ)",
+        "items": [
+            "ALL applications via iBuild portal — 100% digital",
+            "HVHZ Uniform Roofing Permit Application required for ALL re-roofs (FBC 8th Ed Chapter 15)",
+            "HVHZ Roofing Permit Forms Package required (complete package per FBC Section 1525)",
+            "Miami-Dade NOA (Notice of Acceptance) required for ALL roofing materials — every component",
+            "Two (2) sets of plans required (digitally signed & sealed) — site/plot plan, roof framing, elevations, energy calcs",
+            "Survey less than 180 days old required",
+            "City of Miami Contractor Registration required per Ordinance 14279 + MDC Registration",
+            "GOTCHA: Insurance certificate must name 'City of Miami Building Department' as certificate holder",
+            "Notice of Commencement required if job value >= $5,000; $15,000 for A/C",
+            "$40 non-refundable application fee",
+            "Affidavit of Compliance — Roof Decking required",
+            "Affidavit of Compliance — Roof to Wall required",
+            "Re-Nailing Affidavit of Compliance required when re-nailing existing decking",
+            "Roofing Owners Notification Considerations form — inform homeowner of roofing considerations",
+            "Combustion Flue Vent Certification required when re-roofing over combustion appliances",
+            "Ridge Ventilation Calculations when balanced ventilation needed",
+            "GOTCHA: Peel-and-stick (self-adhering) underlayment REQUIRED in HVHZ for shingle roofs",
+            "GOTCHA: Max 2 roof layers — often must tear off existing before re-roof",
+            "F.S. 553.844 SFR Roofing Affidavit: For single-family residential re-roofs on buildings valued > $300,000, roofing must comply with current code",
+            "Commercial re-roofing over 160 sq ft may require MDC Fire Rescue pre-approval",
+            "NOTE: Additional form required for Owner-Builder roofing permits",
+            "NOTE: Private Provider: 1/3 credit on permit fee",
+        ],
+    },
+    "pool_spa": {
+        "name": "Pool / Spa Permit",
+        "items": [
+            "ALL applications via iBuild portal — 100% digital",
+            "Pool permits qualify for walk-thru same-day structural review at Building Department",
+            "Plans showing pool location, dimensions, setbacks, barriers, equipment, plumbing/electrical",
+            "Product Approvals (MDC NOA) required for pool barrier and safety equipment (HVHZ)",
+            "Separate electrical and plumbing trade sub-permits required",
+            "City + MDC Contractor Registration required",
+            "GOTCHA: Insurance certificate must name 'City of Miami Building Department' as certificate holder",
+            "Notice of Commencement required for each trade if over threshold",
+            "Florida Residential Swimming Pool Safety Act compliance required",
+            "Pool barrier/fence must comply with F.S. 515 — self-closing, self-latching gate",
+            "GOTCHA: Pool bonding strictly enforced — ALL metal within 5 feet must be bonded",
+            "GOTCHA: Pool deck may require SEPARATE building application — check with dept",
+            "Elevation Certificate may be required if property in flood zone",
+        ],
+    },
+    "demolition": {
+        "name": "Demolition Permit (Total or Partial)",
+        "items": [
+            "ALL applications via iBuild portal — 100% digital",
+            "Demolition permits handled under Unsafe Structures section of Building Department",
+            "City + MDC Contractor Registration required",
+            "GOTCHA: Insurance certificate must name 'City of Miami Building Department' as certificate holder",
+            "GOTCHA: Asbestos survey/abatement may be required BEFORE demolition — actual cost charged",
+            "Lead environmental sampling may also be required — actual cost charged",
+            "Tree permit may be required if trees affected by demolition",
+            "DERM review may be required — submit to MDC portal separately",
+            "Unsafe Structures Panel may be involved — $200 panel fee",
+            "Posting of notices: $50",
+            "Initiation and processing fee for work without permit: $500",
+            "GOTCHA: Warranty deed or proof of ownership required",
+            "GOTCHA: For corporate-owned properties, Sunbiz articles of incorporation may be required",
+            "GOTCHA: Licensed exterminator vermin statement may be required",
+            "GOTCHA: Hose bib location should be shown on survey",
+            "GOTCHA: Temporary fence may require SEPARATE permit",
+            "Notification letters to neighbors may be required — available through City service",
+            "NOTE: Historic properties — demolition may require HEPB review first",
+        ],
+    },
+    "fence": {
+        "name": "Fence Permit",
+        "items": [
+            "ALL applications via iBuild portal — 100% digital",
+            "Fence permits qualify for WALK-THRU same-day structural review at Building Department",
+            "City provides Standard Detail drawings for Masonry, Metal, and Wood fences — use these to streamline",
+            "Standard Detail Masonry Fence PDF available on forms page",
+            "Standard Detail Metal Fence PDF available on forms page",
+            "Standard Detail Wood Fence PDF available on forms page",
+            "Plans showing fence location, height, dimensions, materials, setbacks to property lines",
+            "Site plan or survey required showing fence placement",
+            "Product Approvals (MDC NOA) required for exterior fence products (HVHZ)",
+            "City + MDC Contractor Registration required (or owner-builder)",
+            "GOTCHA: Insurance certificate must name 'City of Miami Building Department' as certificate holder",
+            "GOTCHA: Horizontal wood fences need product approvals too — not just aluminum/PVC",
+            "Miami 21 zoning code may restrict fence height and materials by transect zone",
+            "Check for HOA requirements — city permit does NOT equal HOA approval",
+            "NOTE: Fence permits are one of the fastest permits — walk-thru same-day review",
+        ],
+    },
+    "sign": {
+        "name": "Sign Permit",
+        "items": [
+            "ALL applications via iBuild portal — 100% digital",
+            "City of Miami Sign Code applies — separate from FBC",
+            "Sign Code Design Standards available on miami.gov",
+            "Certain signs are exempt from permit — check exemption list",
+            "Prohibited signs list available — check before applying",
+            "City + MDC Contractor Registration required",
+            "GOTCHA: Insurance certificate must name 'City of Miami Building Department' as certificate holder",
+            "Product Approvals (MDC NOA) required for exterior sign components (HVHZ wind loads)",
+            "Temporary banner permits are separate applications",
+            "Special event signs/banners require Special Events Building Permit Form",
+            "NOTE: Signs may require warrant from Planning/Zoning — check warrant/waiver requirements",
+        ],
+    },
+    "dock": {
+        "name": "Dock / Marine Structure Permit",
+        "items": [
+            "GOTCHA: DUAL PERMIT REQUIRED — City building permit via iBuild + MDC DERM Class I Permit for coastal construction",
+            "City of Miami has SIGNIFICANT waterfront: Biscayne Bay, Miami River, canals",
+            "City building permit via iBuild for structural components",
+            "MDC DERM Class I Permit Application required for ALL dock/seawall/mangrove work in tidal waters",
+            "MDC DERM Class I applications submittable ONLINE as of December 1, 2025",
+            "DERM Coastal Resources contact: 305-372-6575 / derm@miamidade.gov",
+            "Signed & sealed engineering plans by licensed FL PE — must show mean high water line, property lines, setbacks",
+            "Current survey showing existing conditions, water boundaries, structures",
+            "SFWMD Environmental Resource Permit may be required (DEP General Permit for docks <= 1,000 sq ft)",
+            "USACE Section 10/404 Permit required for navigable waters / wetlands",
+            "Sequence: County DERM → FL DEP → Army Corps → Local permit",
+            "City + MDC Contractor Registration required",
+            "GOTCHA: Insurance certificate must name 'City of Miami Building Department' as certificate holder",
+            "GOTCHA: US Longshoreman's and Harbor Workers insurance may be required for marine work",
+            "Notice of Commencement required if job value >= $5,000 (building) + DERM fees",
+            "GOTCHA: Waterway protrusion limits vary — check City and MDC requirements",
+        ],
+    },
+    "seawall": {
+        "name": "Seawall Permit",
+        "items": [
+            "Same requirements as dock/marine permit — see dock permit type",
+            "DUAL PERMIT: City building permit + MDC DERM Class I",
+            "Engineering plans showing seawall design, tiebacks, drainage",
+            "Geotechnical report may be required",
+            "MDC DERM Class I Application required",
+            "GOTCHA: Seawall replacement/repair in tidal waters requires DERM approval BEFORE city permit",
+        ],
+    },
+    "solar": {
+        "name": "Solar Panel Installation Permit",
+        "items": [
+            "ALL applications via iBuild portal — 100% digital",
+            "GOTCHA: ALL City building permit fees for solar installations are WAIVED (residential AND commercial) per Ordinance",
+            "Solar permits processed within 3 BUSINESS DAYS per City ordinance",
+            "NOTE: Fee waiver does NOT include surcharges required by federal, state, or county governments",
+            "Solar PV Permit Application required",
+            "Site Plan with Solar Configuration showing panel layout, dimensions, setbacks",
+            "Electrical One-Line Diagram",
+            "Equipment Specification Sheets for all solar components",
+            "Product Approvals (MDC NOA) required for mounting hardware and panels (HVHZ)",
+            "Structural analysis may be required to verify roof load capacity",
+            "City + MDC Contractor Registration required",
+            "GOTCHA: Insurance certificate must name 'City of Miami Building Department' as certificate holder",
+            "GOTCHA: Notarized homeowner authorization may be required",
+            "GOTCHA: Named special inspector may be required for certain installations",
+            "Electrical sub-permit likely required",
+            "FPL interconnection agreement coordination needed",
+        ],
+    },
+    "ev_charger": {
+        "name": "EV Charger Installation Permit",
+        "items": [
+            "ALL applications via iBuild portal — 100% digital",
+            "Electrical permit required for EV charger installation",
+            "Product Approvals for charger equipment",
+            "Electrical plans showing charger location, circuit details, panel capacity",
+            "City + MDC Contractor Registration required (electrical contractor)",
+            "Insurance certificate must name 'City of Miami Building Department' as certificate holder",
+            "Load calculations to verify panel capacity for added circuit",
+        ],
+    },
+    "windows_doors": {
+        "name": "Windows / Doors / Shutters Permit",
+        "items": [
+            "ALL applications via iBuild portal — 100% digital",
+            "Windows/doors qualify for WALK-THRU same-day structural review at Building Department",
+            "Window and Door Schedule required",
+            "Product Approvals (MDC NOA) required with wind load calculations (HVHZ — 175 mph)",
+            "Manufacturer's installation instructions required",
+            "GOTCHA: Retrofit windows vs new-construction windows have different NOA requirements — verify which applies",
+            "Impact-rated products required throughout HVHZ (no non-impact windows even on non-exposure sides)",
+            "Shutter permits also qualify for walk-thru review",
+            "City + MDC Contractor Registration required",
+            "Insurance certificate must name 'City of Miami Building Department' as certificate holder",
+            "NOTE: Solid waste surcharge is EXEMPT for window/door permits",
+        ],
+    },
+    "driveway": {
+        "name": "Driveway Permit",
+        "items": [
+            "ALL applications via iBuild portal — 100% digital",
+            "Driveways qualify for WALK-THRU same-day structural review at Building Department",
+            "Site plan showing driveway location, dimensions, setbacks to property lines",
+            "Miami 21 zoning code specifies maximum driveway width, setbacks, and coverage",
+            "GOTCHA: Maximum lot coverage and driveway width restrictions vary by transect zone",
+            "Right-of-way permit may be required from Resilience & Public Works if driveway crosses city ROW",
+            "Swale/drainage considerations — may need DERM review",
+            "City + MDC Contractor Registration required",
+            "Insurance certificate must name 'City of Miami Building Department' as certificate holder",
+            "NOTE: Solid waste surcharge is EXEMPT for driveway permits",
+        ],
+    },
+    "shed": {
+        "name": "Shed / Accessory Structure Permit",
+        "items": [
+            "ALL applications via iBuild portal — 100% digital",
+            "Plans showing shed location, dimensions, setbacks per Miami 21 zoning",
+            "Product Approvals (MDC NOA) required for pre-fabricated sheds (HVHZ)",
+            "Signed/sealed plans required for site-built sheds over certain size",
+            "Survey may be required to verify setbacks",
+            "Zoning review to ensure compliance with Miami 21 accessory structure regulations",
+            "City + MDC Contractor Registration required (or owner-builder)",
+            "Insurance certificate must name 'City of Miami Building Department' as certificate holder",
+            "NOTE: Solid waste surcharge is EXEMPT for shed permits",
+        ],
+    },
+    "fire_system": {
+        "name": "Fire Alarm / Sprinkler Permit (Standalone)",
+        "items": [
+            "ALL applications via iBuild portal — 100% digital",
+            "Standalone Fire Alarm or Sprinkler Permit available (separate from Master Permit)",
+            "Fire alarm plans showing device locations, wiring, annunciation",
+            "Sprinkler plans showing pipe sizing, head locations, flow calculations",
+            "City of Miami Fire Prevention Bureau review required",
+            "NFPA standards apply — NFPA 72 (fire alarm), NFPA 13/13R/13D (sprinkler)",
+            "City + MDC Contractor Registration required",
+            "Insurance certificate must name 'City of Miami Building Department' as certificate holder",
+            "After-hours fire inspection available upon request",
+        ],
+    },
+    "certificate_of_occupancy": {
+        "name": "Certificate of Occupancy (CO) / Certificate of Completion (CC)",
+        "items": [
+            "CO required before occupancy of any new building or change of use",
+            "CC required for completion of permitted work on existing structures",
+            "CO fee: Residential $105/unit; Commercial $0.10/sq ft (min $250)",
+            "CC fee: Commercial min $150",
+            "Temporary Certificate of Occupancy (TCO) available — see extension rules in fee schedule",
+            "TCO extensions: Up to 270 days in 90-day increments, fees escalate",
+            "After third TCO request: 50% of building/trade permit line",
+            "Income Restricted Units may be exempt from additional TCO extension fees",
+            "All final inspections must pass before CO/CC issuance",
+            "DERM and Fire inspections may be required for Certificate of Use (CU) — separate applications",
+        ],
+    },
+    "private_provider": {
+        "name": "Private Provider Program",
+        "items": [
+            "Private Provider option per F.S. 553.791",
+            "Must be licensed engineer (FL Ch. 471) or architect (FL Ch. 481)",
+            "Fee credit: 1/3 of permit fee when using BOTH plan review and inspections",
+            "Fee credit: 1/6 of permit fee when using only plan review OR only inspections",
+            "Phased Permits Hold Harmless form available on forms page",
+            "Private Provider does NOT eliminate City oversight — City still collects fees and maintains records",
+            "All Private Provider reports must be submitted through iBuild/ProjectDox",
+        ],
+    },
+    "change_of_contractor": {
+        "name": "Change of Contractor / Architect / Engineer",
+        "items": [
+            "Fee: $100 per change",
+            "Submit through iBuild — Add/Update Contractor on Building Permit",
+            "New contractor must be registered with City of Miami (Ordinance 14279) + MDC",
+            "New contractor's insurance must name 'City of Miami Building Department' as certificate holder",
+            "Insurance certificates must come directly from provider to eplanbuilding@miamigov.com",
+            "GOTCHA: All contractor documents must be current — expired registration blocks new permits",
+        ],
+    },
+"tree": {
+        "name": "Tree Permit",
+        "items": [
+            "Two types: Standalone Tree Permit (no construction) OR Tree Permit with New Construction",
+            "Tree Permit Checklist — Standalone available on forms page",
+            "Tree Permit Checklist — New Construction available on forms page",
+            "Submit through iBuild portal",
+            "Tree removal application available separately",
+            "Right-of-way tree planting has separate process",
+            "Tree Protection Bond may be required during construction — submit through iBuild",
+            "Tree Protection Bond release available after construction completion",
+            "Appeals of tree decisions go to HEPB",
+        ],
+    },
+}
+
 CITY_SPECIFIC_PERMITS = {
     "pompano_beach": POMPANO_BEACH_PERMITS,
     "plantation": PLANTATION_PERMITS,
@@ -20780,6 +22537,9 @@ CITY_SPECIFIC_PERMITS = {
     "miami_beach": MIAMI_BEACH_PERMITS,
     "miami_gardens": MIAMI_GARDENS_PERMITS,
     "homestead": HOMESTEAD_PERMITS,
+    "kendall": KENDALL_PERMITS,
+    "north_miami": NORTH_MIAMI_PERMITS,
+    "miami": MIAMI_PERMITS,
 }
 
 
