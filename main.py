@@ -4286,12 +4286,15 @@ Be SPECIFIC about the permit type. Read the documents carefully to identify exac
 
     # PREMIUM TIER: Use Claude Sonnet (or fallback from Gemini failure)
     try:
+        print(f"🤖 Calling Claude for {city_name}...", flush=True)
         msg = client.messages.create(
             model="claude-sonnet-4-20250514",
             max_tokens=4096,
             messages=[{"role": "user", "content": prompt}],
         )
         resp = msg.content[0].text
+        print(f"🤖 Claude responded: {len(resp)} chars", flush=True)
+        print(f"🤖 First 200 chars: {resp[:200]}", flush=True)
 
         # Log AI usage and costs
         input_tokens = msg.usage.input_tokens
@@ -4366,15 +4369,18 @@ Be SPECIFIC about the permit type. Read the documents carefully to identify exac
                                 for d in parsed["critical_issues"]
                             ]
                         return parsed
-                except:
+                except Exception as parse_err:
+                    print(f"⚠️ JSON parse attempt failed: {parse_err}", flush=True)
                     continue
 
+        print(f"⚠️ Could not parse Claude response as JSON, returning raw", flush=True)
         return {
             "summary": resp[:500],
             "compliance_score": 50,
             "overall_status": "NEEDS_REVIEW",
         }
     except Exception as e:
+        print(f"❌ Claude analysis failed: {e}", flush=True)
         return {"error": str(e), "overall_status": "ERROR"}
 
 
