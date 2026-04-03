@@ -4358,20 +4358,14 @@ Be SPECIFIC about the permit type. Read the documents carefully to identify exac
                             parsed["missing_documents_detailed"] = parsed[
                                 "missing_documents"
                             ]
-                            parsed["missing_documents"] = [
-                                d.get("name", str(d))
-                                for d in parsed["missing_documents"]
-                            ]
+                            # Keep objects intact for frontend hover tooltips
                         if parsed.get("critical_issues") and isinstance(
                             parsed["critical_issues"][0], dict
                         ):
                             parsed["critical_issues_detailed"] = parsed[
                                 "critical_issues"
                             ]
-                            parsed["critical_issues"] = [
-                                d.get("issue", str(d))
-                                for d in parsed["critical_issues"]
-                            ]
+                            # Keep objects intact for frontend hover tooltips
                         return parsed
                 except Exception as parse_err:
                     print(f"⚠️ JSON parse attempt failed: {parse_err}", flush=True)
@@ -4403,5 +4397,3 @@ if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
-
-
