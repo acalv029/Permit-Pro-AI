@@ -2719,6 +2719,7 @@ async def analyze_permit_folder(
             "analysis": analysis,
             "city": city,
             "permit_type": requirements["name"],
+            "gotchas": requirements.get("gotchas", [])[:10],
         }
 
     except HTTPException:
