@@ -2591,7 +2591,9 @@ async def analyze_permit_folder(
         )
 
         tier_limit = TIER_LIMITS.get(user.subscription_tier, 3)
+        print(f"🔍 Analysis check: user={user.email}, tier={user.subscription_tier}, limit={tier_limit}, used={analyses_this_month}, is_admin={user.email in ADMIN_EMAILS}")
         if user.email in ADMIN_EMAILS:
+            print(f"✅ Admin bypass: {user.email} — skipping limit check")
             pass  # Admins get unlimited analyses
         elif analyses_this_month >= tier_limit:
             raise HTTPException(
