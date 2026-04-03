@@ -179,7 +179,12 @@ if DATABASE_URL.startswith("postgres://"):
 if DATABASE_URL.startswith("sqlite"):
     engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 else:
-    engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+    engine = create_engine(
+        DATABASE_URL,
+        pool_pre_ping=True,
+        pool_recycle=300,
+        connect_args={"connect_timeout": 10},
+    )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
@@ -420,8 +425,23 @@ class AIUsageLog(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
 
-Base.metadata.create_all(bind=engine)
-print("✅ Database tables initialized")
+import time as _time
+
+_db_retries = 0
+_db_max_retries = 5
+while _db_retries < _db_max_retries:
+    try:
+        Base.metadata.create_all(bind=engine)
+        print("✅ Database tables initialized")
+        break
+    except Exception as _db_err:
+        _db_retries += 1
+        if _db_retries >= _db_max_retries:
+            print(f"❌ Database connection failed after {_db_max_retries} attempts: {_db_err}")
+            raise
+        print(f"⚠️ Database connection attempt {_db_retries}/{_db_max_retries} failed: {_db_err}")
+        print(f"   Retrying in {_db_retries * 3} seconds...")
+        _time.sleep(_db_retries * 3)
 
 
 # Migrate: Add Stripe columns if they don't exist
@@ -2251,15 +2271,16 @@ async def get_subscription(
 
         tier = user.subscription_tier or "free"
         tier_limit = TIER_LIMITS.get(tier, 3)
+        is_admin = user.email.lower().strip() in [e.lower().strip() for e in ADMIN_EMAILS]
 
         return {
-            "tier": tier,
+            "tier": "business" if is_admin else tier,
             "analyses_this_month": analyses_this_month,
-            "analyses_limit": tier_limit,
-            "analyses_remaining": max(0, tier_limit - analyses_this_month)
+            "analyses_limit": 999999 if is_admin else tier_limit,
+            "analyses_remaining": -1 if is_admin else (max(0, tier_limit - analyses_this_month)
             if tier_limit < 999999
-            else -1,
-            "has_subscription": bool(user.stripe_subscription_id),
+            else -1),
+            "has_subscription": True if is_admin else bool(user.stripe_subscription_id),
         }
     except HTTPException:
         raise
@@ -2556,6 +2577,7 @@ async def analyze_permit_folder(
             pass
 
     # Check usage limits for authenticated users
+    print(f"📥 Analyze request: user={'authenticated' if user else 'anonymous'}, email={user.email if user else 'none'}", flush=True)
     if user:
         first_of_month = datetime.utcnow().replace(
             day=1, hour=0, minute=0, second=0, microsecond=0
@@ -2570,7 +2592,12 @@ async def analyze_permit_folder(
         )
 
         tier_limit = TIER_LIMITS.get(user.subscription_tier, 3)
-        if analyses_this_month >= tier_limit:
+        import sys
+        is_admin = user.email.lower().strip() in [e.lower().strip() for e in ADMIN_EMAILS]
+        print(f"🔍 Analysis check: user={user.email}, tier={user.subscription_tier}, limit={tier_limit}, used={analyses_this_month}, is_admin={is_admin}", flush=True)
+        if is_admin:
+            print(f"✅ Admin bypass: {user.email}", flush=True)
+        elif analyses_this_month >= tier_limit:
             raise HTTPException(
                 status_code=403,
                 detail=f"Monthly limit reached ({tier_limit} analyses). Please upgrade your plan.",
@@ -2646,7 +2673,11 @@ async def analyze_permit_folder(
 
         # Determine AI tier based on subscription
         ai_tier = "standard"  # default: Gemini Flash (cheap)
-        if user and user.subscription_tier in ("pro", "business"):
+        is_admin = user and user.email.lower().strip() in [e.lower().strip() for e in ADMIN_EMAILS]
+        if is_admin:
+            ai_tier = "premium"  # Admins always get Claude
+            print(f"✅ Admin {user.email} using premium (Claude)", flush=True)
+        elif user and user.subscription_tier in ("pro", "business"):
             ai_tier = "premium"  # Claude Sonnet (better quality)
 
         analysis = analyze_folder_with_claude(
@@ -2718,6 +2749,7 @@ def analyze_folder_with_claude(
     city_key = requirements.get("city_key", "")
     gotchas = requirements.get("gotchas", [])
     tips = requirements.get("tips", [])
+    verify_items = requirements.get("verify_with_city", [])
     city_info = requirements.get("city_info", {})
 
     if len(text) > 200000:
@@ -2748,21 +2780,41 @@ FORT LAUDERDALE MARINE REQUIREMENTS:
     elif city_key == "pompano_beach":
         city_context = """
 POMPANO BEACH SPECIFIC REQUIREMENTS:
-- Portal: Click2Gov
-- Applications MUST be in BLACK INK - will be rejected otherwise!
+- Portal: Click2Gov (create app) + ePlan (upload docs) — SEPARATE credentials
+- Applications MUST be in BLACK INK — will be rejected otherwise!
 - Plan sets: Only 1 required (100% electronic review)
-- Fire Review Application REQUIRED for ALL permits (Pompano-specific)
+- Insurance holder MUST read exactly: "City of Pompano Beach, 100 W Atlantic Blvd, Pompano Beach, FL 33060"
+- Fire Review Application required for multi-family/condo/commercial — NOT for single-family residential
 - Both owner AND contractor signatures required, notarized
-- NOC thresholds vary: General >$2,500, HVAC >$5,000, Roofing >$7,500
+- NOC thresholds: General >$2,500, Most trades >$5,000, Roofing >$7,500
 - New/relocated electrical service must be UNDERGROUND (City Ordinance 152.07)
-- Emergency A/C repairs: Must notify Chief Mechanical Inspector BEFORE starting
+- Emergency A/C: notify Scott.Maxwell@copbfl.com with job address BEFORE starting; submit permit next business day
 - EPD must be approved BEFORE city submittal
 - Work without permit = DOUBLE the permit fee
+- Broward Uniform App revision January 8, 2026 required (effective March 9, 2026) — must indicate Private Provider status
+- License-exempt contractors per HB 735 use BTR number instead of license
+- Private Provider: one-time registration at Building@copbfl.com; same PP must do plan review AND inspections
+- Owner/Builder NOT applicable for condominiums; NOT permitted for asphalt installation/removal
+- Generator exhaust must be 10 feet from any building opening
+- Kitchen/bath 2nd floor+ condo: STC 50 dB and IIC 50 dB sound barrier required
+- Standalone solar systems: Quick Service 3 business day review
 
 POMPANO BEACH MARINE REQUIREMENTS:
 - Dock extension: 10% of waterway width OR 8 feet (whichever is less)
 - Boat lift: 20% of waterway width OR 20 feet (whichever is less)
 - Engineering permit fee: 4% of construction cost (min $100)
+- Electrical permit ALWAYS required for docks (not conditional)
+- Approval sequence: County EPD then FL DEP then Army Corps then Local permit
+
+POMPANO BEACH FEES (from Fee Schedule 10/01/2025):
+- Engineering fee: 4% of construction cost (min $100)
+- Plan revision: $100 per revision
+- Reinspection (first disapproval): $60
+- Reinspection (additional): $250
+- Re-inspection for wrong address/work not ready: 4x first reinspection fee
+- Overtime inspections: $225 first 3 hours + $75/additional hour
+- TCO/Partial CO: $550 per unit (same for renewal/extension)
+- Change of contractor: $100
 """
     elif city_key == "lauderdale_by_the_sea":
         city_context = """
@@ -3212,32 +3264,74 @@ MIRAMAR FEES:
     elif city_key == "plantation":
         city_context = """
 PLANTATION SPECIFIC REQUIREMENTS:
-- Portal: Broward ePermits
+- Portal: Accela Citizen Access (ACA) — digital ONLY since 11/14/2022
+- Portal URL: https://aca.plantation.org/CitizenAccess/
 - Application must be signed and notarized by QUALIFIER
-- Walk-Thru permits: Mon, Wed, Fri 8-10 AM only (3 permit limit per person)
 - Insurance COI must list 'City of Plantation' as Certificate Holder
+- Only apply for master permit — sub-permits created by staff after submission
+
+PLANTATION FILE NAMING — CRITICAL (REJECTION TRIGGER):
+- ALL digital submittals MUST use 2-letter prefix: BD-Roof, EL-Generator, PL-Irrigation, ME-HVAC, BD-Pool, BD-Fence, BD-Sign, BD-Demo, etc.
+- Incorrectly named files are REJECTED before review even starts
+- Reserve 4x4 inch space in top right corner for City's digital approval stamp
+- Scanned drawings: 300 DPI minimum
+- When submitting revisions: do NOT resubmit entire plan set — only changed pages, same sheet numbers
+
+PLANTATION DIGITAL SIGNATURES — CRITICAL (REJECTION TRIGGER):
+- Design professionals MUST use DIGITAL signatures backed by certificate authority
+- Regular electronic signatures are REJECTED
+- If not digitally signed: must submit notarized affidavit from designer of record
 
 PLANTATION WORK HOURS:
 - Monday-Friday: 7 AM - 8 PM
 - Saturday: 7 AM - 8 PM (pile-driving 8 AM - 5:30 PM only)
-- NO WORK on Sundays or holidays
+- NO WORK on Sundays or holidays (Chapter 16, Sec 16-2)
 
-PLANTATION ROUTING - SKIP ZONING FOR:
-- A/C changeouts, Re-roofing, Interior work - go DIRECTLY to Building Division
+PLANTATION ROUTING — SKIP ZONING FOR:
+- A/C changeouts, Re-roofing, Interior work — go DIRECTLY to Building Division
 
 PLANTATION CRITICAL REQUIREMENTS:
+- THREE (3) sets of energy calculations (most cities require 2)
+- Fault Current Calculations REQUIRED for ALL electrical service work (Plantation-specific)
+- Re-nailing inspection NOT required on roof permits (unique among Broward cities — saves time)
 - Demolition permits MUST include Building AND Electrical permits together
 - Product Approvals must be stamped 'approved' by Architect of record
-- Plans must be mechanically reproduced - hand-drawn plans rejected
+- Plans must be mechanically reproduced — hand-drawn plans rejected (FBC 107.3.5.1)
+- Plenum ceilings require specs on Structural, Electrical, Mechanical AND Plumbing plans
+- Pre-fab buildings MUST have State approved drawings (Miami-Dade or Florida State)
+- PAID (Plantation Acres Improvement District) properties MUST have PAID review stamp
 
 PLANTATION SPECIAL RULES:
 - COA/HOA/POA approval NOT required for building permit (effective 05/08/2023)
+- Owner-Builder MUST apply IN-PERSON with proof of ownership (Warranty Deed, Settlement Statement, Tax Bill, DL, Utility bill)
+- Preliminary Review SUSPENDED as of 05/16/2024
+- LEED/FGBC certified GREEN buildings get FREE Fast Track Plan Review
+- Fixturing permit required BEFORE Certificate of Occupancy
+- Food/Restaurant plans must be stamped by FDACS or DBPR BEFORE permit submittal
+- Burglar alarm (SFR) requires registration from Plantation Police Dept
 - Marine work requires US Longshoreman's and Harbor Workers insurance
+- Temporary Power requires notarized signatures from owner, GC, AND electrical contractor
 
-PLANTATION FEES:
-- $20 application fee, $10 per page of plans (first page free)
-- Fast Track available with $1,000 cost recovery account
-- Work without permit = 100% penalty fee added
+PLANTATION FEES & PENALTIES:
+- Fees per Chapter 5, Article II of City Code
+- Walk-Thru permits: Mon/Wed/Fri 8-10 AM (3 permit limit per person)
+- Fast Track: $1,000 cost recovery account deposit
+- Failed inspection: $100 re-inspection fee
+- Work without permit: 100% penalty fee added
+- Only franchised C&D firms: Waste Management, Republic Services, Bicon/S&S National Waste
+
+PLANTATION PERMITS — CONFIDENCE NOTES (surface as ⚠️ warnings where applicable):
+- Building, Electrical, Plumbing, Mechanical, Roofing, Demolition, Shed, Fire System, Windows/Doors, Certificate of Occupancy: 100% verified — no caveats needed
+- Pool/Spa (90%): Plantation does not publish pool-specific checklist. Standard Broward/FBC applies. Recommend calling (954) 797-2765 to confirm no additional pool forms
+- Fence (90%): Specific setback distances per zoning district not published. Call (954) 797-2765
+- Solar (90%): No solar-specific checklist. Unknown if FSEC cert accepted in lieu of full PE. Call (954) 797-2765
+- EV Charger (95%): Standard electrical permit. No EV-specific forms found. Call (954) 797-2765
+- Sign (85%): Max sign area, height limits, illumination rules by district not published. Call Planning & Zoning (954) 797-2200
+- Generator (85%): Placement rules, noise dB limits (Chapter 16), structural pad requirements not published. Call (954) 797-2765
+- Screen Enclosure (85%): Unknown if full PE engineering required for all sizes. Call (954) 797-2765
+- Driveway (85%): Unknown if separate ROW permit needed. Call (954) 797-2765
+- Marine/Dock (80%): Plantation is inland — may defer all marine to Broward County. Call (954) 797-2765
+- Private Provider (90%): Fee discount schedule not published. Call (954) 797-2765
 """
     elif city_key == "sunrise":
         city_context = """
@@ -4088,9 +4182,15 @@ GENERAL SOUTH FLORIDA REQUIREMENTS:
     if tips:
         tips_text = "\n\nPERMIT OFFICE TIPS:\n" + "\n".join([f"💡 {t}" for t in tips])
 
+    verify_text = ""
+    if verify_items:
+        verify_text = "\n\nVERIFY WITH CITY (items to confirm — present these as helpful pro tips, NOT as uncertainty):\n" + "\n".join([f"📞 {v}" for v in verify_items])
+
     prompt = f"""You are an expert South Florida permit analyst with 20+ years of experience reviewing permit applications for Broward, Palm Beach, and Miami-Dade counties. You have deep knowledge of {city_name}'s building department requirements.
 
 TASK: Analyze this permit package ({file_count} files) for {city_name}.
+
+IMPORTANT — PRO TIPS: If the VERIFY WITH CITY section below contains items, include them in your response as "pro_tips" — these are things a $2,000 permit expediter would tell the contractor to double-check with a quick phone call. Frame them positively: "Pro tip: Confirm the exact certificate holder wording with [City] Building at [phone] before submitting" — NOT "We couldn't verify this." This makes the tool look MORE thorough, not less.
 
 YOUR FIRST JOB: Identify the SPECIFIC permit type from the documents. Don't just say "plumbing" - determine if it's:
 - Water heater changeout
@@ -4112,6 +4212,7 @@ GENERAL REQUIREMENTS CHECKLIST:
 {reqs}
 {gotchas_text}
 {tips_text}
+{verify_text}
 
 UPLOADED DOCUMENTS:
 {text}
@@ -4134,6 +4235,7 @@ ANALYZE THE DOCUMENTS AND RETURN JSON:
     ],
     "recommendations": ["actionable recommendation 1", "actionable recommendation 2"],
     "city_specific_warnings": ["any {city_name}-specific rejection risks"],
+    "pro_tips": ["ℹ️ Pro tip: Confirm [specific item] with {city_name} Building at [phone number] before submitting"],
     "permit_office_tips": "tips for {city_name} submission"
 }}
 
@@ -4188,12 +4290,15 @@ Be SPECIFIC about the permit type. Read the documents carefully to identify exac
 
     # PREMIUM TIER: Use Claude Sonnet (or fallback from Gemini failure)
     try:
+        print(f"🤖 Calling Claude for {city_name}...", flush=True)
         msg = client.messages.create(
             model="claude-sonnet-4-20250514",
             max_tokens=4096,
             messages=[{"role": "user", "content": prompt}],
         )
         resp = msg.content[0].text
+        print(f"🤖 Claude responded: {len(resp)} chars", flush=True)
+        print(f"🤖 First 200 chars: {resp[:200]}", flush=True)
 
         # Log AI usage and costs
         input_tokens = msg.usage.input_tokens
@@ -4267,24 +4372,25 @@ Be SPECIFIC about the permit type. Read the documents carefully to identify exac
                                 d.get("issue", str(d))
                                 for d in parsed["critical_issues"]
                             ]
-                        parsed["disclaimer"] = "Flo Permit checks your permit package for completeness against official city requirements. A complete package does not guarantee permit approval — final approval depends on plan review, code compliance, engineering accuracy, and other factors determined by the building department."
                         return parsed
-                except:
+                except Exception as parse_err:
+                    print(f"⚠️ JSON parse attempt failed: {parse_err}", flush=True)
                     continue
 
+        print(f"⚠️ Could not parse Claude response as JSON, returning raw", flush=True)
         return {
             "summary": resp[:500],
             "compliance_score": 50,
             "overall_status": "NEEDS_REVIEW",
-            "disclaimer": "Flo Permit checks your permit package for completeness against official city requirements. A complete package does not guarantee permit approval — final approval depends on plan review, code compliance, engineering accuracy, and other factors determined by the building department.",
         }
     except Exception as e:
-        return {"error": str(e), "overall_status": "ERROR", "disclaimer": "Flo Permit checks your permit package for completeness against official city requirements. A complete package does not guarantee permit approval — final approval depends on plan review, code compliance, engineering accuracy, and other factors determined by the building department."}
+        print(f"❌ Claude analysis failed: {e}", flush=True)
+        return {"error": str(e), "overall_status": "ERROR"}
 
 
 @app.on_event("startup")
 async def startup():
-    print("🚀 Flo Permit v1.4.0 Started")
+    print("🚀 Flo Permit v1.5.0 Started — Admin bypass + Claude debug")
     print(f"   API Key: {'✅' if get_api_key() else '❌'}")
     print(f"   JWT Key: {'✅' if os.getenv('JWT_SECRET_KEY') else '❌'}")
     print(f"   Resend Key: {'✅' if os.getenv('RESEND_API_KEY') else '❌'}")
@@ -4297,3 +4403,5 @@ if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
+
+
