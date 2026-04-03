@@ -2271,7 +2271,7 @@ async def get_subscription(
 
         tier = user.subscription_tier or "free"
         tier_limit = TIER_LIMITS.get(tier, 3)
-        is_admin = user.email in ADMIN_EMAILS
+        is_admin = user.email.lower().strip() in [e.lower().strip() for e in ADMIN_EMAILS]
 
         return {
             "tier": "business" if is_admin else tier,
@@ -2577,6 +2577,7 @@ async def analyze_permit_folder(
             pass
 
     # Check usage limits for authenticated users
+    print(f"📥 Analyze request: user={'authenticated' if user else 'anonymous'}, email={user.email if user else 'none'}", flush=True)
     if user:
         first_of_month = datetime.utcnow().replace(
             day=1, hour=0, minute=0, second=0, microsecond=0
@@ -2591,10 +2592,11 @@ async def analyze_permit_folder(
         )
 
         tier_limit = TIER_LIMITS.get(user.subscription_tier, 3)
-        print(f"🔍 Analysis check: user={user.email}, tier={user.subscription_tier}, limit={tier_limit}, used={analyses_this_month}, is_admin={user.email in ADMIN_EMAILS}")
-        if user.email in ADMIN_EMAILS:
-            print(f"✅ Admin bypass: {user.email} — skipping limit check")
-            pass  # Admins get unlimited analyses
+        import sys
+        is_admin = user.email.lower().strip() in [e.lower().strip() for e in ADMIN_EMAILS]
+        print(f"🔍 Analysis check: user={user.email}, tier={user.subscription_tier}, limit={tier_limit}, used={analyses_this_month}, is_admin={is_admin}", flush=True)
+        if is_admin:
+            print(f"✅ Admin bypass: {user.email}", flush=True)
         elif analyses_this_month >= tier_limit:
             raise HTTPException(
                 status_code=403,
