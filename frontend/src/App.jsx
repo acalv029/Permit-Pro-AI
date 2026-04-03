@@ -58,6 +58,9 @@ export default function App() {
   const [newsletterStatus, setNewsletterStatus] = useState('')
   const [viewingAnalysis, setViewingAnalysis] = useState(null)
   const [activeTestimonial, setActiveTestimonial] = useState(0)
+  const [promoInput, setPromoInput] = useState('')
+  const [promoStatus, setPromoStatus] = useState('')
+  const [promoLoading, setPromoLoading] = useState(false)
   const [showReviewForm, setShowReviewForm] = useState(false)
   const [reviewSubmitting, setReviewSubmitting] = useState(false)
   const [adminReviews, setAdminReviews] = useState([])
@@ -132,7 +135,7 @@ export default function App() {
     const purchaseId = params.get('purchase_id')
     
     if (token) { setResetToken(token); setPage('reset-password'); window.history.replaceState({}, document.title, window.location.pathname) }
-    if (payment === 'success') { setSuccessMessage('Payment successful! Your subscription is now active.'); setPage('profile'); window.history.replaceState({}, document.title, window.location.pathname) }
+    if (payment === 'success') { setSuccessMessage('Payment successful! Your subscription is now active.'); setPage('profile'); window.history.replaceState({}, document.title, window.location.pathname); if (window.gtag) { window.gtag('event', 'conversion', { 'send_to': 'AW-17945789173/purchase', 'event_category': 'purchase', 'event_label': 'subscription_payment', 'value': 29.99, 'currency': 'USD' }) } }
     if (payment === 'cancelled') { window.history.replaceState({}, document.title, window.location.pathname) }
     
     // Handle single purchase success
@@ -199,6 +202,8 @@ export default function App() {
       setAuthToken(data.access_token); setCurrentUser(data.user)
       localStorage.setItem('authToken', data.access_token); localStorage.setItem('currentUser', JSON.stringify(data.user))
       setShowRegister(false)
+      // Google Ads conversion tracking - new signup
+      if (window.gtag) { window.gtag('event', 'conversion', { 'send_to': 'AW-17945789173/signup', 'event_category': 'engagement', 'event_label': 'new_registration' }) }
     } catch (err) { setError(err.message) }
   }
 
@@ -394,6 +399,31 @@ export default function App() {
     finally { setCheckoutLoading(false) }
   }
 
+  const redeemPromoCode = async () => {
+    if (!promoInput.trim()) return
+    setPromoLoading(true)
+    setPromoStatus('')
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/promo/redeem`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+        body: JSON.stringify({ code: promoInput.trim().toUpperCase() })
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setPromoStatus(`success:${data.message}`)
+        setPromoInput('')
+        loadProfile()
+      } else {
+        setPromoStatus(`error:${data.detail || 'Invalid code'}`)
+      }
+    } catch (err) {
+      setPromoStatus('error:Something went wrong')
+    } finally {
+      setPromoLoading(false)
+    }
+  }
+
   const loadSinglePurchase = async (purchaseId) => {
     try {
       const res = await fetch(`${API_BASE_URL}/api/single-purchase/${purchaseId}`)
@@ -432,7 +462,7 @@ export default function App() {
 
 
   const NavBar = ({ showBack = false }) => (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#030305]/90 backdrop-blur-xl border-b border-cyan-500/10">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-cyan-500/20">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3" onClick={() => { setPage('home'); setResults(null); setMobileMenuOpen(false) }}>
           <div className="w-11 h-11 rounded-xl overflow-hidden">
@@ -508,8 +538,15 @@ export default function App() {
                 className="flex-1 px-4 py-2.5 bg-black/50 border border-gray-700 rounded-xl text-white text-sm placeholder-gray-500 focus:border-cyan-500 focus:outline-none"
               />
               <button 
-                onClick={() => {
+                onClick={async () => {
                   if (newsletterEmail && newsletterEmail.includes('@')) {
+                    try {
+                      await fetch(`${API_BASE_URL}/api/newsletter`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: newsletterEmail })
+                      })
+                    } catch (err) { console.error('Newsletter error:', err) }
                     setNewsletterStatus('success')
                     setNewsletterEmail('')
                     setTimeout(() => setNewsletterStatus(''), 3000)
@@ -831,7 +868,7 @@ export default function App() {
               { q: "What file types can I upload?", a: "We accept PDF, PNG, JPG, and JPEG files. You can upload up to 50 files at once, with a maximum total size of 200MB." },
               { q: "Is my data secure?", a: "Yes! We use industry-standard encryption, secure password hashing, and your documents are processed securely. We never share your data with third parties." },
               { q: "Does this guarantee my permit will be approved?", a: "No. Flo Permit is an informational tool only. We help identify potential issues, but you should always verify requirements with your local permitting office." },
-              { q: "Is there a free tier?", a: "Yes! Free accounts get 1 analysis per month. Need more? Contact us about Pro plans." },
+              { q: "Is there a free tier?", a: "Yes! Free accounts get 3 analyses per month. Have a promo code? Sign up and enter it to get even more free analyses. Need more? Check out our Pro plan at $29/month." },
               { q: "How accurate is the AI analysis?", a: "Our AI is trained on South Florida permit requirements and is highly accurate. However, requirements can change, so always verify with your local office." },
               { q: "Can I save my analysis history?", a: "Yes! Create a free account to save all your analyses and access them anytime." },
               { q: "How do I contact support?", a: "Email us at support@flopermit.com or use the Contact page. We typically respond within 24 hours." },
@@ -1173,7 +1210,7 @@ export default function App() {
               <h3 className="text-xl font-bold text-white mb-2">Free</h3>
               <div className="mb-6"><span className="text-4xl font-black text-white">$0</span><span className="text-gray-500">/month</span></div>
               <ul className="space-y-3 mb-8 flex-grow">
-                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>1 analysis/month</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>3 analyses/month</li>
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Basic AI analysis</li>
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Email support</li>
               </ul>
@@ -1815,7 +1852,6 @@ export default function App() {
               <p className="text-gray-400">Loading profile...</p>
             </div>
           ) : profile ? (
-            <>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="md:col-span-2 bg-gray-900/80 rounded-2xl p-6 border border-gray-800">
                 <div className="flex justify-between items-start mb-6"><h2 className="text-xl font-bold text-white">Account Information</h2><button onClick={() => setEditingProfile(!editingProfile)} className="text-cyan-400 hover:text-cyan-300 text-sm">{editingProfile ? 'Cancel' : 'Edit'}</button></div>
@@ -1838,17 +1874,42 @@ export default function App() {
               <div className="bg-gray-900/80 rounded-2xl p-6 border border-gray-800">
                 <h2 className="text-xl font-bold text-white mb-4">Subscription</h2>
                 <div className={`inline-block px-3 py-1 rounded-full text-sm font-bold mb-4 ${profile.subscription.tier === 'pro' ? 'bg-cyan-500/20 text-cyan-400' : profile.subscription.tier === 'business' ? 'bg-purple-500/20 text-purple-400' : 'bg-gray-700 text-gray-300'}`}>{profile.subscription.tier.toUpperCase()}</div>
-                <div className="space-y-3"><div className="flex justify-between"><span className="text-gray-400">This Month</span><span className="text-white font-bold">{profile.subscription.analyses_this_month} analyses</span></div>{profile.subscription.analyses_remaining >= 0 && <div className="flex justify-between"><span className="text-gray-400">Remaining</span><span className="text-cyan-400 font-bold">{profile.subscription.analyses_remaining}</span></div>}<div className="flex justify-between"><span className="text-gray-400">Total</span><span className="text-white">{profile.stats.total_analyses}</span></div></div>
+                <div className="space-y-3"><div className="flex justify-between"><span className="text-gray-400">This Month</span><span className="text-white font-bold">{profile.subscription.analyses_this_month} analyses</span></div>{profile.subscription.analyses_remaining >= 0 && <div className="flex justify-between"><span className="text-gray-400">Remaining</span><span className="text-cyan-400 font-bold">{profile.subscription.analyses_remaining}</span></div>}{profile.subscription.bonus_analyses > 0 && <div className="flex justify-between"><span className="text-gray-400">Bonus (promo)</span><span className="text-amber-400 font-bold">+{profile.subscription.bonus_analyses}</span></div>}<div className="flex justify-between"><span className="text-gray-400">Total</span><span className="text-white">{profile.stats.total_analyses}</span></div></div>
                 {profile.subscription.tier === 'free' ? (
                   <button onClick={() => setPage('pricing')} className="w-full mt-4 py-2 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-lg">Upgrade to Pro</button>
                 ) : (
                   <button onClick={openBillingPortal} className="w-full mt-4 py-2 border border-gray-700 text-white font-bold rounded-lg hover:bg-gray-800">Manage Subscription</button>
                 )}
               </div>
-            </div>
-            
-            {/* Leave a Review + Promo Code - Full width row below */}
-            <div className="grid md:grid-cols-2 gap-6 mt-6">
+              
+              {/* Promo Code Redemption */}
+              <div className="bg-gray-900/80 rounded-2xl p-6 border border-gray-800">
+                <h2 className="text-xl font-bold text-white mb-3">Have a Promo Code?</h2>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={promoInput}
+                    onChange={e => setPromoInput(e.target.value.toUpperCase())}
+                    placeholder="e.g. BROWARD3"
+                    className="flex-1 px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white uppercase tracking-wider placeholder-gray-500 focus:border-cyan-500 focus:outline-none"
+                  />
+                  <button
+                    onClick={redeemPromoCode}
+                    disabled={promoLoading || !promoInput.trim()}
+                    className="px-5 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-bold rounded-xl disabled:opacity-50 whitespace-nowrap"
+                  >
+                    {promoLoading ? '...' : 'Redeem'}
+                  </button>
+                </div>
+                {promoStatus.startsWith('success:') && (
+                  <p className="text-emerald-400 text-sm mt-2">{promoStatus.replace('success:', '')}</p>
+                )}
+                {promoStatus.startsWith('error:') && (
+                  <p className="text-red-400 text-sm mt-2">{promoStatus.replace('error:', '')}</p>
+                )}
+              </div>
+
+              {/* Leave a Review */}
               <div className="bg-gray-900/80 rounded-2xl p-6 border border-gray-800">
                 <h2 className="text-xl font-bold text-white mb-4">Leave a Review</h2>
                 <p className="text-gray-400 text-sm mb-4">Love Flo Permit? We'd appreciate your feedback!</p>
@@ -1856,18 +1917,7 @@ export default function App() {
                   <span>★</span> Write a Review
                 </button>
               </div>
-              <div className="bg-gray-900/80 rounded-2xl p-6 border border-gray-800">
-                <h2 className="text-xl font-bold text-white mb-4">Have a Promo Code?</h2>
-                <p className="text-gray-400 text-sm mb-4">Enter your code to unlock free analyses</p>
-                <form onSubmit={async (e) => { e.preventDefault(); const code = e.target.promoRedeem.value.trim(); if (!code) return; try { const res = await fetch(`${API_BASE_URL}/api/redeem-promo`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` }, body: JSON.stringify({ promo_code: code }) }); const data = await res.json(); if (res.ok) { alert(data.message || 'Promo code applied!'); loadProfile(); loadSubscription(); e.target.reset() } else { alert(data.detail || 'Invalid promo code') } } catch (err) { alert('Error applying promo code') } }}>
-                  <div className="flex gap-2">
-                    <input name="promoRedeem" type="text" placeholder="Enter code" className="flex-1 px-4 py-2 bg-black/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none uppercase tracking-wider" />
-                    <button type="submit" className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-lg whitespace-nowrap">Apply</button>
-                  </div>
-                </form>
-              </div>
             </div>
-            </>
           ) : <p className="text-gray-500">Could not load profile</p>}
         </div>
       </div>
@@ -2108,12 +2158,7 @@ export default function App() {
               
               {/* Disclaimer */}
               <div className="px-8 pb-4">
-                {results.analysis?.disclaimer && (
-                  <p style={{fontSize: '12px', color: '#9ca3af', marginTop: '16px', fontStyle: 'italic'}}>
-                    {results.analysis.disclaimer}
-                  </p>
-                )}
-                <div className="p-3 bg-gray-800/50 border border-gray-700 rounded-lg mt-2">
+                <div className="p-3 bg-gray-800/50 border border-gray-700 rounded-lg">
                   <p className="text-gray-500 text-xs"><strong>Disclaimer:</strong> This analysis is informational only. Always verify requirements with your local permitting office.</p>
                 </div>
               </div>
@@ -2768,7 +2813,7 @@ export default function App() {
                 <input name="company" type="text" placeholder="Company (optional)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
                 <input name="email" type="email" required placeholder="Email" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
                 <input name="password" type="password" required minLength="8" placeholder="Password (min 8)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
-                <input name="promoCode" type="text" placeholder="Promo Code (optional)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none uppercase tracking-wider" />
+                <div className="mb-4"><input name="promoCode" type="text" placeholder="Promo Code (optional)" className="w-full px-4 py-3 bg-gradient-to-r from-amber-500/5 to-orange-500/5 border border-amber-500/30 rounded-xl text-white placeholder-gray-400 focus:border-amber-400 focus:outline-none uppercase tracking-wider" /><p className="text-xs text-gray-500 mt-1.5 ml-1">Got a code from an event or contractor? Enter it for free bonus analyses</p></div>
                 <label className="flex items-start gap-3 mb-4 cursor-pointer"><input type="checkbox" required className="mt-1 w-4 h-4 accent-cyan-500" /><span className="text-gray-400 text-sm">I agree to the Terms and Privacy Policy</span></label>
                 {error && <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl mb-4"><p className="text-red-400 text-sm font-medium">{error}</p></div>}
                 <button type="submit" className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl">Create Account</button>
@@ -2787,11 +2832,10 @@ export default function App() {
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden flex flex-col">
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-[#030305]"></div>
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-cyan-500/15 rounded-full blur-[120px] animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[120px] animate-pulse" style={{animationDelay: '1s'}}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/5 rounded-full blur-[150px] animate-pulse" style={{animationDelay: '2s'}}></div>
-        <div className="absolute inset-0 opacity-10" style={{backgroundImage: 'linear-gradient(rgba(6, 182, 212, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(6, 182, 212, 0.08) 1px, transparent 1px)', backgroundSize: '60px 60px'}}></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+        <div className="absolute inset-0 opacity-20" style={{backgroundImage: 'linear-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(6, 182, 212, 0.1) 1px, transparent 1px)', backgroundSize: '50px 50px'}}></div>
         
         {/* Floating glowing particles */}
         <div className="particle particle-1"></div>
@@ -2852,7 +2896,7 @@ export default function App() {
                 <input name="company" type="text" placeholder="Company (optional)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
                 <input name="email" type="email" required placeholder="Email" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
                 <input name="password" type="password" required minLength="8" placeholder="Password (min 8)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none" />
-                <input name="promoCode" type="text" placeholder="Promo Code (optional)" className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl mb-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none uppercase tracking-wider" />
+                <div className="mb-4"><input name="promoCode" type="text" placeholder="Promo Code (optional)" className="w-full px-4 py-3 bg-gradient-to-r from-amber-500/5 to-orange-500/5 border border-amber-500/30 rounded-xl text-white placeholder-gray-400 focus:border-amber-400 focus:outline-none uppercase tracking-wider" /><p className="text-xs text-gray-500 mt-1.5 ml-1">Got a code from an event or contractor? Enter it for free bonus analyses</p></div>
                 <label className="flex items-start gap-3 mb-4 cursor-pointer">
                   <input type="checkbox" required className="mt-1 w-4 h-4 accent-cyan-500" />
                   <span className="text-gray-400 text-sm">I agree to the <button type="button" onClick={() => { setShowRegister(false); setPage('terms') }} className="text-cyan-400 hover:underline">Terms & Conditions</button> and <button type="button" onClick={() => { setShowRegister(false); setPage('privacy') }} className="text-cyan-400 hover:underline">Privacy Policy</button></span>
@@ -2972,19 +3016,34 @@ export default function App() {
       <div className="relative z-10 pt-24 px-6 pb-12 flex-grow">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <span className="inline-block px-4 py-1.5 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-sm font-semibold animate-pulse">AI-POWERED PERMIT ANALYSIS</span>
-            <h1 className="text-5xl md:text-7xl font-black mt-4 mb-6 title-glow"><span className="bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">South Florida</span><br/><span className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(6,182,212,0.4)]">Permit Checker</span></h1>
-            <p className="text-xl text-gray-500 mb-6">Upload your permit package and get instant AI-powered analysis</p>
+            <span className="px-4 py-1.5 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-sm font-semibold">AI-POWERED PERMIT ANALYSIS</span>
+            <h1 className="text-5xl md:text-7xl font-black mt-4 mb-6"><span className="bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">South Florida</span><br/><span className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Permit Checker</span></h1>
+            <p className="text-xl text-gray-400 mb-6">Upload your permit package and get instant AI-powered analysis</p>
             
             <div className="flex items-center justify-center gap-4 text-sm">
               <span className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400">3 Counties</span>
               <span className="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400">30 Cities</span>
               <span className="px-3 py-1 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-400">More Coming Soon</span>
             </div>
+            
+            {/* Homeowner CTA - shows for non-logged-in users */}
+            {!currentUser && (
+              <div className="mt-6 flex flex-col items-center gap-3">
+                <button
+                  onClick={() => { setPage('pricing'); setTimeout(() => setShowSinglePurchase(true), 100) }}
+                  className="px-5 py-2.5 bg-gradient-to-r from-cyan-500/10 to-emerald-500/10 border border-cyan-500/30 rounded-xl text-cyan-400 text-sm font-semibold hover:border-cyan-400 transition-all flex items-center gap-2"
+                >
+                  <span>🏠</span> Homeowner? Get a single analysis for $15.99 — no account needed
+                </button>
+                <p className="text-gray-500 text-sm">
+                  Have a promo code? <button onClick={() => setShowRegister(true)} className="text-cyan-400 hover:text-cyan-300 underline">Sign up free</button> to redeem it
+                </p>
+              </div>
+            )}
           </div>
-          <div className="relative group">
-            <div className="absolute -inset-[2px] bg-gradient-to-r from-cyan-500 via-emerald-500 to-purple-500 rounded-3xl blur-md opacity-40 group-hover:opacity-60 transition-opacity duration-500 animate-border-glow"></div>
-            <div className="relative bg-[#0a0a12]/90 backdrop-blur-xl rounded-3xl p-8 border border-gray-800/50">
+          <div className="relative">
+            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/50 via-emerald-500/50 to-purple-500/50 rounded-3xl blur-xl opacity-30"></div>
+            <div className="relative bg-gray-900/80 backdrop-blur-xl rounded-3xl p-8 border border-gray-800">
               {/* Professional County/City/Permit Selection */}
               <div className="grid md:grid-cols-3 gap-4 mb-6">
                 {/* County Select */}
@@ -3094,7 +3153,7 @@ export default function App() {
               <div className="mb-6">
                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Upload Documents</label>
                 <div 
-                  className={`border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-300 ${isDragging ? 'border-cyan-400 bg-cyan-500/10 scale-[1.02] shadow-[0_0_40px_rgba(6,182,212,0.2)]' : 'border-gray-800 bg-black/40 hover:border-gray-700 hover:bg-black/50'}`} 
+                  className={`border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-200 ${isDragging ? 'border-cyan-400 bg-cyan-500/10 scale-[1.02]' : 'border-gray-700 bg-black/30 hover:border-gray-600'}`} 
                   onDragOver={e => { e.preventDefault(); setIsDragging(true) }} 
                   onDragLeave={() => setIsDragging(false)} 
                   onDrop={e => { e.preventDefault(); setIsDragging(false); handleFiles({ target: { files: e.dataTransfer.files } }) }}
@@ -3162,23 +3221,19 @@ export default function App() {
                 </div>
               </div>
               <div className="mb-6"><label className="flex items-start gap-3 cursor-pointer"><input type="checkbox" checked={agreedToTerms} onChange={e => setAgreedToTerms(e.target.checked)} className="mt-1 w-5 h-5 rounded border-gray-600 bg-black/50 text-cyan-500" /><span className="text-sm text-gray-400">I agree to the <button type="button" onClick={() => setPage('terms')} className="text-cyan-400 underline">Terms of Service</button></span></label></div>
-              <button onClick={analyze} disabled={!canAnalyze} className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 ${canAnalyze ? 'bg-gradient-to-r from-cyan-500 to-emerald-500 text-black shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:shadow-[0_0_50px_rgba(6,182,212,0.6)] hover:scale-[1.02]' : 'bg-gray-800/50 text-gray-600 cursor-not-allowed'}`}>{canAnalyze ? `Analyze ${validFiles.length} Files` : 'Select city, permit type & files'}</button>
+              <button onClick={analyze} disabled={!canAnalyze} className={`w-full py-4 rounded-xl font-bold text-lg ${canAnalyze ? 'bg-gradient-to-r from-cyan-500 to-emerald-500 text-black' : 'bg-gray-800 text-gray-500 cursor-not-allowed'}`}>{canAnalyze ? `Analyze ${validFiles.length} Files` : 'Select city, permit type & files'}</button>
             </div>
           </div>
           <div className="grid md:grid-cols-3 gap-6 mt-12">
-            {[{icon:'⚡',title:'Instant Analysis',desc:'Results in seconds',glow:'cyan'},{icon:'🎯',title:'Compliance Score',desc:'Know where you stand',glow:'emerald'},{icon:'📋',title:'Missing Items',desc:'Never miss requirements',glow:'purple'}].map((f,i) => (
-              <div key={i} className={`text-center p-6 bg-[#0a0a12]/80 rounded-2xl border border-gray-800/50 transition-all duration-300 hover:scale-105 hover:border-${f.glow}-500/30 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] group`}>
-                <div className="text-3xl mb-3 transition-transform duration-300 group-hover:scale-110">{f.icon}</div>
-                <h3 className="font-bold text-white mb-1">{f.title}</h3>
-                <p className="text-sm text-gray-600">{f.desc}</p>
-              </div>
+            {[{icon:'⚡',title:'Instant Analysis',desc:'Results in seconds'},{icon:'🎯',title:'Compliance Score',desc:'Know where you stand'},{icon:'📋',title:'Missing Items',desc:'Never miss requirements'}].map((f,i) => (
+              <div key={i} className="text-center p-6 bg-gray-900/50 rounded-2xl border border-gray-800"><div className="text-3xl mb-3">{f.icon}</div><h3 className="font-bold text-white mb-1">{f.title}</h3><p className="text-sm text-gray-500">{f.desc}</p></div>
             ))}
           </div>
         </div>
       </div>
       <Footer />
       <style>{`
-        select option { background: #030305; color: white; padding: 12px; }
+        select option { background: #0a0a0a; color: white; padding: 12px; }
         select option:disabled { color: #6b7280; font-style: italic; }
         select option:checked { background: linear-gradient(to right, #06b6d4, #10b981); color: black; }
         select::-webkit-scrollbar { width: 8px; }
@@ -3214,24 +3269,14 @@ export default function App() {
         @keyframes particleFade {
           0%, 100% { opacity: 0; transform: scale(0.5); }
           20% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.8; transform: scale(1.5); }
+          50% { opacity: 0.8; transform: scale(1.2); }
           80% { opacity: 1; transform: scale(1); }
         }
         @keyframes particleFloat {
           0%, 100% { transform: translateY(0) translateX(0); }
-          25% { transform: translateY(-20px) translateX(10px); }
-          50% { transform: translateY(-10px) translateX(-8px); }
-          75% { transform: translateY(-25px) translateX(15px); }
-        }
-        @keyframes borderGlow {
-          0%, 100% { opacity: 0.3; filter: blur(8px); }
-          50% { opacity: 0.6; filter: blur(12px); }
-        }
-        .animate-border-glow {
-          animation: borderGlow 3s ease-in-out infinite;
-        }
-        .title-glow {
-          filter: drop-shadow(0 0 40px rgba(6, 182, 212, 0.15));
+          25% { transform: translateY(-15px) translateX(8px); }
+          50% { transform: translateY(-8px) translateX(-5px); }
+          75% { transform: translateY(-20px) translateX(12px); }
         }
       `}</style>
     </div>

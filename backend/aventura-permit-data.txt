@@ -1,0 +1,146 @@
+CITY OF AVENTURA, FLORIDA — COMPLETE PERMIT GUIDE (VERIFIED)
+
+BUILDING DEPARTMENT OVERVIEW
+Aventura is in northeastern Miami-Dade County (borders Broward to the north but is NOT in Broward). The city is entirely within the High Velocity Hurricane Zone (HVHZ), making it subject to the strictest wind and product approval requirements in the continental U.S.
+Keven Klopp is the Director of Community Development (not "Building Director" — building services have been outsourced to CAP Government Inc. since Aventura's incorporation in 1995). CAP Government provides the Building Official, plans review, and inspection services.
+Address: 19200 West Country Club Drive, 4th Floor, Aventura, FL 33180
+Phone: 305-466-8937 (Building Division) | 305-466-8940 (Community Development)
+Email: permits@cityofaventura.com
+Hours: Monday–Friday, 8:00 AM – 3:30 PM
+Online Portal: eTRAKiT — https://etrakit.cityofaventura.com/etrakit/
+Payment: Check, cash, money orders in person | Credit card accepted online (2.79% convenience fee)
+
+WHEN IS A PERMIT REQUIRED?
+A licensed contractor must pull a permit for: new construction, alterations/modifications, any repairs exceeding $500 in labor + materials that modify existing structure (tile, wood flooring, marble), any electrical work (including ceiling fans), roofing, windows, doors, plumbing, HVAC, kitchen/bath remodels, impact-resistant coverings, pools, fences, signs, demolition, generators, solar panels, and EV charger installations.
+
+GENERAL SUBMISSION REQUIREMENTS (ALL PERMIT TYPES)
+Every permit application requires: an original, fully filled, signed, and notarized application by BOTH property owner AND contractor, plus proof of property ownership. Additional requirements depending on scope include 2 sets of plans (drawn to scale, signed/sealed by licensed professional when required), 2 sets of calculations, 2 sets of product approvals, and surveys as required. The upfront fee is $130 (credited toward total permit fee).
+Digital submission note: Plans submitted online through eTRAKiT must be in PDF format and must be unlocked (locked PDFs cause review delays). Within 2 working days of online submission, you get an email confirmation from the E-Permits team.
+Expedited review is available — requires a letter from the contractor requesting it and agreeing to pay additional costs, plus all documents in duplicate.
+
+ALL PERMIT TYPES
+
+ROOFING PERMITS
+Required documentation: permit application (notarized), 2 sets of roof plans/layout drawings, Miami-Dade NOA for ALL roofing products, manufacturer installation specs, product approval certifications, and structural calculations if modifying roof structure.
+HVHZ-specific requirements: self-adhering underlayment is mandatory, minimum #30 felt or equivalent synthetic (ASTM D226), peel-and-stick waterproof membranes required in valleys and across entire roof deck, hurricane clips/straps required for roof-to-wall connections (must meet 170–200+ mph wind resistance), all products must pass TAS 201/202/203. Additional required documents include Affidavit of Roof Underlayment, Construction Debris Removal Affidavit, Rooftop Mounted Equipment Affidavit (if applicable), Owners Notification for Roofing Considerations (FBC 1524 HVHZ), Roof-to-Wall Connection Hurricane Mitigation Affidavit, and Manufacturer Installation Specifications.
+For commercial re-roofing over 160 sq ft, plans MUST be approved by Miami-Dade Fire Rescue AND DPERA (Department of Permitting, Environment and Regulatory Affairs) BEFORE submission to Aventura. Submit 2 sets of plans to DPERA first.
+Inspections: minimum two — dry-in (underlayment) stage and final completion.
+
+WINDOW & DOOR PERMITS
+One of the most critical permit types due to HVHZ. ALL impact windows/doors must have a valid Miami-Dade NOA — no exceptions. Products must meet HVHZ testing (TAS 201/202/203), with design wind speeds of 170–200+ mph. All glazing in the wind-borne debris region must be impact-resistant or have approved protective systems (shutters). Products without a valid, current NOA will be rejected.
+Required docs: permit application, manufacturer specs, Florida Product Approval number OR Miami-Dade NOA for every product, window/door schedule with sizes, types, and approval numbers.
+
+ELECTRICAL PERMITS
+Separate permit required for ANY electrical work, including ceiling fan installation, panel upgrades, new circuits, and service changes. Must comply with NFPA 70 (National Electrical Code) as adopted by Florida Building Code Chapter 27. Load calculations required for panel upgrades or new service. Licensed electrical contractor required. For larger projects with elevators/escalators, a Selective Coordination Requirements Inspection Form is required for plan review. FPL coordination is required for any electrical service modifications.
+
+PLUMBING PERMITS
+Separate permit for new installations or significant modifications. Licensed plumbing contractor required.
+
+MECHANICAL / HVAC PERMITS
+Separate permit for HVAC installations and modifications (furnaces, boilers, heaters, tanks, air conditioners). Required docs include mechanical plans, heating/cooling load calculations (Manual J required), equipment form (Manual S required), duct design (Manual D required), energy calculations, and equipment product approvals. Licensed mechanical contractor required.
+
+SWIMMING POOL & SPA PERMITS
+Required for nearly all permanent pool installations. Pool must be enclosed by fence/barrier at least 4 feet high with self-closing, self-latching gates. Multiple phase inspections: electrical, structural, final safety check.
+
+FENCE PERMITS
+Separate permit required. Residential fences require the yellow permit application with site plan and property survey. Must adhere to height limits per zoning district. Must secure Architectural Review Committee approval. Fees: chain link $130 for first 1,000 linear feet; wood/metal $0.70/linear foot; concrete $1.30/linear foot.
+
+SIGN PERMITS
+Separate permit for commercial signs. Requires notarized application by owner and contractor, 2 sets of plans drawn to scale and sealed when required. City has specific signage regulations — contact Community Development at 305-466-8940.
+
+DEMOLITION PERMITS
+Per Florida Building Code Section 105.1. Requires detailed info on dimensions, materials, and demolition methods. Miami-Dade County requires asbestos review and approval — Notice of Demolition or Asbestos Abatement form must be submitted at least 10 working days before demolition starts.
+
+TREE REMOVAL PERMITS
+Regulated by Miami-Dade County Environmental Code. Permit required for removal/relocation of non-exempt trees. Site plan/tree survey required for 10+ trees. Valid 1 year. Contact MDC Tree Program: 305-372-6574.
+
+COMMERCIAL TENANT IMPROVEMENT / BUILDOUT
+Standard building permit process plus NOC before first inspection, potential DPERA pre-approval, ADA compliance review, and fire department review. Product approvals required depending on scope.
+
+GENERATOR PERMITS
+Building and electrical permits required. Possible gas/mechanical permits. Generator exhaust must be located 10 feet away from wall openings (windows, doors, exhaust fans, vents).
+
+SOLAR PANEL PERMITS
+Building and electrical permits required. May need zoning/mechanical permits depending on scope. Four-phase process: submit blueprints, compile credentials, await review, pass post-installation inspection.
+
+EV CHARGER PERMITS
+Electrical permit required. Construction permit may be needed if property modifications are required (panel upgrades, etc.).
+
+RIGHT-OF-WAY / PUBLIC WORKS PERMITS
+Separate permit required if project touches public right-of-way (apron, sidewalk, swale). Handled by Public Works/Transportation Division (305-466-8970), separate from building permits.
+
+NOTICE OF COMMENCEMENT (NOC)
+NOC threshold: $2,500 for improvements to real property (conservative threshold — some sources cite $5,000 for Aventura/Miami-Dade specifically, but $2,500 is the safe practice).
+HVAC exception: Repair or replacement of existing HVAC system under $15,000 is exempt from NOC.
+File with Miami-Dade County Clerk of Courts AFTER permit is pulled but BEFORE starting work. Must be recorded and posted on job site before first inspection. Valid for 1 year from recording date. Must be recorded within 90 days before starting work. Property owner is responsible for filing. Failure to properly record can result in paying twice for improvements.
+
+HVHZ REQUIREMENTS (NON-NEGOTIABLE)
+Aventura is entirely within the HVHZ. Minimum wind velocity: 146 mph (3-second gust). Ultimate design wind speeds: 170–200+ mph (ASCE 7-22, Risk Category II). Miami-Dade County-specific velocities supersede standard ASCE maps.
+ALL exterior products must have a Miami-Dade NOA — roofing, windows, doors, shutters, awnings, utility sheds, skylights, trusses, underlayment, and all exterior envelope products. NOAs are valid for 5 years from first approval. First-time product approval submittal costs manufacturers $4,000. Search database: https://www.miamidade.gov/building/pc-search_app.asp
+
+FLOOD ZONE REQUIREMENTS
+Aventura is an NFIP community (storm drains empty directly into the Intracoastal). New construction: lowest floor must be at minimum 12 inches above base flood elevation OR 18 inches above crown of road, whichever is highest. 50% substantial improvement rule: if renovation costs equal or exceed 50% of building's market value in any 1-year period, the building must meet all current new construction requirements.
+
+ENHANCED BUILDING SAFETY INSPECTIONS PROGRAM
+All buildings 3,500+ sq ft AND 3+ stories are subject to enhanced inspections. The old 40-year program has been updated with 25-year, 30-year, and 40-year inspection intervals. SIRS (Structural Integrity Reserve Study) mandated by Senate Bill 4-D, deadline December 31, 2025. Inspection costs start at $900 minimum for structural, $900 for electrical, $350 for illumination, $600 for infrared thermography.
+
+CONTRACTOR LICENSING & REGISTRATION
+State law prohibits working with unlicensed contractors. Two license types: Miami-Dade County (regulated by PERA) or State of Florida (regulated by DBPR). City registration is mandatory — qualifier must appear in person for first-time registration with notarized signature and original documents. Annual renewal by September 30th. Verify at MyFloridaLicense.com.
+
+FEE SCHEDULE
+Upfront fee (all permits): $130 (credited toward total). Re-inspection (1st return): $57.50/inspector. Re-inspection (subsequent): $115/inspector. CO/TCO inspection: $34.50/inspector. Public safety radio pre-test: $255. Public safety radio post-install: $425. Full schedule: https://www.cityofaventura.com/DocumentCenter/View/60/Building-Permit-Fee-Schedule-PDF
+
+INSPECTION REQUIREMENTS
+ALL inspections must be requested ONLINE through eTRAKiT — no phone requests accepted since September 23, 2016. Inspection types: building/structural, accessibility/ADA, roofing, electrical, mechanical, gas, plumbing, fire safety. Re-inspection fees triggered by: wrong address, corrections not completed, failure to provide access.
+
+CONSTRUCTION HOURS
+Weekdays: 7:00 AM – 6:00 PM. Saturdays: 8:00 AM – 5:00 PM. Sundays & holidays: NOT ALLOWED unless you get approval from the Office of the City Manager (305-466-8910) BEFORE work begins.
+
+HOA & CONDO COORDINATION
+Aventura has a massive density of condos and HOA communities. The city recommends (but does not legally require) securing HOA/condo association approval before submitting permit applications. Submit an approval letter from the association with your application. The city permit is based solely on Florida Building Code — it does NOT satisfy HOA requirements. Failing to get HOA approval can lead to work stoppages even with a valid city permit.
+
+ENVIRONMENTAL & LANDSCAPE
+Storm drains empty into the Intracoastal — pollution violations up to $500/incident/day. Environmental Resource Permits may be required from SFWMD. NPDES stormwater permits required before discharging. Landscape plans require 10 copies + 1 electronic copy, must be sealed by a Florida registered landscape architect. Minimum 3 shade trees per single-family property. Erosion/sediment control required for sites disturbing 1+ acre.
+
+ZONING DISTRICTS
+RS2 (Residential Single Family), RMF3-RMF4 (Multi-Family), B1-B3 (Business), OP (Office Park), MO (Medical Office), TC1-TC5 (Town Center), CF (Community Facility), ROS (Recreation Open Space), CNS (Conservation), U (Utilities). Each has specific setbacks, height limits, and parking requirements.
+
+KNOWN GOTCHAS & COMMON REJECTION REASONS
+
+Application gotchas: Missing notarization (BOTH owner AND contractor required), missing proof of ownership, incomplete supporting docs, inadequate/incorrect site plans (top cause of delays), missing architect/engineer seals, not submitting 2 complete sets, locked PDF files causing review delays.
+
+Contractor gotchas: Unlicensed contractor (automatic rejection), not registered with Aventura, expired registration (renewal due Sept 30), qualifier not appearing in person for first-time registration.
+
+HVHZ gotchas: Missing Miami-Dade NOA (#1 rejection reason for exterior work), expired NOA (only valid 5 years — check dates), using Florida Product Approval instead of MDC NOA (Aventura is HVHZ, not just wind-borne debris), improper wind load calculations, missing/inadequate underlayment specs, missing hurricane clip/strap specs, self-adhering underlayment not specified (mandatory in HVHZ).
+
+NOC gotchas: Filing NOC before pulling permit (must be AFTER), not filing at all for qualifying projects, not posting on job site before first inspection, expired NOC (1 year validity), not recording with MDC Clerk of Courts.
+
+Inspection gotchas: Requesting by phone (online only since 2016), wrong address ($57.50 fee), corrections not completed ($57.50+ fee), no property access ($57.50 fee), expired permit (180 days from issuance/last inspection).
+
+Commercial gotchas: Not getting MDC Fire Rescue pre-approval for re-roofing over 160 sq ft, not submitting to DPERA, missing ADA compliance review, asbestos review not done for demolition (10-day lead time).
+
+Flood zone gotchas: Not meeting elevation requirements, triggering 50% substantial improvement rule without upgrading to new construction standards.
+
+HOA gotchas: Starting work without association approval (city permit ≠ HOA approval), HOA requiring different materials than permitted.
+
+Hours gotchas: Sunday/holiday work without City Manager approval, working outside hours.
+
+High-rise gotchas: Not having SIRS study completed (deadline was Dec 31, 2025), missing enhanced building safety inspections for 3+ story buildings, not meeting 25/30/40-year recertification requirements.
+
+Generator gotchas: Exhaust not 10 feet from wall openings.
+
+KEY CONTACTS
+Building Division: permits@cityofaventura.com | 305-466-8937
+Community Development (Keven Klopp): 305-466-8940
+Code Compliance: via Building Division
+City Manager (after-hours approval): 305-466-8910
+Public Works/Stormwater: 305-466-8970
+MDC Tree Program: 305-372-6574
+eTRAKiT: https://etrakit.cityofaventura.com/etrakit/
+Permit Application: https://www.cityofaventura.com/DocumentCenter/View/76
+Fee Schedule: https://www.cityofaventura.com/DocumentCenter/View/60
+Municipal Code: https://library.municode.com/fl/aventura
+MDC Product Search: https://www.miamidade.gov/building/pc-search_app.asp
+
+FLO PERMIT DATABASE INTEGRATION NOTES
+County: Miami-Dade. HVHZ: YES. MDC NOA Required: YES. Portal: eTRAKiT (not eBuildingPermit). NOC Threshold: $2,500 (use conservative threshold). HVAC NOC Exception: $15,000. NOC Recording: MDC Clerk of Courts. Building dept outsourced to CAP Government. Inspections online only. Fire reviews Tuesdays in Sunny Isles. Commercial re-roof >160 sq ft needs Fire + DPERA. Architectural Review Committee for fences. Many high-rises = flag HOA/condo approval. Construction hours enforced strictly. Flood zone considerations (coastal). Enhanced building safety program for 3+ story buildings. Plans must be unlocked PDFs for eTRAKiT. Manual J/S/D required for HVAC.
