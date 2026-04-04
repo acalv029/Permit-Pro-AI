@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>South Florida Building Permit Requirements — 30 Cities | Flo Permit</title>
+  <meta name="description" content="Building permit requirements for 30 cities across Broward, Palm Beach, and Miami-Dade counties. 8,787 requirements checked by AI.">
+  <link rel="canonical" href="https://flopermit.us/cities/"><link rel="icon" type="image/png" href="/adc_logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2V1MF78CPY"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-2V1MF78CPY');</script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Montserrat',sans-serif;background:#030305;color:#e2e8f0;line-height:1.65;overflow-x:hidden}
+    body::after{content:'';position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;opacity:.025;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+    a{color:#22d3ee;text-decoration:none;transition:all .25s}a:hover{color:#67e8f9}
+    
+    .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .logo-img{width:36px;height:36px;border-radius:8px;object-fit:contain}
+    .logo-text{line-height:1.1}
+    .logo-flo{font-size:20px;font-weight:900;color:#22d3ee}
+    .logo-permit{font-size:20px;font-weight:900;color:#fff}
+    .logo-sub{font-size:9px;color:#06b6d4;font-weight:700;letter-spacing:2px;margin-top:1px}
+
+
+    nav{max-width:1200px;margin:0 auto;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:10}
+    .nav-r{display:flex;gap:20px;align-items:center}.nav-r a{color:#475569;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px}.nav-r a:hover{color:#e2e8f0}
+
+    .hero{max-width:1200px;margin:0 auto;padding:60px 24px 20px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;position:relative}
+    .hero::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(6,182,212,.04) 0%,transparent 70%);pointer-events:none}
+    .hero-left{position:relative}
+    .hero-label{font-size:10px;color:#475569;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px}
+    .hero h1{font-size:42px;font-weight:900;line-height:1.1;margin-bottom:20px;letter-spacing:-.5px}
+    .hero h1 em{font-style:normal;color:#22d3ee}
+    .hero-desc{font-size:15px;color:#64748b;margin-bottom:32px;max-width:420px;line-height:1.7}
+    .hero-stats{display:flex;gap:24px;margin-bottom:36px}
+    .hs{text-align:left}.hs-n{font-size:28px;font-weight:900;color:#fff}.hs-l{font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:1px;font-weight:700}
+    .hero-cta{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;background:#22d3ee;color:#030305;font-weight:800;font-size:14px;border-radius:10px;letter-spacing:.3px;transition:all .3s}
+    .hero-cta:hover{background:#67e8f9;transform:translateY(-2px);box-shadow:0 8px 30px rgba(6,182,212,.2);color:#030305}
+
+    .hero-right{position:relative}
+    .map-frame{background:rgba(5,10,20,.7);border:1px solid rgba(30,41,59,.4);border-radius:16px;padding:12px;position:relative}
+    .map-frame svg{width:100%;height:auto;display:block}
+    .map-frame svg text{pointer-events:none;user-select:none}
+    .city-dot{cursor:pointer}
+    .city-dot:hover .dot-core{r:7}
+    .map-tooltip{position:fixed;background:#0f172a;border:1px solid #1e293b;border-radius:8px;padding:8px 12px;pointer-events:none;z-index:100;opacity:0;transition:opacity .15s;font-size:11px;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+    .map-tooltip h5{font-weight:800;color:#fff;font-size:12px;margin-bottom:1px}.map-tooltip span{color:#475569;font-size:10px}
+    .map-legend{display:flex;gap:16px;margin-top:10px;justify-content:center}
+    .ml{display:flex;align-items:center;gap:5px;font-size:10px;color:#334155;font-weight:600}.ml-d{width:8px;height:8px;border-radius:50%}
+
+    .filter-section{max-width:1200px;margin:0 auto;padding:48px 24px 16px}
+    .filter-section h2{font-size:11px;color:#334155;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px}
+    .filter-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .search-input{flex:1;min-width:220px;padding:11px 16px 11px 40px;background:rgba(15,23,42,.4);border:1px solid rgba(30,41,59,.5);border-radius:10px;color:#fff;font-family:'Montserrat',sans-serif;font-size:13px;outline:none;transition:all .3s;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23334155' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:14px center}
+    .search-input:focus{border-color:rgba(34,211,238,.4);box-shadow:0 0 0 3px rgba(34,211,238,.06)}
+    .search-input::placeholder{color:#1e293b}
+    .ftabs{display:flex;gap:4px}
+    .ftab{padding:8px 14px;background:transparent;border:1px solid rgba(30,41,59,.4);border-radius:8px;color:#334155;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;font-family:'Montserrat',sans-serif}
+    .ftab:hover{color:#64748b;border-color:#334155}
+    .ftab.active{border-color:rgba(34,211,238,.3);color:#22d3ee;background:rgba(34,211,238,.04)}
+
+    .list-section{max-width:1200px;margin:0 auto;padding:0 24px 60px}
+    .county-label{font-size:12px;font-weight:800;color:#64748b;padding:20px 0 10px;display:flex;align-items:center;gap:8px;letter-spacing:.5px}
+    .cl-dot{width:6px;height:6px;border-radius:50%}.cl-count{margin-left:auto;font-size:10px;color:#1e293b;font-weight:600}
+    .cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}
+    .cc{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:rgba(10,15,30,.4);border:1px solid rgba(20,30,50,.6);border-radius:10px;text-decoration:none;transition:all .3s;overflow:hidden;position:relative}
+    .cc::before{content:'';position:absolute;top:0;left:0;width:0;height:100%;background:rgba(34,211,238,.03);transition:width .3s}
+    .cc:hover{border-color:rgba(34,211,238,.2);transform:translateY(-1px)}.cc:hover::before{width:100%}.cc.hidden{display:none}
+    .cc-inner{position:relative}.cc h4{font-size:14px;font-weight:800;color:#e2e8f0;margin-bottom:2px}
+    .cc-nums{font-size:10px;color:#334155;font-weight:500}.cc-ph{font-size:10px;color:#1e293b;margin-top:2px}
+    .cc-tags{display:flex;gap:4px;margin-top:4px}
+    .t{font-size:8px;padding:2px 6px;border-radius:4px;font-weight:800;letter-spacing:.5px;text-transform:uppercase}
+    .t-h{background:rgba(245,158,11,.08);color:rgba(245,158,11,.6)}.t-p{background:rgba(34,211,238,.06);color:rgba(34,211,238,.5)}
+    .cc-arrow{color:#0f172a;transition:all .3s;flex-shrink:0;position:relative}.cc:hover .cc-arrow{color:#22d3ee;transform:translateX(3px)}
+
+    .stories{max-width:1200px;margin:0 auto;padding:60px 24px;display:grid;grid-template-columns:280px 1fr;gap:40px;align-items:start}
+    .stories-left{position:sticky;top:40px}.stories-left h2{font-size:24px;font-weight:900;line-height:1.2;margin-bottom:8px;color:#fff}.stories-left p{font-size:13px;color:#334155;line-height:1.6}
+    .stories-right{display:flex;flex-direction:column;gap:12px}
+    .st{padding:20px;background:rgba(10,15,30,.4);border:1px solid rgba(239,68,68,.06);border-radius:12px;border-left:2px solid rgba(239,68,68,.2);transition:all .3s}
+    .st:hover{border-color:rgba(239,68,68,.15);border-left-color:rgba(239,68,68,.4)}
+    .st-city{font-size:9px;color:rgba(239,68,68,.5);font-weight:800;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px}
+    .st-body{font-size:13px;color:#94a3b8;line-height:1.6;margin-bottom:10px}
+    .st-lesson{font-size:11px;color:#334155;line-height:1.5;padding:8px 12px;background:rgba(0,0,0,.3);border-radius:6px}
+
+    .cta-end{text-align:center;padding:80px 24px;position:relative}
+    .cta-end::before{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:500px;height:300px;background:radial-gradient(circle,rgba(6,182,212,.03),transparent 70%);pointer-events:none}
+    .cta-end h2{font-size:32px;font-weight:900;margin-bottom:12px;position:relative;letter-spacing:-.5px}.cta-end h2 em{font-style:normal;color:#22d3ee}
+    .cta-end p{color:#334155;margin-bottom:28px;font-size:14px;position:relative}
+
+    .no-results{text-align:center;padding:40px;color:#1e293b;font-size:13px;display:none}
+    .sdiv{height:1px;background:linear-gradient(90deg,transparent,rgba(30,41,59,.3),transparent);max-width:1200px;margin:0 auto}
+    footer{max-width:1200px;margin:0 auto;padding:20px 24px;border-top:1px solid rgba(15,23,42,.8);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+    footer span{font-size:10px;color:#1e293b}footer a{font-size:10px;color:#1e293b;margin-left:12px}footer a:hover{color:#475569}
+
+    @media(max-width:900px){
+      .hero{grid-template-columns:1fr;padding-top:40px}.hero h1{font-size:32px}.hero-right{order:-1}
+      .stories{grid-template-columns:1fr}.stories-left{position:static}
+      .nav-r{display:none}.cgrid{grid-template-columns:1fr}.filter-row{flex-direction:column}
+    }
+  </style>
+</head>
+<body>
+  <nav><a href="https://flopermit.us" class="logo-link">
+  <img src="/adc_logo.png" alt="" class="logo-img">
+  <div class="logo-text"><span class="logo-flo">Flo</span> <span class="logo-permit">Permit</span><div class="logo-sub">SOUTH FLORIDA</div></div>
+</a><div class="nav-r"><a href="https://flopermit.us">Home</a><a href="/cities/index.html">Cities</a><a href="https://flopermit.us">Analyze</a></div></nav>
+
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-label">Tri-County Coverage</div>
+      <h1>Every permit requirement.<br><em>Every city.</em></h1>
+      <p class="hero-desc">We track permit requirements for 30 municipalities across South Florida. Pick your city, see what you need, upload your documents for instant AI analysis.</p>
+      <div class="hero-stats">
+        <div class="hs"><div class="hs-n">30</div><div class="hs-l">Cities</div></div>
+        <div class="hs"><div class="hs-n">8,787</div><div class="hs-l">Requirements</div></div>
+        <div class="hs"><div class="hs-n">1,099</div><div class="hs-l">Gotchas</div></div>
+      </div>
+      <a href="https://flopermit.us" class="hero-cta">Check Your Package &rarr;</a>
+    </div>
+    <div class="hero-right">
+      <div class="map-frame"><svg viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="ocean" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0c4a6e" stop-opacity=".08"/>
+      <stop offset="100%" stop-color="#0c4a6e" stop-opacity=".2"/>
+    </linearGradient>
+    <linearGradient id="everg" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0%" stop-color="transparent"/>
+      <stop offset="100%" stop-color="#064e3b" stop-opacity=".06"/>
+    </linearGradient>
+    <clipPath id="landClip">
+      <path d="M320,19 Q333,38 340,58 Q346,85 347,113 Q346,130 340,148 Q343,165 340,183 Q336,196 327,210 Q326,229 320,249 Q323,256 320,264 Q319,274 313,284 Q313,299 307,315 Q306,328 300,342 Q299,355 293,369 Q293,381 287,393 Q290,398 287,404 Q286,410 280,416 Q286,427 287,439 Q286,451 280,463 Q283,472 280,482 Q273,488 260,494 Q263,503 260,513 Q249,528 233,544 Q203,563 167,583 Q153,602 133,622 Q119,641 100,661 L0,700 L0,0 Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- Ocean -->
+  <path d="M320,19 Q333,38 340,58 Q346,85 347,113 Q346,130 340,148 Q343,165 340,183 Q336,196 327,210 Q326,229 320,249 Q323,256 320,264 Q319,274 313,284 Q313,299 307,315 Q306,328 300,342 Q299,355 293,369 Q293,381 287,393 Q290,398 287,404 Q286,410 280,416 Q286,427 287,439 Q286,451 280,463 Q283,472 280,482 Q273,488 260,494 Q263,503 260,513 Q249,528 233,544 Q203,563 167,583 Q153,602 133,622 Q119,641 100,661 L400,700 L400,0 Z" fill="url(#ocean)"/>
+
+  <!-- Land area (clipped to coast) -->
+  <g clip-path="url(#landClip)">
+    <!-- Everglades fade -->
+    <rect x="0" y="0" width="400" height="700" fill="url(#everg)"/>
+
+    <!-- County fills -->
+    <rect x="0" y="0" width="400" height="264" fill="rgba(167,139,250,.03)"/>
+    <rect x="0" y="264" width="400" height="140" fill="rgba(34,211,238,.03)"/>
+    <rect x="0" y="404" width="400" height="296" fill="rgba(245,158,11,.03)"/>
+
+    <!-- County border lines -->
+    <line x1="0" y1="264" x2="320" y2="264" stroke="rgba(100,116,139,.15)" stroke-width="1" stroke-dasharray="6,4"/>
+    <line x1="0" y1="404" x2="287" y2="404" stroke="rgba(100,116,139,.15)" stroke-width="1" stroke-dasharray="6,4"/>
+
+    <!-- County labels -->
+    <text x="60" y="152" fill="rgba(167,139,250,.1)" font-size="10" font-weight="800" font-family="Montserrat" letter-spacing="3" transform="rotate(-90,60,152)">PALM BEACH</text>
+    <text x="50" y="344" fill="rgba(34,211,238,.1)" font-size="10" font-weight="800" font-family="Montserrat" letter-spacing="3" transform="rotate(-90,50,344)">BROWARD</text>
+    <text x="40" y="527" fill="rgba(245,158,11,.1)" font-size="10" font-weight="800" font-family="Montserrat" letter-spacing="3" transform="rotate(-90,40,527)">MIAMI-DADE</text>
+
+    <!-- I-95 -->
+    <path d="M300,31 L300,117 L307,194 L300,264 L273,350 L253,404 L240,467 L220,544 L167,622" fill="none" stroke="rgba(100,116,139,.08)" stroke-width="1.5" stroke-dasharray="4,6"/>
+    <text x="306" y="156" fill="rgba(100,116,139,.08)" font-size="7" font-weight="700" font-family="Montserrat">I-95</text>
+
+    <!-- Turnpike -->
+    <path d="M247,39 L253,117 L260,194 L253,264 L220,350 L200,404 L180,467 L147,544" fill="none" stroke="rgba(100,116,139,.05)" stroke-width="1" stroke-dasharray="3,5"/>
+
+    <!-- City dots -->
+    <g class="city-dot" data-county="Broward" data-city="pompano beach" data-slug="pompano-beach">
+      <circle cx="287" cy="296" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="287" cy="296" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="287" cy="296" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Broward" data-city="plantation" data-slug="plantation">
+      <circle cx="200" cy="342" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="200" cy="342" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="200" cy="342" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Miami-Dade" data-city="hialeah" data-slug="hialeah">
+      <circle cx="180" cy="443" r="10" fill="#f59e0b" opacity=".05"/>
+      <circle cx="180" cy="443" r="4.5" fill="#f59e0b" opacity=".85" class="dot-core"/>
+      <circle cx="180" cy="443" r="4.5" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Broward" data-city="oakland park" data-slug="oakland-park">
+      <circle cx="280" cy="323" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="280" cy="323" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="280" cy="323" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Broward" data-city="town of davie" data-slug="davie">
+      <circle cx="200" cy="362" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="200" cy="362" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="200" cy="362" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Broward" data-city="coconut creek" data-slug="coconut-creek">
+      <circle cx="247" cy="292" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="247" cy="292" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="247" cy="292" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Broward" data-city="deerfield beach" data-slug="deerfield-beach">
+      <circle cx="300" cy="264" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="300" cy="264" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="300" cy="264" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Broward" data-city="lauderdale-by-the-sea" data-slug="lauderdale-by-the-sea">
+      <circle cx="300" cy="315" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="300" cy="315" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="300" cy="315" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Broward" data-city="city of weston" data-slug="weston">
+      <circle cx="100" cy="350" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="100" cy="350" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="100" cy="350" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Broward" data-city="miramar" data-slug="miramar">
+      <circle cx="167" cy="397" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="167" cy="397" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="167" cy="397" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Broward" data-city="hollywood" data-slug="hollywood">
+      <circle cx="267" cy="385" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="267" cy="385" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="267" cy="385" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Broward" data-city="sunrise" data-slug="sunrise">
+      <circle cx="167" cy="331" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="167" cy="331" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="167" cy="331" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Broward" data-city="fort lauderdale" data-slug="fort-lauderdale">
+      <circle cx="273" cy="342" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="273" cy="342" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="273" cy="342" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Palm Beach" data-city="boca raton" data-slug="boca-raton">
+      <circle cx="300" cy="249" r="10" fill="#a78bfa" opacity=".05"/>
+      <circle cx="300" cy="249" r="4.5" fill="#a78bfa" opacity=".85" class="dot-core"/>
+      <circle cx="300" cy="249" r="4.5" fill="none" stroke="#a78bfa" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Palm Beach" data-city="boynton beach" data-slug="boynton-beach">
+      <circle cx="320" cy="183" r="10" fill="#a78bfa" opacity=".05"/>
+      <circle cx="320" cy="183" r="4.5" fill="#a78bfa" opacity=".85" class="dot-core"/>
+      <circle cx="320" cy="183" r="4.5" fill="none" stroke="#a78bfa" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Palm Beach" data-city="delray beach" data-slug="delray-beach">
+      <circle cx="320" cy="210" r="10" fill="#a78bfa" opacity=".05"/>
+      <circle cx="320" cy="210" r="4.5" fill="#a78bfa" opacity=".85" class="dot-core"/>
+      <circle cx="320" cy="210" r="4.5" fill="none" stroke="#a78bfa" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Broward" data-city="pembroke pines" data-slug="pembroke-pines">
+      <circle cx="160" cy="389" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="160" cy="389" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="160" cy="389" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Palm Beach" data-city="west palm beach" data-slug="west-palm-beach">
+      <circle cx="333" cy="113" r="10" fill="#a78bfa" opacity=".05"/>
+      <circle cx="333" cy="113" r="4.5" fill="#a78bfa" opacity=".85" class="dot-core"/>
+      <circle cx="333" cy="113" r="4.5" fill="none" stroke="#a78bfa" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Broward" data-city="margate" data-slug="margate">
+      <circle cx="227" cy="296" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="227" cy="296" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="227" cy="296" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Broward" data-city="tamarac" data-slug="tamarac">
+      <circle cx="200" cy="311" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="200" cy="311" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="200" cy="311" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Palm Beach" data-city="wellington" data-slug="wellington">
+      <circle cx="187" cy="132" r="10" fill="#a78bfa" opacity=".05"/>
+      <circle cx="187" cy="132" r="4.5" fill="#a78bfa" opacity=".85" class="dot-core"/>
+      <circle cx="187" cy="132" r="4.5" fill="none" stroke="#a78bfa" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Palm Beach" data-city="lake worth beach" data-slug="lake-worth-beach">
+      <circle cx="327" cy="148" r="10" fill="#a78bfa" opacity=".05"/>
+      <circle cx="327" cy="148" r="4.5" fill="#a78bfa" opacity=".85" class="dot-core"/>
+      <circle cx="327" cy="148" r="4.5" fill="none" stroke="#a78bfa" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Miami-Dade" data-city="miami beach" data-slug="miami-beach">
+      <circle cx="280" cy="471" r="10" fill="#f59e0b" opacity=".05"/>
+      <circle cx="280" cy="471" r="4.5" fill="#f59e0b" opacity=".85" class="dot-core"/>
+      <circle cx="280" cy="471" r="4.5" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Miami-Dade" data-city="miami gardens" data-slug="miami-gardens">
+      <circle cx="207" cy="412" r="10" fill="#f59e0b" opacity=".05"/>
+      <circle cx="207" cy="412" r="4.5" fill="#f59e0b" opacity=".85" class="dot-core"/>
+      <circle cx="207" cy="412" r="4.5" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Miami-Dade" data-city="homestead" data-slug="homestead">
+      <circle cx="47" cy="595" r="10" fill="#f59e0b" opacity=".05"/>
+      <circle cx="47" cy="595" r="4.5" fill="#f59e0b" opacity=".85" class="dot-core"/>
+      <circle cx="47" cy="595" r="4.5" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Miami-Dade" data-city="kendall (unincorporated miami-dade)" data-slug="kendall">
+      <circle cx="133" cy="513" r="10" fill="#f59e0b" opacity=".05"/>
+      <circle cx="133" cy="513" r="4.5" fill="#f59e0b" opacity=".85" class="dot-core"/>
+      <circle cx="133" cy="513" r="4.5" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Miami-Dade" data-city="north miami" data-slug="north-miami">
+      <circle cx="240" cy="432" r="10" fill="#f59e0b" opacity=".05"/>
+      <circle cx="240" cy="432" r="4.5" fill="#f59e0b" opacity=".85" class="dot-core"/>
+      <circle cx="240" cy="432" r="4.5" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Miami-Dade" data-city="miami" data-slug="miami">
+      <circle cx="240" cy="482" r="10" fill="#f59e0b" opacity=".05"/>
+      <circle cx="240" cy="482" r="4.5" fill="#f59e0b" opacity=".85" class="dot-core"/>
+      <circle cx="240" cy="482" r="4.5" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Broward" data-city="coral springs" data-slug="coral-springs">
+      <circle cx="187" cy="284" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="187" cy="284" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="187" cy="284" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+<g class="city-dot" data-county="Broward" data-city="lighthouse point" data-slug="lighthouse-point">
+      <circle cx="307" cy="280" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="307" cy="280" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="307" cy="280" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+        <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+
+  </g>
+
+  <!-- Coastline stroke -->
+  <path d="M320,19 Q333,38 340,58 Q346,85 347,113 Q346,130 340,148 Q343,165 340,183 Q336,196 327,210 Q326,229 320,249 Q323,256 320,264 Q319,274 313,284 Q313,299 307,315 Q306,328 300,342 Q299,355 293,369 Q293,381 287,393 Q290,398 287,404 Q286,410 280,416 Q286,427 287,439 Q286,451 280,463 Q283,472 280,482 Q273,488 260,494 Q263,503 260,513 Q249,528 233,544 Q203,563 167,583 Q153,602 133,622 Q119,641 100,661" fill="none" stroke="rgba(14,165,233,.2)" stroke-width="1.5"/>
+
+  <!-- Ocean label -->
+  <text x="370" y="350" fill="rgba(14,165,233,.08)" font-size="9" font-weight="700" font-family="Montserrat" letter-spacing="2" transform="rotate(90,370,350)">ATLANTIC OCEAN</text>
+
+  <!-- Compass -->
+  <g transform="translate(30,30)" opacity=".15">
+    <circle cx="0" cy="0" r="12" fill="none" stroke="#64748b" stroke-width="1"/>
+    <text x="0" y="-16" fill="#64748b" font-size="7" font-weight="800" text-anchor="middle" font-family="Montserrat">N</text>
+    <line x1="0" y1="-8" x2="0" y2="8" stroke="#64748b" stroke-width="1"/>
+    <line x1="-8" y1="0" x2="8" y2="0" stroke="#64748b" stroke-width="1"/>
+  </g>
+</svg></div>
+      <div class="map-legend">
+        <div class="ml"><div class="ml-d" style="background:#a78bfa"></div>Palm Beach</div>
+        <div class="ml"><div class="ml-d" style="background:#22d3ee"></div>Broward</div>
+        <div class="ml"><div class="ml-d" style="background:#f59e0b"></div>Miami-Dade</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="filter-section">
+    <h2>Find Your City</h2>
+    <div class="filter-row">
+      <input type="text" class="search-input" placeholder="Type a city name..." id="search" oninput="filter()">
+      <div class="ftabs">
+        <button class="ftab active" onclick="setC('all',this)">All</button>
+        <button class="ftab" onclick="setC('Broward',this)">Broward</button>
+        <button class="ftab" onclick="setC('Palm Beach',this)">Palm Beach</button>
+        <button class="ftab" onclick="setC('Miami-Dade',this)">Miami-Dade</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="list-section"><div class="county-label" style="--cc:#22d3ee"><span class="cl-dot" style="background:#22d3ee"></span>Broward County<span class="cl-count">17 cities</span></div><div class="cgrid"><a href="/cities/weston.html" class="cc" data-county="Broward" data-city="city of weston">
+          <div class="cc-inner"><h4>City of Weston</h4><div class="cc-nums">20 types &middot; 255 items</div>
+          <div class="cc-tags"><span class="t t-h">HVHZ</span><span class="t t-p">Portal</span></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/coconut-creek.html" class="cc" data-county="Broward" data-city="coconut creek">
+          <div class="cc-inner"><h4>Coconut Creek</h4><div class="cc-nums">25 types &middot; 215 items</div>
+          <div class="cc-ph">954-973-6750</div><div class="cc-tags"><span class="t t-h">HVHZ</span><span class="t t-p">Portal</span></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/coral-springs.html" class="cc" data-county="Broward" data-city="coral springs">
+          <div class="cc-inner"><h4>Coral Springs</h4><div class="cc-nums">22 types &middot; 313 items</div>
+          <div class="cc-ph">954-344-1025</div><div class="cc-tags"><span class="t t-h">HVHZ</span><span class="t t-p">Portal</span></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/deerfield-beach.html" class="cc" data-county="Broward" data-city="deerfield beach">
+          <div class="cc-inner"><h4>Deerfield Beach</h4><div class="cc-nums">21 types &middot; 300 items</div>
+          <div class="cc-tags"></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/fort-lauderdale.html" class="cc" data-county="Broward" data-city="fort lauderdale">
+          <div class="cc-inner"><h4>Fort Lauderdale</h4><div class="cc-nums">23 types &middot; 333 items</div>
+          <div class="cc-tags"></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/hollywood.html" class="cc" data-county="Broward" data-city="hollywood">
+          <div class="cc-inner"><h4>Hollywood</h4><div class="cc-nums">21 types &middot; 284 items</div>
+          <div class="cc-tags"></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/lauderdale-by-the-sea.html" class="cc" data-county="Broward" data-city="lauderdale-by-the-sea">
+          <div class="cc-inner"><h4>Lauderdale-by-the-Sea</h4><div class="cc-nums">20 types &middot; 292 items</div>
+          <div class="cc-ph">954-640-4215</div><div class="cc-tags"><span class="t t-h">HVHZ</span><span class="t t-p">Portal</span></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/lighthouse-point.html" class="cc" data-county="Broward" data-city="lighthouse point">
+          <div class="cc-inner"><h4>Lighthouse Point</h4><div class="cc-nums">20 types &middot; 364 items</div>
+          <div class="cc-ph">954-943-6509</div><div class="cc-tags"><span class="t t-h">HVHZ</span></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/margate.html" class="cc" data-county="Broward" data-city="margate">
+          <div class="cc-inner"><h4>Margate</h4><div class="cc-nums">22 types &middot; 340 items</div>
+          <div class="cc-ph">954-970-3004</div><div class="cc-tags"><span class="t t-h">HVHZ</span><span class="t t-p">Portal</span></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/miramar.html" class="cc" data-county="Broward" data-city="miramar">
+          <div class="cc-inner"><h4>Miramar</h4><div class="cc-nums">22 types &middot; 300 items</div>
+          <div class="cc-tags"></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/oakland-park.html" class="cc" data-county="Broward" data-city="oakland park">
+          <div class="cc-inner"><h4>Oakland Park</h4><div class="cc-nums">19 types &middot; 305 items</div>
+          <div class="cc-ph">954-630-4350</div><div class="cc-tags"><span class="t t-h">HVHZ</span><span class="t t-p">Portal</span></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/pembroke-pines.html" class="cc" data-county="Broward" data-city="pembroke pines">
+          <div class="cc-inner"><h4>Pembroke Pines</h4><div class="cc-nums">20 types &middot; 337 items</div>
+          <div class="cc-tags"></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/plantation.html" class="cc" data-county="Broward" data-city="plantation">
+          <div class="cc-inner"><h4>Plantation</h4><div class="cc-nums">24 types &middot; 283 items</div>
+          <div class="cc-ph">954-797-2765</div><div class="cc-tags"><span class="t t-h">HVHZ</span><span class="t t-p">Portal</span></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/pompano-beach.html" class="cc" data-county="Broward" data-city="pompano beach">
+          <div class="cc-inner"><h4>Pompano Beach</h4><div class="cc-nums">25 types &middot; 400 items</div>
+          <div class="cc-ph">954-786-4669</div><div class="cc-tags"><span class="t t-h">HVHZ</span><span class="t t-p">Portal</span></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/sunrise.html" class="cc" data-county="Broward" data-city="sunrise">
+          <div class="cc-inner"><h4>Sunrise</h4><div class="cc-nums">17 types &middot; 261 items</div>
+          <div class="cc-ph">954-572-2354</div><div class="cc-tags"><span class="t t-h">HVHZ</span><span class="t t-p">Portal</span></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/tamarac.html" class="cc" data-county="Broward" data-city="tamarac">
+          <div class="cc-inner"><h4>Tamarac</h4><div class="cc-nums">21 types &middot; 321 items</div>
+          <div class="cc-ph">954-597-3420</div><div class="cc-tags"><span class="t t-h">HVHZ</span><span class="t t-p">Portal</span></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/davie.html" class="cc" data-county="Broward" data-city="town of davie">
+          <div class="cc-inner"><h4>Town of Davie</h4><div class="cc-nums">29 types &middot; 415 items</div>
+          <div class="cc-ph">954-797-1111</div><div class="cc-tags"><span class="t t-h">HVHZ</span></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a></div><div class="county-label" style="--cc:#a78bfa"><span class="cl-dot" style="background:#a78bfa"></span>Palm Beach County<span class="cl-count">6 cities</span></div><div class="cgrid"><a href="/cities/boca-raton.html" class="cc" data-county="Palm Beach" data-city="boca raton">
+          <div class="cc-inner"><h4>Boca Raton</h4><div class="cc-nums">22 types &middot; 293 items</div>
+          <div class="cc-ph">561-393-7930</div><div class="cc-tags"><span class="t t-p">Portal</span></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/boynton-beach.html" class="cc" data-county="Palm Beach" data-city="boynton beach">
+          <div class="cc-inner"><h4>Boynton Beach</h4><div class="cc-nums">18 types &middot; 225 items</div>
+          <div class="cc-tags"></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/delray-beach.html" class="cc" data-county="Palm Beach" data-city="delray beach">
+          <div class="cc-inner"><h4>Delray Beach</h4><div class="cc-nums">18 types &middot; 200 items</div>
+          <div class="cc-ph">561-243-7200</div><div class="cc-tags"><span class="t t-p">Portal</span></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/lake-worth-beach.html" class="cc" data-county="Palm Beach" data-city="lake worth beach">
+          <div class="cc-inner"><h4>Lake Worth Beach</h4><div class="cc-nums">16 types &middot; 277 items</div>
+          <div class="cc-tags"></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/wellington.html" class="cc" data-county="Palm Beach" data-city="wellington">
+          <div class="cc-inner"><h4>Wellington</h4><div class="cc-nums">20 types &middot; 328 items</div>
+          <div class="cc-tags"></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/west-palm-beach.html" class="cc" data-county="Palm Beach" data-city="west palm beach">
+          <div class="cc-inner"><h4>West Palm Beach</h4><div class="cc-nums">19 types &middot; 283 items</div>
+          <div class="cc-tags"></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a></div><div class="county-label" style="--cc:#f59e0b"><span class="cl-dot" style="background:#f59e0b"></span>Miami-Dade County<span class="cl-count">7 cities</span></div><div class="cgrid"><a href="/cities/hialeah.html" class="cc" data-county="Miami-Dade" data-city="hialeah">
+          <div class="cc-inner"><h4>Hialeah</h4><div class="cc-nums">20 types &middot; 212 items</div>
+          <div class="cc-ph">305-883-5825</div><div class="cc-tags"><span class="t t-h">HVHZ</span><span class="t t-p">Portal</span></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/homestead.html" class="cc" data-county="Miami-Dade" data-city="homestead">
+          <div class="cc-inner"><h4>Homestead</h4><div class="cc-nums">16 types &middot; 294 items</div>
+          <div class="cc-ph">(305) 224-4500</div><div class="cc-tags"><span class="t t-h">HVHZ</span><span class="t t-p">Portal</span></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/kendall.html" class="cc" data-county="Miami-Dade" data-city="kendall (unincorporated miami-dade)">
+          <div class="cc-inner"><h4>Kendall (Unincorporated Miami-Dade)</h4><div class="cc-nums">20 types &middot; 311 items</div>
+          <div class="cc-ph">786-315-2100</div><div class="cc-tags"><span class="t t-h">HVHZ</span><span class="t t-p">Portal</span></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/miami.html" class="cc" data-county="Miami-Dade" data-city="miami">
+          <div class="cc-inner"><h4>Miami</h4><div class="cc-nums">21 types &middot; 230 items</div>
+          <div class="cc-ph">305-416-1100</div><div class="cc-tags"><span class="t t-h">HVHZ</span><span class="t t-p">Portal</span></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/miami-beach.html" class="cc" data-county="Miami-Dade" data-city="miami beach">
+          <div class="cc-inner"><h4>Miami Beach</h4><div class="cc-nums">19 types &middot; 250 items</div>
+          <div class="cc-tags"></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/miami-gardens.html" class="cc" data-county="Miami-Dade" data-city="miami gardens">
+          <div class="cc-inner"><h4>Miami Gardens</h4><div class="cc-nums">19 types &middot; 201 items</div>
+          <div class="cc-ph">305-622-8027</div><div class="cc-tags"><span class="t t-h">HVHZ</span><span class="t t-p">Portal</span></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a><a href="/cities/north-miami.html" class="cc" data-county="Miami-Dade" data-city="north miami">
+          <div class="cc-inner"><h4>North Miami</h4><div class="cc-nums">19 types &middot; 365 items</div>
+          <div class="cc-tags"></div></div>
+          <svg class="cc-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a></div><div class="no-results" id="nr">No cities match your search.</div></div>
+
+  <div class="sdiv"></div>
+
+  <section class="stories">
+    <div class="stories-left"><h2>Real rejection stories.</h2><p>These actually happened to South Florida contractors. Our AI catches every one of these before you submit.</p></div>
+    <div class="stories-right"><div class="st"><div class="st-city">Fort Lauderdale</div><p class="st-body">Insurance certificate said &#x27;City of Ft. Lauderdale&#x27; instead of &#x27;City of Fort Lauderdale.&#x27; Rejected. Two weeks lost.</p><p class="st-lesson">Cert holder wording must be letter-perfect.</p></div><div class="st"><div class="st-city">Weston</div><p class="st-body">HVAC contractor used the standard $2,500 NOC threshold. Weston&#x27;s A/C threshold is actually $15,000. Unnecessary filing, wasted day.</p><p class="st-lesson">NOC thresholds vary by city AND permit type.</p></div><div class="st"><div class="st-city">Davie</div><p class="st-body">Roofer submitted during Wednesday walk-through. Rejected on first review. Walk-throughs are one-shot — had to resubmit through regular review. Three weeks added.</p><p class="st-lesson">Walk-through = one chance. Use regular review unless your package is bulletproof.</p></div></div>
+  </section>
+
+  <section class="cta-end">
+    <h2>Upload your docs.<br><em>Know in seconds.</em></h2>
+    <p>AI analysis against every city-specific requirement.</p>
+    <a href="https://flopermit.us" class="hero-cta">Start Free Analysis &rarr;</a>
+  </section>
+
+  <footer><span>&copy; 2026 Flo Permit</span><div><a href="https://flopermit.us">Home</a><a href="/cities/index.html">Cities</a><a href="https://flopermit.us">Privacy</a><a href="https://flopermit.us">Terms</a></div></footer>
+
+  <div class="map-tooltip" id="tip"></div>
+  <script>
+    let ac='all';
+    function setC(c,b){ac=c;document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));b.classList.add('active');filter()}
+    function filter(){
+      const q=document.getElementById('search').value.toLowerCase();let v=0;
+      document.querySelectorAll('.cc').forEach(c=>{const s=(!q||c.dataset.city.includes(q))&&(ac==='all'||c.dataset.county===ac);c.classList.toggle('hidden',!s);if(s)v++});
+      document.querySelectorAll('.county-label').forEach(h=>{h.style.display=(ac==='all'||h.textContent.includes(ac))?'':'none'});
+      document.querySelectorAll('.city-dot').forEach(d=>{const s=(!q||(d.dataset.city||'').includes(q))&&(ac==='all'||(d.dataset.county||'')===ac);d.style.opacity=s?'1':'.05'});
+      document.getElementById('nr').style.display=v===0?'block':'none';
+    }
+    const tip=document.getElementById('tip');
+    const cd={"pompano-beach":{"n":"Pompano Beach","t":25,"i":400,"g":29},"plantation":{"n":"Plantation","t":24,"i":283,"g":49},"hialeah":{"n":"Hialeah","t":20,"i":212,"g":40},"oakland-park":{"n":"Oakland Park","t":19,"i":305,"g":30},"davie":{"n":"Town of Davie","t":29,"i":415,"g":14},"coconut-creek":{"n":"Coconut Creek","t":25,"i":215,"g":18},"deerfield-beach":{"n":"Deerfield Beach","t":21,"i":300,"g":22},"lauderdale-by-the-sea":{"n":"Lauderdale-by-the-Sea","t":20,"i":292,"g":32},"weston":{"n":"City of Weston","t":20,"i":255,"g":32},"miramar":{"n":"Miramar","t":22,"i":300,"g":26},"hollywood":{"n":"Hollywood","t":21,"i":284,"g":60},"sunrise":{"n":"Sunrise","t":17,"i":261,"g":24},"fort-lauderdale":{"n":"Fort Lauderdale","t":23,"i":333,"g":36},"boca-raton":{"n":"Boca Raton","t":22,"i":293,"g":35},"boynton-beach":{"n":"Boynton Beach","t":18,"i":225,"g":55},"delray-beach":{"n":"Delray Beach","t":18,"i":200,"g":53},"pembroke-pines":{"n":"Pembroke Pines","t":20,"i":337,"g":32},"west-palm-beach":{"n":"West Palm Beach","t":19,"i":283,"g":44},"margate":{"n":"Margate","t":22,"i":340,"g":41},"tamarac":{"n":"Tamarac","t":21,"i":321,"g":14},"wellington":{"n":"Wellington","t":20,"i":328,"g":40},"lake-worth-beach":{"n":"Lake Worth Beach","t":16,"i":277,"g":25},"miami-beach":{"n":"Miami Beach","t":19,"i":250,"g":17},"miami-gardens":{"n":"Miami Gardens","t":19,"i":201,"g":36},"homestead":{"n":"Homestead","t":16,"i":294,"g":55},"kendall":{"n":"Kendall (Unincorporated Miami-Dade)","t":20,"i":311,"g":41},"north-miami":{"n":"North Miami","t":19,"i":365,"g":57},"miami":{"n":"Miami","t":21,"i":230,"g":58},"coral-springs":{"n":"Coral Springs","t":22,"i":313,"g":45},"lighthouse-point":{"n":"Lighthouse Point","t":20,"i":364,"g":39}};
+    document.querySelectorAll('.city-dot').forEach(d=>{
+      d.addEventListener('mouseenter',ev=>{const c=cd[d.dataset.slug];if(!c)return;tip.innerHTML='<h5>'+c.n+'</h5><span>'+c.t+' types &middot; '+c.i+' items &middot; '+c.g+' gotchas</span>';tip.style.opacity='1'});
+      d.addEventListener('mousemove',ev=>{tip.style.left=ev.clientX+12+'px';tip.style.top=ev.clientY-10+'px'});
+      d.addEventListener('mouseleave',()=>{tip.style.opacity='0'});
+      d.addEventListener('click',()=>{window.location.href='/cities/'+d.dataset.slug+'.html'});
+    });
+  </script>
+</body>
+</html>
