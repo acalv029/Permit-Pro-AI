@@ -120,287 +120,297 @@
       <a href="https://flopermit.us" class="hero-cta">Check Your Package &rarr;</a>
     </div>
     <div class="hero-right">
-      <div class="map-frame"><svg viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg">
+      <div class="map-frame"><svg viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
   <defs>
-    <linearGradient id="ocean" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#0c4a6e" stop-opacity=".08"/>
-      <stop offset="100%" stop-color="#0c4a6e" stop-opacity=".2"/>
+    <linearGradient id="oceanG" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0c4a6e" stop-opacity=".06"/>
+      <stop offset="100%" stop-color="#0c4a6e" stop-opacity=".25"/>
     </linearGradient>
-    <linearGradient id="everg" x1="1" y1="0" x2="0" y2="0">
+    <linearGradient id="evergG" x1="1" y1="0" x2="0" y2="0">
       <stop offset="0%" stop-color="transparent"/>
-      <stop offset="100%" stop-color="#064e3b" stop-opacity=".06"/>
+      <stop offset="100%" stop-color="#064e3b" stop-opacity=".04"/>
     </linearGradient>
-    <clipPath id="landClip">
-      <path d="M320,19 Q333,38 340,58 Q346,85 347,113 Q346,130 340,148 Q343,165 340,183 Q336,196 327,210 Q326,229 320,249 Q323,256 320,264 Q319,274 313,284 Q313,299 307,315 Q306,328 300,342 Q299,355 293,369 Q293,381 287,393 Q290,398 287,404 Q286,410 280,416 Q286,427 287,439 Q286,451 280,463 Q283,472 280,482 Q273,488 260,494 Q263,503 260,513 Q249,528 233,544 Q203,563 167,583 Q153,602 133,622 Q119,641 100,661 L0,700 L0,0 Z"/>
+    <clipPath id="land">
+      <path d="M326.7,11.7 Q332,18 333.3,23.3 Q335,27 333.3,31.1 Q335,39 333.3,46.7 Q339,52 340.0,58.3 Q342,64 340.0,70.0 Q342,78 340.0,85.6 Q342,93 340.0,101.1 Q344,107 343.3,112.8 Q344,119 340.0,124.4 Q342,130 340.0,136.1 Q342,142 340.0,147.8 Q342,156 340.0,163.3 Q342,169 340.0,175.0 Q342,179 340.0,182.8 Q339,191 333.3,198.3 Q332,204 326.7,210.0 Q329,216 326.7,221.7 Q325,229 320.0,237.2 Q322,243 320.0,248.9 Q322,257 320.0,264.4 Q319,272 313.3,280.0 Q312,286 306.7,291.7 Q309,298 306.7,303.3 Q305,309 300.0,315.0 Q302,321 300.0,326.7 Q302,332 300.0,338.3 Q299,344 293.3,350.0 Q295,354 293.3,357.8 Q292,364 286.7,369.4 Q289,375 286.7,381.1 Q289,385 286.7,388.9 Q289,395 286.7,400.6 Q289,404 286.7,408.3 Q289,412 286.7,416.1 Q289,420 286.7,423.9 Q289,430 286.7,435.6 Q285,439 280.0,443.3 Q282,447 280.0,451.1 Q282,455 280.0,458.9 Q282,463 280.0,466.7 Q282,469 280.0,470.6 Q282,474 280.0,478.3 Q279,480 273.3,482.2 Q275,484 273.3,486.1 Q272,490 266.7,493.9 Q265,498 260.0,501.7 Q262,508 260.0,513.3 Q259,517 253.3,521.1 Q245,529 233.3,536.7 Q222,544 206.7,552.2 Q195,560 180.0,567.8 Q169,576 153.3,583.3 Q142,591 126.7,598.9 Q122,607 113.3,614.4 Q109,622 100.0,630.0 Q92,638 80.0,645.6 Q75,653 66.7,661.1 L0,700 L0,0 L326.7,11.7 Z"/>
     </clipPath>
   </defs>
 
-  <!-- Ocean -->
-  <path d="M320,19 Q333,38 340,58 Q346,85 347,113 Q346,130 340,148 Q343,165 340,183 Q336,196 327,210 Q326,229 320,249 Q323,256 320,264 Q319,274 313,284 Q313,299 307,315 Q306,328 300,342 Q299,355 293,369 Q293,381 287,393 Q290,398 287,404 Q286,410 280,416 Q286,427 287,439 Q286,451 280,463 Q283,472 280,482 Q273,488 260,494 Q263,503 260,513 Q249,528 233,544 Q203,563 167,583 Q153,602 133,622 Q119,641 100,661 L400,700 L400,0 Z" fill="url(#ocean)"/>
+  <!-- Background -->
+  <rect width="400" height="700" fill="rgba(5,5,15,.6)"/>
 
-  <!-- Land area (clipped to coast) -->
-  <g clip-path="url(#landClip)">
-    <!-- Everglades fade -->
-    <rect x="0" y="0" width="400" height="700" fill="url(#everg)"/>
+  <!-- Ocean (everything east of coastline) -->
+  <path d="M326.7,11.7 Q332,18 333.3,23.3 Q335,27 333.3,31.1 Q335,39 333.3,46.7 Q339,52 340.0,58.3 Q342,64 340.0,70.0 Q342,78 340.0,85.6 Q342,93 340.0,101.1 Q344,107 343.3,112.8 Q344,119 340.0,124.4 Q342,130 340.0,136.1 Q342,142 340.0,147.8 Q342,156 340.0,163.3 Q342,169 340.0,175.0 Q342,179 340.0,182.8 Q339,191 333.3,198.3 Q332,204 326.7,210.0 Q329,216 326.7,221.7 Q325,229 320.0,237.2 Q322,243 320.0,248.9 Q322,257 320.0,264.4 Q319,272 313.3,280.0 Q312,286 306.7,291.7 Q309,298 306.7,303.3 Q305,309 300.0,315.0 Q302,321 300.0,326.7 Q302,332 300.0,338.3 Q299,344 293.3,350.0 Q295,354 293.3,357.8 Q292,364 286.7,369.4 Q289,375 286.7,381.1 Q289,385 286.7,388.9 Q289,395 286.7,400.6 Q289,404 286.7,408.3 Q289,412 286.7,416.1 Q289,420 286.7,423.9 Q289,430 286.7,435.6 Q285,439 280.0,443.3 Q282,447 280.0,451.1 Q282,455 280.0,458.9 Q282,463 280.0,466.7 Q282,469 280.0,470.6 Q282,474 280.0,478.3 Q279,480 273.3,482.2 Q275,484 273.3,486.1 Q272,490 266.7,493.9 Q265,498 260.0,501.7 Q262,508 260.0,513.3 Q259,517 253.3,521.1 Q245,529 233.3,536.7 Q222,544 206.7,552.2 Q195,560 180.0,567.8 Q169,576 153.3,583.3 Q142,591 126.7,598.9 Q122,607 113.3,614.4 Q109,622 100.0,630.0 Q92,638 80.0,645.6 Q75,653 66.7,661.1 L400,700 L400,0 L326.7,11.7 Z" fill="url(#oceanG)"/>
+
+  <!-- Biscayne Bay -->
+  <path d="M273.3,427.8 Q272,432 266.7,435.6 Q265,441 260.0,447.2 Q259,453 253.3,458.9 Q255,463 253.3,466.7 Q255,471 253.3,474.4 Q255,478 253.3,482.2 Q252,486 246.7,490.0 Q245,494 240.0,497.8 Q242,502 240.0,505.6 Q242,509 240.0,513.3 Q252,513 260.0,513.3 Q262,509 260.0,505.6 Q265,502 266.7,497.8 Q269,494 266.7,490.0 Q272,486 273.3,482.2 Q279,478 280.0,474.4 Q282,471 280.0,466.7 Q282,463 280.0,458.9 Q282,455 280.0,451.1 Q282,447 280.0,443.3 Q285,439 286.7,435.6 Q289,432 286.7,427.8 Z" fill="rgba(14,165,233,.08)" stroke="rgba(14,165,233,.1)" stroke-width=".5"/>
+
+  <!-- Land area -->
+  <g clip-path="url(#land)">
+    <!-- Everglades gradient -->
+    <rect x="0" y="0" width="400" height="700" fill="url(#evergG)"/>
 
     <!-- County fills -->
-    <rect x="0" y="0" width="400" height="264" fill="rgba(167,139,250,.03)"/>
-    <rect x="0" y="264" width="400" height="140" fill="rgba(34,211,238,.03)"/>
-    <rect x="0" y="404" width="400" height="296" fill="rgba(245,158,11,.03)"/>
+    <rect x="0" y="0" width="400" height="264.4" fill="rgba(167,139,250,.025)"/>
+    <rect x="0" y="264.4" width="400" height="136.20000000000005" fill="rgba(34,211,238,.025)"/>
+    <rect x="0" y="400.6" width="400" height="299.4" fill="rgba(245,158,11,.025)"/>
 
-    <!-- County border lines -->
-    <line x1="0" y1="264" x2="320" y2="264" stroke="rgba(100,116,139,.15)" stroke-width="1" stroke-dasharray="6,4"/>
-    <line x1="0" y1="404" x2="287" y2="404" stroke="rgba(100,116,139,.15)" stroke-width="1" stroke-dasharray="6,4"/>
-
-    <!-- County labels -->
-    <text x="60" y="152" fill="rgba(167,139,250,.1)" font-size="10" font-weight="800" font-family="Montserrat" letter-spacing="3" transform="rotate(-90,60,152)">PALM BEACH</text>
-    <text x="50" y="344" fill="rgba(34,211,238,.1)" font-size="10" font-weight="800" font-family="Montserrat" letter-spacing="3" transform="rotate(-90,50,344)">BROWARD</text>
-    <text x="40" y="527" fill="rgba(245,158,11,.1)" font-size="10" font-weight="800" font-family="Montserrat" letter-spacing="3" transform="rotate(-90,40,527)">MIAMI-DADE</text>
+    <!-- Grid lines (subtle lat/lng) -->
+    <line x1="0" y1="194.4" x2="400" y2="194.4" stroke="rgba(100,116,139,.04)" stroke-width=".5"/>
+    <line x1="0" y1="388.9" x2="400" y2="388.9" stroke="rgba(100,116,139,.04)" stroke-width=".5"/>
+    <line x1="0" y1="583.3" x2="400" y2="583.3" stroke="rgba(100,116,139,.04)" stroke-width=".5"/>
+    <line x1="166.7" y1="0" x2="166.7" y2="700" stroke="rgba(100,116,139,.04)" stroke-width=".5"/>
+    <line x1="266.7" y1="0" x2="266.7" y2="700" stroke="rgba(100,116,139,.04)" stroke-width=".5"/>
 
     <!-- I-95 -->
-    <path d="M300,31 L300,117 L307,194 L300,264 L273,350 L253,404 L240,467 L220,544 L167,622" fill="none" stroke="rgba(100,116,139,.08)" stroke-width="1.5" stroke-dasharray="4,6"/>
-    <text x="306" y="156" fill="rgba(100,116,139,.08)" font-size="7" font-weight="700" font-family="Montserrat">I-95</text>
+    <path d="M300.0,19.4 L313.3,77.8 L320.0,155.6 L306.7,233.3 L306.7,264.4 L293.3,311.1 L280.0,350.0 L273.3,400.6 L260.0,447.2 L240.0,486.1 L193.3,544.4 L133.3,602.8" fill="none" stroke="rgba(100,116,139,.07)" stroke-width="1.5" stroke-dasharray="3,5"/>
+    <text x="318.3" y="136.1" fill="rgba(100,116,139,.1)" font-size="6" font-weight="800" font-family="Montserrat" letter-spacing="1">I-95</text>
 
-    <!-- Turnpike -->
-    <path d="M247,39 L253,117 L260,194 L253,264 L220,350 L200,404 L180,467 L147,544" fill="none" stroke="rgba(100,116,139,.05)" stroke-width="1" stroke-dasharray="3,5"/>
+    <!-- County border lines (clean horizontal dashes) -->
+    <line x1="0" y1="264.4" x2="320.0" y2="264.4" stroke="rgba(148,163,184,.12)" stroke-width="1" stroke-dasharray="6,3"/>
+    <line x1="0" y1="400.6" x2="286.7" y2="400.6" stroke="rgba(148,163,184,.12)" stroke-width="1" stroke-dasharray="6,3"/>
+
+    <!-- County labels (rotated, very subtle) -->
+    <text x="25" y="132.2" fill="rgba(167,139,250,.08)" font-size="9" font-weight="900" font-family="Montserrat" letter-spacing="4" transform="rotate(-90,25,132.2)">PALM BEACH</text>
+    <text x="20" y="337.5" fill="rgba(34,211,238,.08)" font-size="9" font-weight="900" font-family="Montserrat" letter-spacing="4" transform="rotate(-90,20,337.5)">BROWARD</text>
+    <text x="20" y="510.3" fill="rgba(245,158,11,.08)" font-size="9" font-weight="900" font-family="Montserrat" letter-spacing="4" transform="rotate(-90,20,510.3)">MIAMI-DADE</text>
 
     <!-- City dots -->
     <g class="city-dot" data-county="Broward" data-city="pompano beach" data-slug="pompano-beach">
-      <circle cx="287" cy="296" r="10" fill="#22d3ee" opacity=".05"/>
-      <circle cx="287" cy="296" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
-      <circle cx="287" cy="296" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+      <circle cx="286.7" cy="295.6" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="286.7" cy="295.6" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="286.7" cy="295.6" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Broward" data-city="plantation" data-slug="plantation">
-      <circle cx="200" cy="342" r="10" fill="#22d3ee" opacity=".05"/>
-      <circle cx="200" cy="342" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
-      <circle cx="200" cy="342" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+      <circle cx="200.0" cy="342.2" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="200.0" cy="342.2" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="200.0" cy="342.2" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Miami-Dade" data-city="hialeah" data-slug="hialeah">
-      <circle cx="180" cy="443" r="10" fill="#f59e0b" opacity=".05"/>
-      <circle cx="180" cy="443" r="4.5" fill="#f59e0b" opacity=".85" class="dot-core"/>
-      <circle cx="180" cy="443" r="4.5" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".3">
+      <circle cx="180.0" cy="443.3" r="10" fill="#f59e0b" opacity=".05"/>
+      <circle cx="180.0" cy="443.3" r="4.5" fill="#f59e0b" opacity=".85" class="dot-core"/>
+      <circle cx="180.0" cy="443.3" r="4.5" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Broward" data-city="oakland park" data-slug="oakland-park">
-      <circle cx="280" cy="323" r="10" fill="#22d3ee" opacity=".05"/>
-      <circle cx="280" cy="323" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
-      <circle cx="280" cy="323" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+      <circle cx="280.0" cy="322.8" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="280.0" cy="322.8" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="280.0" cy="322.8" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Broward" data-city="town of davie" data-slug="davie">
-      <circle cx="200" cy="362" r="10" fill="#22d3ee" opacity=".05"/>
-      <circle cx="200" cy="362" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
-      <circle cx="200" cy="362" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+      <circle cx="200.0" cy="361.7" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="200.0" cy="361.7" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="200.0" cy="361.7" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Broward" data-city="coconut creek" data-slug="coconut-creek">
-      <circle cx="247" cy="292" r="10" fill="#22d3ee" opacity=".05"/>
-      <circle cx="247" cy="292" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
-      <circle cx="247" cy="292" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+      <circle cx="246.7" cy="291.7" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="246.7" cy="291.7" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="246.7" cy="291.7" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Broward" data-city="deerfield beach" data-slug="deerfield-beach">
-      <circle cx="300" cy="264" r="10" fill="#22d3ee" opacity=".05"/>
-      <circle cx="300" cy="264" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
-      <circle cx="300" cy="264" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+      <circle cx="300.0" cy="264.4" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="300.0" cy="264.4" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="300.0" cy="264.4" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Broward" data-city="lauderdale-by-the-sea" data-slug="lauderdale-by-the-sea">
-      <circle cx="300" cy="315" r="10" fill="#22d3ee" opacity=".05"/>
-      <circle cx="300" cy="315" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
-      <circle cx="300" cy="315" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+      <circle cx="300.0" cy="315.0" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="300.0" cy="315.0" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="300.0" cy="315.0" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Broward" data-city="city of weston" data-slug="weston">
-      <circle cx="100" cy="350" r="10" fill="#22d3ee" opacity=".05"/>
-      <circle cx="100" cy="350" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
-      <circle cx="100" cy="350" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+      <circle cx="100.0" cy="350.0" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="100.0" cy="350.0" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="100.0" cy="350.0" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Broward" data-city="miramar" data-slug="miramar">
-      <circle cx="167" cy="397" r="10" fill="#22d3ee" opacity=".05"/>
-      <circle cx="167" cy="397" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
-      <circle cx="167" cy="397" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+      <circle cx="166.7" cy="396.7" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="166.7" cy="396.7" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="166.7" cy="396.7" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Broward" data-city="hollywood" data-slug="hollywood">
-      <circle cx="267" cy="385" r="10" fill="#22d3ee" opacity=".05"/>
-      <circle cx="267" cy="385" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
-      <circle cx="267" cy="385" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+      <circle cx="266.7" cy="385.0" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="266.7" cy="385.0" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="266.7" cy="385.0" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Broward" data-city="sunrise" data-slug="sunrise">
-      <circle cx="167" cy="331" r="10" fill="#22d3ee" opacity=".05"/>
-      <circle cx="167" cy="331" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
-      <circle cx="167" cy="331" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+      <circle cx="166.7" cy="330.6" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="166.7" cy="330.6" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="166.7" cy="330.6" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Broward" data-city="fort lauderdale" data-slug="fort-lauderdale">
-      <circle cx="273" cy="342" r="10" fill="#22d3ee" opacity=".05"/>
-      <circle cx="273" cy="342" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
-      <circle cx="273" cy="342" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+      <circle cx="273.3" cy="342.2" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="273.3" cy="342.2" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="273.3" cy="342.2" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Palm Beach" data-city="boca raton" data-slug="boca-raton">
-      <circle cx="300" cy="249" r="10" fill="#a78bfa" opacity=".05"/>
-      <circle cx="300" cy="249" r="4.5" fill="#a78bfa" opacity=".85" class="dot-core"/>
-      <circle cx="300" cy="249" r="4.5" fill="none" stroke="#a78bfa" stroke-width="1" opacity=".3">
+      <circle cx="300.0" cy="248.9" r="10" fill="#a78bfa" opacity=".05"/>
+      <circle cx="300.0" cy="248.9" r="4.5" fill="#a78bfa" opacity=".85" class="dot-core"/>
+      <circle cx="300.0" cy="248.9" r="4.5" fill="none" stroke="#a78bfa" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Palm Beach" data-city="boynton beach" data-slug="boynton-beach">
-      <circle cx="320" cy="183" r="10" fill="#a78bfa" opacity=".05"/>
-      <circle cx="320" cy="183" r="4.5" fill="#a78bfa" opacity=".85" class="dot-core"/>
-      <circle cx="320" cy="183" r="4.5" fill="none" stroke="#a78bfa" stroke-width="1" opacity=".3">
+      <circle cx="320.0" cy="182.8" r="10" fill="#a78bfa" opacity=".05"/>
+      <circle cx="320.0" cy="182.8" r="4.5" fill="#a78bfa" opacity=".85" class="dot-core"/>
+      <circle cx="320.0" cy="182.8" r="4.5" fill="none" stroke="#a78bfa" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Palm Beach" data-city="delray beach" data-slug="delray-beach">
-      <circle cx="320" cy="210" r="10" fill="#a78bfa" opacity=".05"/>
-      <circle cx="320" cy="210" r="4.5" fill="#a78bfa" opacity=".85" class="dot-core"/>
-      <circle cx="320" cy="210" r="4.5" fill="none" stroke="#a78bfa" stroke-width="1" opacity=".3">
+      <circle cx="320.0" cy="210.0" r="10" fill="#a78bfa" opacity=".05"/>
+      <circle cx="320.0" cy="210.0" r="4.5" fill="#a78bfa" opacity=".85" class="dot-core"/>
+      <circle cx="320.0" cy="210.0" r="4.5" fill="none" stroke="#a78bfa" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Broward" data-city="pembroke pines" data-slug="pembroke-pines">
-      <circle cx="160" cy="389" r="10" fill="#22d3ee" opacity=".05"/>
-      <circle cx="160" cy="389" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
-      <circle cx="160" cy="389" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+      <circle cx="160.0" cy="388.9" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="160.0" cy="388.9" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="160.0" cy="388.9" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Palm Beach" data-city="west palm beach" data-slug="west-palm-beach">
-      <circle cx="333" cy="113" r="10" fill="#a78bfa" opacity=".05"/>
-      <circle cx="333" cy="113" r="4.5" fill="#a78bfa" opacity=".85" class="dot-core"/>
-      <circle cx="333" cy="113" r="4.5" fill="none" stroke="#a78bfa" stroke-width="1" opacity=".3">
+      <circle cx="333.3" cy="112.8" r="10" fill="#a78bfa" opacity=".05"/>
+      <circle cx="333.3" cy="112.8" r="4.5" fill="#a78bfa" opacity=".85" class="dot-core"/>
+      <circle cx="333.3" cy="112.8" r="4.5" fill="none" stroke="#a78bfa" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Broward" data-city="margate" data-slug="margate">
-      <circle cx="227" cy="296" r="10" fill="#22d3ee" opacity=".05"/>
-      <circle cx="227" cy="296" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
-      <circle cx="227" cy="296" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+      <circle cx="226.7" cy="295.6" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="226.7" cy="295.6" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="226.7" cy="295.6" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Broward" data-city="tamarac" data-slug="tamarac">
-      <circle cx="200" cy="311" r="10" fill="#22d3ee" opacity=".05"/>
-      <circle cx="200" cy="311" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
-      <circle cx="200" cy="311" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+      <circle cx="200.0" cy="311.1" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="200.0" cy="311.1" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="200.0" cy="311.1" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Palm Beach" data-city="wellington" data-slug="wellington">
-      <circle cx="187" cy="132" r="10" fill="#a78bfa" opacity=".05"/>
-      <circle cx="187" cy="132" r="4.5" fill="#a78bfa" opacity=".85" class="dot-core"/>
-      <circle cx="187" cy="132" r="4.5" fill="none" stroke="#a78bfa" stroke-width="1" opacity=".3">
+      <circle cx="186.7" cy="132.2" r="10" fill="#a78bfa" opacity=".05"/>
+      <circle cx="186.7" cy="132.2" r="4.5" fill="#a78bfa" opacity=".85" class="dot-core"/>
+      <circle cx="186.7" cy="132.2" r="4.5" fill="none" stroke="#a78bfa" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Palm Beach" data-city="lake worth beach" data-slug="lake-worth-beach">
-      <circle cx="327" cy="148" r="10" fill="#a78bfa" opacity=".05"/>
-      <circle cx="327" cy="148" r="4.5" fill="#a78bfa" opacity=".85" class="dot-core"/>
-      <circle cx="327" cy="148" r="4.5" fill="none" stroke="#a78bfa" stroke-width="1" opacity=".3">
+      <circle cx="326.7" cy="147.8" r="10" fill="#a78bfa" opacity=".05"/>
+      <circle cx="326.7" cy="147.8" r="4.5" fill="#a78bfa" opacity=".85" class="dot-core"/>
+      <circle cx="326.7" cy="147.8" r="4.5" fill="none" stroke="#a78bfa" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Miami-Dade" data-city="miami beach" data-slug="miami-beach">
-      <circle cx="280" cy="471" r="10" fill="#f59e0b" opacity=".05"/>
-      <circle cx="280" cy="471" r="4.5" fill="#f59e0b" opacity=".85" class="dot-core"/>
-      <circle cx="280" cy="471" r="4.5" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".3">
+      <circle cx="280.0" cy="470.6" r="10" fill="#f59e0b" opacity=".05"/>
+      <circle cx="280.0" cy="470.6" r="4.5" fill="#f59e0b" opacity=".85" class="dot-core"/>
+      <circle cx="280.0" cy="470.6" r="4.5" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Miami-Dade" data-city="miami gardens" data-slug="miami-gardens">
-      <circle cx="207" cy="412" r="10" fill="#f59e0b" opacity=".05"/>
-      <circle cx="207" cy="412" r="4.5" fill="#f59e0b" opacity=".85" class="dot-core"/>
-      <circle cx="207" cy="412" r="4.5" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".3">
+      <circle cx="206.7" cy="412.2" r="10" fill="#f59e0b" opacity=".05"/>
+      <circle cx="206.7" cy="412.2" r="4.5" fill="#f59e0b" opacity=".85" class="dot-core"/>
+      <circle cx="206.7" cy="412.2" r="4.5" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Miami-Dade" data-city="homestead" data-slug="homestead">
-      <circle cx="47" cy="595" r="10" fill="#f59e0b" opacity=".05"/>
-      <circle cx="47" cy="595" r="4.5" fill="#f59e0b" opacity=".85" class="dot-core"/>
-      <circle cx="47" cy="595" r="4.5" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".3">
+      <circle cx="46.7" cy="595.0" r="10" fill="#f59e0b" opacity=".05"/>
+      <circle cx="46.7" cy="595.0" r="4.5" fill="#f59e0b" opacity=".85" class="dot-core"/>
+      <circle cx="46.7" cy="595.0" r="4.5" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Miami-Dade" data-city="kendall (unincorporated miami-dade)" data-slug="kendall">
-      <circle cx="133" cy="513" r="10" fill="#f59e0b" opacity=".05"/>
-      <circle cx="133" cy="513" r="4.5" fill="#f59e0b" opacity=".85" class="dot-core"/>
-      <circle cx="133" cy="513" r="4.5" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".3">
+      <circle cx="133.3" cy="513.3" r="10" fill="#f59e0b" opacity=".05"/>
+      <circle cx="133.3" cy="513.3" r="4.5" fill="#f59e0b" opacity=".85" class="dot-core"/>
+      <circle cx="133.3" cy="513.3" r="4.5" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Miami-Dade" data-city="north miami" data-slug="north-miami">
-      <circle cx="240" cy="432" r="10" fill="#f59e0b" opacity=".05"/>
-      <circle cx="240" cy="432" r="4.5" fill="#f59e0b" opacity=".85" class="dot-core"/>
-      <circle cx="240" cy="432" r="4.5" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".3">
+      <circle cx="240.0" cy="431.7" r="10" fill="#f59e0b" opacity=".05"/>
+      <circle cx="240.0" cy="431.7" r="4.5" fill="#f59e0b" opacity=".85" class="dot-core"/>
+      <circle cx="240.0" cy="431.7" r="4.5" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Miami-Dade" data-city="miami" data-slug="miami">
-      <circle cx="240" cy="482" r="10" fill="#f59e0b" opacity=".05"/>
-      <circle cx="240" cy="482" r="4.5" fill="#f59e0b" opacity=".85" class="dot-core"/>
-      <circle cx="240" cy="482" r="4.5" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".3">
+      <circle cx="240.0" cy="482.2" r="10" fill="#f59e0b" opacity=".05"/>
+      <circle cx="240.0" cy="482.2" r="4.5" fill="#f59e0b" opacity=".85" class="dot-core"/>
+      <circle cx="240.0" cy="482.2" r="4.5" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Broward" data-city="coral springs" data-slug="coral-springs">
-      <circle cx="187" cy="284" r="10" fill="#22d3ee" opacity=".05"/>
-      <circle cx="187" cy="284" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
-      <circle cx="187" cy="284" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+      <circle cx="186.7" cy="283.9" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="186.7" cy="283.9" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="186.7" cy="283.9" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
     </g>
 <g class="city-dot" data-county="Broward" data-city="lighthouse point" data-slug="lighthouse-point">
-      <circle cx="307" cy="280" r="10" fill="#22d3ee" opacity=".05"/>
-      <circle cx="307" cy="280" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
-      <circle cx="307" cy="280" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
+      <circle cx="306.7" cy="280.0" r="10" fill="#22d3ee" opacity=".05"/>
+      <circle cx="306.7" cy="280.0" r="4.5" fill="#22d3ee" opacity=".85" class="dot-core"/>
+      <circle cx="306.7" cy="280.0" r="4.5" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".3">
         <animate attributeName="r" values="4.5;10;4.5" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values=".3;0;.3" dur="3s" repeatCount="indefinite"/>
       </circle>
@@ -408,18 +418,32 @@
 
   </g>
 
-  <!-- Coastline stroke -->
-  <path d="M320,19 Q333,38 340,58 Q346,85 347,113 Q346,130 340,148 Q343,165 340,183 Q336,196 327,210 Q326,229 320,249 Q323,256 320,264 Q319,274 313,284 Q313,299 307,315 Q306,328 300,342 Q299,355 293,369 Q293,381 287,393 Q290,398 287,404 Q286,410 280,416 Q286,427 287,439 Q286,451 280,463 Q283,472 280,482 Q273,488 260,494 Q263,503 260,513 Q249,528 233,544 Q203,563 167,583 Q153,602 133,622 Q119,641 100,661" fill="none" stroke="rgba(14,165,233,.2)" stroke-width="1.5"/>
+  <!-- Coastline stroke (on top of everything) -->
+  <path d="M326.7,11.7 Q332,18 333.3,23.3 Q335,27 333.3,31.1 Q335,39 333.3,46.7 Q339,52 340.0,58.3 Q342,64 340.0,70.0 Q342,78 340.0,85.6 Q342,93 340.0,101.1 Q344,107 343.3,112.8 Q344,119 340.0,124.4 Q342,130 340.0,136.1 Q342,142 340.0,147.8 Q342,156 340.0,163.3 Q342,169 340.0,175.0 Q342,179 340.0,182.8 Q339,191 333.3,198.3 Q332,204 326.7,210.0 Q329,216 326.7,221.7 Q325,229 320.0,237.2 Q322,243 320.0,248.9 Q322,257 320.0,264.4 Q319,272 313.3,280.0 Q312,286 306.7,291.7 Q309,298 306.7,303.3 Q305,309 300.0,315.0 Q302,321 300.0,326.7 Q302,332 300.0,338.3 Q299,344 293.3,350.0 Q295,354 293.3,357.8 Q292,364 286.7,369.4 Q289,375 286.7,381.1 Q289,385 286.7,388.9 Q289,395 286.7,400.6 Q289,404 286.7,408.3 Q289,412 286.7,416.1 Q289,420 286.7,423.9 Q289,430 286.7,435.6 Q285,439 280.0,443.3 Q282,447 280.0,451.1 Q282,455 280.0,458.9 Q282,463 280.0,466.7 Q282,469 280.0,470.6 Q282,474 280.0,478.3 Q279,480 273.3,482.2 Q275,484 273.3,486.1 Q272,490 266.7,493.9 Q265,498 260.0,501.7 Q262,508 260.0,513.3 Q259,517 253.3,521.1 Q245,529 233.3,536.7 Q222,544 206.7,552.2 Q195,560 180.0,567.8 Q169,576 153.3,583.3 Q142,591 126.7,598.9 Q122,607 113.3,614.4 Q109,622 100.0,630.0 Q92,638 80.0,645.6 Q75,653 66.7,661.1" fill="none" stroke="rgba(14,165,233,.2)" stroke-width="1.5"/>
+
+  <!-- Miami Beach barrier island hint -->
+  <path d="M286.7,435.6 Q289,443 286.7,451.1 Q285,459 280.0,466.7 Q282,472 280.0,478.3 Q279,480 273.3,482.2" fill="none" stroke="rgba(14,165,233,.12)" stroke-width="3" stroke-linecap="round"/>
 
   <!-- Ocean label -->
-  <text x="370" y="350" fill="rgba(14,165,233,.08)" font-size="9" font-weight="700" font-family="Montserrat" letter-spacing="2" transform="rotate(90,370,350)">ATLANTIC OCEAN</text>
+  <text x="370" y="300" fill="rgba(14,165,233,.06)" font-size="8" font-weight="800" font-family="Montserrat" letter-spacing="3" transform="rotate(90,370,300)">ATLANTIC OCEAN</text>
+
+  <!-- Biscayne Bay label -->
+  <text x="263.3" y="474.4" fill="rgba(14,165,233,.08)" font-size="5" font-weight="700" font-family="Montserrat" letter-spacing="1" text-anchor="middle">BISCAYNE BAY</text>
 
   <!-- Compass -->
-  <g transform="translate(30,30)" opacity=".15">
-    <circle cx="0" cy="0" r="12" fill="none" stroke="#64748b" stroke-width="1"/>
-    <text x="0" y="-16" fill="#64748b" font-size="7" font-weight="800" text-anchor="middle" font-family="Montserrat">N</text>
-    <line x1="0" y1="-8" x2="0" y2="8" stroke="#64748b" stroke-width="1"/>
-    <line x1="-8" y1="0" x2="8" y2="0" stroke="#64748b" stroke-width="1"/>
+  <g transform="translate(20,22)" opacity=".12">
+    <circle cx="0" cy="0" r="10" fill="none" stroke="#94a3b8" stroke-width=".5"/>
+    <text x="0" y="-13" fill="#94a3b8" font-size="6" font-weight="900" text-anchor="middle" font-family="Montserrat">N</text>
+    <line x1="0" y1="-7" x2="0" y2="7" stroke="#94a3b8" stroke-width=".5"/>
+    <line x1="-7" y1="0" x2="7" y2="0" stroke="#94a3b8" stroke-width=".5"/>
+  </g>
+
+  <!-- Scale bar -->
+  <g transform="translate(15,680)" opacity=".1">
+    <line x1="0" y1="0" x2="50" y2="0" stroke="#94a3b8" stroke-width="1"/>
+    <line x1="0" y1="-3" x2="0" y2="3" stroke="#94a3b8" stroke-width="1"/>
+    <line x1="50" y1="-3" x2="50" y2="3" stroke="#94a3b8" stroke-width="1"/>
+    <text x="25" y="10" fill="#94a3b8" font-size="5" font-weight="600" text-anchor="middle" font-family="Montserrat">~10 mi</text>
   </g>
 </svg></div>
       <div class="map-legend">
