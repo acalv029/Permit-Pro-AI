@@ -841,7 +841,7 @@ export default function App() {
               { q: "What file types can I upload?", a: "We accept PDF, PNG, JPG, and JPEG files. You can upload up to 50 files at once, with a maximum total size of 200MB." },
               { q: "Is my data secure?", a: "Yes! We use industry-standard encryption, secure password hashing, and your documents are processed securely. We never share your data with third parties." },
               { q: "Does this guarantee my permit will be approved?", a: "No. Flo Permit is an informational tool only. We help identify potential issues, but you should always verify requirements with your local permitting office." },
-              { q: "Is there a free tier?", a: "Yes! Free accounts get 1 analysis per month. Need more? Contact us about Pro plans." },
+              { q: "Is there a free tier?", a: "Yes! Free accounts get 1 analysis per month. Pro is $49/month for 20 analyses (~$2.50 each), and GC/Expediter is $149/month unlimited. Compare that to $300-500 per expediter visit." },
               { q: "How accurate is the AI analysis?", a: "Our AI is trained on South Florida permit requirements and is highly accurate. However, requirements can change, so always verify with your local office." },
               { q: "Can I save my analysis history?", a: "Yes! Create a free account to save all your analyses and access them anytime." },
               { q: "How do I contact support?", a: "Email us at support@flopermit.com or use the Contact page. We typically respond within 24 hours." },
@@ -1158,8 +1158,8 @@ export default function App() {
       <div className="relative z-10 pt-24 px-6 pb-12 flex-grow">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-4">Simple, Transparent Pricing</h1>
-            <p className="text-gray-400 text-lg">Choose the plan that fits your needs</p>
+            <h1 className="text-4xl font-black bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent mb-4">One rejection costs more than a year of Flo Permit.</h1>
+            <p className="text-gray-400 text-lg">An expediter charges $300–500 per permit. A rejection delays your crew 1–3 weeks. Pick your plan.</p>
           </div>
           
           {/* Single Purchase Banner */}
@@ -1196,13 +1196,14 @@ export default function App() {
             {/* Pro */}
             <div className="bg-gray-900/80 rounded-2xl p-8 border-2 border-cyan-500 relative flex flex-col">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-full text-black text-xs font-bold">POPULAR</div>
-              <h3 className="text-xl font-bold text-white mb-2">Pro</h3>
-              <div className="mb-6"><span className="text-4xl font-black text-white">$29</span><span className="text-gray-500">/month</span></div>
+              <h3 className="text-xl font-bold text-white mb-2">Contractor Pro</h3>
+              <div className="mb-6"><span className="text-4xl font-black text-white">$49</span><span className="text-gray-500">/month</span></div>
               <ul className="space-y-3 mb-8 flex-grow">
-                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>30 analyses/month</li>
-                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Enhanced AI (deeper analysis)</li>
-                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Email support</li>
-                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Analysis history</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>20 analyses/month</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Enhanced AI (Claude-powered)</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Full analysis history</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Priority support</li>
+                <li className="flex items-center gap-2 text-gray-500 text-sm"><span className="w-5"></span>~$2.50/analysis vs $500/expediter</li>
               </ul>
               {subscription?.tier === 'pro' ? (
                 <button onClick={openBillingPortal} className="w-full py-3 border border-cyan-500 text-cyan-400 font-bold rounded-xl hover:bg-cyan-500/10">Manage Subscription</button>
@@ -1212,19 +1213,20 @@ export default function App() {
             </div>
             {/* Business */}
             <div className="bg-gray-900/80 rounded-2xl p-8 border border-gray-800 flex flex-col">
-              <h3 className="text-xl font-bold text-white mb-2">Business</h3>
-              <div className="mb-6"><span className="text-4xl font-black text-white">$99</span><span className="text-gray-500">/month</span></div>
+              <h3 className="text-xl font-bold text-white mb-2">GC / Expediter</h3>
+              <div className="mb-6"><span className="text-4xl font-black text-white">$149</span><span className="text-gray-500">/month</span></div>
               <ul className="space-y-3 mb-8 flex-grow">
                 <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Unlimited analyses</li>
-                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Enhanced AI (deeper analysis)</li>
-                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Email support</li>
-                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Analysis history</li>
-                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Team features (soon)</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Enhanced AI (Claude-powered)</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Full analysis history</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Priority support</li>
+                <li className="flex items-center gap-2 text-gray-400"><svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>Team features (coming soon)</li>
+                <li className="flex items-center gap-2 text-gray-500 text-sm"><span className="w-5"></span>Less than half an expediter visit</li>
               </ul>
               {subscription?.tier === 'business' ? (
                 <button onClick={openBillingPortal} className="w-full py-3 border border-purple-500 text-purple-400 font-bold rounded-xl hover:bg-purple-500/10">Manage Subscription</button>
               ) : (
-                <button onClick={() => handleCheckout('business')} disabled={checkoutLoading || !currentUser} className="w-full py-3 border border-gray-700 text-white font-bold rounded-xl hover:bg-gray-800 disabled:opacity-50 flex items-center justify-center gap-2">{checkoutLoading ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>Processing...</> : currentUser ? 'Upgrade to Business' : 'Sign up first'}</button>
+                <button onClick={() => handleCheckout('business')} disabled={checkoutLoading || !currentUser} className="w-full py-3 border border-gray-700 text-white font-bold rounded-xl hover:bg-gray-800 disabled:opacity-50 flex items-center justify-center gap-2">{checkoutLoading ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>Processing...</> : currentUser ? 'Go Unlimited' : 'Sign up first'}</button>
               )}
             </div>
           </div>
