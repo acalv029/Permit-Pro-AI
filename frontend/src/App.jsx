@@ -36,6 +36,7 @@ export default function App() {
   const [successMessage, setSuccessMessage] = useState('')
   const [isDragging, setIsDragging] = useState(false)
   const [agreedToTerms, setAgreedToTerms] = useState(false)
+  const [showAnalysisConfirm, setShowAnalysisConfirm] = useState(false)
   const [profile, setProfile] = useState(null)
   const [profileLoading, setProfileLoading] = useState(false)
   const [editingProfile, setEditingProfile] = useState(false)
@@ -1232,7 +1233,7 @@ export default function App() {
           </div>
           {subscription && (
             <div className="mt-8 p-4 bg-gray-900/50 rounded-xl border border-gray-800 text-center">
-              <p className="text-gray-400">Current usage: <span className="text-white font-bold">{subscription.analyses_this_month}</span> / {subscription.analyses_limit === -1 ? '∞' : subscription.analyses_limit} analyses this month</p>
+              <p className="text-gray-400">{subscription.analyses_limit === -1 || subscription.analyses_limit > 9999 ? (<>You've run <span className="text-white font-bold">{subscription.analyses_this_month}</span> analyses this month</>) : subscription.analyses_remaining > 0 ? (<>You have <span className="text-cyan-400 font-bold">{subscription.analyses_remaining} {subscription.analyses_remaining === 1 ? 'analysis' : 'analyses'}</span> remaining this month</>) : (<><span className="text-amber-400 font-bold">0 analyses remaining</span> this month — upgrade or enter a promo code on your <button onClick={() => setPage('profile')} className="text-cyan-400 hover:text-cyan-300 underline">profile</button></>)}</p>
             </div>
           )}
         </div>
@@ -2960,7 +2961,7 @@ export default function App() {
                 </div>
               </div>
               <div className="mb-6"><label className="flex items-start gap-3 cursor-pointer"><input type="checkbox" checked={agreedToTerms} onChange={e => setAgreedToTerms(e.target.checked)} className="mt-1 w-5 h-5 rounded border-gray-600 bg-black/50 text-cyan-500" /><span className="text-sm text-gray-400">I agree to the <button type="button" onClick={() => setPage('terms')} className="text-cyan-400 underline">Terms of Service</button></span></label></div>
-              <button onClick={analyze} disabled={!canAnalyze} className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 ${canAnalyze ? 'bg-gradient-to-r from-cyan-500 to-emerald-500 text-black shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:shadow-[0_0_50px_rgba(6,182,212,0.6)] hover:scale-[1.02]' : 'bg-gray-800/50 text-gray-600 cursor-not-allowed'}`}>{canAnalyze ? `Analyze ${validFiles.length} Files` : 'Select city, permit type & files'}</button>
+              <button onClick={() => setShowAnalysisConfirm(true)} disabled={!canAnalyze} className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 ${canAnalyze ? 'bg-gradient-to-r from-cyan-500 to-emerald-500 text-black shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:shadow-[0_0_50px_rgba(6,182,212,0.6)] hover:scale-[1.02]' : 'bg-gray-800/50 text-gray-600 cursor-not-allowed'}`}>{canAnalyze ? `Analyze ${validFiles.length} Files` : 'Select city, permit type & files'}</button>
             </div>
           </div>
           <div className="grid md:grid-cols-3 gap-6 mt-12">
@@ -2974,6 +2975,79 @@ export default function App() {
           </div>
         </div>
       </div>
+
+      {/* Analysis Confirmation Modal */}
+      {showAnalysisConfirm && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="relative max-w-lg w-full">
+            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-3xl blur-lg opacity-30"></div>
+            <div className="relative bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden max-h-[85vh] overflow-y-auto">
+              <div className="p-6 border-b border-gray-800 flex items-center justify-between">
+                <h2 className="text-xl font-bold text-white">Confirm Analysis</h2>
+                <button onClick={() => setShowAnalysisConfirm(false)} className="text-gray-500 hover:text-white text-2xl">&times;</button>
+              </div>
+              <div className="p-6 space-y-5">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-3 bg-black/40 rounded-lg border border-gray-800">
+                    <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">City</p>
+                    <p className="text-white font-bold text-sm">{city}</p>
+                  </div>
+                  <div className="p-3 bg-black/40 rounded-lg border border-gray-800">
+                    <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Permit Type</p>
+                    <p className="text-white font-bold text-sm">{permitType}</p>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-gray-400 text-sm font-semibold mb-2">{validFiles.length} {validFiles.length === 1 ? 'file' : 'files'} to analyze ({formatSize(totalSize)})</p>
+                  <div className="space-y-1.5 max-h-48 overflow-y-auto">
+                    {validFiles.map((f, i) => (
+                      <div key={i} className="flex items-center justify-between p-2 bg-black/30 rounded-lg text-sm">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span className="text-cyan-400 flex-shrink-0">{f.name.toLowerCase().endsWith('.pdf') ? '📄' : '🖼️'}</span>
+                          <span className="text-gray-300 truncate">{f.name}</span>
+                        </div>
+                        <span className="text-gray-600 text-xs flex-shrink-0 ml-2">{formatSize(f.size)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {validFiles.length === 1 && (
+                  <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+                    <p className="text-amber-300 text-sm font-semibold mb-1">⚠ Only 1 file uploaded</p>
+                    <p className="text-amber-300/70 text-xs">Most permit packages require multiple documents (plans, survey, NOC, energy calcs, etc.). Want to add more files before analyzing?</p>
+                  </div>
+                )}
+                {validFiles.length <= 2 && totalSize < 500000 && (
+                  <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+                    <p className="text-amber-300 text-sm font-semibold mb-1">⚠ This looks like a small package</p>
+                    <p className="text-amber-300/70 text-xs">Your upload is under 500KB — this may be incomplete. Full permit packages are usually several MB. You can always add more files and re-analyze for free.</p>
+                  </div>
+                )}
+                {subscription && (
+                  <div className="p-3 bg-black/40 rounded-lg border border-gray-800">
+                    {subscription.analyses_limit === -1 || subscription.analyses_limit > 9999 ? (
+                      <p className="text-gray-400 text-sm">This will use <span className="text-white font-bold">1 analysis</span> — you have <span className="text-cyan-400 font-bold">unlimited</span></p>
+                    ) : subscription.analyses_remaining > 0 ? (
+                      <p className="text-gray-400 text-sm">This will use <span className="text-white font-bold">1</span> of your <span className="text-cyan-400 font-bold">{subscription.analyses_remaining} remaining</span> analyses this month</p>
+                    ) : (
+                      <p className="text-red-400 text-sm font-semibold">You have 0 analyses remaining. <button onClick={() => { setShowAnalysisConfirm(false); setPage('pricing') }} className="text-cyan-400 underline">Upgrade</button></p>
+                    )}
+                  </div>
+                )}
+                <div className="flex gap-3">
+                  <button onClick={() => setShowAnalysisConfirm(false)} className="flex-1 py-3 border border-gray-700 text-gray-300 font-semibold rounded-xl hover:bg-gray-800 transition-colors">
+                    Add More Files
+                  </button>
+                  <button onClick={() => { setShowAnalysisConfirm(false); analyze() }} className="flex-1 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl hover:scale-[1.02] transition-transform">
+                    Confirm & Analyze →
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Footer />
       <style>{`
         select option { background: #030305; color: white; padding: 12px; }
