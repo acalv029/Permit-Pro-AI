@@ -4395,10 +4395,18 @@ ANALYZE THE DOCUMENTS AND RETURN JSON:
 }}
 
 SCORING:
-- 90-100: Ready to submit
-- 70-89: Minor fixes needed
+- 100: All required documents present and complete. Give 100 if everything required is found — do NOT dock points for optional/recommended items or minor formatting preferences.
+- 90-99: Ready to submit with very minor issues (e.g., a recommended but not required document is missing)
+- 70-89: Minor fixes needed (1-2 required documents missing or incomplete)
 - 50-69: Significant gaps
 - Below 50: Major documents missing
+
+CRITICAL SCORING RULES:
+- Only mark documents as "missing" if they are ACTUALLY REQUIRED for this specific permit type. Do NOT flag documents that are for OTHER permit types.
+- If a document is present but you can't verify every detail (e.g., you can see plans but can't confirm they're signed/sealed from the PDF), give the benefit of the doubt and mark it as "complete" with a note.
+- Do NOT penalize for documents you simply cannot read or parse from the uploaded files — assume the contractor has them unless there's clear evidence they're missing.
+- "Recommended" items should NOT reduce the compliance score below 95.
+- If all REQUIRED documents are present, the score MUST be 95 or above.
 
 Be SPECIFIC about the permit type. Read the documents carefully to identify exactly what work is being done."""
 
