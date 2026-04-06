@@ -4407,6 +4407,7 @@ CRITICAL SCORING RULES:
 - Do NOT penalize for documents you simply cannot read or parse from the uploaded files — assume the contractor has them unless there's clear evidence they're missing.
 - "Recommended" items should NOT reduce the compliance score below 95.
 - If all REQUIRED documents are present, the score MUST be 95 or above.
+- CONTRACTOR NAME MISMATCH: It is NORMAL and LEGAL for the company on the plans/drawings to be different from the contractor pulling the permit. This happens when a licensed contractor pulls permits on behalf of another company doing the work. Do NOT flag this as an issue or dock points. The names that must match each other are: APPLICATION, INSURANCE CERTIFICATE, LICENSE, and NOC — these should all show the same contractor. Plans/drawings can be prepared by anyone.
 
 Be SPECIFIC about the permit type. Read the documents carefully to identify exactly what work is being done."""
 
