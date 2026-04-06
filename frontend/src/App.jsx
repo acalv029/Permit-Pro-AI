@@ -63,6 +63,7 @@ export default function App() {
   const [reviewSubmitting, setReviewSubmitting] = useState(false)
   const [adminReviews, setAdminReviews] = useState([])
   const [adminPurchases, setAdminPurchases] = useState([])
+  const [adminUsers, setAdminUsers] = useState([])
   const [publicReviews, setPublicReviews] = useState([])
   const [checklistPreview, setChecklistPreview] = useState(null)
   const [copiedInsurance, setCopiedInsurance] = useState(false)
@@ -309,6 +310,8 @@ export default function App() {
   const loadAdminStats = async () => { if (!authToken) return; setAdminLoading(true); try { const res = await fetch(`${API_BASE_URL}/api/admin/stats`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setAdminStats(data) } } catch (err) { console.error(err) } finally { setAdminLoading(false) } }
   const loadAdminReviews = async () => { if (!authToken) return; try { const res = await fetch(`${API_BASE_URL}/api/admin/reviews`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setAdminReviews(data.reviews || []) } } catch (err) { console.error(err) } }
   const loadAdminPurchases = async () => { if (!authToken) return; try { const res = await fetch(`${API_BASE_URL}/api/admin/single-purchases`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setAdminPurchases(data.purchases || []) } } catch (err) { console.error(err) } }
+  const loadAdminUsers = async () => { if (!authToken) return; try { const res = await fetch(`${API_BASE_URL}/api/admin/users`, { headers: { 'Authorization': `Bearer ${authToken}` } }); if (res.ok) { const data = await res.json(); setAdminUsers(data.users || []) } } catch (err) { console.error(err) } }
+  const adminUpdateUser = async (userId, update) => { try { const res = await fetch(`${API_BASE_URL}/api/admin/users/${userId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` }, body: JSON.stringify(update) }); const data = await res.json(); if (res.ok) { alert(data.message); loadAdminUsers() } else { alert(data.detail || 'Error') } } catch (err) { alert('Error updating user') } }
   const updateAdminPurchase = async (purchaseUuid, updates) => { try { const res = await fetch(`${API_BASE_URL}/api/admin/single-purchase/${purchaseUuid}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` }, body: JSON.stringify(updates) }); if (res.ok) { alert('Purchase updated!'); loadAdminPurchases() } else { const data = await res.json(); alert(data.detail || 'Update failed') } } catch (err) { alert('Error updating purchase') } }
   const submitReview = async (e) => {
     e.preventDefault()
@@ -425,7 +428,7 @@ export default function App() {
     } catch (err) { console.error('Error loading purchase:', err) }
   }
 
-  useEffect(() => { if (page === 'history' && authToken) loadHistory(); if (page === 'profile' && authToken) { loadProfile(); loadSubscription() }; if (page === 'admin' && authToken && isAdmin) { loadAdminStats(); loadAdminReviews(); loadAdminPurchases() }; if (page === 'pricing' && authToken) loadSubscription(); setMobileMenuOpen(false); window.scrollTo(0, 0) }, [page])
+  useEffect(() => { if (page === 'history' && authToken) loadHistory(); if (page === 'profile' && authToken) { loadProfile(); loadSubscription() }; if (page === 'admin' && authToken && isAdmin) { loadAdminStats(); loadAdminReviews(); loadAdminPurchases(); loadAdminUsers() }; if (page === 'pricing' && authToken) loadSubscription(); setMobileMenuOpen(false); window.scrollTo(0, 0) }, [page])
 
   const canAnalyze = city && permitType && validFiles.length > 0 && totalSize <= 200 * 1024 * 1024 && agreedToTerms
   const getPermitTypes = () => {
@@ -1699,6 +1702,55 @@ export default function App() {
                             >
                               +30 Days
                             </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* User Management */}
+              <div className="bg-gradient-to-r from-blue-900/30 to-indigo-900/30 rounded-xl p-6 border border-blue-500/30">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-bold text-white flex items-center gap-2"><span className="text-xl">👥</span> User Management</h3>
+                  <button onClick={loadAdminUsers} className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-lg text-sm hover:bg-blue-500/30">↻ Refresh</button>
+                </div>
+                {adminUsers.length === 0 ? (
+                  <p className="text-gray-500">Loading users...</p>
+                ) : (
+                  <div className="space-y-3">
+                    {adminUsers.filter(u => !u.is_admin).map(u => (
+                      <div key={u.id} className="p-4 bg-black/30 rounded-xl border border-gray-800 hover:border-gray-700 transition-colors">
+                        <div className="flex items-start justify-between gap-4 flex-wrap">
+                          <div className="flex-1 min-w-[200px]">
+                            <div className="flex items-center gap-2 mb-1 flex-wrap">
+                              <span className="font-semibold text-white">{u.email}</span>
+                              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${u.tier === 'business' ? 'bg-purple-500/20 text-purple-400' : u.tier === 'pro' ? 'bg-cyan-500/20 text-cyan-400' : 'bg-gray-700 text-gray-400'}`}>{u.tier}</span>
+                              {u.has_stripe && <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400">STRIPE</span>}
+                              {u.bonus_analyses > 0 && <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-400">+{u.bonus_analyses} bonus</span>}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {u.full_name || ''} {u.company_name ? `• ${u.company_name}` : ''} • Joined {new Date(u.created_at).toLocaleDateString()}
+                              {u.promo_code && <span className="text-amber-400"> • Code: {u.promo_code}</span>}
+                            </div>
+                            <div className="text-xs text-gray-400 mt-1">
+                              This month: <span className="text-white font-bold">{u.analyses_this_month}</span> / {u.tier_limit >= 999999 ? '∞' : u.tier_limit} • Total: {u.total_analyses}
+                              {u.remaining >= 0 && u.remaining < 999999 && <span className="text-cyan-400"> • {u.remaining} remaining</span>}
+                            </div>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            <select 
+                              value={u.tier} 
+                              onChange={(e) => { if (confirm(`Change ${u.email} to ${e.target.value}?`)) adminUpdateUser(u.id, { tier: e.target.value }) }}
+                              className="px-2 py-1 bg-gray-800 border border-gray-700 rounded-lg text-xs text-white cursor-pointer"
+                            >
+                              <option value="free">Free</option>
+                              <option value="pro">Pro</option>
+                              <option value="business">Unlimited</option>
+                            </select>
+                            <button onClick={() => { const n = prompt(`Add bonus analyses for ${u.email}:`, '5'); if (n) adminUpdateUser(u.id, { add_bonus: parseInt(n) }) }} className="px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-lg text-xs font-bold hover:bg-emerald-500/30">+ Bonus</button>
+                            <button onClick={() => { if (confirm(`Deactivate ${u.email}?`)) adminUpdateUser(u.id, { is_active: false }) }} className="px-3 py-1 bg-red-500/10 text-red-400 rounded-lg text-xs font-bold hover:bg-red-500/20">Ban</button>
                           </div>
                         </div>
                       </div>

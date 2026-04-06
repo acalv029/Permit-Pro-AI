@@ -828,7 +828,8 @@ def send_contact_email(name: str, email: str, subject: str, message: str) -> boo
 
 
 @app.post("/api/auth/register", response_model=TokenResponse)
-async def register(user_data: UserRegister, db: Session = Depends(get_db)):
+@limiter.limit("3/minute;10/hour")
+async def register(request: Request, user_data: UserRegister, db: Session = Depends(get_db)):
     """Register a new user"""
     try:
         # Verify reCAPTCHA
@@ -900,7 +901,8 @@ async def register(user_data: UserRegister, db: Session = Depends(get_db)):
 
 
 @app.post("/api/auth/login", response_model=TokenResponse)
-async def login(user_data: UserLogin, db: Session = Depends(get_db)):
+@limiter.limit("5/minute;20/hour")
+async def login(request: Request, user_data: UserLogin, db: Session = Depends(get_db)):
     """Login and get access token"""
     try:
         # Verify reCAPTCHA
@@ -1922,6 +1924,109 @@ async def get_promo_stats(
     return {"promo_stats": stats}
 
 
+@app.get("/api/admin/users")
+async def get_admin_users(
+    authorization: str = Header(None), db: Session = Depends(get_db)
+):
+    """Admin: list all users with subscription info"""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    token = authorization[7:]
+    payload = decode_access_token(token)
+    user_id = int(payload.get("sub"))
+    require_admin(user_id, db)
+
+    from sqlalchemy import func
+
+    first_of_month = datetime.utcnow().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    users = db.query(User).order_by(User.created_at.desc()).limit(100).all()
+    
+    result = []
+    for u in users:
+        analyses_this_month = db.query(AnalysisHistory).filter(
+            AnalysisHistory.user_id == u.id,
+            AnalysisHistory.created_at >= first_of_month
+        ).count()
+        total_analyses = db.query(AnalysisHistory).filter(AnalysisHistory.user_id == u.id).count()
+        tier_limit = TIER_LIMITS.get(u.subscription_tier or "free", 1) + (getattr(u, 'bonus_analyses', 0) or 0)
+        
+        result.append({
+            "id": u.id,
+            "email": u.email,
+            "full_name": u.full_name,
+            "company_name": u.company_name,
+            "tier": u.subscription_tier or "free",
+            "bonus_analyses": getattr(u, 'bonus_analyses', 0) or 0,
+            "analyses_this_month": analyses_this_month,
+            "total_analyses": total_analyses,
+            "tier_limit": tier_limit,
+            "remaining": max(0, tier_limit - analyses_this_month) if tier_limit < 999999 else -1,
+            "has_stripe": bool(u.stripe_subscription_id),
+            "promo_code": getattr(u, 'promo_code_used', None),
+            "created_at": u.created_at.isoformat() if u.created_at else None,
+            "is_admin": u.email.lower().strip() in [e.lower().strip() for e in ADMIN_EMAILS]
+        })
+    
+    return {"users": result}
+
+
+@app.put("/api/admin/users/{target_user_id}")
+async def admin_update_user(
+    target_user_id: int,
+    authorization: str = Header(None), 
+    db: Session = Depends(get_db),
+    update: dict = None
+):
+    """Admin: update user tier, bonus analyses, etc."""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    token = authorization[7:]
+    payload = decode_access_token(token)
+    admin_id = int(payload.get("sub"))
+    require_admin(admin_id, db)
+
+    if update is None:
+        from fastapi import Request
+        raise HTTPException(status_code=400, detail="No update data provided")
+
+    user = db.query(User).filter(User.id == target_user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    changes = []
+    
+    # Change subscription tier
+    if "tier" in update and update["tier"] in ["free", "pro", "business"]:
+        old_tier = user.subscription_tier
+        user.subscription_tier = update["tier"]
+        changes.append(f"tier: {old_tier} → {update['tier']}")
+    
+    # Add bonus analyses
+    if "add_bonus" in update:
+        bonus = int(update["add_bonus"])
+        current = getattr(user, 'bonus_analyses', 0) or 0
+        user.bonus_analyses = current + bonus
+        changes.append(f"bonus: +{bonus} (now {user.bonus_analyses})")
+    
+    # Set bonus analyses to specific number
+    if "set_bonus" in update:
+        user.bonus_analyses = int(update["set_bonus"])
+        changes.append(f"bonus set to {user.bonus_analyses}")
+    
+    # Deactivate/activate
+    if "is_active" in update:
+        user.is_active = bool(update["is_active"])
+        changes.append(f"active: {user.is_active}")
+
+    db.commit()
+    
+    return {
+        "message": f"Updated user {user.email}: {', '.join(changes)}",
+        "user_id": user.id,
+        "changes": changes
+    }
+
+
 @app.get("/api/admin/single-purchases")
 async def get_all_single_purchases(
     authorization: str = Header(None), db: Session = Depends(get_db)
@@ -2270,7 +2375,7 @@ async def get_subscription(
         )
 
         tier = user.subscription_tier or "free"
-        tier_limit = TIER_LIMITS.get(tier, 3)
+        tier_limit = TIER_LIMITS.get(tier, 3) + (getattr(user, 'bonus_analyses', 0) or 0)
         is_admin = user.email.lower().strip() in [e.lower().strip() for e in ADMIN_EMAILS]
 
         return {
@@ -2629,7 +2734,7 @@ async def analyze_permit_folder(
             .count()
         )
 
-        tier_limit = TIER_LIMITS.get(user.subscription_tier, 3)
+        tier_limit = TIER_LIMITS.get(user.subscription_tier, 3) + (getattr(user, 'bonus_analyses', 0) or 0)
         import sys
         is_admin = user.email.lower().strip() in [e.lower().strip() for e in ADMIN_EMAILS]
         print(f"🔍 Analysis check: user={user.email}, tier={user.subscription_tier}, limit={tier_limit}, used={analyses_this_month}, is_admin={is_admin}", flush=True)
