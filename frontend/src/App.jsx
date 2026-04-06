@@ -2005,6 +2005,9 @@ export default function App() {
                       {results.analysis?.compliance_score || 0}%
                     </div>
                     <div className="text-sm text-gray-500">Compliance</div>
+                    <div className={`text-xs font-bold mt-1 ${(results.analysis?.compliance_score || 0) >= 90 ? 'text-emerald-400' : (results.analysis?.compliance_score || 0) >= 70 ? 'text-amber-400' : 'text-red-400'}`}>
+                      {(results.analysis?.compliance_score || 0) >= 90 ? '✓ Ready to Submit' : (results.analysis?.compliance_score || 0) >= 70 ? 'Needs Attention' : 'Incomplete'}
+                    </div>
                   </div>
                 </div>
               </div>
