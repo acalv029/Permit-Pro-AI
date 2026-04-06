@@ -4345,6 +4345,20 @@ GENERAL SOUTH FLORIDA REQUIREMENTS:
 
 TASK: Analyze this permit package ({file_count} files) for {city_name}.
 
+ABSOLUTE RULE — DO NOT INVENT REQUIREMENTS:
+You may ONLY check for documents and requirements listed in the GENERAL REQUIREMENTS CHECKLIST below. Do NOT invent, imagine, or add requirements that are not in the checklist. If something is not in the checklist, it is NOT required. The checklist is the COMPLETE list of what this city needs — nothing more.
+
+When marking something as "missing", you MUST be able to point to a specific item in the checklist below that requires it. If you cannot find it in the checklist, do NOT flag it.
+
+DO NOT flag these as missing (common false positives):
+- Energy calculations (unless specifically listed in the checklist for this permit type)
+- Structural calculations (unless specifically listed)
+- Soil/geotechnical reports (unless specifically listed)
+- Environmental assessments (unless specifically listed)
+- Tree surveys or landscaping plans (unless specifically listed)
+- Zoning verification letters (unless specifically listed)
+- Documents for OTHER permit types that are not being applied for
+
 IMPORTANT — PRO TIPS: If the VERIFY WITH CITY section below contains items, include them in your response as "pro_tips" — these are things a $2,000 permit expediter would tell the contractor to double-check with a quick phone call. Frame them positively: "Pro tip: Confirm the exact certificate holder wording with [City] Building at [phone] before submitting" — NOT "We couldn't verify this." This makes the tool look MORE thorough, not less.
 
 YOUR FIRST JOB: Identify the SPECIFIC permit type from the documents. Don't just say "plumbing" - determine if it's:
@@ -4402,12 +4416,16 @@ SCORING:
 - Below 50: Major documents missing
 
 CRITICAL SCORING RULES:
+- ONLY flag items from the REQUIREMENTS CHECKLIST above as missing. Do NOT invent additional requirements that aren't in the checklist. If it's not listed in the checklist above, it is NOT required.
 - Only mark documents as "missing" if they are ACTUALLY REQUIRED for this specific permit type. Do NOT flag documents that are for OTHER permit types.
 - If a document is present but you can't verify every detail (e.g., you can see plans but can't confirm they're signed/sealed from the PDF), give the benefit of the doubt and mark it as "complete" with a note.
 - Do NOT penalize for documents you simply cannot read or parse from the uploaded files — assume the contractor has them unless there's clear evidence they're missing.
 - "Recommended" items should NOT reduce the compliance score below 95.
 - If all REQUIRED documents are present, the score MUST be 95 or above.
+- CONSISTENCY: Your job is to check the uploaded documents against the checklist. Period. Do NOT add new requirements based on what you read inside the documents. For example, if you see a reference to "drainage plans" inside an uploaded document, do NOT add "drainage plans" as a missing requirement unless it's in the checklist above.
 - CONTRACTOR NAME MISMATCH: It is NORMAL and LEGAL for the company on the plans/drawings to be different from the contractor pulling the permit. This happens when a licensed contractor pulls permits on behalf of another company doing the work. Do NOT flag this as an issue or dock points. The names that must match each other are: APPLICATION, INSURANCE CERTIFICATE, LICENSE, and NOC — these should all show the same contractor. Plans/drawings can be prepared by anyone.
+- ADDING DOCUMENTS MUST HELP, NOT HURT: If a contractor uploads additional documents, the score should go UP or stay the same — NEVER down. More documents = more complete package. Do not use additional documents as an excuse to find new problems.
+- DO NOT HALLUCINATE REQUIREMENTS: Every item you list as "missing" must come directly from the GENERAL REQUIREMENTS CHECKLIST provided above. If you cannot find the requirement in the checklist, DO NOT flag it. Making up requirements destroys trust in this tool.
 
 Be SPECIFIC about the permit type. Read the documents carefully to identify exactly what work is being done."""
 
