@@ -4420,8 +4420,8 @@ CRITICAL SCORING RULES:
 - Only mark documents as "missing" if they are ACTUALLY REQUIRED for this specific permit type. Do NOT flag documents that are for OTHER permit types.
 - If a document is present but you can't verify every detail (e.g., you can see plans but can't confirm they're signed/sealed from the PDF), give the benefit of the doubt and mark it as "complete" with a note.
 - Do NOT penalize for documents you simply cannot read or parse from the uploaded files — assume the contractor has them unless there's clear evidence they're missing.
-- "Recommended" items should NOT reduce the compliance score below 95.
-- If all REQUIRED documents are present, the score MUST be 95 or above.
+- "Recommended" items must NEVER appear in "missing_documents" — put them in "recommendations" instead. They should NEVER reduce the compliance score. If something is "nice to have" or "would be helpful," it goes in recommendations, NOT missing_documents.
+- If all REQUIRED documents from the checklist are present, the score MUST be 100. Not 95, not 98 — exactly 100.
 - CONSISTENCY: Your job is to check the uploaded documents against the checklist. Period. Do NOT add new requirements based on what you read inside the documents. For example, if you see a reference to "drainage plans" inside an uploaded document, do NOT add "drainage plans" as a missing requirement unless it's in the checklist above.
 - CONTRACTOR NAME MISMATCH: It is NORMAL and LEGAL for the company on the plans/drawings to be different from the contractor pulling the permit. This happens when a licensed contractor pulls permits on behalf of another company doing the work. Do NOT flag this as an issue or dock points. The names that must match each other are: APPLICATION, INSURANCE CERTIFICATE, LICENSE, and NOC — these should all show the same contractor. Plans/drawings can be prepared by anyone.
 - ADDING DOCUMENTS MUST HELP, NOT HURT: If a contractor uploads additional documents, the score should go UP or stay the same — NEVER down. More documents = more complete package. Do not use additional documents as an excuse to find new problems.
