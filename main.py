@@ -854,6 +854,7 @@ async def register(user_data: UserRegister, db: Session = Depends(get_db)):
                     "to": ["toshygluestick@gmail.com"],
                     "subject": f"New Signup: {user_data.email}",
                     "html": f"<h3>New user signed up!</h3><p><b>Email:</b> {user_data.email}</p><p><b>Name:</b> {user_data.full_name or 'Not provided'}</p><p><b>Company:</b> {user_data.company_name or 'Not provided'}</p><p><b>Time:</b> {datetime.utcnow().isoformat()}</p>",
+                    "idempotency_key": str(__import__("uuid").uuid4()),
                 }
             )
         except Exception as e:
