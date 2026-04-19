@@ -1726,7 +1726,7 @@ export default function App() {
                           <div className="flex-1 min-w-[200px]">
                             <div className="flex items-center gap-2 mb-1 flex-wrap">
                               <span className="font-semibold text-white">{u.email}</span>
-                              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${u.tier === 'business' ? 'bg-purple-500/20 text-purple-400' : u.tier === 'pro' ? 'bg-cyan-500/20 text-cyan-400' : 'bg-gray-700 text-gray-400'}`}>{u.tier}</span>
+                              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${u.tier === 'business' ? 'bg-purple-500/20 text-purple-400' : u.tier === 'pro' ? 'bg-cyan-500/20 text-cyan-400' : 'bg-gray-700 text-gray-400'}`}>{u.tier === 'business' ? 'Unlimited $149' : u.tier === 'pro' ? 'Pro $49' : 'Free'}</span>
                               {u.has_stripe && <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400">STRIPE</span>}
                               {u.bonus_analyses > 0 && <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-400">+{u.bonus_analyses} bonus</span>}
                             </div>
@@ -1738,6 +1738,17 @@ export default function App() {
                               This month: <span className="text-white font-bold">{u.analyses_this_month}</span> / {u.tier_limit >= 999999 ? '∞' : u.tier_limit} • Total: {u.total_analyses}
                               {u.remaining >= 0 && u.remaining < 999999 && <span className="text-cyan-400"> • {u.remaining} remaining</span>}
                             </div>
+                            {u.subscription_ends && (
+                              <div className="text-xs mt-1">
+                                {new Date(u.subscription_ends) > new Date() 
+                                  ? <span className="text-emerald-400">Subscription active until {new Date(u.subscription_ends).toLocaleDateString()}</span>
+                                  : <span className="text-red-400">Subscription expired {new Date(u.subscription_ends).toLocaleDateString()}</span>
+                                }
+                              </div>
+                            )}
+                            {u.tier !== 'free' && !u.has_stripe && !u.subscription_ends && (
+                              <div className="text-xs text-amber-400 mt-1">⚠ Plan set manually (no Stripe billing)</div>
+                            )}
                           </div>
                           <div className="flex flex-wrap gap-2">
                             <select 
@@ -1745,9 +1756,9 @@ export default function App() {
                               onChange={(e) => { if (confirm(`Change ${u.email} to ${e.target.value}?`)) adminUpdateUser(u.id, { tier: e.target.value }) }}
                               className="px-2 py-1 bg-gray-800 border border-gray-700 rounded-lg text-xs text-white cursor-pointer"
                             >
-                              <option value="free">Free</option>
-                              <option value="pro">Pro</option>
-                              <option value="business">Unlimited</option>
+                              <option value="free">Free (1/mo)</option>
+                              <option value="pro">Pro $49 (20/mo)</option>
+                              <option value="business">Unlimited $149</option>
                             </select>
                             <button onClick={() => { const n = prompt(`Add bonus analyses for ${u.email}:`, '5'); if (n) adminUpdateUser(u.id, { add_bonus: parseInt(n) }) }} className="px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-lg text-xs font-bold hover:bg-emerald-500/30">+ Bonus</button>
                             <button onClick={() => { if (confirm(`Deactivate ${u.email}?`)) adminUpdateUser(u.id, { is_active: false }) }} className="px-3 py-1 bg-red-500/10 text-red-400 rounded-lg text-xs font-bold hover:bg-red-500/20">Ban</button>
@@ -2387,25 +2398,19 @@ export default function App() {
         </div>
       </div>
 
-      {/* DEMO / SAMPLE ANALYSIS */}
+      {/* DEMO VIDEO */}
       <div className="relative z-10 px-6 pb-20">
-        <div className="max-w-3xl mx-auto">
-          <div className="rounded-2xl overflow-hidden border border-white/10 bg-gray-900/50">
-            <div className="bg-black/80 rounded-xl border border-white/10 overflow-hidden shadow-2xl m-6 md:m-10">
-              <div className="p-4 bg-gradient-to-r from-cyan-500/10 to-emerald-500/10 border-b border-white/5 flex items-center justify-between">
-                <div><p className="text-white font-bold text-sm">Analysis Complete</p><p className="text-gray-500 text-xs">Fort Lauderdale • Roofing Permit</p></div>
-                <div className="text-right"><p className="text-3xl font-black text-amber-400">73%</p><p className="text-gray-600 text-[10px] uppercase tracking-wider">Compliance</p></div>
-              </div>
-              <div className="p-4 space-y-2">
-                <div className="flex items-center gap-3 p-2.5 bg-red-500/8 border border-red-500/15 rounded-lg"><span className="text-red-400 font-bold text-sm w-5 text-center">✗</span><span className="text-white text-sm font-medium flex-1">Roof Material Worksheet</span><span className="text-[10px] px-2 py-0.5 bg-red-500/15 text-red-400 rounded-full font-bold">MISSING</span></div>
-                <div className="flex items-center gap-3 p-2.5 bg-red-500/8 border border-red-500/15 rounded-lg"><span className="text-red-400 font-bold text-sm w-5 text-center">✗</span><span className="text-white text-sm font-medium flex-1">Product Approval (FL# or NOA)</span><span className="text-[10px] px-2 py-0.5 bg-red-500/15 text-red-400 rounded-full font-bold">MISSING</span></div>
-                <div className="flex items-center gap-3 p-2.5 rounded-lg opacity-50"><span className="text-emerald-400 font-bold text-sm w-5 text-center">✓</span><span className="text-gray-400 text-sm flex-1">Signed & Sealed Plans</span><span className="text-[10px] px-2 py-0.5 bg-emerald-500/10 text-emerald-500 rounded-full font-bold">FOUND</span></div>
-                <div className="flex items-center gap-3 p-2.5 rounded-lg opacity-50"><span className="text-emerald-400 font-bold text-sm w-5 text-center">✓</span><span className="text-gray-400 text-sm flex-1">Permit Application</span><span className="text-[10px] px-2 py-0.5 bg-emerald-500/10 text-emerald-500 rounded-full font-bold">FOUND</span></div>
-                <div className="flex items-center gap-3 p-2.5 rounded-lg opacity-50"><span className="text-emerald-400 font-bold text-sm w-5 text-center">✓</span><span className="text-gray-400 text-sm flex-1">Notice of Commencement</span><span className="text-[10px] px-2 py-0.5 bg-emerald-500/10 text-emerald-500 rounded-full font-bold">FOUND</span></div>
-                <div className="mt-3 p-3 bg-amber-500/5 border border-amber-500/15 rounded-lg"><p className="text-amber-300 text-xs leading-relaxed">⚠ Product approvals must show FL# or Miami-Dade NOA — generic spec sheets will be rejected.</p></div>
-              </div>
-            </div>
+        <div className="max-w-4xl mx-auto">
+          <div className="rounded-2xl overflow-hidden border border-white/10 bg-gray-900/50 shadow-2xl shadow-cyan-500/5">
+            <iframe 
+              src="/demo.html" 
+              style={{width:'100%', height:'500px', border:'none', borderRadius:'16px', background:'#030305'}}
+              title="Flo Permit Demo"
+              loading="lazy"
+              allow="autoplay"
+            />
           </div>
+          <p className="text-center text-gray-600 text-xs mt-4">See how Flo Permit analyzes a real permit package in seconds</p>
         </div>
       </div>
 
