@@ -417,7 +417,7 @@ export default function App() {
         setCity(data.city)
         setPermitType(data.permit_type)
         // Set county based on city
-        if (['Fort Lauderdale', 'Pompano Beach', 'Hollywood', 'Coral Springs', 'Coconut Creek', 'Davie', 'Deerfield Beach', 'Lauderdale-by-the-Sea', 'Lighthouse Point', 'Margate', 'Miramar', 'Oakland Park', 'Pembroke Pines', 'Plantation', 'Sunrise', 'Tamarac', 'Weston'].includes(data.city)) {
+        if (['Fort Lauderdale', 'Pompano Beach', 'Hollywood', 'Coral Springs', 'Coconut Creek', 'Davie', 'Deerfield Beach', 'Lauderdale-by-the-Sea', 'Lighthouse Point', 'Margate', 'Miramar', 'Oakland Park', 'Pembroke Pines', 'Plantation', 'Sunrise', 'Tamarac', 'Weston', 'Wilton Manors'].includes(data.city)) {
           setCounty('Broward')
         } else if (['Boca Raton', 'Boynton Beach', 'Delray Beach', 'Lake Worth Beach', 'West Palm Beach'].includes(data.city)) {
           setCounty('Palm Beach')
@@ -1300,6 +1300,7 @@ export default function App() {
                       <option value="Margate">Margate</option>
                       <option value="Miramar">Miramar</option>
                       <option value="Oakland Park">Oakland Park</option>
+                      <option value="Wilton Manors">Wilton Manors</option>
                       <option value="Pembroke Pines">Pembroke Pines</option>
                       <option value="Plantation">Plantation</option>
                       <option value="Pompano Beach">Pompano Beach</option>
@@ -2863,6 +2864,7 @@ export default function App() {
                           <option value="Margate">Margate</option>
                           <option value="Miramar">Miramar</option>
                           <option value="Oakland Park">Oakland Park</option>
+                      <option value="Wilton Manors">Wilton Manors</option>
                           <option value="Pembroke Pines">Pembroke Pines</option>
                           <option value="Plantation">Plantation</option>
                           <option value="Pompano Beach">Pompano Beach</option>

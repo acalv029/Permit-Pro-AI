@@ -165,7 +165,11 @@ SINGLE_ANALYSIS_PRICE = 1599
 # PROMO CODE CONFIGURATION
 # ============================================================================
 PROMO_CODES = {
-    "CONTRACTOR3": {"bonus_analyses": 3, "max_redemptions": 30, "description": "3 free analyses for contractors"},
+    "CONTRACTOR3": {
+        "bonus_analyses": 3,
+        "max_redemptions": 30,
+        "description": "3 free analyses for contractors",
+    },
 }
 
 # ============================================================================
@@ -668,7 +672,9 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
             """,
         }
 
-        resend.Emails.send({**params, "idempotency_key": str(__import__("uuid").uuid4())})
+        resend.Emails.send(
+            {**params, "idempotency_key": str(__import__("uuid").uuid4())}
+        )
         return True
     except Exception as e:
         print(f"❌ Failed to send reset email: {str(e)}")
@@ -763,7 +769,9 @@ def send_welcome_email(email: str, full_name: str = None) -> bool:
             """,
         }
 
-        resend.Emails.send({**params, "idempotency_key": str(__import__("uuid").uuid4())})
+        resend.Emails.send(
+            {**params, "idempotency_key": str(__import__("uuid").uuid4())}
+        )
         return True
     except Exception as e:
         print(f"❌ Failed to send welcome email: {str(e)}")
@@ -795,7 +803,9 @@ def send_contact_email(name: str, email: str, subject: str, message: str) -> boo
             """,
         }
 
-        resend.Emails.send({**params, "idempotency_key": str(__import__("uuid").uuid4())})
+        resend.Emails.send(
+            {**params, "idempotency_key": str(__import__("uuid").uuid4())}
+        )
         return True
     except Exception as e:
         print(f"❌ Failed to send contact email: {str(e)}")
@@ -1700,6 +1710,8 @@ async def create_checkout_session(
                     "quantity": 1,
                 }
             ],
+    except HTTPException:
+        raise
             mode="subscription",
             success_url=f"{FRONTEND_URL}?payment=success&tier={tier}",
             cancel_url=f"{FRONTEND_URL}?payment=cancelled",
@@ -1891,15 +1903,30 @@ async def get_promo_stats(
     stats = []
     for code, config in PROMO_CODES.items():
         used_count = db.query(User).filter(User.promo_code_used == code).count()
-        users = db.query(User).filter(User.promo_code_used == code).order_by(User.created_at.desc()).limit(10).all()
-        stats.append({
-            "code": code,
-            "bonus_analyses": config["bonus_analyses"],
-            "max_redemptions": config["max_redemptions"],
-            "used_count": used_count,
-            "remaining": config["max_redemptions"] - used_count,
-            "recent_users": [{"email": u.email, "name": u.full_name, "created_at": u.created_at.isoformat()} for u in users]
-        })
+        users = (
+            db.query(User)
+            .filter(User.promo_code_used == code)
+            .order_by(User.created_at.desc())
+            .limit(10)
+            .all()
+        )
+        stats.append(
+            {
+                "code": code,
+                "bonus_analyses": config["bonus_analyses"],
+                "max_redemptions": config["max_redemptions"],
+                "used_count": used_count,
+                "remaining": config["max_redemptions"] - used_count,
+                "recent_users": [
+                    {
+                        "email": u.email,
+                        "name": u.full_name,
+                        "created_at": u.created_at.isoformat(),
+                    }
+                    for u in users
+                ],
+            }
+        )
     return {"promo_stats": stats}
 
 
