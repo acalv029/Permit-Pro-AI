@@ -716,7 +716,7 @@ export default function App() {
               <button onClick={() => setPage('home')} className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-bold rounded-xl hover:scale-105 transition-transform text-lg">
                 Try It Now - Analyze Your Permits
               </button>
-              <p className="text-gray-500 text-sm mt-4">1 free analysis, no credit card required</p>
+              <p className="text-gray-500 text-sm mt-4">3 free analyses to start, no credit card required</p>
             </div>
           </div>
         </div>
@@ -845,7 +845,7 @@ export default function App() {
               { q: "What file types can I upload?", a: "We accept PDF, PNG, JPG, and JPEG files. You can upload up to 50 files at once, with a maximum total size of 200MB." },
               { q: "Is my data secure?", a: "Yes! We use industry-standard encryption, secure password hashing, and your documents are processed securely. We never share your data with third parties." },
               { q: "Does this guarantee my permit will be approved?", a: "No. Flo Permit is an informational tool only. We help identify potential issues, but you should always verify requirements with your local permitting office." },
-              { q: "Is there a free tier?", a: "Yes! Free accounts get 1 analysis per month. Pro is $49/month for 20 analyses (~$2.50 each), and GC/Expediter is $149/month unlimited. Compare that to $300-500 per expediter visit." },
+              { q: "Is there a free tier?", a: "Yes! Free accounts start with 3 free analyses, then 1 per month. Pro is $49/month for 20 analyses (~$2.50 each), and GC/Expediter is $149/month unlimited. Compare that to $300-500 per expediter visit." },
               { q: "How accurate is the AI analysis?", a: "Our AI is trained on South Florida permit requirements and is highly accurate. However, requirements can change, so always verify with your local office." },
               { q: "Can I save my analysis history?", a: "Yes! Create a free account to save all your analyses and access them anytime." },
               { q: "How do I contact support?", a: "Email us at support@flopermit.com or use the Contact page. We typically respond within 24 hours." },
@@ -2395,7 +2395,7 @@ export default function App() {
           <button onClick={() => setShowRegister(true)} className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black font-extrabold rounded-xl hover:scale-[1.02] transition-transform text-lg shadow-lg shadow-cyan-500/20">
             Check My Package Free →
           </button>
-          <p className="text-gray-600 text-sm mt-4">1 free analysis/month. No credit card needed.</p>
+          <p className="text-gray-600 text-sm mt-4">3 free analyses to start. No credit card needed.</p>
         </div>
       </div>
 

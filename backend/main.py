@@ -155,7 +155,7 @@ STRIPE_PRICES = {
 
 TIER_LIMITS = {
     "free": 1,
-    "pro": 30,
+    "pro": 20,
     "business": 999999,
     "single": 1,
 }
@@ -853,6 +853,7 @@ async def register(request: Request, user_data: UserRegister, db: Session = Depe
             hashed_password=hash_password(user_data.password),
             full_name=user_data.full_name,
             company_name=user_data.company_name,
+            bonus_analyses=2,  # Welcome bonus: 1/month + 2 bonus = 3 free analyses to start
         )
 
         db.add(new_user)
@@ -1962,6 +1963,8 @@ async def get_admin_users(
             "tier_limit": tier_limit,
             "remaining": max(0, tier_limit - analyses_this_month) if tier_limit < 999999 else -1,
             "has_stripe": bool(u.stripe_subscription_id),
+            "stripe_sub_id": u.stripe_subscription_id[:20] + "..." if u.stripe_subscription_id else None,
+            "subscription_ends": u.subscription_ends_at.isoformat() if u.subscription_ends_at else None,
             "promo_code": getattr(u, 'promo_code_used', None),
             "created_at": u.created_at.isoformat() if u.created_at else None,
             "is_admin": u.email.lower().strip() in [e.lower().strip() for e in ADMIN_EMAILS]
