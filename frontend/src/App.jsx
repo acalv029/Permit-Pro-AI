@@ -417,7 +417,7 @@ export default function App() {
         setCity(data.city)
         setPermitType(data.permit_type)
         // Set county based on city
-        if (['Fort Lauderdale', 'Pompano Beach', 'Hollywood', 'Coral Springs', 'Coconut Creek', 'Davie', 'Deerfield Beach', 'Lauderdale-by-the-Sea', 'Lighthouse Point', 'Margate', 'Miramar', 'Oakland Park', 'Pembroke Pines', 'Plantation', 'Sunrise', 'Tamarac', 'Weston', 'Wilton Manors'].includes(data.city)) {
+        if (['Fort Lauderdale', 'Pompano Beach', 'Hollywood', 'Coral Springs', 'Coconut Creek', 'Davie', 'Deerfield Beach', 'Lauderdale-by-the-Sea', 'Lighthouse Point', 'Margate', 'Miramar', 'Oakland Park', 'Pembroke Pines', 'Plantation', 'Sunrise', 'Tamarac', 'Weston', 'Wilton Manors', 'Dania Beach'].includes(data.city)) {
           setCounty('Broward')
         } else if (['Boca Raton', 'Boynton Beach', 'Delray Beach', 'Lake Worth Beach', 'West Palm Beach'].includes(data.city)) {
           setCounty('Palm Beach')
@@ -840,7 +840,7 @@ export default function App() {
           <div className="space-y-4">
             {[
               { q: "What is Flo Permit?", a: "Flo Permit is an AI-powered tool that analyzes your permit documents and tells you if your package is complete. Upload your files, and we'll identify missing documents, issues, and provide recommendations." },
-              { q: "Which cities do you support?", a: "We support 30 cities across Broward, Palm Beach, and Miami-Dade counties including Fort Lauderdale, Miami, Miami Beach, Boca Raton, Hollywood, Wellington, Pompano Beach, Hialeah, Coral Springs, Oakland Park, and many more!" },
+              { q: "Which cities do you support?", a: "We support 32 cities across Broward, Palm Beach, and Miami-Dade counties including Fort Lauderdale, Miami, Miami Beach, Boca Raton, Hollywood, Wellington, Pompano Beach, Hialeah, Coral Springs, Oakland Park, and many more!" },
               { q: "What permit types can you analyze?", a: "We support all major permit types: Roofing, HVAC/Mechanical, Electrical, Plumbing, Windows/Doors, Pool, Fence, Solar, Generator, Demolition, and Marine (Dock, Seawall, Boat Lift). Our AI auto-detects the permit type from your documents!" },
               { q: "What file types can I upload?", a: "We accept PDF, PNG, JPG, and JPEG files. You can upload up to 50 files at once, with a maximum total size of 200MB." },
               { q: "Is my data secure?", a: "Yes! We use industry-standard encryption, secure password hashing, and your documents are processed securely. We never share your data with third parties." },
@@ -1301,6 +1301,8 @@ export default function App() {
                       <option value="Miramar">Miramar</option>
                       <option value="Oakland Park">Oakland Park</option>
                       <option value="Wilton Manors">Wilton Manors</option>
+                      <option value="Dania Beach">Dania Beach</option>
+                      <option value="Dania Beach">Dania Beach</option>
                       <option value="Pembroke Pines">Pembroke Pines</option>
                       <option value="Plantation">Plantation</option>
                       <option value="Pompano Beach">Pompano Beach</option>
@@ -2428,7 +2430,7 @@ export default function App() {
             <div className="p-6 bg-white/[0.02] rounded-xl border border-white/5">
               <div className="text-amber-400 text-2xl mb-3">⏱</div>
               <h3 className="text-white font-bold mb-2">Every city is different</h3>
-              <p className="text-gray-500 text-sm leading-relaxed">Fort Lauderdale wants 3 plan sets. Pompano requires black ink only. Miami Beach needs SHA-1 codes. You can't memorize 30 cities.</p>
+              <p className="text-gray-500 text-sm leading-relaxed">Fort Lauderdale wants 3 plan sets. Pompano requires black ink only. Miami Beach needs SHA-1 codes. You can't memorize 32 cities.</p>
             </div>
             <div className="p-6 bg-white/[0.02] rounded-xl border border-white/5">
               <div className="text-emerald-400 text-2xl mb-3">✓</div>
@@ -2447,7 +2449,7 @@ export default function App() {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               { num: '1', title: 'Upload your docs', desc: 'Plans, surveys, NOCs, energy calcs, product approvals — upload everything in your package.' },
-              { num: '2', title: 'Select city & permit type', desc: "Choose from 30 cities and 20+ permit types. We check against that city's exact requirements." },
+              { num: '2', title: 'Select city & permit type', desc: "Choose from 32 cities and 20+ permit types. We check against that city's exact requirements." },
               { num: '3', title: 'Get your report', desc: 'Missing documents, critical issues, compliance score, and specific fix instructions. In seconds.' }
             ].map((s, i) => (
               <div key={i} className="text-center">
@@ -2479,7 +2481,7 @@ export default function App() {
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between text-gray-400"><span>AI analysis</span><span className="text-cyan-400 font-bold">~$5/check</span></div>
                 <div className="flex justify-between text-gray-400"><span>Time to results</span><span className="text-cyan-400 font-bold">30 seconds</span></div>
-                <div className="flex justify-between text-gray-400"><span>City-specific rules</span><span className="text-cyan-400 font-bold">30 cities built in</span></div>
+                <div className="flex justify-between text-gray-400"><span>City-specific rules</span><span className="text-cyan-400 font-bold">32 cities built in</span></div>
                 <div className="flex justify-between text-gray-400"><span>Known gotchas caught</span><span className="text-cyan-400 font-bold">1,099 and counting</span></div>
               </div>
             </div>
@@ -2517,7 +2519,7 @@ export default function App() {
       {/* CITIES */}
       <div className="relative z-10 py-16 px-6 border-t border-white/5">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-black text-center mb-4 text-white">30 cities. 10,000+ requirements.</h2>
+          <h2 className="text-2xl md:text-3xl font-black text-center mb-4 text-white">32 cities. 10,000+ requirements.</h2>
           <p className="text-gray-500 text-center mb-10">Every city has different rules. We know all of them.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
@@ -2865,6 +2867,8 @@ export default function App() {
                           <option value="Miramar">Miramar</option>
                           <option value="Oakland Park">Oakland Park</option>
                       <option value="Wilton Manors">Wilton Manors</option>
+                      <option value="Dania Beach">Dania Beach</option>
+                      <option value="Dania Beach">Dania Beach</option>
                           <option value="Pembroke Pines">Pembroke Pines</option>
                           <option value="Plantation">Plantation</option>
                           <option value="Pompano Beach">Pompano Beach</option>
