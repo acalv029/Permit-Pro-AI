@@ -1291,6 +1291,7 @@ export default function App() {
                     <>
                       <option value="Coconut Creek">Coconut Creek</option>
                       <option value="Coral Springs">Coral Springs</option>
+                      <option value="Dania Beach">Dania Beach</option>
                       <option value="Davie">Davie</option>
                       <option value="Deerfield Beach">Deerfield Beach</option>
                       <option value="Fort Lauderdale">Fort Lauderdale</option>
@@ -1300,15 +1301,13 @@ export default function App() {
                       <option value="Margate">Margate</option>
                       <option value="Miramar">Miramar</option>
                       <option value="Oakland Park">Oakland Park</option>
-                      <option value="Wilton Manors">Wilton Manors</option>
-                      <option value="Dania Beach">Dania Beach</option>
-                      <option value="Dania Beach">Dania Beach</option>
                       <option value="Pembroke Pines">Pembroke Pines</option>
                       <option value="Plantation">Plantation</option>
                       <option value="Pompano Beach">Pompano Beach</option>
                       <option value="Sunrise">Sunrise</option>
                       <option value="Tamarac">Tamarac</option>
                       <option value="Weston">Weston</option>
+                      <option value="Wilton Manors">Wilton Manors</option>
                     </>
                   )}
                   {county === 'Palm Beach' && (
@@ -2857,6 +2856,7 @@ export default function App() {
                         <>
                           <option value="Coconut Creek">Coconut Creek</option>
                           <option value="Coral Springs">Coral Springs</option>
+                          <option value="Dania Beach">Dania Beach</option>
                           <option value="Davie">Davie</option>
                           <option value="Deerfield Beach">Deerfield Beach</option>
                           <option value="Fort Lauderdale">Fort Lauderdale</option>
@@ -2866,15 +2866,13 @@ export default function App() {
                           <option value="Margate">Margate</option>
                           <option value="Miramar">Miramar</option>
                           <option value="Oakland Park">Oakland Park</option>
-                      <option value="Wilton Manors">Wilton Manors</option>
-                      <option value="Dania Beach">Dania Beach</option>
-                      <option value="Dania Beach">Dania Beach</option>
                           <option value="Pembroke Pines">Pembroke Pines</option>
                           <option value="Plantation">Plantation</option>
                           <option value="Pompano Beach">Pompano Beach</option>
                           <option value="Sunrise">Sunrise</option>
                           <option value="Tamarac">Tamarac</option>
                           <option value="Weston">Weston</option>
+                          <option value="Wilton Manors">Wilton Manors</option>
                         </>
                       )}
                       {county === 'Palm Beach' && (
