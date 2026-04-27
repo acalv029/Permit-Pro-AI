@@ -309,6 +309,7 @@ class User(Base):
     stripe_customer_id = Column(String(255), nullable=True)
     stripe_subscription_id = Column(String(255), nullable=True)
     subscription_ends_at = Column(DateTime, nullable=True)
+    bonus_analyses = Column(Integer, default=0)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -853,12 +854,18 @@ async def register(request: Request, user_data: UserRegister, db: Session = Depe
             hashed_password=hash_password(user_data.password),
             full_name=user_data.full_name,
             company_name=user_data.company_name,
-            bonus_analyses=2,  # Welcome bonus: 1/month + 2 bonus = 3 free analyses to start
         )
 
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
+
+        # Welcome bonus: 1/month + 2 bonus = 3 free analyses to start
+        try:
+            new_user.bonus_analyses = 2
+            db.commit()
+        except Exception:
+            pass  # Column may not exist yet
 
         # Send welcome email
         send_welcome_email(new_user.email, new_user.full_name)

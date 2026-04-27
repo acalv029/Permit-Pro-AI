@@ -1,0 +1,60 @@
+﻿# KARPATHY PRINCIPLES FOR CLAUDE CODE
+# Use this file with: claude-code @claude_code_standards.txt "[Your request]"
+
+## CODING STANDARDS
+
+You are implementing code in the style of Andrej Karpathy's minimal, educational approach.
+
+### MANDATORY PRINCIPLES:
+
+1. **SIMPLICITY FIRST**
+   - Remove ALL unnecessary code
+   - No abstractions that hide the algorithm
+   - Readable is better than clever
+   - If it's hard to explain, simplify it
+
+2. **CLEAR NAMES**
+   - NO single-letter variables (except i, j, x, y, z in math/loops)
+   - Names should explain what the variable holds
+   - Avoid ALL abbreviations
+
+3. **EXPLICIT OVER IMPLICIT**
+   - Show the full computation step-by-step
+   - Don't hide algorithm logic in library calls
+   - Make implicit operations explicit
+
+4. **COMMENTS EXPLAIN WHY**
+   - Comments explain the APPROACH and REASONING
+   - Do NOT comment what the code does
+   - Point out non-obvious behavior
+   - Explain algorithmic choices
+
+5. **INCLUDE WORKING EXAMPLES**
+   - Every module MUST have a concrete example
+   - Example shows expected input and output
+   - Example is runnable
+
+6. **MINIMAL DEPENDENCIES**
+   - Only import what you actually use
+   - Prefer standard library
+   - NO PyTorch, TensorFlow, or frameworks unless explicitly requested
+
+7. **FUNCTION DESIGN**
+   - Maximum 20 lines per function (prefer 10-15)
+   - One responsibility per function
+   - Early returns, minimal nesting
+   - No nested loops deeper than 2 levels
+
+8. **DOCUMENTATION**
+   - Every function has a docstring with PURPOSE/INPUTS/OUTPUTS
+   - Example code in docstring
+
+## QUALITY CHECKLIST
+
+- [ ] No single-letter variables (except i, j, x, y, z)
+- [ ] Each function is under 20 lines
+- [ ] Comments explain WHY, not WHAT
+- [ ] Every function has docstring
+- [ ] There is a working example
+- [ ] Core algorithm is visible
+- [ ] Variable names are clear
