@@ -1268,10 +1268,11 @@ export default function App() {
                 <label className="block text-sm font-semibold text-gray-400 mb-2">County</label>
                 <select 
                   value={county} 
-                  onChange={e => { setCounty(e.target.value); setCity(''); setPermitType('') }}
+                  onChange={e => { setCounty(e.target.value); setCity(e.target.value === 'auto' ? 'auto' : ''); setPermitType(e.target.value === 'auto' ? 'auto' : '') }}
                   className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:border-cyan-500 focus:outline-none"
                 >
                   <option value="">Select county...</option>
+                  <option value="auto">✨ Auto-detect from documents</option>
                   <option value="Broward">Broward County</option>
                   <option value="Miami-Dade">Miami-Dade County</option>
                   <option value="Palm Beach">Palm Beach County</option>
@@ -1286,7 +1287,10 @@ export default function App() {
                   disabled={!county}
                   className="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:border-cyan-500 focus:outline-none disabled:opacity-50"
                 >
-                  <option value="">{county ? 'Select city...' : 'Select county first'}</option>
+                  <option value="">{county === 'auto' ? 'Will auto-detect' : county ? 'Select city...' : 'Select county first'}</option>
+                  {county === 'auto' && (
+                    <option value="auto">✨ Auto-detect city</option>
+                  )}
                   {county === 'Broward' && (
                     <>
                       <option value="Coconut Creek">Coconut Creek</option>
@@ -2026,6 +2030,23 @@ export default function App() {
               </div>
               
               <div className="p-8 space-y-6">
+                {/* Conflict Warning */}
+                {results.conflict_warning && (
+                  <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-start gap-3">
+                    <span className="text-red-400 text-lg shrink-0">🚨</span>
+                    <div>
+                      <p className="text-red-300 font-bold text-sm">Multiple Cities Detected</p>
+                      <p className="text-red-400/80 text-xs mt-1">{results.conflict_warning}</p>
+                    </div>
+                  </div>
+                )}
+                {/* Auto-detect info */}
+                {results.auto_detected && (
+                  <div className="p-3 bg-cyan-500/10 border border-cyan-500/20 rounded-lg flex items-center gap-2">
+                    <span className="text-cyan-400">✨</span>
+                    <span className="text-cyan-300 text-xs font-medium">Auto-detected: {results.auto_detected.city} ({Math.round(results.auto_detected.confidence * 100)}% confidence)</span>
+                  </div>
+                )}
                 {/* Disclaimer Banner */}
                 <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg flex items-start gap-2">
                   <span className="text-amber-400 shrink-0">⚠️</span>
