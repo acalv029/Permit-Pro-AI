@@ -65,7 +65,7 @@ from sqlalchemy.orm import sessionmaker, relationship, Session
 load_dotenv()
 
 from reader import get_document_text
-from permit_data import get_permit_requirements, get_city_key, get_permit_types
+from permit_data import get_permit_requirements, get_city_key, get_permit_types, CITY_INFO, KNOWN_GOTCHAS
 from analyzer import analyze_document_with_claude
 from gemini_provider import analyze_with_gemini, get_google_key, parse_analysis_json
 
@@ -155,7 +155,7 @@ STRIPE_PRICES = {
 
 TIER_LIMITS = {
     "free": 1,
-    "pro": 30,
+    "pro": 20,
     "business": 999999,
     "single": 1,
 }
@@ -179,7 +179,12 @@ if DATABASE_URL.startswith("postgres://"):
 if DATABASE_URL.startswith("sqlite"):
     engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 else:
-    engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+    engine = create_engine(
+        DATABASE_URL,
+        pool_pre_ping=True,
+        pool_recycle=300,
+        connect_args={"connect_timeout": 10},
+    )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
@@ -285,78 +290,6 @@ def detect_permit_type_from_text(text: str) -> str:
     return "structural"  # Default to structural
 
 
-def detect_city_from_text(text: str) -> dict:
-    """Auto-detect city, county, and potential conflicts from document text."""
-    text_lower = text.lower()
-    
-    # All supported cities with common variations
-    city_patterns = {
-        "Fort Lauderdale": ["fort lauderdale", "ft lauderdale", "ft. lauderdale", "lauderbuild"],
-        "Pompano Beach": ["pompano beach", "pompano"],
-        "Hollywood": ["hollywood, fl", "hollywood fl", "city of hollywood"],
-        "Coral Springs": ["coral springs"],
-        "Coconut Creek": ["coconut creek"],
-        "Lauderdale-by-the-Sea": ["lauderdale-by-the-sea", "lauderdale by the sea", "lbts"],
-        "Deerfield Beach": ["deerfield beach"],
-        "Pembroke Pines": ["pembroke pines"],
-        "Lighthouse Point": ["lighthouse point"],
-        "Weston": ["city of weston", "weston, fl", "weston fl"],
-        "Davie": ["town of davie", "davie, fl", "davie fl"],
-        "Plantation": ["city of plantation", "plantation, fl", "plantation fl"],
-        "Sunrise": ["city of sunrise", "sunrise, fl", "sunrise fl"],
-        "Miramar": ["city of miramar", "miramar, fl", "miramar fl"],
-        "Margate": ["city of margate", "margate, fl", "margate fl"],
-        "Tamarac": ["city of tamarac", "tamarac, fl", "tamarac fl"],
-        "Oakland Park": ["oakland park"],
-        "Wilton Manors": ["wilton manors"],
-        "Dania Beach": ["dania beach"],
-        "Boca Raton": ["boca raton"],
-        "Lake Worth Beach": ["lake worth beach", "lake worth"],
-        "Delray Beach": ["delray beach"],
-        "Boynton Beach": ["boynton beach"],
-        "West Palm Beach": ["west palm beach", "west palm"],
-        "Wellington": ["village of wellington", "wellington, fl", "wellington fl"],
-        "Miami": ["city of miami", "miami, fl 33"],
-        "Miami Beach": ["miami beach"],
-        "Hialeah": ["city of hialeah", "hialeah, fl", "hialeah fl"],
-        "Homestead": ["city of homestead", "homestead, fl", "homestead fl"],
-        "Miami Gardens": ["miami gardens"],
-        "North Miami": ["north miami"],
-        "Kendall": ["kendall, fl", "kendall fl"],
-    }
-    
-    detected_cities = {}
-    for city_name, patterns in city_patterns.items():
-        count = 0
-        for pattern in patterns:
-            count += text_lower.count(pattern)
-        if count > 0:
-            detected_cities[city_name] = count
-    
-    if not detected_cities:
-        return {"detected": None, "confidence": 0, "conflicts": []}
-    
-    # Sort by frequency
-    sorted_cities = sorted(detected_cities.items(), key=lambda x: x[1], reverse=True)
-    primary_city = sorted_cities[0][0]
-    primary_count = sorted_cities[0][1]
-    
-    # Check for conflicts — multiple cities with significant mentions
-    conflicts = []
-    if len(sorted_cities) > 1:
-        for city_name, count in sorted_cities[1:]:
-            # If another city has more than 2 mentions or at least 30% of primary, flag it
-            if count >= 2 or (count / primary_count) >= 0.3:
-                conflicts.append(city_name)
-    
-    return {
-        "detected": primary_city,
-        "confidence": min(primary_count / 3, 1.0),  # Normalize: 3+ mentions = high confidence
-        "all_detected": dict(sorted_cities),
-        "conflicts": conflicts,
-    }
-
-
 # ============================================================================
 # DATABASE MODELS
 # ============================================================================
@@ -376,6 +309,7 @@ class User(Base):
     stripe_customer_id = Column(String(255), nullable=True)
     stripe_subscription_id = Column(String(255), nullable=True)
     subscription_ends_at = Column(DateTime, nullable=True)
+    bonus_analyses = Column(Integer, default=0)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -492,8 +426,23 @@ class AIUsageLog(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
 
-Base.metadata.create_all(bind=engine)
-print("✅ Database tables initialized")
+import time as _time
+
+_db_retries = 0
+_db_max_retries = 5
+while _db_retries < _db_max_retries:
+    try:
+        Base.metadata.create_all(bind=engine)
+        print("✅ Database tables initialized")
+        break
+    except Exception as _db_err:
+        _db_retries += 1
+        if _db_retries >= _db_max_retries:
+            print(f"❌ Database connection failed after {_db_max_retries} attempts: {_db_err}")
+            raise
+        print(f"⚠️ Database connection attempt {_db_retries}/{_db_max_retries} failed: {_db_err}")
+        print(f"   Retrying in {_db_retries * 3} seconds...")
+        _time.sleep(_db_retries * 3)
 
 
 # Migrate: Add Stripe columns if they don't exist
@@ -880,7 +829,8 @@ def send_contact_email(name: str, email: str, subject: str, message: str) -> boo
 
 
 @app.post("/api/auth/register", response_model=TokenResponse)
-async def register(user_data: UserRegister, db: Session = Depends(get_db)):
+@limiter.limit("3/minute;10/hour")
+async def register(request: Request, user_data: UserRegister, db: Session = Depends(get_db)):
     """Register a new user"""
     try:
         # Verify reCAPTCHA
@@ -909,6 +859,13 @@ async def register(user_data: UserRegister, db: Session = Depends(get_db)):
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
+
+        # Welcome bonus: 1/month + 2 bonus = 3 free analyses to start
+        try:
+            new_user.bonus_analyses = 2
+            db.commit()
+        except Exception:
+            pass  # Column may not exist yet
 
         # Send welcome email
         send_welcome_email(new_user.email, new_user.full_name)
@@ -952,7 +909,8 @@ async def register(user_data: UserRegister, db: Session = Depends(get_db)):
 
 
 @app.post("/api/auth/login", response_model=TokenResponse)
-async def login(user_data: UserLogin, db: Session = Depends(get_db)):
+@limiter.limit("5/minute;20/hour")
+async def login(request: Request, user_data: UserLogin, db: Session = Depends(get_db)):
     """Login and get access token"""
     try:
         # Verify reCAPTCHA
@@ -1974,6 +1932,111 @@ async def get_promo_stats(
     return {"promo_stats": stats}
 
 
+@app.get("/api/admin/users")
+async def get_admin_users(
+    authorization: str = Header(None), db: Session = Depends(get_db)
+):
+    """Admin: list all users with subscription info"""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    token = authorization[7:]
+    payload = decode_access_token(token)
+    user_id = int(payload.get("sub"))
+    require_admin(user_id, db)
+
+    from sqlalchemy import func
+
+    first_of_month = datetime.utcnow().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    users = db.query(User).order_by(User.created_at.desc()).limit(100).all()
+    
+    result = []
+    for u in users:
+        analyses_this_month = db.query(AnalysisHistory).filter(
+            AnalysisHistory.user_id == u.id,
+            AnalysisHistory.created_at >= first_of_month
+        ).count()
+        total_analyses = db.query(AnalysisHistory).filter(AnalysisHistory.user_id == u.id).count()
+        tier_limit = TIER_LIMITS.get(u.subscription_tier or "free", 1) + (getattr(u, 'bonus_analyses', 0) or 0)
+        
+        result.append({
+            "id": u.id,
+            "email": u.email,
+            "full_name": u.full_name,
+            "company_name": u.company_name,
+            "tier": u.subscription_tier or "free",
+            "bonus_analyses": getattr(u, 'bonus_analyses', 0) or 0,
+            "analyses_this_month": analyses_this_month,
+            "total_analyses": total_analyses,
+            "tier_limit": tier_limit,
+            "remaining": max(0, tier_limit - analyses_this_month) if tier_limit < 999999 else -1,
+            "has_stripe": bool(u.stripe_subscription_id),
+            "stripe_sub_id": u.stripe_subscription_id[:20] + "..." if u.stripe_subscription_id else None,
+            "subscription_ends": u.subscription_ends_at.isoformat() if u.subscription_ends_at else None,
+            "promo_code": getattr(u, 'promo_code_used', None),
+            "created_at": u.created_at.isoformat() if u.created_at else None,
+            "is_admin": u.email.lower().strip() in [e.lower().strip() for e in ADMIN_EMAILS]
+        })
+    
+    return {"users": result}
+
+
+@app.put("/api/admin/users/{target_user_id}")
+async def admin_update_user(
+    target_user_id: int,
+    authorization: str = Header(None), 
+    db: Session = Depends(get_db),
+    update: dict = None
+):
+    """Admin: update user tier, bonus analyses, etc."""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    token = authorization[7:]
+    payload = decode_access_token(token)
+    admin_id = int(payload.get("sub"))
+    require_admin(admin_id, db)
+
+    if update is None:
+        from fastapi import Request
+        raise HTTPException(status_code=400, detail="No update data provided")
+
+    user = db.query(User).filter(User.id == target_user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    changes = []
+    
+    # Change subscription tier
+    if "tier" in update and update["tier"] in ["free", "pro", "business"]:
+        old_tier = user.subscription_tier
+        user.subscription_tier = update["tier"]
+        changes.append(f"tier: {old_tier} → {update['tier']}")
+    
+    # Add bonus analyses
+    if "add_bonus" in update:
+        bonus = int(update["add_bonus"])
+        current = getattr(user, 'bonus_analyses', 0) or 0
+        user.bonus_analyses = current + bonus
+        changes.append(f"bonus: +{bonus} (now {user.bonus_analyses})")
+    
+    # Set bonus analyses to specific number
+    if "set_bonus" in update:
+        user.bonus_analyses = int(update["set_bonus"])
+        changes.append(f"bonus set to {user.bonus_analyses}")
+    
+    # Deactivate/activate
+    if "is_active" in update:
+        user.is_active = bool(update["is_active"])
+        changes.append(f"active: {user.is_active}")
+
+    db.commit()
+    
+    return {
+        "message": f"Updated user {user.email}: {', '.join(changes)}",
+        "user_id": user.id,
+        "changes": changes
+    }
+
+
 @app.get("/api/admin/single-purchases")
 async def get_all_single_purchases(
     authorization: str = Header(None), db: Session = Depends(get_db)
@@ -2322,16 +2385,17 @@ async def get_subscription(
         )
 
         tier = user.subscription_tier or "free"
-        tier_limit = TIER_LIMITS.get(tier, 3)
+        tier_limit = TIER_LIMITS.get(tier, 3) + (getattr(user, 'bonus_analyses', 0) or 0)
+        is_admin = user.email.lower().strip() in [e.lower().strip() for e in ADMIN_EMAILS]
 
         return {
-            "tier": tier,
+            "tier": "business" if is_admin else tier,
             "analyses_this_month": analyses_this_month,
-            "analyses_limit": tier_limit,
-            "analyses_remaining": max(0, tier_limit - analyses_this_month)
+            "analyses_limit": 999999 if is_admin else tier_limit,
+            "analyses_remaining": -1 if is_admin else (max(0, tier_limit - analyses_this_month)
             if tier_limit < 999999
-            else -1,
-            "has_subscription": bool(user.stripe_subscription_id),
+            else -1),
+            "has_subscription": True if is_admin else bool(user.stripe_subscription_id),
         }
     except HTTPException:
         raise
@@ -2341,6 +2405,44 @@ async def get_subscription(
 
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Subscription error: {str(e)}")
+
+
+@app.get("/api/checklist-preview")
+async def checklist_preview(city: str, permit_type: str):
+    """Return checklist items + city info for a city+permit type combo (pre-upload preview)"""
+    city_key = get_city_key(city)
+    if not city_key:
+        return {"items": [], "city_info": {}}
+
+    requirements = get_permit_requirements(city_key, permit_type)
+    if not requirements:
+        requirements = get_permit_requirements(city_key, "building")
+    if not requirements:
+        return {"items": [], "city_info": {}}
+
+    city_info = CITY_INFO.get(city_key, {})
+
+    # Filter items — remove GOTCHA: prefixed items (those go in gotchas)
+    items = [i for i in requirements.get("items", []) if not i.startswith("GOTCHA:")]
+
+    return {
+        "items": items[:25],  # Cap at 25 for preview
+        "total_items": len(items),
+        "permit_name": requirements.get("name", permit_type),
+        "city_info": {
+            "name": city_info.get("name", city),
+            "phone": city_info.get("phone", ""),
+            "address": city_info.get("address", ""),
+            "hours": city_info.get("hours", ""),
+            "portal_url": city_info.get("portal_url", ""),
+            "submission": city_info.get("submission", ""),
+            "insurance_holder": city_info.get("insurance_holder", ""),
+            "noc_threshold": city_info.get("noc_threshold", ""),
+            "plan_sets": city_info.get("plan_sets", ""),
+            "hvhz": city_info.get("hvhz", False),
+        },
+        "gotchas_count": len(KNOWN_GOTCHAS.get(city_key, [])),
+    }
 
 
 @app.get("/api/cities")
@@ -2628,6 +2730,7 @@ async def analyze_permit_folder(
             pass
 
     # Check usage limits for authenticated users
+    print(f"📥 Analyze request: user={'authenticated' if user else 'anonymous'}, email={user.email if user else 'none'}", flush=True)
     if user:
         first_of_month = datetime.utcnow().replace(
             day=1, hour=0, minute=0, second=0, microsecond=0
@@ -2641,8 +2744,13 @@ async def analyze_permit_folder(
             .count()
         )
 
-        tier_limit = TIER_LIMITS.get(user.subscription_tier, 3)
-        if analyses_this_month >= tier_limit:
+        tier_limit = TIER_LIMITS.get(user.subscription_tier, 3) + (getattr(user, 'bonus_analyses', 0) or 0)
+        import sys
+        is_admin = user.email.lower().strip() in [e.lower().strip() for e in ADMIN_EMAILS]
+        print(f"🔍 Analysis check: user={user.email}, tier={user.subscription_tier}, limit={tier_limit}, used={analyses_this_month}, is_admin={is_admin}", flush=True)
+        if is_admin:
+            print(f"✅ Admin bypass: {user.email}", flush=True)
+        elif analyses_this_month >= tier_limit:
             raise HTTPException(
                 status_code=403,
                 detail=f"Monthly limit reached ({tier_limit} analyses). Please upgrade your plan.",
@@ -2698,36 +2806,12 @@ async def analyze_permit_folder(
             except:
                 all_text.append(f"\n=== {pf['name']} ===\n[Error reading]")
 
-        combined_text = "\n".join(all_text)
-
-        # Auto-detect city if set to "auto"
-        detected_info = None
-        if city == "auto" or not city:
-            detected_info = detect_city_from_text(combined_text)
-            if detected_info["detected"]:
-                city = detected_info["detected"]
-                print(f"Auto-detected city: {city} (confidence: {detected_info['confidence']:.0%})")
-            else:
-                raise HTTPException(
-                    status_code=400,
-                    detail="Could not detect city from documents. Please select a city manually.",
-                )
-
         city_key = get_city_key(city)
-
-        # Check for conflicting cities in documents (even if city was manually selected)
-        city_conflict_check = detect_city_from_text(combined_text)
-        conflict_warning = None
-        if city_conflict_check["conflicts"]:
-            # Filter out the selected city from conflicts
-            real_conflicts = [c for c in city_conflict_check["conflicts"] if c != city]
-            if real_conflicts:
-                conflict_warning = f"Warning: Documents may contain materials for multiple cities. Detected references to {', '.join(real_conflicts)} in addition to {city}. Please verify all documents are for the same permit package."
-                print(f"⚠ City conflict detected: {city} vs {real_conflicts}")
 
         # Handle auto-detect permit type
         if permit_type == "auto" or not permit_type:
-            detected_type = detect_permit_type_from_text(combined_text)
+            # AI will detect the permit type from the documents
+            detected_type = detect_permit_type_from_text("\n".join(all_text))
             permit_type = detected_type
 
         requirements = get_permit_requirements(city_key, permit_type)
@@ -2742,7 +2826,11 @@ async def analyze_permit_folder(
 
         # Determine AI tier based on subscription
         ai_tier = "standard"  # default: Gemini Flash (cheap)
-        if user and user.subscription_tier in ("pro", "business"):
+        is_admin = user and user.email.lower().strip() in [e.lower().strip() for e in ADMIN_EMAILS]
+        if is_admin:
+            ai_tier = "premium"  # Admins always get Claude
+            print(f"✅ Admin {user.email} using premium (Claude)", flush=True)
+        elif user and user.subscription_tier in ("pro", "business"):
             ai_tier = "premium"  # Claude Sonnet (better quality)
 
         analysis = analyze_folder_with_claude(
@@ -2776,7 +2864,8 @@ async def analyze_permit_folder(
 
         shutil.rmtree(temp_dir)
 
-        response = {
+        city_info_data = CITY_INFO.get(city_key, {})
+        return {
             "success": True,
             "analysis_id": analysis_id,
             "files_analyzed": len(processed_files),
@@ -2784,21 +2873,18 @@ async def analyze_permit_folder(
             "analysis": analysis,
             "city": city,
             "permit_type": requirements["name"],
+            "gotchas": requirements.get("gotchas", [])[:10],
+            "city_info": {
+                "phone": city_info_data.get("phone", ""),
+                "address": city_info_data.get("address", ""),
+                "hours": city_info_data.get("hours", ""),
+                "portal_url": city_info_data.get("portal_url", ""),
+                "submission": city_info_data.get("submission", ""),
+                "insurance_holder": city_info_data.get("insurance_holder", ""),
+                "noc_threshold": city_info_data.get("noc_threshold", ""),
+                "plan_sets": city_info_data.get("plan_sets", ""),
+            },
         }
-
-        # Add auto-detection info if city was auto-detected
-        if detected_info:
-            response["auto_detected"] = {
-                "city": detected_info["detected"],
-                "confidence": detected_info["confidence"],
-                "all_detected": detected_info.get("all_detected", {}),
-            }
-
-        # Add conflict warning if documents reference multiple cities
-        if conflict_warning:
-            response["conflict_warning"] = conflict_warning
-
-        return response
 
     except HTTPException:
         shutil.rmtree(temp_dir, ignore_errors=True)
@@ -2828,6 +2914,7 @@ def analyze_folder_with_claude(
     city_key = requirements.get("city_key", "")
     gotchas = requirements.get("gotchas", [])
     tips = requirements.get("tips", [])
+    verify_items = requirements.get("verify_with_city", [])
     city_info = requirements.get("city_info", {})
 
     if len(text) > 200000:
@@ -2858,21 +2945,41 @@ FORT LAUDERDALE MARINE REQUIREMENTS:
     elif city_key == "pompano_beach":
         city_context = """
 POMPANO BEACH SPECIFIC REQUIREMENTS:
-- Portal: Click2Gov
-- Applications MUST be in BLACK INK - will be rejected otherwise!
+- Portal: Click2Gov (create app) + ePlan (upload docs) — SEPARATE credentials
+- Applications MUST be in BLACK INK — will be rejected otherwise!
 - Plan sets: Only 1 required (100% electronic review)
-- Fire Review Application REQUIRED for ALL permits (Pompano-specific)
+- Insurance holder MUST read exactly: "City of Pompano Beach, 100 W Atlantic Blvd, Pompano Beach, FL 33060"
+- Fire Review Application required for multi-family/condo/commercial — NOT for single-family residential
 - Both owner AND contractor signatures required, notarized
-- NOC thresholds vary: General >$2,500, HVAC >$5,000, Roofing >$7,500
+- NOC thresholds: General >$2,500, Most trades >$5,000, Roofing >$7,500
 - New/relocated electrical service must be UNDERGROUND (City Ordinance 152.07)
-- Emergency A/C repairs: Must notify Chief Mechanical Inspector BEFORE starting
+- Emergency A/C: notify Scott.Maxwell@copbfl.com with job address BEFORE starting; submit permit next business day
 - EPD must be approved BEFORE city submittal
 - Work without permit = DOUBLE the permit fee
+- Broward Uniform App revision January 8, 2026 required (effective March 9, 2026) — must indicate Private Provider status
+- License-exempt contractors per HB 735 use BTR number instead of license
+- Private Provider: one-time registration at Building@copbfl.com; same PP must do plan review AND inspections
+- Owner/Builder NOT applicable for condominiums; NOT permitted for asphalt installation/removal
+- Generator exhaust must be 10 feet from any building opening
+- Kitchen/bath 2nd floor+ condo: STC 50 dB and IIC 50 dB sound barrier required
+- Standalone solar systems: Quick Service 3 business day review
 
 POMPANO BEACH MARINE REQUIREMENTS:
 - Dock extension: 10% of waterway width OR 8 feet (whichever is less)
 - Boat lift: 20% of waterway width OR 20 feet (whichever is less)
 - Engineering permit fee: 4% of construction cost (min $100)
+- Electrical permit ALWAYS required for docks (not conditional)
+- Approval sequence: County EPD then FL DEP then Army Corps then Local permit
+
+POMPANO BEACH FEES (from Fee Schedule 10/01/2025):
+- Engineering fee: 4% of construction cost (min $100)
+- Plan revision: $100 per revision
+- Reinspection (first disapproval): $60
+- Reinspection (additional): $250
+- Re-inspection for wrong address/work not ready: 4x first reinspection fee
+- Overtime inspections: $225 first 3 hours + $75/additional hour
+- TCO/Partial CO: $550 per unit (same for renewal/extension)
+- Change of contractor: $100
 """
     elif city_key == "lauderdale_by_the_sea":
         city_context = """
@@ -3322,32 +3429,74 @@ MIRAMAR FEES:
     elif city_key == "plantation":
         city_context = """
 PLANTATION SPECIFIC REQUIREMENTS:
-- Portal: Broward ePermits
+- Portal: Accela Citizen Access (ACA) — digital ONLY since 11/14/2022
+- Portal URL: https://aca.plantation.org/CitizenAccess/
 - Application must be signed and notarized by QUALIFIER
-- Walk-Thru permits: Mon, Wed, Fri 8-10 AM only (3 permit limit per person)
 - Insurance COI must list 'City of Plantation' as Certificate Holder
+- Only apply for master permit — sub-permits created by staff after submission
+
+PLANTATION FILE NAMING — CRITICAL (REJECTION TRIGGER):
+- ALL digital submittals MUST use 2-letter prefix: BD-Roof, EL-Generator, PL-Irrigation, ME-HVAC, BD-Pool, BD-Fence, BD-Sign, BD-Demo, etc.
+- Incorrectly named files are REJECTED before review even starts
+- Reserve 4x4 inch space in top right corner for City's digital approval stamp
+- Scanned drawings: 300 DPI minimum
+- When submitting revisions: do NOT resubmit entire plan set — only changed pages, same sheet numbers
+
+PLANTATION DIGITAL SIGNATURES — CRITICAL (REJECTION TRIGGER):
+- Design professionals MUST use DIGITAL signatures backed by certificate authority
+- Regular electronic signatures are REJECTED
+- If not digitally signed: must submit notarized affidavit from designer of record
 
 PLANTATION WORK HOURS:
 - Monday-Friday: 7 AM - 8 PM
 - Saturday: 7 AM - 8 PM (pile-driving 8 AM - 5:30 PM only)
-- NO WORK on Sundays or holidays
+- NO WORK on Sundays or holidays (Chapter 16, Sec 16-2)
 
-PLANTATION ROUTING - SKIP ZONING FOR:
-- A/C changeouts, Re-roofing, Interior work - go DIRECTLY to Building Division
+PLANTATION ROUTING — SKIP ZONING FOR:
+- A/C changeouts, Re-roofing, Interior work — go DIRECTLY to Building Division
 
 PLANTATION CRITICAL REQUIREMENTS:
+- THREE (3) sets of energy calculations (most cities require 2)
+- Fault Current Calculations REQUIRED for ALL electrical service work (Plantation-specific)
+- Re-nailing inspection NOT required on roof permits (unique among Broward cities — saves time)
 - Demolition permits MUST include Building AND Electrical permits together
 - Product Approvals must be stamped 'approved' by Architect of record
-- Plans must be mechanically reproduced - hand-drawn plans rejected
+- Plans must be mechanically reproduced — hand-drawn plans rejected (FBC 107.3.5.1)
+- Plenum ceilings require specs on Structural, Electrical, Mechanical AND Plumbing plans
+- Pre-fab buildings MUST have State approved drawings (Miami-Dade or Florida State)
+- PAID (Plantation Acres Improvement District) properties MUST have PAID review stamp
 
 PLANTATION SPECIAL RULES:
 - COA/HOA/POA approval NOT required for building permit (effective 05/08/2023)
+- Owner-Builder MUST apply IN-PERSON with proof of ownership (Warranty Deed, Settlement Statement, Tax Bill, DL, Utility bill)
+- Preliminary Review SUSPENDED as of 05/16/2024
+- LEED/FGBC certified GREEN buildings get FREE Fast Track Plan Review
+- Fixturing permit required BEFORE Certificate of Occupancy
+- Food/Restaurant plans must be stamped by FDACS or DBPR BEFORE permit submittal
+- Burglar alarm (SFR) requires registration from Plantation Police Dept
 - Marine work requires US Longshoreman's and Harbor Workers insurance
+- Temporary Power requires notarized signatures from owner, GC, AND electrical contractor
 
-PLANTATION FEES:
-- $20 application fee, $10 per page of plans (first page free)
-- Fast Track available with $1,000 cost recovery account
-- Work without permit = 100% penalty fee added
+PLANTATION FEES & PENALTIES:
+- Fees per Chapter 5, Article II of City Code
+- Walk-Thru permits: Mon/Wed/Fri 8-10 AM (3 permit limit per person)
+- Fast Track: $1,000 cost recovery account deposit
+- Failed inspection: $100 re-inspection fee
+- Work without permit: 100% penalty fee added
+- Only franchised C&D firms: Waste Management, Republic Services, Bicon/S&S National Waste
+
+PLANTATION PERMITS — CONFIDENCE NOTES (surface as ⚠️ warnings where applicable):
+- Building, Electrical, Plumbing, Mechanical, Roofing, Demolition, Shed, Fire System, Windows/Doors, Certificate of Occupancy: 100% verified — no caveats needed
+- Pool/Spa (90%): Plantation does not publish pool-specific checklist. Standard Broward/FBC applies. Recommend calling (954) 797-2765 to confirm no additional pool forms
+- Fence (90%): Specific setback distances per zoning district not published. Call (954) 797-2765
+- Solar (90%): No solar-specific checklist. Unknown if FSEC cert accepted in lieu of full PE. Call (954) 797-2765
+- EV Charger (95%): Standard electrical permit. No EV-specific forms found. Call (954) 797-2765
+- Sign (85%): Max sign area, height limits, illumination rules by district not published. Call Planning & Zoning (954) 797-2200
+- Generator (85%): Placement rules, noise dB limits (Chapter 16), structural pad requirements not published. Call (954) 797-2765
+- Screen Enclosure (85%): Unknown if full PE engineering required for all sizes. Call (954) 797-2765
+- Driveway (85%): Unknown if separate ROW permit needed. Call (954) 797-2765
+- Marine/Dock (80%): Plantation is inland — may defer all marine to Broward County. Call (954) 797-2765
+- Private Provider (90%): Fee discount schedule not published. Call (954) 797-2765
 """
     elif city_key == "sunrise":
         city_context = """
@@ -4198,9 +4347,29 @@ GENERAL SOUTH FLORIDA REQUIREMENTS:
     if tips:
         tips_text = "\n\nPERMIT OFFICE TIPS:\n" + "\n".join([f"💡 {t}" for t in tips])
 
+    verify_text = ""
+    if verify_items:
+        verify_text = "\n\nVERIFY WITH CITY (items to confirm — present these as helpful pro tips, NOT as uncertainty):\n" + "\n".join([f"📞 {v}" for v in verify_items])
+
     prompt = f"""You are an expert South Florida permit analyst with 20+ years of experience reviewing permit applications for Broward, Palm Beach, and Miami-Dade counties. You have deep knowledge of {city_name}'s building department requirements.
 
 TASK: Analyze this permit package ({file_count} files) for {city_name}.
+
+ABSOLUTE RULE — DO NOT INVENT REQUIREMENTS:
+You may ONLY check for documents and requirements listed in the GENERAL REQUIREMENTS CHECKLIST below. Do NOT invent, imagine, or add requirements that are not in the checklist. If something is not in the checklist, it is NOT required. The checklist is the COMPLETE list of what this city needs — nothing more.
+
+When marking something as "missing", you MUST be able to point to a specific item in the checklist below that requires it. If you cannot find it in the checklist, do NOT flag it.
+
+DO NOT flag these as missing (common false positives):
+- Energy calculations (unless specifically listed in the checklist for this permit type)
+- Structural calculations (unless specifically listed)
+- Soil/geotechnical reports (unless specifically listed)
+- Environmental assessments (unless specifically listed)
+- Tree surveys or landscaping plans (unless specifically listed)
+- Zoning verification letters (unless specifically listed)
+- Documents for OTHER permit types that are not being applied for
+
+IMPORTANT — PRO TIPS: If the VERIFY WITH CITY section below contains items, include them in your response as "pro_tips" — these are things a $2,000 permit expediter would tell the contractor to double-check with a quick phone call. Frame them positively: "Pro tip: Confirm the exact certificate holder wording with [City] Building at [phone] before submitting" — NOT "We couldn't verify this." This makes the tool look MORE thorough, not less.
 
 YOUR FIRST JOB: Identify the SPECIFIC permit type from the documents. Don't just say "plumbing" - determine if it's:
 - Water heater changeout
@@ -4222,6 +4391,7 @@ GENERAL REQUIREMENTS CHECKLIST:
 {reqs}
 {gotchas_text}
 {tips_text}
+{verify_text}
 
 UPLOADED DOCUMENTS:
 {text}
@@ -4244,14 +4414,28 @@ ANALYZE THE DOCUMENTS AND RETURN JSON:
     ],
     "recommendations": ["actionable recommendation 1", "actionable recommendation 2"],
     "city_specific_warnings": ["any {city_name}-specific rejection risks"],
+    "pro_tips": ["ℹ️ Pro tip: Confirm [specific item] with {city_name} Building at [phone number] before submitting"],
     "permit_office_tips": "tips for {city_name} submission"
 }}
 
 SCORING:
-- 90-100: Ready to submit
-- 70-89: Minor fixes needed
+- 100: All required documents present and complete. Give 100 if everything required is found — do NOT dock points for optional/recommended items or minor formatting preferences.
+- 90-99: Ready to submit with very minor issues (e.g., a recommended but not required document is missing)
+- 70-89: Minor fixes needed (1-2 required documents missing or incomplete)
 - 50-69: Significant gaps
 - Below 50: Major documents missing
+
+CRITICAL SCORING RULES:
+- ONLY flag items from the REQUIREMENTS CHECKLIST above as missing. Do NOT invent additional requirements that aren't in the checklist. If it's not listed in the checklist above, it is NOT required.
+- Only mark documents as "missing" if they are ACTUALLY REQUIRED for this specific permit type. Do NOT flag documents that are for OTHER permit types.
+- If a document is present but you can't verify every detail (e.g., you can see plans but can't confirm they're signed/sealed from the PDF), give the benefit of the doubt and mark it as "complete" with a note.
+- Do NOT penalize for documents you simply cannot read or parse from the uploaded files — assume the contractor has them unless there's clear evidence they're missing.
+- "Recommended" items must NEVER appear in "missing_documents" — put them in "recommendations" instead. They should NEVER reduce the compliance score. If something is "nice to have" or "would be helpful," it goes in recommendations, NOT missing_documents.
+- If all REQUIRED documents from the checklist are present, the score MUST be 100. Not 95, not 98 — exactly 100.
+- CONSISTENCY: Your job is to check the uploaded documents against the checklist. Period. Do NOT add new requirements based on what you read inside the documents. For example, if you see a reference to "drainage plans" inside an uploaded document, do NOT add "drainage plans" as a missing requirement unless it's in the checklist above.
+- CONTRACTOR NAME MISMATCH: It is NORMAL and LEGAL for the company on the plans/drawings to be different from the contractor pulling the permit. This happens when a licensed contractor pulls permits on behalf of another company doing the work. Do NOT flag this as an issue or dock points. The names that must match each other are: APPLICATION, INSURANCE CERTIFICATE, LICENSE, and NOC — these should all show the same contractor. Plans/drawings can be prepared by anyone.
+- ADDING DOCUMENTS MUST HELP, NOT HURT: If a contractor uploads additional documents, the score should go UP or stay the same — NEVER down. More documents = more complete package. Do not use additional documents as an excuse to find new problems.
+- DO NOT HALLUCINATE REQUIREMENTS: Every item you list as "missing" must come directly from the GENERAL REQUIREMENTS CHECKLIST provided above. If you cannot find the requirement in the checklist, DO NOT flag it. Making up requirements destroys trust in this tool.
 
 Be SPECIFIC about the permit type. Read the documents carefully to identify exactly what work is being done."""
 
@@ -4298,12 +4482,15 @@ Be SPECIFIC about the permit type. Read the documents carefully to identify exac
 
     # PREMIUM TIER: Use Claude Sonnet (or fallback from Gemini failure)
     try:
+        print(f"🤖 Calling Claude for {city_name}...", flush=True)
         msg = client.messages.create(
             model="claude-sonnet-4-20250514",
             max_tokens=4096,
             messages=[{"role": "user", "content": prompt}],
         )
         resp = msg.content[0].text
+        print(f"🤖 Claude responded: {len(resp)} chars", flush=True)
+        print(f"🤖 First 200 chars: {resp[:200]}", flush=True)
 
         # Log AI usage and costs
         input_tokens = msg.usage.input_tokens
@@ -4363,36 +4550,39 @@ Be SPECIFIC about the permit type. Read the documents carefully to identify exac
                             parsed["missing_documents_detailed"] = parsed[
                                 "missing_documents"
                             ]
-                            parsed["missing_documents"] = [
-                                d.get("name", str(d))
-                                for d in parsed["missing_documents"]
-                            ]
+                            # Keep objects intact for frontend hover tooltips
                         if parsed.get("critical_issues") and isinstance(
                             parsed["critical_issues"][0], dict
                         ):
                             parsed["critical_issues_detailed"] = parsed[
                                 "critical_issues"
                             ]
-                            parsed["critical_issues"] = [
-                                d.get("issue", str(d))
-                                for d in parsed["critical_issues"]
-                            ]
+                            # Keep objects intact for frontend hover tooltips
+                            print(f"🔍 Critical issues: OBJECTS ({len(parsed['critical_issues'])} items)", flush=True)
+                        elif parsed.get("critical_issues"):
+                            print(f"🔍 Critical issues: STRINGS ({len(parsed['critical_issues'])} items): {parsed['critical_issues'][0][:80]}", flush=True)
+                        if parsed.get("missing_documents"):
+                            first = parsed["missing_documents"][0]
+                            print(f"🔍 Missing docs type: {'OBJECT' if isinstance(first, dict) else 'STRING'} ({len(parsed['missing_documents'])} items)", flush=True)
                         return parsed
-                except:
+                except Exception as parse_err:
+                    print(f"⚠️ JSON parse attempt failed: {parse_err}", flush=True)
                     continue
 
+        print(f"⚠️ Could not parse Claude response as JSON, returning raw", flush=True)
         return {
             "summary": resp[:500],
             "compliance_score": 50,
             "overall_status": "NEEDS_REVIEW",
         }
     except Exception as e:
+        print(f"❌ Claude analysis failed: {e}", flush=True)
         return {"error": str(e), "overall_status": "ERROR"}
 
 
 @app.on_event("startup")
 async def startup():
-    print("🚀 Flo Permit v1.4.0 Started")
+    print("🚀 Flo Permit v1.5.0 Started — Admin bypass + Claude debug")
     print(f"   API Key: {'✅' if get_api_key() else '❌'}")
     print(f"   JWT Key: {'✅' if os.getenv('JWT_SECRET_KEY') else '❌'}")
     print(f"   Resend Key: {'✅' if os.getenv('RESEND_API_KEY') else '❌'}")
