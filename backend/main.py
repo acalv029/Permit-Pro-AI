@@ -2894,6 +2894,10 @@ async def analyze_permit_folder(
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# Claude model used for premium analyses. Override with the CLAUDE_MODEL variable in Railway.
+CLAUDE_MODEL = os.getenv("CLAUDE_MODEL", "claude-sonnet-5")
+
+
 def analyze_folder_with_claude(
     text: str,
     requirements: dict,
@@ -4484,11 +4488,16 @@ Be SPECIFIC about the permit type. Read the documents carefully to identify exac
     try:
         print(f"🤖 Calling Claude for {city_name}...", flush=True)
         msg = client.messages.create(
-            model="claude-sonnet-4-20250514",
-            max_tokens=4096,
+            model=CLAUDE_MODEL,
+            max_tokens=8192,
+            # Claude Sonnet 5 thinks by default; this keeps the old no-thinking behavior
+            extra_body={"thinking": {"type": "disabled"}},
             messages=[{"role": "user", "content": prompt}],
         )
-        resp = msg.content[0].text
+        # Read text blocks by type (a response can start with a non-text block)
+        resp = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
+        if not resp.strip():
+            raise ValueError(f"Claude returned no text (stop_reason={msg.stop_reason})")
         print(f"🤖 Claude responded: {len(resp)} chars", flush=True)
         print(f"🤖 First 200 chars: {resp[:200]}", flush=True)
 
@@ -4496,10 +4505,10 @@ Be SPECIFIC about the permit type. Read the documents carefully to identify exac
         input_tokens = msg.usage.input_tokens
         output_tokens = msg.usage.output_tokens
         total_tokens = input_tokens + output_tokens
-        # Claude Sonnet 4 pricing: $3/1M input, $15/1M output
+        # Claude Sonnet 5 pricing: $2/1M input, $10/1M output
         # FIXED: divide by 1M first, then convert to cents
         cost_cents = max(
-            1, int((input_tokens * 3 + output_tokens * 15) / 1_000_000 * 100)
+            1, int((input_tokens * 2 + output_tokens * 10) / 1_000_000 * 100)
         )
 
         print(
@@ -4512,7 +4521,7 @@ Be SPECIFIC about the permit type. Read the documents carefully to identify exac
                 usage_log = AIUsageLog(
                     user_id=user_id,
                     analysis_uuid=analysis_uuid,
-                    model="claude-sonnet-4-20250514",
+                    model=CLAUDE_MODEL,
                     input_tokens=input_tokens,
                     output_tokens=output_tokens,
                     total_tokens=total_tokens,
