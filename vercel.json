@@ -1,6 +1,15 @@
 {
-  "rewrites": [
-    { "source": "/cities/:path*", "destination": "/cities/:path*" },
-    { "source": "/(.*)", "destination": "/" }
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "flopermit.vercel.app"
+        }
+      ],
+      "destination": "https://www.flopermit.us/$1",
+      "permanent": true
+    }
   ]
 }

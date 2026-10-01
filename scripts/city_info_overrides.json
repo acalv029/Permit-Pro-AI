@@ -1,0 +1,230 @@
+{
+ "boca-raton": {
+  "county": "Palm Beach",
+  "name": "Boca Raton",
+  "noc_threshold": "5000",
+  "phone": "561-393-7930",
+  "portal_url": "bocaehub.com",
+  "submission": "Boca eHub for application + Boca ePlans/ProjectDox for plan uploads — DO NOT USE C2Gov"
+ },
+ "boynton-beach": {
+  "county": "Palm Beach",
+  "name": "Boynton Beach"
+ },
+ "coconut-creek": {
+  "county": "Broward",
+  "hvhz": true,
+  "name": "Coconut Creek",
+  "noc_threshold": "2500",
+  "phone": "954-973-6750",
+  "plan_sets": "2",
+  "portal_url": "https://www.coconutcreek.gov/business/permits-and-payments/epermits",
+  "submission": "Electronic via ePermits; owner-builders must apply IN-PERSON"
+ },
+ "coral-springs": {
+  "county": "Broward",
+  "hvhz": true,
+  "name": "Coral Springs",
+  "noc_threshold": "2500",
+  "phone": "954-344-1025",
+  "plan_sets": "2",
+  "portal_url": "https://etrakit.coralsprings.gov",
+  "submission": "Electronic preferred (7 business days review) vs Hard Copy (15 business days review)"
+ },
+ "davie": {
+  "county": "Broward",
+  "hvhz": true,
+  "name": "Town of Davie",
+  "noc_threshold": "$2,500",
+  "phone": "954-797-1111",
+  "plan_sets": "2 paper sets if submitting paper plans, or submit electronically via OAS/ProjectDox"
+ },
+ "deerfield-beach": {
+  "county": "Broward",
+  "name": "Deerfield Beach"
+ },
+ "delray-beach": {
+  "county": "Palm Beach",
+  "insurance_holder": "City of Delray Beach\n100 NW 1st Avenue\nDelray Beach, FL 33444",
+  "name": "Delray Beach",
+  "noc_threshold": "5000",
+  "phone": "561-243-7200",
+  "portal_url": "https://cityofdelraybeachfl-energovweb.tylerhost.net/apps/selfservice#/home",
+  "submission": "ALL DIGITAL — 100% paperless since Oct 1, 2024. Paper plans NOT reviewed. $25 scanning fee for paper submissions."
+ },
+ "fort-lauderdale": {
+  "county": "Broward",
+  "name": "Fort Lauderdale"
+ },
+ "hialeah": {
+  "county": "Miami-Dade",
+  "hvhz": true,
+  "insurance_holder": "City of Hialeah",
+  "name": "Hialeah",
+  "noc_threshold": "2500",
+  "phone": "305-883-5825",
+  "plan_sets": "2",
+  "portal_url": "https://epay.hialeahfl.gov/",
+  "submission": "In-person, email (permits@hialeahfl.gov), or Tyler CSS portal — all applications must be NOTARIZED"
+ },
+ "hollywood": {
+  "county": "Broward",
+  "name": "Hollywood"
+ },
+ "homestead": {
+  "county": "Miami-Dade",
+  "hvhz": true,
+  "name": "Homestead",
+  "noc_threshold": "2500",
+  "phone": "(305) 224-4500",
+  "portal_url": "https://www.homesteadfl.gov/746/",
+  "submission": "Electronic only via EPL-B.U.I.L.D. — strict file naming convention REQUIRED"
+ },
+ "kendall": {
+  "county": "Miami-Dade",
+  "hvhz": true,
+  "name": "Kendall (Unincorporated Miami-Dade)",
+  "noc_threshold": "2500",
+  "phone": "786-315-2100",
+  "portal_url": "miamidade.gov/Apps/RER/EPSPortal",
+  "submission": "Yellow Form - signed and notarized"
+ },
+ "lake-worth-beach": {
+  "county": "Palm Beach",
+  "name": "Lake Worth Beach"
+ },
+ "lauderdale-by-the-sea": {
+  "county": "Broward",
+  "hvhz": true,
+  "insurance_holder": "Town of Lauderdale By-The-Sea, 4501 N. Ocean Drive, Lauderdale By-The-Sea, FL 33308",
+  "name": "Lauderdale-by-the-Sea",
+  "noc_threshold": "2500",
+  "phone": "954-640-4215",
+  "plan_sets": "2",
+  "portal_url": "https://www2.citizenserve.com/Portal/PortalController?Action=showHomePage&installationID=117",
+  "submission": "Online preferred via CitizenServe - paper accepted at Town Hall if unable to submit online"
+ },
+ "lighthouse-point": {
+  "county": "Broward",
+  "hvhz": true,
+  "name": "Lighthouse Point",
+  "noc_threshold": "2500",
+  "phone": "954-943-6509",
+  "plan_sets": "2",
+  "submission": "Online or in person - NO FAXED applications"
+ },
+ "margate": {
+  "county": "Broward",
+  "hvhz": true,
+  "name": "Margate",
+  "noc_threshold": "2500",
+  "phone": "954-970-3004",
+  "plan_sets": "2",
+  "portal_url": "https://margate-fl-us.avolvecloud.com/Portal/",
+  "submission": "Electronic via ProjectDox ONLY — no paper submittals accepted"
+ },
+ "miami": {
+  "county": "Miami-Dade",
+  "hvhz": true,
+  "name": "Miami",
+  "noc_threshold": "5000",
+  "phone": "305-416-1100",
+  "plan_sets": "2",
+  "portal_url": "https://www.miami.gov/Permits-Construction/iBuild-Portal-Link",
+  "submission": "FULLY DIGITAL — ALL applications via iBuild; plans via ProjectDox/ePlan. NO PAPER APPLICATIONS."
+ },
+ "miami-beach": {
+  "county": "Miami-Dade",
+  "name": "Miami Beach"
+ },
+ "miami-gardens": {
+  "county": "Miami-Dade",
+  "hvhz": true,
+  "name": "Miami Gardens",
+  "noc_threshold": "2500",
+  "phone": "305-622-8027",
+  "plan_sets": "2",
+  "portal_url": "https://miamigardensfl-energovpub.tylerhost.net/apps/selfservice#/home",
+  "submission": "Online via CSS portal — all attachments uploaded digitally; payments online only"
+ },
+ "miramar": {
+  "county": "Broward",
+  "name": "Miramar"
+ },
+ "north-miami": {
+  "county": "Miami-Dade",
+  "name": "North Miami"
+ },
+ "oakland-park": {
+  "county": "Broward",
+  "hvhz": true,
+  "insurance_holder": "City of Oakland Park, 1100 Park Lane East, First Floor, Oakland Park, FL 33334",
+  "name": "Oakland Park",
+  "noc_threshold": "2500",
+  "phone": "954-630-4350",
+  "plan_sets": "2",
+  "portal_url": "https://oaklandparkfl-energovweb.tylerhost.net/apps/SelfService#/home",
+  "submission": "Online preferred (PDF only) + In-Person at 1100 Park Lane East, 1st Floor"
+ },
+ "pembroke-pines": {
+  "county": "Broward",
+  "name": "Pembroke Pines"
+ },
+ "plantation": {
+  "county": "Broward",
+  "hvhz": true,
+  "insurance_holder": "City of Plantation",
+  "name": "Plantation",
+  "noc_threshold": "2500",
+  "phone": "954-797-2765",
+  "plan_sets": "3",
+  "portal_url": "https://aca.plantation.org/CitizenAccess/",
+  "submission": "Digital ONLY since 11/14/2022 via ACA portal — application signed and notarized by Qualifier"
+ },
+ "pompano-beach": {
+  "county": "Broward",
+  "hvhz": true,
+  "insurance_holder": "City of Pompano Beach, 100 W Atlantic Blvd, Pompano Beach, FL 33060",
+  "name": "Pompano Beach",
+  "noc_threshold": "2500",
+  "phone": "954-786-4669",
+  "plan_sets": "1",
+  "portal_url": "https://c2g.pompanobeachfl.gov/Click2GovBP/",
+  "submission": "100% Electronic via ePlan - Applications must be in BLACK INK"
+ },
+ "sunrise": {
+  "county": "Broward",
+  "hvhz": true,
+  "name": "Sunrise",
+  "noc_threshold": "5000",
+  "phone": "954-572-2354",
+  "plan_sets": "2",
+  "portal_url": "https://sunrisefl.gov/openforbusiness",
+  "submission": "e-Plan Review online + in-person; SIGNED ZONING CHECKLIST REQUIRED — applications rejected without it"
+ },
+ "tamarac": {
+  "county": "Broward",
+  "hvhz": true,
+  "name": "Tamarac",
+  "noc_threshold": "2500",
+  "phone": "954-597-3420",
+  "plan_sets": "Electronic — 1 copy via ePermits. Paper plans (up to 3 large pages) converted for $3/page fee. Over 3 pages MUST be submitted online or flash drive/CD.",
+  "portal_url": "https://e-gov.tamarac.org/Click2GovBP/index.html",
+  "submission": "100% PAPERLESS since March 2014 — ALL electronic via ePermits"
+ },
+ "wellington": {
+  "county": "Palm Beach",
+  "name": "Wellington"
+ },
+ "west-palm-beach": {
+  "county": "Palm Beach",
+  "name": "West Palm Beach"
+ },
+ "weston": {
+  "county": "Broward",
+  "hvhz": true,
+  "name": "City of Weston",
+  "noc_threshold": "$2,500",
+  "portal_url": "https://aca-prod.accela.com/WESTON/"
+ }
+}

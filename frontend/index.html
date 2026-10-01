@@ -3,87 +3,119 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="/adc_logo.png" />
     <link rel="apple-touch-icon" href="/adc_logo.png" />
 
-    <!-- Primary SEO -->
-    <title>Flo Permit — AI-Powered Permit Analysis for South Florida | Broward, Palm Beach, Miami-Dade</title>
-    <meta name="description" content="Upload your permit documents and get instant AI-powered analysis. Flo Permit checks your package against city-specific requirements for 30 cities across Broward, Palm Beach, and Miami-Dade counties. Know what's missing before you submit." />
-    <meta name="keywords" content="permit analysis, building permit, South Florida, Fort Lauderdale permits, Broward County permits, Palm Beach permits, Miami-Dade permits, AI permit checker, construction permits, permit document checklist, Coral Springs, Boca Raton, Hollywood FL, Pembroke Pines, Pompano Beach, Oakland Park permits, North Miami permits, Wellington permits, Miami Beach permits, permit compliance" />
+    <title>Flo Permit: Permit Package Checker for South Florida (32 Cities)</title>
+    <meta name="description" content="Check your permit package against your city&#x27;s requirements before you submit. 32 cities across Broward, Palm Beach and Miami-Dade. 3 free analyses." />
     <meta name="author" content="Flo Permit" />
-    <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://flopermit.us/" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://www.flopermit.us/" />
 
-    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://flopermit.us/" />
-    <meta property="og:title" content="Flo Permit — AI-Powered Permit Analysis for South Florida" />
-    <meta property="og:description" content="Upload your permit documents and get instant AI analysis. Know what's missing before you submit. Serving 30 cities across Broward, Palm Beach & Miami-Dade." />
-    <meta property="og:image" content="https://flopermit.us/adc_logo.png" />
+    <meta property="og:url" content="https://www.flopermit.us/" />
+    <meta property="og:title" content="Flo Permit: Permit Package Checker for South Florida (32 Cities)" />
+    <meta property="og:description" content="Check your permit package against your city&#x27;s requirements before you submit. 32 cities across Broward, Palm Beach and Miami-Dade. 3 free analyses." />
+    <meta property="og:image" content="https://www.flopermit.us/adc_logo.png" />
     <meta property="og:site_name" content="Flo Permit" />
     <meta property="og:locale" content="en_US" />
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Flo Permit — AI-Powered Permit Analysis for South Florida" />
-    <meta name="twitter:description" content="Upload your permit documents and get instant AI analysis. Know what's missing before you submit. Serving 30 cities in South Florida." />
-    <meta name="twitter:image" content="https://flopermit.us/adc_logo.png" />
-
-    <!-- Theme -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Flo Permit: Permit Package Checker for South Florida (32 Cities)" />
+    <meta name="twitter:description" content="Check your permit package against your city&#x27;s requirements before you submit. 32 cities across Broward, Palm Beach and Miami-Dade. 3 free analyses." />
+    <meta name="twitter:image" content="https://www.flopermit.us/adc_logo.png" />
     <meta name="theme-color" content="#06b6d4" />
-    <meta name="msapplication-TileColor" content="#000000" />
 
-    <!-- Structured Data / Schema.org -->
     <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": "https://www.flopermit.us/#org",
+      "name": "Flo Permit",
+      "url": "https://www.flopermit.us/",
+      "logo": "https://www.flopermit.us/adc_logo.png"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.flopermit.us/#website",
+      "name": "Flo Permit",
+      "url": "https://www.flopermit.us/",
+      "publisher": {
+        "@id": "https://www.flopermit.us/#org"
+      }
+    },
+    {
       "@type": "SoftwareApplication",
       "name": "Flo Permit",
-      "description": "AI-powered permit document analysis for South Florida. Upload your permit package and get instant compliance checks for 30 cities across Broward, Palm Beach, and Miami-Dade counties.",
-      "url": "https://flopermit.us",
+      "url": "https://www.flopermit.us/",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Web",
+      "description": "Permit package checker for South Florida contractors. Upload your documents, pick your city and permit type, and see what is missing before you submit. Covers 32 cities across Broward, Palm Beach and Miami-Dade counties.",
+      "areaServed": [
+        {
+          "@type": "AdministrativeArea",
+          "name": "Broward County, Florida"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Palm Beach County, Florida"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Miami-Dade County, Florida"
+        }
+      ],
+      "publisher": {
+        "@id": "https://www.flopermit.us/#org"
+      },
       "offers": [
         {
           "@type": "Offer",
+          "name": "Free",
           "price": "0",
           "priceCurrency": "USD",
-          "description": "Free plan with 3 analyses per month"
+          "description": "3 free analyses to start, then 1 per month"
         },
         {
           "@type": "Offer",
+          "name": "Single analysis",
           "price": "15.99",
           "priceCurrency": "USD",
-          "description": "Single analysis"
+          "description": "One time purchase, 1 analysis"
         },
         {
           "@type": "Offer",
-          "price": "29.99",
+          "name": "Pro",
+          "price": "49",
           "priceCurrency": "USD",
           "priceSpecification": {
             "@type": "UnitPriceSpecification",
-            "billingDuration": "P1M"
+            "price": "49",
+            "priceCurrency": "USD",
+            "billingDuration": "P1M",
+            "unitCode": "MON"
           },
-          "description": "Pro plan with 30 analyses per month"
+          "description": "20 analyses per month"
+        },
+        {
+          "@type": "Offer",
+          "name": "Unlimited",
+          "price": "149",
+          "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": "149",
+            "priceCurrency": "USD",
+            "billingDuration": "P1M",
+            "unitCode": "MON"
+          },
+          "description": "Unlimited analyses"
         }
-      ],
-      "areaServed": {
-        "@type": "State",
-        "name": "Florida",
-        "containsPlace": [
-          { "@type": "AdministrativeArea", "name": "Broward County" },
-          { "@type": "AdministrativeArea", "name": "Palm Beach County" },
-          { "@type": "AdministrativeArea", "name": "Miami-Dade County" }
-        ]
-      },
-      "provider": {
-        "@type": "Organization",
-        "name": "Flo Permit",
-        "url": "https://flopermit.us"
-      }
+      ]
     }
+  ]
+}
     </script>
 
     <!-- Google Analytics + Google Ads -->
@@ -95,10 +127,38 @@
       gtag('config', 'G-2V1MF78CPY');
       gtag('config', 'AW-17945789173');
     </script>
+
+    <style>
+      body{margin:0;background:#030305}
+      #prerender{max-width:880px;margin:0 auto;padding:56px 24px;color:#cbd5e1;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.7}
+      #prerender h1{font-size:40px;line-height:1.15;color:#fff;font-weight:900;margin:0 0 16px}
+      #prerender h2{font-size:22px;color:#fff;margin:40px 0 12px}
+      #prerender a{color:#22d3ee;text-decoration:none}
+      #prerender .cities a{display:inline-block;margin:0 14px 8px 0}
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Plain HTML for crawlers and slow connections. React replaces it as soon as the app loads. -->
+      <div id="prerender">
+        <h1>Check your permit package before you submit</h1>
+        <p>Flo Permit checks your permit documents against your city's requirements and tells you what is missing before you go to the building department. It covers 32 cities across Broward, Palm Beach and Miami-Dade counties in South Florida.</p>
+        <p><a href="/cities/">Browse permit requirements by city</a></p>
+        <h2>How it works</h2>
+        <ol>
+          <li>Pick your city and permit type.</li>
+          <li>Upload your permit documents.</li>
+          <li>Get a report showing what is missing, with city specific rejection reasons.</li>
+        </ol>
+        <h2>Permit requirements by county</h2>
+        <p><a href="/cities/broward-county.html">Broward County</a> &middot; <a href="/cities/palm-beach-county.html">Palm Beach County</a> &middot; <a href="/cities/miami-dade-county.html">Miami-Dade County</a></p>
+        <h2>Pricing</h2>
+        <p>3 free analyses to start, then 1 free analysis per month. Pro is $49 a month for 20 analyses. Unlimited is $149 a month. A single analysis is $15.99.</p>
+        <h2>Cities covered</h2>
+        <p class="cities"><a href="/cities/boca-raton.html">Boca Raton</a> <a href="/cities/boynton-beach.html">Boynton Beach</a> <a href="/cities/weston.html">Weston</a> <a href="/cities/coconut-creek.html">Coconut Creek</a> <a href="/cities/coral-springs.html">Coral Springs</a> <a href="/cities/dania-beach.html">Dania Beach</a> <a href="/cities/deerfield-beach.html">Deerfield Beach</a> <a href="/cities/delray-beach.html">Delray Beach</a> <a href="/cities/fort-lauderdale.html">Fort Lauderdale</a> <a href="/cities/hialeah.html">Hialeah</a> <a href="/cities/hollywood.html">Hollywood</a> <a href="/cities/homestead.html">Homestead</a> <a href="/cities/kendall.html">Kendall</a> <a href="/cities/lake-worth-beach.html">Lake Worth Beach</a> <a href="/cities/lauderdale-by-the-sea.html">Lauderdale-by-the-Sea</a> <a href="/cities/lighthouse-point.html">Lighthouse Point</a> <a href="/cities/margate.html">Margate</a> <a href="/cities/miami.html">Miami</a> <a href="/cities/miami-beach.html">Miami Beach</a> <a href="/cities/miami-gardens.html">Miami Gardens</a> <a href="/cities/miramar.html">Miramar</a> <a href="/cities/north-miami.html">North Miami</a> <a href="/cities/oakland-park.html">Oakland Park</a> <a href="/cities/pembroke-pines.html">Pembroke Pines</a> <a href="/cities/plantation.html">Plantation</a> <a href="/cities/pompano-beach.html">Pompano Beach</a> <a href="/cities/sunrise.html">Sunrise</a> <a href="/cities/tamarac.html">Tamarac</a> <a href="/cities/davie.html">Davie</a> <a href="/cities/wellington.html">Wellington</a> <a href="/cities/west-palm-beach.html">West Palm Beach</a> <a href="/cities/wilton-manors.html">Wilton Manors</a> </p>
+        <p><a href="/blog/">Permit guides and checklists</a> &middot; <a href="/blog/permit-rejections-broward.html">10 reasons permits get rejected in Broward County</a></p>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
-
