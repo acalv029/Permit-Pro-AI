@@ -269,6 +269,8 @@ footer .flinks{display:flex;gap:14px;flex-wrap:wrap}
 .nav-links a.nav-cta{color:#000}
 .hero h1{line-height:1.2}
 .stat.wide{flex:2 1 320px}
+.pc-sub{list-style:none;font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#22d3ee;padding:18px 0 4px;margin-top:6px;border-top:1px solid rgba(255,255,255,.05)}
+.pc-items .pc-sub:first-child{border-top:0;margin-top:0;padding-top:6px}
 """
 
 JS = r"""
@@ -309,6 +311,36 @@ def money(v):
     s = str(v).strip()
     m = re.match(r"^\$?\s*([\d,]+)$", s)
     return "${:,}".format(int(m.group(1).replace(",", ""))) if m else s
+
+
+DIVIDER_RE = re.compile(r"^(?:(?:GOTCHA|NOTE|FEE|NOC|WARNING|HVHZ CITY|HVHZ)\s*(?::|\u2014|-)\s*)?=+\s*(.+?)\s*=+\s*$", re.I)
+TAG_PREFIX_RE = re.compile(r"^(?:GOTCHA|NOTE|FEE|NOC|WARNING|HVHZ CITY|HVHZ)\s*(?::|\u2014|-)\s*", re.I)
+
+
+def section_title(s):
+    """Return the heading text if the line is a section header rather than a requirement, else None."""
+    m = DIVIDER_RE.match(s.strip())
+    if m:
+        return m.group(1).strip(" :")
+    body = TAG_PREFIX_RE.sub("", s.strip())
+    if body.endswith(":") and len(body) <= 90:
+        return body.rstrip(": ").strip()
+    return None
+
+
+def split_sections(items):
+    """-> (requirements only, list for display with section headings; empty sections are dropped)."""
+    reqs = [i for i in items if not section_title(i)]
+    out, pending = [], None
+    for i in items:
+        if section_title(i):
+            pending = i
+        else:
+            if pending is not None:
+                out.append(pending)
+                pending = None
+            out.append(i)
+    return reqs, out
 
 
 def clean_items(items):
@@ -368,9 +400,12 @@ def build_cities(pd, overrides, stats):
                 continue
             raw = v["items"]
             items = fix_noc(clean_items(raw), stats)
+            full = items
+            items, render = split_sections(full)
+            stats["section_headers"] = stats.get("section_headers", 0) + (len(full) - len(items))
             stats["uncertainty_removed"] += sum(1 for i in raw if isinstance(i, str) and i.strip().upper().startswith("UNCERTAINTY"))
             label, pw = labels[tk]
-            c["types"][tk] = {"key": tk, "slug": tk.replace("_", "-"), "label": label, "pw": pw, "items": items, "page": False}
+            c["types"][tk] = {"key": tk, "slug": tk.replace("_", "-"), "label": label, "pw": pw, "items": items, "render": render, "page": False}
         cities.append(c)
 
     # 2) decide which city + type combinations are substantial enough for their own page
@@ -539,6 +574,9 @@ def footer(today):
 
 
 def item_li(s):
+    h = section_title(s)
+    if h:
+        return '<li class="pc-sub">{}</li>'.format(esc(h))
     m = PREFIX_RE.match(s)
     chip = ""
     if m:
@@ -727,7 +765,7 @@ def build_permit_page(c, t, cities, today):
     crumbs = [("Home", "/"), ("Cities", "/cities/"), (c["county"] + " County", "/cities/{}.html".format(COUNTY_SLUG[c["county"]])),
               (c["name"], city_url(c)), (noun(t), permit_url(c, t))]
     faq = faq_permit(c, t)
-    lis = "".join(item_li(i) for i in t["items"])
+    lis = "".join(item_li(i) for i in t["render"])
     sibs = [(permit_url(c, s), noun(s), "{} requirements".format(len(s["items"]))) for k, s in c["types"].items() if s["page"] and k != t["key"]]
     sib_html = ('<div class="divider"></div><div class="section"><div class="sec-title">Other permit types in {}</div>{}'
                 '<a class="view-all" href="{}">All {} permit requirements \u2192</a></div>').format(esc(c["name"]), link_cards(sibs[:24]), city_url(c), esc(c["name"])) if sibs else ""
@@ -889,6 +927,7 @@ def main():
     print("Skipped (thin, < {} items): {}  |  skipped (near duplicate): {}  |  UNCERTAINTY notes withheld: {}".format(MIN_ITEMS, len(stats["skipped_thin"]), len(stats["skipped_dup"]), stats["uncertainty_removed"]))
     print("Titles over 60 chars: {}  |  longest title: {}  |  longest description: {}".format(len(long_titles), max(len(t) for t, d, _ in pages.values()), max(len(d) for t, d, _ in pages.values())))
     print("NOC: {} checklist/gotcha lines with older thresholds withheld | NOC stat hidden on {} cities".format(stats["noc_lines_withheld"], len(stats["noc_stats_hidden"])))
+    print("Section headers converted from checklist lines: {}".format(stats.get("section_headers", 0)))
     if stats["no_county"]:
         print("WARNING no county, skipped:", stats["no_county"])
     for slug, tk, ratio in stats["skipped_dup"][:25]:

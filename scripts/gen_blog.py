@@ -272,7 +272,7 @@ def build_post(p, public, cities, today, draft):
     h2s = [(i, t) for lvl, i, t in heads if lvl == 2 and t.strip().lower() not in ("faq", "frequently asked questions", "sources")]
     toc = ""
     if len(h2s) >= 4:
-        toc = '<div class="toc"><strong>On this page</strong><ol>{}</ol></div>'.format("".join('<li><a href="#{}">{}</a></li>'.format(i, esc(t)) for i, t in h2s))
+        toc = '<div class="toc"><strong>On this page</strong><ol>{}</ol></div>'.format("".join('<li><a href="#{}">{}</a></li>'.format(i, esc(re.sub(r"^\d+\.\s*", "", t))) for i, t in h2s))
 
     rel = []
     for c in p["cities"]:
