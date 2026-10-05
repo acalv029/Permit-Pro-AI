@@ -4,6 +4,7 @@ seo_title: Florida Notice of Commencement Rules (2026)
 description: When a Florida Notice of Commencement is required, who signs it, where to record it in Broward and Miami-Dade, and when it is due.
 slug: notice-of-commencement-florida-broward-miami-dade
 date: 2026-10-01
+updated: 2026-10-05
 tags: Notice of Commencement, Broward, Miami-Dade
 cities: fort-lauderdale, miami
 ---
@@ -16,6 +17,18 @@ Florida's Construction Lien Law (sections 713.001 to 713.37 of the Florida Statu
 > You may still see $2,500 on older forms, checklists and blog posts. The Broward County and Miami-Dade County pages above both use $5,000 today. If a checklist quotes a different number, ask the building department which figure it applies before you decide you can skip the form.
 
 The HVAC exemption is written for repair or replacement of an existing system, so do not assume it covers other work. A roof, a window package or a remodel is judged against the general $5,000 figure.
+
+## What the statute says
+
+Section 713.135 of the Florida Statutes governs how building departments handle the Notice of Commencement, and it applies to every city and county in the state. As published in the 2026 statutes:
+
+- When the direct contract is greater than $5,000, the building department must require a copy of the NOC before the first inspection. Without it, the department or a private provider may not perform or approve later inspections.
+- A "copy" can be a certified copy of the recorded notice, a notarized statement that it has been filed for recording along with a copy, or the clerk's official records information, such as the instrument number.
+- The copy must show the owner's name and address, the contractor's name and address, and the property location. The department must check that these match the permit application.
+- A building department may not require the NOC to be recorded as a condition of the application for, or the processing or issuance of, a building permit.
+- Repair or replacement of an existing heating or air conditioning system is exempt when the contract is less than $15,000.
+
+If a city's form asks for the NOC earlier than the first inspection, or lists a lower dollar figure, ask the building department which rule it applies.
 
 ## Who signs it and how long it lasts
 
@@ -67,6 +80,7 @@ The owner contracting for the improvements. Miami-Dade County's page says it can
 
 ## Sources
 
+- [Florida Statutes, section 713.135 (2026)](https://m.flsenate.gov/Statutes/713.135)
 - [Broward County ePermits: Notice of Commencement](https://www.broward.org/ePermits/Pages/NoticeOfCommencement.aspx)
 - [Miami-Dade County: Notice of Commencement](https://www.miamidade.gov/global/economy/building/notice-of-commencement.page)
 - [City of Plantation: Notice of Commencement Requirements (rev. 10/01/2023)](https://plantation.org/home/showpublisheddocument/6559/638336570290070000)

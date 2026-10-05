@@ -65,6 +65,7 @@ from sqlalchemy.orm import sessionmaker, relationship, Session
 load_dotenv()
 
 from reader import get_document_text
+from permit_data import normalize_noc_prompt  # NOC threshold correction
 from permit_data import get_permit_requirements, get_city_key, get_permit_types, CITY_INFO, KNOWN_GOTCHAS
 from analyzer import analyze_document_with_claude
 from gemini_provider import analyze_with_gemini, get_google_key, parse_analysis_json
@@ -4447,7 +4448,7 @@ Be SPECIFIC about the permit type. Read the documents carefully to identify exac
     if tier == "standard" and get_google_key():
         try:
             print(f"Using Gemini Flash (standard tier) for {city_name}")
-            result = analyze_with_gemini(prompt, max_tokens=4096)
+            result = analyze_with_gemini(normalize_noc_prompt(prompt), max_tokens=4096)
 
             print(
                 f"Gemini Usage: {result['input_tokens']:,} in + {result['output_tokens']:,} out "
@@ -4492,7 +4493,7 @@ Be SPECIFIC about the permit type. Read the documents carefully to identify exac
             max_tokens=8192,
             # Claude Sonnet 5 thinks by default; this keeps the old no-thinking behavior
             extra_body={"thinking": {"type": "disabled"}},
-            messages=[{"role": "user", "content": prompt}],
+            messages=[{"role": "user", "content": normalize_noc_prompt(prompt)}],
         )
         # Read text blocks by type (a response can start with a non-text block)
         resp = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")

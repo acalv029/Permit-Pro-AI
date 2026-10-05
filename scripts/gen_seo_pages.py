@@ -87,7 +87,7 @@ def noc_stale(s):
     """True when a line talks about the NOC and quotes a dollar figure other than $5,000 / $15,000."""
     if not NOC_MENTION.search(s):
         return False
-    return bool({int(m.replace(",", "")) for m in MONEY.findall(s) if m.replace(",", "")} - {5000, 15000})
+    return bool({int(m.replace(",", "")) for m in MONEY.findall(s) if m.replace(",", "")} & {2500, 7500})
 
 
 def fix_noc(items, stats, insert=True):
@@ -386,7 +386,7 @@ def build_cities(pd, overrides, stats):
         slug = key.replace("_", "-")
         info = dict(pd.CITY_INFO.get(key, {}))
         ov = overrides.get(slug, {})
-        info.update({k: v for k, v in ov.items() if v not in (None, "")})
+        info.update({k: v for k, v in ov.items() if v not in (None, "") and not k.lower().startswith("noc")})
         full_name = info.get("name") or NAME_FIX.get(key) or key.replace("_", " ").title()
         name = re.sub(r"^(City|Town|Village) of\s+", "", re.sub(r"\s*\(.*?\)\s*", " ", full_name).strip(), flags=re.I)
         county = info.get("county")
@@ -458,6 +458,8 @@ def normalize_info(info, stats, slug):
             d["plan_sets_long"] = ps.strip()
     if info.get("hvhz") is True:
         d["hvhz"] = True
+    # The NOC thresholds are set statewide by Fla. Stat. 713.135(1)(e) and apply to every city and county.
+    d["noc"], d["noc_hvac"] = "$5,000", "$15,000"
     return d
 
 
